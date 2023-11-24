@@ -1,0 +1,425 @@
+
+<section class="navbar navbar-default main-box-header main-head clearfix l-navbar">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-left form-inline">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="semanticlabel_keword" id="semanticlabel_keword" placeholder="请输入关键字" style="height:34px;">
+                    <span class="input-group-btn">
+											<button class="btn btn-primary" type="button" onclick="show_semanticlabel_data();">
+						            <img src="__PUBLIC__/img/sousuo.png" alt="">
+						            搜索
+						          </button>
+										 </span>
+                </div>
+                <button class="btn btn-knowledgebase" onclick="showSemanticlabel();" type="button" name="button">
+                   <img src="__PUBLIC__/img/tianjia.png" alt="">添加标签</button>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-knowledgebase cancelkn" data-title="删除多个语义标签" onclick="del_Semanticlabel();" >
+                    <img src="__PUBLIC__/img/piliangshanchu.png" alt="">批量删除</button>
+            </div>
+        </div>
+        <div class="col-sm-6"></div>
+    </div>
+</section>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">
+                <input type="checkbox" name="mobiles" class="semanticlabel_checks" data-page="0" onclick="check_semanticlabels();">
+            </th>
+            <th class="text-center">序号</th>
+            <th class="text-center">语义标签</th>
+            <th class="text-center ">关键词</th>
+            <th class="text-center">标签精准查询
+            	<i class="hint" data-toggle="tooltip" title="" data-placement="top" data-original-title="通过标签进行精确筛选通话记录">?</i></th>
+            <th class="text-center">意向等级</th>
+            <th class="text-center">排序</th>
+            <th class="text-center">操作</th>
+        </tr>
+    </thead>
+    <tbody id="semanticlabelList">
+
+    </tbody>
+</table>
+<div class="datatips datatips_know semantic_label_data">
+  <p><img src="__PUBLIC__/img/none.png" /></p>
+  <p>暂无数据</p>
+</div>
+<div class="row">
+	<footer class="main-box-footer clearfix col-sm-12 semantic_footer">
+		<div class="pull-left">
+			<input type="checkbox" name="mobiles" class="semanticlabel_allcheck" data-page="0" onclick="check_all_semanticlabel();">全选
+			（已选中<span id="semantic_label_count">0</span>条语义标签）</div>
+		<div class="semantic_label_paging"></div>
+	</footer>
+</div>
+
+
+
+<!--获取语义标签数据,以及更改语义标签开启状态-->
+<script>
+     //回车搜索事件 ---语义标签搜索
+    $('#semanticlabel_keword').keyup(function(event){
+      if(event.keyCode ==13){
+         show_semanticlabel_data()
+      }
+   });
+		/**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	*/
+	var semantic_label_paging = new Paging01();
+	semantic_label_paging.init_args({
+	  page: 1, //初始页码
+	  limit: 10, //初始每页显示的数据量
+	  paging_class: 'semantic_label_paging', //放置分页的class
+	  callback: show_semanticlabel_data, //回调函数 比如show_datas(页码, 显示条数)
+	  key:2,
+	});
+
+	//页面加载事件
+	$(function () {
+		show_semanticlabel_data();
+	});
+	window.semantic_page = 1;
+	//获取语义标签数据
+	function show_semanticlabel_data(page,pagesize) {
+		$("#fullScreen").removeClass("fadeInRight animated");
+	  window.semantic_page = page;
+		var url = '{:url("get_semanticslabel_list")}';
+		var data = {};
+		if(page == '' || page == null){
+			data.page = 1;
+		}else{
+			data.page = page;
+		}
+
+		if(pagesize == '' || pagesize == null){
+			data.pagesize = 10;
+		}else{
+			data.pagesize = pagesize;
+		}
+		//获取话术id
+		data.sceneId = $('.active .Idlist').val();
+		//获取关键字
+		data.keyword = $('#semanticlabel_keword').val();
+		console.log(data);
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			type: 'post',
+			data:data,
+			success: function(result) {
+				console.log('-----------------------');
+				console.log(result);
+				console.log('-----------------------');
+				var htmls = '';
+				$("#semanticlabelList").find("tr").remove();
+				$('.semantic_footer').hide();
+				$('.semantic_label_data').show();
+				if(result.code === 0) {
+					$('.semantic_footer').show();
+					$('.semantic_label_data').hide();
+
+					for(var i = 0; i < result.data.data.length; i++){
+						var key = result.data.data[i].key;
+						var label = result.data.data[i].label;
+						var keyword = result.data.data[i].keyword;
+						var id = result.data.data[i].id;
+						var label_status = result.data.data[i].label_status;
+						var state = result.data.data[i].state;
+            var query_order = result.data.data[i].query_order;
+            var level = result.data.data[i].level;
+
+						var string = '<tr>'
+						+ '<td class="text-center"><input type="checkbox" name="mobiles" class="semanticlabel_check" data-id="'+id+'" onclick="check_semanticlabel_thing();"></td>'
+						+ '<td>'+key+'</td>'
+						+	'<td>'+label+'</td>'
+						+	'<td>'+keyword+'</td>';
+					  if(state == '' || state == null){
+					  	string += '<td><input type="checkbox" name="protag_query" data-state="'+label_status+'" data-id="'+id+'" class="precision_query" onclick="change_semanticslabel_state(this);"></td>';
+					  }else{
+					  	string += '<td><input type="checkbox" name="protag_query" data-state="'+label_status+'" data-id="'+id+'" checked="'+state+'" class="precision_query" onclick="change_semanticslabel_state(this);"></td>';
+					  }
+            string +=	'<td>'+level+'</td>';
+            string +=	'<td>'+query_order+'</td>';
+					  string += '<td><a href="javascript:;" onclick="showSemanticlabel('+id+');">编辑</a> &nbsp;<a href="javascript:;" data-title="删除单个语义标签" onclick="del_Semanticlabel('+id+');">删除</a></td>';
+						string += '</tr>';
+						$("#semanticlabelList").append(string);
+					}
+
+					$('#semantic_label_count').attr('data-total',result.data.count);
+  				$('#semantic_label_count').attr('data-page',result.data.page);
+  				//显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+  				semantic_label_paging.paging(result.data.page, result.data.count, result.data.pagesize);
+
+  				check_all_semanticlabel();
+  				check_semanticlabels();
+
+				}else if(result.code == 3){
+				  console.log('参数传递错误，话术id为空,获取语义标签失败');
+				}
+			if(window.change_type == 1){
+				$("#fullScreen").addClass("fadeInRight animated");
+				 window.change_type = 0;
+			}
+			},
+			error: function(e) {
+				alert('获取语义标签失败');
+			}
+		});
+	}
+
+	// 语义标签选中事件
+	function change_semanticslabel_state(obi){
+		var labelId = $(obi).attr('data-id');
+		var state = $(obi).attr('data-state');
+		if(state == 1){
+			state = 0;
+		}else{
+			state = 1;
+		}
+		$.post("{:url('change_semanticslabel_state')}",{'labelId':labelId,'state':state},function(data){
+			if(data.code === 0){
+				alert('更新成功');
+			}else{
+				alert('更新失败');
+			}
+			show_semanticlabel_data(window.semantic_page);
+		});
+	}
+</script>
+
+<!--全选，本页选，单选-->
+<script>
+		//所有数据全选
+   function check_all_semanticlabel(){
+   	if($('.semanticlabel_allcheck').is(':checked')){
+			$('.semanticlabel_checks').prop("checked",true);
+			$('.semanticlabel_check').prop("checked",true);
+			$('#semantic_label_count').text($('#semantic_label_count').attr('data-total'));
+			$('.semanticlabel_checks').attr('data-page',$('#semantic_label_count').attr('data-total'));
+		}else{
+			$('.semanticlabel_checks').prop("checked",false);
+			$('.semanticlabel_check').prop("checked",false);
+			$('#semantic_label_count').text(0);
+			$('.semanticlabel_checks').attr('data-page',0);
+		}
+   }
+   //本页全选
+   function check_semanticlabels(){
+   	if($('.semanticlabel_checks').is(':checked')) {
+			$('.semanticlabel_check').prop("checked",true);
+      if($('.semanticlabel_check:checked').length == $('#semantic_label_count').attr('data-total')){
+        $('.semanticlabel_allcheck').prop("checked",true);
+        $('.semanticlabel_checks').prop("checked",true);
+        $('.semanticlabel_checks').attr('data-page',$('#semantic_label_count').attr('data-total'));
+      }else {
+        $('.semanticlabel_checks').attr('data-page',$('#semantic_label_count').attr('data-page'));
+      }
+      // $('.check_page').attr('data-page',$('#count').attr('data-page'));
+      $('#semantic_label_count').text($('.semanticlabel_check:checked').length);
+		}else{
+			$('.semanticlabel_allcheck').prop("checked",false);
+			$('.semanticlabel_check').prop("checked",false);
+			$('#semantic_label_count').text(0);
+			$('.semanticlabel_checks').attr('data-page',0);
+		}
+   }
+   //单个选项框选中事件
+   function check_semanticlabel_thing(){
+   	if(!$(".semanticlabel_check").checked) {
+			$('.semanticlabel_checks').prop("checked",false);
+			$('.semanticlabel_allcheck').prop("checked",false);
+			$('.semanticlabel_checks').attr('data-page',0);
+		}
+		var check_pagenum = $('.semanticlabel_check').length;
+		var check_num = $('.semanticlabel_check:checked').length;
+		if(check_pagenum == check_num){
+			$('.semanticlabel_checks').prop("checked",true);
+			$('.semanticlabel_checks').attr('data-page',$('#semantic_label_count').attr('data-page'));
+		}
+    if(check_num == $('#semantic_label_count').attr('data-total')){
+      $('.semanticlabel_allcheck').prop("checked",true);
+      $('.semanticlabel_checks').prop("checked",true);
+      $('.semanticlabel_checks').attr('data-page',$('#semantic_label_count').attr('data-total'));
+    }
+		$('#semantic_label_count').text(check_num);
+   }
+</script>
+
+<!--添加，编辑，删除语义标签-->
+<script>
+	// 添加，编辑弹窗
+	function showSemanticlabel(id){
+		$('#semanticlabel_add_edit').modal('show');
+		if(id == '' || id == null){
+			//添加语义标签
+      $('#semanticlabel_title span').text('添加语义标签');
+      $('#semanticlabel_add_edit').attr('data-id','');
+      $('#semantics-branchName').val('');
+			$('#semantics-branchkeyword').val('');
+			$('#semantics_label_level').val(0);
+			$('#semantics-query_order').val(0);
+		}else{
+			//编辑语义标签
+			$('#semanticlabel_title span').text('编辑语义标签');
+			$('#semanticlabel_add_edit').attr('data-id',id);
+			 $('#semantics-branchName').val('');
+      $('#semantics-branchkeyword').val('');
+      $('#semantics-query_order').val(0);
+      $('#semantics_label_level').val(0);
+			var url = '{:url("edit_semanticslabel_info")}';
+			$.ajax({
+				url:url,
+				dataType: 'json',
+				type: 'post',
+				data:{id:id},
+				success: function(result) {
+					if(result.code == 0){
+					 $('#semantics-branchName').val(result.data.label);
+						$('#semantics-branchkeyword').val(result.data.keyword);
+						$('#semantics_label_level').val(result.data.level);
+						$('#semantics-query_order').val(result.data.query_order);
+					}
+				},
+				error: function(e) {
+					alert('获取编辑语义标签信息失败');
+				}
+			});
+		}
+	}
+
+	//添加，编辑
+	function add_SemanticlabelSubmit(){
+		$('#semanticlabel_add_edit').modal('hide');
+
+		//提交ajax方法的状态
+		var commit_ajax_state = true;
+		var id = $('#semanticlabel_add_edit').attr('data-id');
+		var sceneId = $('.active .Idlist').val();
+		var label = $('#semantics-branchName').val();
+    var semantics_label_level = $('#semantics_label_level').val();
+    var query_order = $('#semantics-query_order').val();
+		if(label == '' || label == null){
+		  alert('语义标签名不能为空');
+		  commit_ajax_state = false;
+		}
+		var keyword = $('#semantics-branchkeyword').val();
+		if(commit_ajax_state === true){
+		  var url = '{:url("add_editor_semanticslabel")}';
+
+  		$.ajax({
+				url:url,
+				dataType: 'json',
+				type: 'post',
+				data:{id:id, label:label, keyword:keyword, sceneId:sceneId, level:semantics_label_level,query_order:query_order},
+				success: function(result) {
+					if(result.code == 0){
+						if(id == '' || id == null){
+							alert('添加语义标签成功');
+						}else{
+							alert('编辑语义标签成功');
+						}
+						show_semanticlabel_data();
+						// window.location.reload()；
+					}else if(result.code == 3){
+					  alert('该语义标签名已存在');
+					}else if(result.code == 5){
+					  alert('参数传递错误，话术id为空');
+					}else{
+						alert('编辑添加语义标签信息失败');
+					}
+
+				},
+				error: function(e) {
+					alert('编辑添加语义标签信息失败');
+				}
+			});
+		}
+
+	}
+
+	// 删除弹窗
+	function del_Semanticlabel(id){
+		if(id == '' || id == null){
+		  if($('.semanticlabel_check:checked').length == 0){
+		    alert('请至少选择一条数据');
+		  }else{
+		    $("#delModal_semanticlabel").modal('show');
+  			$('#delModal_semanticlabel').attr('data-id', '');
+  			//批量
+  			$('#delModal_semanticlabel').attr('data-state',0);
+		  }
+		}else{
+		  $("#delModal_semanticlabel").modal('show');
+			$('#delModal_semanticlabel').attr('data-id', id);
+			//单个
+			$('#delModal_semanticlabel').attr('data-state',1);
+		}
+	}
+
+	//删除
+	function delSemanticlabel(){
+		var data = {};
+		var id = $('#delModal_semanticlabel').attr('data-id');
+		var del_state = $('#delModal_semanticlabel').attr('data-state');
+		//判断是否全选
+		if($('.semanticlabel_allcheck').is(':checked')){
+			data.state = 0;
+			//获取话术id
+			data.sceneId = $('.active .Idlist').val();
+			//获取关键字
+			data.keyword = $('#semanticlabel_keword').val();
+
+		}else{
+			//定义传递的参数id数组
+			var del_ids = [];
+			if(del_state == 1){
+				//单个删除
+				del_ids[0] = id;
+			}else{
+				//批量删除
+				$.each($('.semanticlabel_check:checked'), function(index, object){
+	 				del_ids.push($(object).attr('data-id'));
+	 			});
+			}
+			data.state = 1;
+			data.del_ids = del_ids;
+		}
+		console.log(data);
+		var url = "{:url('del_semanticslabel')}";
+
+		$.ajax({
+			url:url,
+			dataType: 'json',
+			type: 'post',
+			data:data,
+			success: function(result) {
+				console.log(result);
+				if(result.code == 0){
+					alert('删除成功');
+					show_semanticlabel_data();
+					// window.location.reload()；
+				}else{
+					alert('删除失败');
+				}
+
+			},
+			error: function(e) {
+				alert('删除失败');
+			}
+		});
+		//将全选，本页选取消选中
+		$('.semanticlabel_checks').prop("checked",false);
+		$('.semanticlabel_allcheck').prop("checked",false);
+		//将删除模板隐藏
+		$("#delModal_semanticlabel").modal('hide');
+	}
+</script>

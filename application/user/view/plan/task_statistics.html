@@ -1,0 +1,683 @@
+{extend name="public/base" /}
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+
+
+<style type="text/css">
+	.btn-primary.focus, .btn-primary:focus {
+	    color: #fff;
+	    background-color: #03a9f4;
+	     border-color: #03a9f4;
+	}
+	.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+	    color: #03a9f4;
+	    background-color: initial;
+	    border-color: #03a9f4;
+	}
+	.btn-default.focus, .btn-default:focus {
+	    color: #03a9f4;
+	   background-color: initial;
+	    border-color: #03a9f4;
+	}
+	.btn-default:hover {
+	    color: #03a9f4;
+	    background-color: initial;
+	    border-color: #03a9f4;
+	}
+	.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+	    color: #fff;
+	    background-color: #03a9f4;
+	    border-color: #03a9f4;
+	}
+	.btn-primary:hover {
+	    color: #fff;
+	    background-color: #03a9f4;
+	    border-color: #03a9f4;
+	}
+.table tbody>tr>td {
+		padding: 9px 8px;
+}
+.table-responsive {
+	min-height: .01%;
+	overflow-x: hidden;
+}
+.table-responsive>table>thead>tr>th{
+	background-color: #f2f7fd;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: normal;
+}
+#newModal > .modal-dialog {
+    width: 450px;
+    margin: 30px auto;
+}
+.textwidth{
+	width:250px;
+}
+.n_panel_title img{
+	margin-right:8px;
+	vertical-align:sub;
+}
+.l-margin{
+	margin-left:13px;
+}
+.modal-title{
+	font-size: 16px;
+	color: #000;
+	/* padding: 0px 15px; */
+}
+.modal-body-tips{
+  padding:35px;
+}
+.navbar{
+	margin-bottom:0px;
+	margin-top: 7px;
+}
+.empty-tip p:nth-of-type(1){
+  margin-bottom: 20px;
+}
+.empty-tip p:nth-last-of-type(1){
+  color: #999;
+  font-size: 15px;
+}
+.component-page-empty{
+  margin-top: 12%;
+}
+
+
+@media (max-width: 1360px){
+	/* .btn-margin{
+		margin-top:12px;
+	} */
+	/* .navbar{
+			margin-bottom:5px;
+	} */
+}
+@media (max-width: 1310px){
+	.l-input-width {
+    width: 130px!important;
+	}
+	table.table-hover.pz_table_contents > thead > tr > th:nth-child(2){
+		width:44px;
+		padding:8px 2px;
+	}
+	table.table-hover.pz_table_contents > thead > tr > th:nth-child(13){
+		width:50px;
+	}
+}
+@media (max-width: 1255px){
+	.l-input-width {
+    width: 117px!important;
+	}
+}
+@media (max-width: 1235px){
+	/* .l-input-width {
+	    width: 185px!important;
+	} */
+}
+@media (max-width: 1230px){
+	.date-margin{
+		/* margin-top:12px; */
+	}
+	.navbar{
+		margin-bottom: 10px;
+    margin-top: 5px;
+	}
+	.l-margin{
+		margin-left:0px;
+	}
+}
+@media (max-width: 1210px){
+	.l-margin {
+	    margin-left: 9px;
+	}
+	.pz_shijianzhi {
+    margin: 6px 8px 0px !important;
+	}
+}
+@media (max-width: 1180px){
+	.l-input-width {
+    width: 160px!important;
+	}
+	.date-margin {
+    margin-top: 12px;
+	}
+	.pz_marginsp{
+		margin-left: 0px !important;
+	}
+	.btn-margin{
+		margin-top:12px;
+	}
+	.btn-margin .btn.btn-primary{
+		padding: 6px 19px;
+	}
+}
+@media (min-width: 1340px){
+	.btn-margin{
+		margin-top:0px;
+	}
+}
+@media screen and (min-width: 1191px) and (max-width:1230px){
+	.date-margin{
+		/* margin-top:12px; */
+	}
+	.navbar{
+		margin-bottom:5px;
+		margin-top: 5px;
+	}
+	.l-margin{
+		margin-left:13px;
+	}
+}
+.date-margin label, .date-margin span{
+	margin-top:6px;
+}
+.pull-left label{
+	font-size:14px;
+}
+.l-dateSelbg{
+	position:relative;
+}
+.l-dateSelbg::after{
+	/* content: '';
+  width: 15px;
+  height: 15px;
+  background: url(/public/img/xuanzeriqi.png) 100% 100% no-repeat;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%); */
+}
+.c_datebgimg {
+  background: url(/public/img/xuanzeriqi.png) 93% 50% no-repeat;
+}
+.c_selectimg {
+  background: url(/public/img_sj/jiantou.png) 94% 50% no-repeat;
+}
+.l-padding{
+	padding:0px 0px!important;
+}
+/* .n_head_box_b{
+  padding-bottom: 20px !important;
+} */
+.pz_shijianzhi{
+	margin:6px 15px 0px;
+}
+.n_panel_title {
+    display: inline-block;
+    line-height: 30px;
+}
+.resetSel {
+  background-clip: padding-box;
+  border-color: #e0e3e4;
+  color: #404040;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.form-control {
+	padding: 6px;
+}
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header n_head_box n_head_box_b clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title">
+          <img src="/public/img/renwutongji.png">任务统计</span>
+  		</div>
+			<div class="pull-right">
+				<button class="btn btn-primary " style="padding: 4px 21px;" onclick="arr_soft_delet()" target-form="ids" data-toggle="modal" data-target="#batch-delete">
+					<!-- <img src="/public/img/piliangshanchu.png" alt=""> -->
+					批量删除
+				</button>
+			</div>
+		</header>
+
+		<div class="main-box-body clearfix">
+			<section class="navbar main-box-header clearfix l-padding">
+					<form method="get" role="form">
+						<div class="form-inline bottomfour" style="display: inline-block;">
+							<div class="pull-left" style="margin-right:2;">
+								<label>任务名称：</label>
+								<input type="text" class="form-control l-input-width" id="keyword" name="keyword" placeholder="请输入任务名称">
+								<label class="l-margin">任务状态：</label>
+								<select name="calltask" id="calltask"  class="form-control l-input-width c_selectimg resetSel">
+									<option value="">请选择任务状态</option>
+									<option value="0">待启动</option>
+									<option value="1">进行中</option>
+									<option value="2">人工暂停</option>
+									<option value="5">定时暂停</option>
+									<option value="6">异常暂停</option>
+									<option value="4">欠费暂停</option>
+									<option value="3">已完成</option>
+									<option value="-1">已删除</option>
+								</select>
+
+							</div>
+
+							<div class="pull-left date-margin">
+								<label class="l-margin pull-left pz_marginsp">拨打时间段：</label>
+								<div class=" pull-left l-dateSelbg">
+									<input type="text" class="form-control l-input-width c_datebgimg" placeholder="开始时间" id="startDate" name="startDate"
+									 value="" />
+									<script>
+										$('#startDate').fdatepicker({
+											format: 'yyyy-mm-dd ',
+											pickTime: false
+										});
+										</script>
+									</div>
+
+									<span class="pull-left pz_shijianzhi">至</span>
+									<div class="form-group pull-left">
+										<div class="formgroup l-dateSelbg ">
+											<input type="text" class="form-control l-input-width c_datebgimg" placeholder="结束时间" id="endTime" name="endTime" value=""  style="width:130px;" />
+											<script>
+												$('#endTime').fdatepicker({
+													format: 'yyyy-mm-dd ',
+													pickTime: false
+												});
+											</script>
+
+								</div>
+							</div>
+						</div>
+						<div class="pull-left btn-margin">
+							<button class="btn btn-primary" type="button" name="submit" onclick="ajax_configlist()" >查询</button>
+							<button class="btn pz_kongxin_anniusty" type="button" name="reset" onclick="no_query()">重置</button>
+						</div>
+
+					</form>
+			</section>
+		     <!-- <div style="height:10px;line-height:30px;background-color:#FBFBFB;">
+		     </div> -->
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover pz_table_contents">
+				   <thead>
+					    <tr>
+					    	<th class="text-center"><input class="icheckbox_square-blue" id="member_all_check" type="checkbox" name='all_checked' ></th>
+								<!--<th class="text-center">-->
+								<!--		<input onclick="allcheck();" id="member_all_check" name='all_checked' type="checkbox" class='flow-label check-all' />-->
+								<!--</th>-->
+								<th class="text-center">序号</th>
+								<th class="text-center">任务名称</th>
+								<th class="text-center">任务状态</th>
+								<th class="text-center">号码总数量</th>
+								<th class="text-center">呼叫总次数</th>
+								<th class="text-center">接通次数</th>
+								<th class="text-center">接通率</th>
+								<th class="text-center">计费时长</th>
+								<th class="text-center">平均通话时长(秒)</th>
+								<th class="text-center">意向客户数(A+B)</th>
+								<th class="text-center">使用机器人数量</th>
+								<th class="text-center">话术名称</th>
+								<th class="text-center">线路名称</th>
+								<th class="text-center">是否推送微信</th>
+								<th class="text-center">启动打断</th>
+								<th class="text-center">发送短信</th>
+								<th class="text-center">是否加入CRM</th>
+								<!--<th class="text-center">消费金额</th>-->
+								<th class="text-center">创建任务时间</th>
+								<th class="text-center">拨打时间</th>
+								<th class="text-center">操作</th>
+					    </tr>
+				    </thead>
+				   <tbody id="tablepagelist">
+				   <!--		<tr>-->
+							<!-- <td class="text-center">-->
+							<!--		 <input type="checkbox" name="roleids" class='flow-label rolecheck' />-->
+							<!-- </td>-->
+							<!-- <td class="text-center">1</td>-->
+							<!-- <td class="text-center">测试</td>-->
+							<!-- <td class="text-center">100/200</td>-->
+							<!-- <td class="text-center">50</td>-->
+							<!-- <td class="text-center">40</td>-->
+							<!-- <td class="text-center">	90%</td>-->
+							<!-- <td class="text-center">120min</td>-->
+							<!-- <td class="text-center">30</td>-->
+							<!-- <td class="text-center">2018-11-11 12：23:32</td>-->
+							<!-- <td class="text-center">2018-11-12 12：23:32</td>-->
+							<!-- <td class="text-center">暂停</td>-->
+							<!-- <td class="text-center">-->
+							<!-- 	<a href="javascript:void(0);" onclick="delsingletask();">删除</a>-->
+							<!-- </td>-->
+							<!--</tr>-->
+				   </tbody>
+				  </table>
+			  </div>
+			  <div class="component-page-empty" id="pegeempty">
+        	<div class="empty-tip line">
+						<p><img src="__PUBLIC__/img/none.png" /></p>
+						<p>暂无数据</p>
+        	</div>
+        </div>
+				<footer id="" class="main-box-footer clearfix">
+					<div class="pull-left margintop">
+          <input class="ppzrolecheck all_checked_count"  type="checkbox"/>全选（已选中<span id='user_count'>0</span>个任务）</div>
+	        <div class="text-right pull-right">
+	        	<div class="paging clearfix">
+	        	</div>
+	        </div>
+				</footer>
+		</div>
+		<div class="l_loadfixed" style="display: none;">
+			<div class="l_loaddata">
+				<p><img src="/public/img_sj/reload.gif" alt="">正在查询中...</p>
+				<p>   </p>
+			</div>
+		</div>
+	</div>
+</div>
+
+ <script type="text/javascript">
+ $(function(){
+		var keyword = "{$_GET['keyword']|default=''}";
+		$('#keyword').val(keyword);
+})
+ </script>
+</div>
+
+<!--批量删除提示-->
+ <div class="modal fade" id="batch-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips">
+				 确定批量删除选中的任务？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+				 <button type="button" class="btn btn-primary" id="all_delet">	确定    </button>
+			 </div>
+		 </div><!-- /.modal-content -->
+	 </div><!-- /.modal-dialog -->
+ </div><!-- /.modal -->
+
+ <!--单个删除提示-->
+  <div class="modal fade" id="task-sigle-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 	 <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+ 		 <div class="modal-content">
+ 			 <div class="modal-header">
+ 				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+ 					 <span aria-hidden="true">×</span>
+ 				 </button>
+ 				 <h4 class="modal-title" id="myModalLabel">
+ 					 操作提示
+ 				 </h4>
+ 			 </div>
+ 			 <div class="modal-body modal-body-tips">
+ 				 确定删除该任务？
+ 			 </div>
+ 			 <div class="modal-footer">
+ 				 <button type="button" class="btn btn-default" data-dismiss="modal"> 取消		</button>
+ 				 <button type="button" class="btn btn-primary" id="soft_delet" >	确定    </button>
+ 			 </div>
+ 		 </div><!-- /.modal-content -->
+ 	 </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type="text/javascript">
+	var Paging = new Paging01();
+	Paging.init_args({
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: ajax_configlist //回调函数 比如show_datas(页码, 显示条数)
+	});
+	//单个任务删除
+	function delsingletask(id){
+		console.log(id);
+		$('#soft_delet').on('click',function(e){
+    	$.ajax({
+					type: 'POST',
+	        url: '/user/Plan/soft_delet',
+	        data: {'id':id},
+	        success:function(data){
+	        	if(data.code == 1 ){
+	        		$('#task-sigle-delete').modal('hide');
+	        	}else if(data.code == 0){
+				    alert(data.msg);
+	        		$('#task-sigle-delete').modal('hide');
+	        	}
+	        	$("#tablepagelist").find("tr").remove();
+	        	ajax_configlist(window.page,window.limit);
+	        }
+			})
+		})
+		$('#task-sigle-delete').modal('show');
+	}
+	//多选软删除
+	function arr_soft_delet(){
+		$('#all_delet').on('click',function(e){
+			var arr = new Array();
+			if($("input[name='checkids'][type='checkbox']").is(':checked')){
+					$("input[name='checkids'][type='checkbox']").each(function(i){
+						if($(this).context.checked == true){
+								arr[i] = $(this).val();
+						}
+					});
+					var vals = arr.join();
+					$.ajax({
+						type: 'POST',
+		        url: '/user/Plan/task_batch_delet',
+		        data: {'vals':vals},
+		        success:function(data){
+		        		if(data.code == 1 ){
+			        		$('#batch-delete').modal('hide');
+			        	}else if(data.code == 0){
+						    alert(data.msg);
+			         		$('#batch-delete').modal('hide');
+			        	}
+			        	$("#tablepagelist").find("tr").remove();
+			        		ajax_configlist(window.page,window.limit);
+			        	}
+					})
+			}else{
+				alert('未选中删除项');
+				$('#batch-delete').modal('hide');
+			}
+		})
+	}
+	function timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear();
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) ;
+        var D = date.getDate();
+        if(D<10){
+        	 D='0' + D;
+        }
+        var h = date.getHours() ;
+        if(h<10){
+        	 h='0' + h;
+        }
+        var m = date.getMinutes() ;
+         if(m<10){
+        	 m='0' + m;
+        }
+        var s = date.getSeconds();
+         if(s<10){
+        	 s='0' + s;
+        }
+        return Y+'-'+M+'-'+D+'  '+h+':'+m+':'+s;
+    }
+    //页面加载完成 渲染数据
+    // $().ready(function(){
+	ajax_configlist(1, 10);
+		// })
+		//重置查询
+  function no_query(){
+		keyword = $('#keyword').val('');
+  	calltask = $('#calltask').val('');
+  	$("#startDate").val("");
+  	$("#endTime").val("");
+  	ajax_configlist(1, 10);
+  }
+    var mobile,startNum,endNum,startDate,endTime,calltask,scenarios,call_times,affirm_times,negative_times,neutral_times,effective_times,hit_times,invitations;
+		var levelids=[],statusids=[],semanticLabels=[],flowLabels=[],knlgLabels=[];
+    function ajax_configlist(page, limit){
+    	$('.l_loadfixed').show();
+    	var url = '/user/Plan/ajax_task_statistics';
+    	var keyword = $('#keyword').val();
+    	var calltask = $('#calltask').val();//人状态
+    	var startDate =$('#startDate').val();
+    	var endTime =$('#endTime').val();
+    	// var limit = $('.limit').val(); //自定义 分页限制
+    	if(!page){
+    		var page = 1;
+    	}
+        window.page = page ;
+    	window.limit = limit;
+    	$.ajax({
+					type: 'POST',
+	        url: url,
+	        data: {'keyword':keyword,'calltask':calltask,'page':page,'startDate':startDate,'endTime':endTime,'limit':limit},
+	        success: function(data){
+				$('.l_loadfixed').hide();
+          	var total = data.data.total;   //数据总条数
+						var Nowpage = data.data.Nowpage; //当前页码
+						var page = data.data.page;  //总页数
+            var limit = data.data.limit;//每页的分页条数
+						var Nowpage = Number(Nowpage);
+						window.count = total;
+						var datalist = data.data.list;
+						console.log(datalist);
+          	$("#tablepagelist").find("tr").remove();
+          	if(datalist.length>0){
+          		$('.main-box-footer').show();
+          		$("#pegeempty").css("display","none");
+          		$("#tablepagelist").find("tr").remove();
+							for(var i = 0; i<datalist.length; i++){
+								var id = datalist[i].id; //序号
+								var task_name = datalist[i].task_name; //任务名称
+								var status = datalist[i].status;
+								var number_total = datalist[i].number_total; //号码总数
+								var call_already = datalist[i].call_already; //已呼叫数
+								var call_okConnect = datalist[i].call_okConnect; //接通次数
+								// var a3 = datalist[i].task; //接通次数
+								var call_rate = datalist[i].call_rate; //接通率
+								var call_avg_duration=  datalist[i].call_avg_duration//平均通话时长
+								var call_duration = datalist[i].call_duration; //通话时长
+								var call_level = datalist[i].call_level; //意向客户数 A+B
+								var robot_cnt = datalist[i].robot_cnt; //机器人数量
+								var scenarios_name =datalist[i].scenarios_name; //话术名称
+								var call_phone_name=	datalist[i].call_phone_name; //线路名称
+								var breakcall=	datalist[i].break; //得到是否打断   break
+								var sms=	datalist[i].sms;
+								var wechat=	datalist[i].wechat;
+								var crm=	datalist[i].crm;
+								var create_time = timestampToTime(datalist[i].create_time); //创建任务时间
+								var screen_url = datalist[i].url;
+								if(datalist[i].last_dial_time==0){
+									var last_dial_time ="暂无通话记录";
+								}else{
+								  var last_dial_time = timestampToTime(datalist[i].last_dial_time); //最近拨打时间
+								}
+								 //任务状态
+								switch (status) {
+									case 1:
+										status = "进行中";
+										break;
+									case 2:
+										status = "人工暂停";
+										break;
+									case 3:
+										status = "已完成";
+										break;
+									case 4:
+										status = "欠费";
+										break;
+								  case 5:
+										status = "定时暂停";
+										break;
+								  case 6:
+										status = "异常暂停";
+										break;
+								  case 7:
+										status = "任务故障";
+										break;
+									case -1:
+										status = "软删除";
+										break;
+									case 0:
+										status = "待启动";
+										break;
+							  }
+								var string = '<tr class="itemId'+id+'" alt="'+id+'">'
+								+'<td class="text-center"><input type="checkbox" class="member_check rolecheck" value="'+id+'" name="checkids" /></td>'
+								+'<td class="text-center">'+ ((Nowpage-1)*limit+ (i+1)) +'</td>'
+								+'<td class="text-center"><a href="'+screen_url+'">'+task_name+'</a></td>'
+								+'<td class="text-center">'+status+'</td>'
+								+'<td class="text-center">'+call_already+'/'+number_total+'</td>'
+								+'<td class="text-center">'+call_already+'</td>'
+								+'<td class="text-center">'+call_okConnect+'</td>'
+								+'<td class="text-center">'+call_rate+'%</td>'
+								+'<td class="text-center">'+call_duration+'分钟</td>'
+								+'<td class="text-center">'+call_avg_duration+'</td>'
+								+'<td class="text-center">'+call_level+'</td>'
+								+'<td class="text-center">'+robot_cnt+'</td>'
+								+'<td class="text-center">'+scenarios_name+'</td>'
+								+'<td class="text-center">'+call_phone_name+'</td>'
+								//是否推送维信
+								+'<td class="text-center">'+wechat+'</td>'
+								+'<td class="text-center">'+breakcall+'</td>'
+								//是否发送你个短信
+								+'<td class="text-center">'+sms+'</td>'
+								//是否加入crm
+								+'<td class="text-center">'+crm+'</td>'
+								+'<td class="text-center">'+create_time+'</td>'
+								+'<td class="text-center">'+last_dial_time+'</td>'
+								+'<td class="text-center"><a href="javascript:void(0);" onclick="delsingletask('+id+');">删除</a></td>'
+								string += '</tr>';
+								$("#tablepagelist").append(string);
+							}
+							//Nowpage  当前页
+							//count    数据总条数
+							//total    总共页数
+							//limit    分页数量
+							Paging.paging(Nowpage, total, limit);
+							//全选
+							election()
+						}else{
+								Paging.paging(1, 0, 10);
+								$("#pegeempty").css("display","block");
+								$("#tablepagelist").find("tr").remove();
+								$("#tablepagelist").find("tr").remove();
+								$('.main-box-footer').hide();
+						}
+          }
+			})
+    }
+	//跳转
+	function go_up(page, limit)
+	{
+		paging(page, window.total, 5, limit);
+		ajax_configlist(page);
+	}
+ function limitSet(obj){
+ 	 //页码类型换了 之后 自动跳转第一页  因为预防页码过多  比如一共300条数据 10条每页的时候翻页到30页 我弄30条每页 如果还处于30页 会出现bug 跳转第一页 可以避免这样的情况
+ 	  paging(1, window.total, 5, $(obj).val());
+ 	  ajax_configlist(1);
+ }
+</script>
+
+
+
+
+
+{/block}

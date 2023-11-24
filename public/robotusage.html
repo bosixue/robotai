@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>图表</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts-en.common.js"></script>
+		<script type="text/javascript" src="/public/plugs/jquery/jquery-2.1.4.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/3.3.5/css/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="/application/user/static/css/style.css" type="text/css" />
+		<link rel="stylesheet" href="/application/user/static/css/robotusage.css" type="text/css" />
+	</head>
+	<body>
+		<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+		<div class="content">
+		  <button type="button" class="btn btn-primary" onclick="getData(1440);">当天</button>
+			<button type="button" class="btn btn-primary" onclick="getData(15);">过去15分钟</button>
+			<button type="button" class="btn btn-primary" onclick="getData(60);">过去1小时</button>
+			<button type="button" class="btn btn-primary" onclick="getData(240);">过去4小时</button>
+		</div>
+		<div class="num">
+		  <p >缓存通话记录数量：<span id="cache_call_bill_count"></span></p>
+      <p >缓存通话详情数量：<span id="cache_call_record_count"></span></p>
+		</div>
+		<div id="main"></div>
+	</body>
+	<script type="text/javascript">
+		$(function() {
+			getData(1440);
+		})
+
+		/*
+		 * 根据时间获取对应时间的数据
+		 * time：请求的时间（分钟）
+		 */
+		function getData(time) {
+			//获取数据接口
+			var url = '/api/test/getRobotCount';
+			var data = {};
+			last_min = time;
+			data.last_min = time;
+			$.ajax({
+				type: 'get',
+				url: url,
+				data: data,
+				dataType: 'json',
+				success: function(result) {
+				  $("#cache_call_bill_count").text(result.cache_call_bill_count);
+				  $("#cache_call_record_count").text(result.cache_call_record_count);
+				
+					showChart(result);
+				},
+				error: function(e) {
+					console.log(e);
+				}
+			});
+		}
+
+		/*
+		 *  图标数据填充
+		 *  result：后台返回的机器人每分钟使用量
+		 */
+		function showChart(result) {
+			var xData = new Array();
+			var yData = new Array();
+			var cache_call_record_counts = new Array();
+			var cache_call_bill_counts = new Array();
+		// 	console.log(result);
+			//遍历后台返回的数据
+			$.each(result.robots, function(i, val) {
+			 // console.log(val.count_time);
+				xData[i] = getTime(val.count_time);
+				yData[i] = val.use_robot;
+				cache_call_record_counts[i] = result.cache_call_record_count;
+				cache_call_bill_counts[i] = result.cache_call_bill_count;
+			});
+
+			//初始化eachars
+			var myChart = echarts.init(document.getElementById('main'));
+			//配置eachars图标参数
+			myChart.setOption(option = {
+			  baseOption:{
+			    	//图表标题
+  				title: {
+  					text: '机器人使用量'
+  				},
+  				tooltip: {
+  					trigger: 'axis',
+  					position: [30, 30],
+  					// 	重新格式化提示框
+  					formatter: (params) => {
+                  
+  						results = getFsNum(params[0].axisValue, result.robots);
+              newResults = splitArr(results,20)
+  						// for (var tmp = 0; tmp < results.length; tmp++) {
+  						// 	res += '<p style="margin:3px 10px 3px 10px">' + results[tmp].fs_id + '：' + results[
+  						// 		tmp].use_robot + '</p>'
+  						// }
+  						var $box = ''
+  						for (var tmp = 0; tmp < newResults.length; tmp++) {
+  						  var $p = ''
+  							 for(var item = 0;item < newResults[tmp].length;item++){
+  							   $p += '<p style="margin:3px 10px 3px 10px">' + newResults[tmp][item].fs_id + '：' + newResults[tmp][item].use_robot + '</p>'
+  							 }
+  							 $box += `<div index=${tmp}>${$p}</div>` 
+  						}
+  						
+  						var res = '<div style="margin-left:10px;"><p>时间：' + params[0].name + '</p></div>'+'<div class="box-items" style="display:flex">'+$box+'</div>'
+  						for (var i = 0; i < params.length; i++) {
+  							res += '<p style="margin:3px 10px 3px 10px">' + params[i].seriesName + '：' + params[
+  								i].data + '</p>'
+  						}
+  
+  						return res;
+  					}
+  				},
+  				//X轴数据显示
+  				xAxis: {
+  					type: 'category',
+  					data: xData,
+  					label: {
+  
+  					}
+  				},
+  				//y轴数据显示
+  				yAxis: {
+  					splitLine: {
+  						show: false
+  					}
+  				},
+  				//辅助工具
+  				toolbox: {
+  					left: 'right',
+  					feature: {
+  						dataZoom: {
+  							yAxisIndex: 'none'
+  						},
+  						restore: {},
+  						saveAsImage: {}
+  					}
+  				},
+  				visualMap: {
+  					top: 10,
+  					right: 10,
+  					pieces: [{
+  						gt: 0,
+  						lte: 50,
+  						color: '#096'
+  					}, {
+  						gt: 50,
+  						lte: 100,
+  						color: '#ffde33'
+  					}, {
+  						gt: 100,
+  						lte: 150,
+  						color: '#ff9933'
+  					}, {
+  						gt: 150,
+  						lte: 200,
+  						color: '#cc0033'
+  					}, {
+  						gt: 200,
+  						lte: 300,
+  						color: '#660099'
+  					}, {
+  						gt: 300,
+  						color: '#7e0023'
+  					}, {
+  						gt: 400,
+  						color: '#7e0023'
+  					}],
+  					outOfRange: {
+  						color: '#999'
+  					}
+  				},
+  				//数据图表值
+  				series: [
+  				  {
+  					name: '机器人使用',
+  					type: 'line',
+  					data: yData,
+  					// symbol:'circle',   /*折线点的样式circle:实心点；none:去掉点*/
+  					symbolSize: 5,
+  					/*折线点的大小*/
+  					smooth: true,
+  					/*让曲线变平滑*/
+  					itemStyle: {
+  						normal: {
+  							color: '#0e90fe',
+  							lineStyle: {
+  								//折线的颜色
+  								color: '#0e90fe'
+  							}
+  						}
+  					}
+  				},
+  				],
+  				grid: {   //组件离容器的距离
+              left: '15%',
+              right: '3%',
+              bottom: '10%'
+          }
+			  },
+			  media:[{
+			    query:{
+			      maxWidth: 750,               // 当容器宽度小于 750 时。
+			    },
+			    option:{
+    				tooltip: {
+    					trigger: 'axis',
+    					position: [30, 30],
+    					// 	重新格式化提示框
+    					formatter: (params) => {
+    						results = getFsNum(params[0].axisValue, result.robots);
+                newResults = splitArr(results,10)
+    						var $box = ''
+    						for (var tmp = 0; tmp < newResults.length; tmp++) {
+    						  var $p = ''
+    							 for(var item = 0;item < newResults[tmp].length;item++){
+    							   $p += '<p style="margin:3px 10px 3px 10px">' + newResults[tmp][item].fs_id + '：' + newResults[tmp][item].use_robot + '</p>'
+    							 }
+    							 $box += `<div index=${tmp}>${$p}</div>` 
+    						}
+    						
+    						var res = '<div style="margin-left:10px;"><p>时间：' + params[0].name + '</p></div>'+'<div class="box-items" style="display:flex">'+$box+'</div>'
+    						
+    						
+    						for (var i = 0; i < params.length; i++) {
+    							res += '<p style="margin:3px 10px 3px 10px">' + params[i].seriesName + '：' + params[
+    								i].data + '</p>'
+    						}
+    						
+    						return res;
+    					}
+    				},
+    				series: [
+  				  {
+  					name: '机器人使用',
+  					type: 'line',
+  					data: yData,
+  					// symbol:'circle',   /*折线点的样式circle:实心点；none:去掉点*/
+  					symbolSize: 5,
+  					/*折线点的大小*/
+  					smooth: true,
+  					/*让曲线变平滑*/
+  					itemStyle: {
+  						normal: {
+  							color: '#0e90fe',
+  							lineStyle: {
+  								//折线的颜色
+  								color: '#0e90fe'
+  							}
+  						}
+  					}
+  				},
+  				],
+    				
+    			    }
+			    }]
+			});
+
+			window.onresize = function() {
+				myChart.resize();
+			}
+		}
+
+		//将返回的日期数据处理成HH:MM的格式
+
+		function getTime(time) {
+			//匹配时分的正则
+			result = time.match(/[0-9]{2}:[0-9]{2}/);
+			return result;
+		}
+		//拆分数据的方法
+		function splitArr (data,senArrLen){
+  		   //处理成len个一组的数据
+      let data_len = data.length;
+      let arrOuter_len = data_len % senArrLen === 0 ? data_len / senArrLen : parseInt((data_len / senArrLen)+'') + 1;
+      let arrSec_len = data_len > senArrLen ? senArrLen : data_len;//内层数组的长度
+      let arrOuter = new Array(arrOuter_len);//最外层数组
+      let arrOuter_index = 0;//外层数组的子元素下标
+      // console.log(data_len % len);
+      for (let i = 0; i < data_len; i++) {
+          if (i % senArrLen === 0){
+              arrOuter_index++;
+              let len = arrSec_len * arrOuter_index;
+              //将内层数组的长度最小取决于数据长度对len取余，平时最内层由下面赋值决定
+              arrOuter[arrOuter_index-1] = new  Array(data_len % senArrLen);
+              if(arrOuter_index === arrOuter_len)//最后一组
+                  data_len % senArrLen === 0 ?
+                      len = data_len % senArrLen + senArrLen * arrOuter_index :
+                      len = data_len % senArrLen + senArrLen * (arrOuter_index - 1);
+              let arrSec_index = 0;//第二层数组的索引
+              for (let k = i; k < len; k++) {//第一层数组的开始取决于第二层数组长度*当前第一层的索引
+                  arrOuter[arrOuter_index-1][arrSec_index] = data[k];
+                  arrSec_index++;
+              }
+          }
+      }
+      return arrOuter;
+  	}
+
+		//根据时间获取对应时间fs使用机器人显示到图标详情中
+
+		function getFsNum(time, data) {
+			var fs
+			$.each(data, function(index, obj) {
+				if (time == getTime(obj.count_time)) {
+					fs = obj.fs;
+					return false;
+				};
+			});
+			return fs;
+		}
+	</script>
+
+</html>

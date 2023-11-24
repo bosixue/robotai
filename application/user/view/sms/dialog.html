@@ -1,0 +1,122 @@
+<!--运营商中添加和变价短信模板弹框-->
+<div class="modal fade in " id="template-sms" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+     aria-hidden="false" style="display: none;">
+    <div class="modal-dialog modal-sm" style="width: 470px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span>
+
+                </button>
+                <h4 class="modal-title" id="template"><span>添加短信模板</span></h4>
+
+            </div>
+            <div class="modal-body pagelists" style="padding-bottom:15px;">
+                <form id="cus_accountform" method="post" class="form-horizontal margintop"
+                      enctype="multipart/form-data">
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">选择短信通道：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="" id="sms-passageway" class="form-control groupwidth">
+                                <option>请选择短信通道</option>
+                                <option>短信通道1</option>
+                                <option>短信通道2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">选择短信签名：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="" id="sms-signature" class="form-control groupwidth">
+                                <option>请选择短信签名</option>
+                                <option>签名1</option>
+                                <option>签名2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">输入模板内容：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea name="" id="template-content" class="groupwidth" rows="5"
+                                      placeholder="请输入模板内容"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">变量名：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control groupwidth " placeholder="请输入变量名" name=""
+                                   id="varname" value=""/> <span class="variabletips">支持微信号，QQ号，手机号，缩短的网址，若添加多个，以轮询的形式进行发送</span>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="save(0)" type="button">保 存
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 短信发送中短信发送弹框开始 -->
+<div class="modal fade" id="sendSms" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="pzModalLabel">发送短信</h4>
+            </div>
+            <div class="modal-body sendSMSBody">
+                <div class="form-group">
+                    <label style="padding-top: 7px;width: 98px" class="control-label pull-left">选择短信通道：</label>
+                    <div class="col-lg-7 col-sm-7">
+                        <select class="form-control" id="data_channel_option">
+                            <option value="">'选择短信通道'</option>
+                        </select>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="form-group">
+                    <label style="padding-top: 7px;width: 98px" class="control-label pull-left">选择短信模板：</label>
+                    <div class="col-lg-7 col-sm-7">
+                        <select class="form-control" id="data_template_option">
+                            <option value="">选择短信模板</option>
+                        </select>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="form-group">
+                    <label style="padding-top: 7px;width: 98px;text-align: right"
+                           class="control-label pull-left">导入号码：</label>
+                    <div class="col-lg-7 col-sm-7 paddingT7">
+                        <input type="file" id="excelId" onchange="formSoundv(this);" accept=".xlsx">
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="form-group">
+                    <label style="padding-top: 7px;width: 98px;text-align: right"
+                           class="control-label pull-left"></label>
+                    <div class="col-lg-7 col-sm-7 ">
+                        <div class="marginrT15">
+                            <a href="/application/user/static/template.xlsx">模板下载</a>
+                        </div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="modal-footer neweditbtn">
+                <input type='hidden' id='sign-id' value=''/>
+                <input type='hidden' id='action' value='add'/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" id="click_submit" onclick="click_submit();" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 短信发送中短信发送弹框结束-->

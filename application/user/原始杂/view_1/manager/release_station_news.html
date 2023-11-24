@@ -1,0 +1,68 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/systemManage.css" rel="stylesheet" type="text/css"/>
+
+<div class="row">
+  <div class="main-box clearfix">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left r_headline">
+			  <a class="details_title" href="javascript:history.back(1);">
+          <img src="/public/img/pz_fanhui.png">返回上一级
+		    </a>
+		   </div>
+		</header>
+	</div>
+
+  <div class="main-box r_maindataheigth">
+    <header class="main-box-header n_head_box n_head_box_b clearfix">
+  	  <div class="pull-left">
+  		  <span class="n_panel_title">
+          <img src="/public/img/wodehuashu.png">发布站内消息</span>
+      </div>
+    </header>
+    <div class="r_maindata">
+      <form id="form" method="post" enctype="multipart/form-data" method="post">
+        <div class="main-box-body">
+          <!-- 标题 -->
+          <div class="form-group r_dlex">
+            <label>标题:</label>
+            <div class="r_datainput">
+              <input type="text" class="form-control textwidth" name="name" id="name" value="" />
+            </div>
+          </div>
+          <!-- 发送对象 -->
+          <div class="form-group r_dlex">
+            <label>发送对象:</label>
+            <div class="r_datainput">
+              <input type="checkbox" name="" value="">所有人
+              <select name="send_obj" id="send_obj" class="form-control textwidth resetSel c_selectimg">
+  							<option value="">请选择发送对象</option>
+  					</select>
+            </div>
+          </div>
+          <!-- 内容 -->
+          <div class="form-group r_dlex">
+            <label>内容:</label>
+            <div class="r_datainput r_textarea">
+              <textarea name="name"></textarea>
+            </div>
+          </div>
+          <!-- 按钮 -->
+          <div class="form-group r_dlex">
+            <label></label>
+            <div class="r_datainput">
+              <button type="button" class="btn btn-primary">保存</button>
+              <button type="button" class="btn btn-primary">保存并发送</button>
+              <a type="button" class="btn r_cancle">取消</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</div>
+
+{/block}

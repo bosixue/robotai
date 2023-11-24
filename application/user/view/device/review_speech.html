@@ -1,0 +1,466 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/business.css" rel="stylesheet" type="text/css">
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<style>
+	.navbar{
+	  margin-bottom: 0px;
+	}
+</style>
+
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><img src="__PUBLIC__/img_sj/huashushenhe.png" alt="">话术审核</span>
+		  </div>
+			<a class="btn s_addnew pull-right headbtn hide" data-title="批量删除"  onclick="popTipswin(this);" target-form="ids"><img src="__PUBLIC__/img/piliangshanchu.png" alt="">批量删除</a>
+		</header>
+		<div class="r_switch">
+			<input class="switch switch-anim" onchange="checkNum()" type="checkbox" checked><span id="checkname">话术审核通道开启</span>
+		</div>
+
+		<div class="main-box-body clearfix">
+	      <section class="navbar clearfix">
+					<form method="get" role="form">
+						<div class="form-group dis_in  c_seldate clearfix b_setmargin">
+              <!-- 搜索关键字 -->
+							<div class="dis_in">
+                <label class="levelSelect statusSelect">话术名称:</label>
+                <div class=" dis_in">
+                  <input type="text" class="form-control nameinput" id="speech" name="speech">
+                </div>
+							</div>
+              <!-- 话术创建者 -->
+							<div class="dis_in c_marleft">
+                <label class="levelSelect statusSelect">话术创建者:</label>
+                <div class=" dis_in">
+                  <input type="text" class="form-control nameinput" id="creator" name="creator">
+                </div>
+							</div>
+              <!-- 选择审核状态 -->
+              <div class="dis_in c_marleft">
+                <label class="levelSelect statusSelect">审核状态:</label>
+                <div class="dis_in c_selectset pr pz_selectss">
+  							 <select style="width:100px;" name="shenghe" id="shenghe" class="form-control resetSel c_selectimg">
+  								 <option value=" " selected="">请选择审核状态</option>
+  								 <option value="0">审核中</option>
+  								 <option value="1">审核通过</option>
+  							 </select>
+  						  </div>
+              </div>
+              <!-- 新建话术时间 -->
+              <div class="dis_in c_marleft">
+                <!-- 选择日期 -->
+  							 <label class="levelSelect statusSelect">新建话术时间:</label>
+  								 <div class="dis_in">
+  									 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+  									 <script>
+  											 $('#startDate').fdatepicker({
+  												 format: 'yyyy-mm-dd',
+  												 // pickTime: true
+  											 });
+  									 </script>
+  								 </div>
+  								 <span class="pz_zhi">至</span>
+  								 <div class="dis_in">
+  									 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+  									 <script>
+  										 $('#endTime').fdatepicker({
+  											 format: 'yyyy-mm-dd',
+  											 // pickTime: true
+  										 });
+  									 </script>
+  								 </div>
+              </div>
+              <!-- 话术审核时间 -->
+              <div class="dis_in c_marleft">
+                <!-- 选择日期 -->
+  							 <label class="levelSelect statusSelect">话术审核时间:</label>
+  								 <div class="dis_in">
+  									 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startaudit" name="startaudit" value="" readonly="">
+  									 <script>
+  											 $('#startaudit').fdatepicker({
+  												 format: 'yyyy-mm-dd',
+  												 // pickTime: true
+  											 });
+  									 </script>
+  								 </div>
+  								 <span class="pz_zhi">至</span>
+  								 <div class="dis_in">
+  									 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endaudit" name="endaudit" value="" readonly="">
+  									 <script>
+  										 $('#endaudit').fdatepicker({
+  											 format: 'yyyy-mm-dd',
+  											 // pickTime: true
+  										 });
+  									 </script>
+  								 </div>
+              </div>
+							<!-- 查询、重置按钮 -->
+							<div class="dis_in c_marleft pz_annius">
+								<button class="btn btn-primary" type="submit">查询</button>
+								<button class="btn btn-primary pz_kongxin_anniusty" onclick="reset_click();" type="button">重置</button>
+							</div>
+					  </div>
+				 </form>
+				</section>
+
+			  <div class="table-responsive">
+
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center hide"><input class="check-all" name='all_checked' type="checkbox"/></th>
+								<th class="text-center">序号</th>
+								<th class="text-center">话术名称</th>
+								<th class="text-center">行业</th>
+								<th class="text-center">话术创建者</th>
+								<th class="text-center">审核状态</th>
+								<th class="text-center">新建话术时间</th>
+								<th class="text-center">话术审核时间</th>
+								<!-- <th class="text-center">审核状态</th> -->
+                <th class="text-center">备注</th>
+								<th class="text-center">操作</th>
+					    </tr>
+				    </thead>
+				   <tbody>
+
+
+								<tr>
+								 <td class="text-center hide">
+										<input type="checkbox" name="roleids" class="rolecheck" value=""/>
+								 </td>
+								 <td class="text-center">1</td>
+								 <td class="text-center">测试话术1</td>
+									<td class="text-center">金融</td>
+									<td class="text-center">scy00</td>
+									<td class="text-center">未审核</td>
+									<td class="text-center">2018.11.15  1:02</td>
+									<td class="text-center">2018.11.15  1:02</td>
+									<td class="text-center">继续</td>
+									<td class="text-center">
+										<!--<a  href="{:url('user/scenarios/showscene')}">查看话术&nbsp;&nbsp;</a>-->
+										<a href="javascript:void(0);" data-title="删除模板"  onclick="addspeech();">审核话术</a>
+									</td>
+								</tr>
+				    </tbody>
+				  </table>
+				    <div class="row">
+								<div class="col-sm-4 text-left"></div>
+								<div class="col-sm-8 text-right"></div>
+						</div>
+			  </div>
+
+				<footer class="main-box-footer clearfix">
+					<div class="pull-left hide">
+						<input class="check-all" name='DataCheck_all' type="checkbox"/> 选择全部记录（已选择<span id="check_count">0</span>条记录）
+					</div>
+        <div class="pull-right">
+          <span>全部记录：50条</span>
+        </div>
+				</footer>
+		</div>
+	</div>
+
+</div>
+
+ <script type="text/javascript">
+
+	 $(function(){
+			var keyword = "{$_GET['keyword']|default=''}";
+			$('#keyword').val(keyword);
+
+			checkNum();
+	})
+
+	function checkNum(){
+      if($('.switch-anim').prop('checked')){
+        $('#checkname').html('话术审核通道开启');
+				$('.main-box-body').show();
+      }else{
+        $('#checkname').html('话术审核通道关闭');
+				$('.main-box-body').hide();
+      }
+    }
+
+ //设置状态
+ function setstatus(id,status){
+ 		var url = "{:url('setTplStatus')}";
+ 		$.ajax({
+ 					url : url,
+ 					dataType : "json",
+ 					type : "post",
+ 					data : {'sId':id,'status':status},
+ 					success: function(data){
+ 						if (data.code) {
+ 						alert(data.msg);
+ 				}else{
+ 						location.reload();
+ 				}
+ 					},
+ 					error : function() {
+ 						alert('失败。');
+ 					}
+ 		});
+ }
+
+
+//删除模板
+ function delRole(id){
+    var r=confirm('确认删除?');
+     	if (!r)
+           return;
+     	   var ids;
+ 	    	if(id){
+ 	    		var Ids=[];
+ 	    		Ids.push(id);
+ 	    		ids = Ids;
+ 	    	}else{
+ 	    		 var IdsVal = [];
+ 	        	 var roleids = document.getElementsByName("roleids");
+ 	    		 for ( var j = 0; j < roleids.length; j++) {
+ 	    		    if (roleids.item(j).checked == true) {
+ 	    		    	IdsVal.push(roleids.item(j).value);
+ 	    		    }
+ 	    		 }
+ 	    		 ids = IdsVal;
+ 	    	}
+
+ 	    	if(!ids.length){
+ 	    		alert("至少选择一条。");
+ 	    		 return false;
+ 	    	}
+
+     		 $.post("{:url('delTpl')}",{'ids':ids},function(data){
+     			if (data.code) {
+		    		 alert(data.msg);
+		    	}else{
+		    		 location.reload();
+		    	}
+
+ 			});
+
+
+ }
+ //当前页全选
+  $("input[name='all_checked'][type='checkbox']").click(function(){
+ 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+   	} else {
+  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+  	}
+    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+  });
+ 	//子复选框的事件
+ 	$('input[type="checkbox"][name="roleids"]').click(function(){
+ 		//当没有选中某个子复选框时，check-all取消选中
+ 		if (!$(".rolecheck").checked) {
+ 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+ 		}
+ 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+ 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+ 		if (checkedsub == chsub) {
+ 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+ 		}
+    $("#check_count").text(checkedsub);
+ 	});
+  //全部数据全选 DataCheck
+  $("input[name='DataCheck_all'][type='checkbox']").click(function(){
+   if ($("input[name='DataCheck_all'][type='checkbox']").is(":checked")) {
+      $("input[name='roleids'][type='checkbox']").prop("checked",true);
+      $("input[name='all_checked'][type='checkbox']").prop("checked",true);
+    } else {
+      $("input[name='roleids'][type='checkbox']").prop("checked",false);
+      $("input[name='all_checked'][type='checkbox']").prop("checked",false);
+    }
+    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+  });
+	//重置
+	function reset_click(){
+		$('input[name="startDate"][type="text"]').val("");//开始日期
+		$('input[name="endTime"][type="text"]').val("");//结束日期
+		$('select[name="status"] option:eq(0)').prop("selected", 'selected');//模板类型
+		$('select[name="shenghe"] option:eq(0)').prop("selected", 'selected');//审核状态
+		$('input[name="mobile"]').val("");//手机号码
+		$('input[name="keyword"]').val("");//签名内容关键字
+	}
+ </script>
+
+</div>
+
+
+<!-- 新建(编辑)短信模板 -->
+<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog" style="435px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">审核话术</h4>
+				  </div>
+				  <div class="modal-body">
+						  <form id="form" method="post" class="form-horizontal" enctype="multipart/form-data" method="post">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">审核备注</label>
+										<div class="col-lg-9 col-sm-9">
+											 <textarea name="templateInfo" id="templateInfo" class="textwidth" style="border: 1px solid #cfdadd;"></textarea>
+										</div>
+									</div>
+							</form>
+				 </div>
+				 <div style="clear:both;"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">审核不通过</button>
+					<button type="button" onclick="uploadData();" class="btn btn-primary">审核通过</button>
+				</div>
+			</div>
+
+			</div>
+</div>
+
+<script type="text/javascript">
+
+
+ //保存页面
+ function addspeech(uid){
+
+   if(uid > 0){
+
+        $.ajax({
+            type: "POST",
+            dataType:'json',
+            url: "{:url('User/Sms/getTemplate')}",
+            cache: false,
+            data: {id:uid},
+            success: function(data) {
+
+              if (data.code == 0) {
+
+                  var data = data.data;
+                  $("#tplChannel").val(data.channel_id);
+                  $("#tplSign").val(data.sign_id);
+                  $("#tplType").val(data.type);
+                  $("#tplName").val(data.name);
+                  $("#tplPrice").val(data.price);
+                  $("#templateInfo").val(data.conent);
+
+                  $('#newModal').modal('show');
+
+              }
+
+            },
+            error: function(data) {
+              alert("获取数据失败");
+            }
+        })
+
+
+   }
+   else{
+
+     $("#tplChannel").val(" ");
+     $("#tplSign").val(" ");
+     $("#tplType").val("");
+     $("#tplName").val("");
+     $("#tplPrice").val("");
+     $("#templateInfo").val("");
+     $('#newModal').modal('show');
+
+   }
+
+ }
+
+
+ function uploadData(){
+
+    var tplChannel = $("#tplChannel").val();
+    if(!tplChannel){
+      alert("关联通道不能为空");
+      return false;
+    }
+
+    var tplSign = $("#tplSign").val();
+    if(!tplSign){
+      alert("关联签名不能为空");
+      return false;
+    }
+
+    var tplType = $("#tplType").val();
+    if(tplType==''){
+      alert("模板类型不能为空");
+      return false;
+    }
+
+    var tplName = $("#tplName").val();
+    if(tplName==''){
+      alert("模板名称不能为空");
+      return false;
+    }
+
+    var tplPrice = $("#tplPrice").val();
+    if(tplPrice==''){
+      alert("模板价格不能为空");
+      return false;
+    }
+
+    var templateInfo = $("#templateInfo").val();
+    if(templateInfo==''){
+      alert("模板内容不能为空");
+      return false;
+    }
+
+    //return false;
+
+    var href = "{:url('User/Sms/template')}";
+
+   var tplId = $("#tplId").val();
+// 			 if(tplId > 0){
+//
+// 				 href = "{:url('User/Label/editLabel')}";
+//
+// 			 }
+
+
+     $.ajax({
+         type: "POST",
+         dataType:'json',
+         url: href,
+         cache: false,
+         data: $("#form").serialize(),
+         success: function(data) {
+
+          if (data.code == 0) {
+
+               alert(data.msg + ' 页面即将自动刷新~');
+
+          }else{
+             alert(data.msg);
+
+          }
+
+          location.reload();
+
+         },
+         error: function(data) {
+           alert("提交失败");
+         }
+     })
+
+   $('#newModal').modal('hide');
+
+ }
+
+</script>
+
+{include file="sms/sms_targer" /}
+
+{/block}

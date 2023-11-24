@@ -1,0 +1,157 @@
+a, a:hover {
+  text-decoration: none;
+  color: #0e90fe;
+}
+.dflex {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+}
+.pr {
+  position: relative;
+}
+.dis_in {
+  display: inline-block;
+}
+.dis_no {
+  display: none;
+}
+.dis_blo {
+  display: block;
+}
+.n_panel_title {
+  display: inline-block;
+  line-height: 34px;
+}
+.n_panel_title img {
+  width: 22px;
+	height: 22px;
+  vertical-align: sub;
+  margin-right: 8px;
+}
+.table tbody>tr>td {
+	padding: 6px 8px;
+}
+.table-responsive {
+	min-height: .01%;
+	overflow-x: hidden;
+}
+#newModal > .modal-dialog {
+  width: 450px;
+  margin: 30px auto;
+}
+.textwidth{
+	width:250px;
+}
+.main-box .main-box-header {
+  padding-top: 20px;
+  /* padding-bottom: 25px; */
+}
+.s_addnew {
+  width: 120px;
+  border-radius: 3px;
+	border: none;
+  background: #0e90fe;
+  color: #fff;
+  text-align: center;
+  margin-left: 15px;
+}
+.s_addnew:hover{
+  color: #fff !important;
+}
+.s_addnew img {
+  vertical-align: sub;
+  margin-right: 6px;
+}
+.navbar {
+  margin-bottom: 0px;
+}
+.formgroup {
+  float: left;
+  margin-left: 8px;
+  margin-bottom: -1px;
+  margin-right: 3px;
+  max-width: 95%;
+}
+.formgroup span {
+  vertical-align: middle;
+}
+.statusSelect {
+  line-height: 34px;
+  float: left;
+  margin-right: 5px;
+}
+.c_dateSelbg::after {
+  /* content: ''; */
+  width: 15px;
+  height: 15px;
+  background: url(../img/xuanzeriqi.png) 100% 100% no-repeat;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+}
+.c_dateSelbg input {
+  width: 150px;
+  padding: 6px;
+}
+.c_seldate select {
+  width: 150px !important;
+  padding: 0px 10px;
+}
+.c_marleft {
+  margin-left: 15px;
+  margin-bottom: 8px;
+  vertical-align: top;
+}
+.resetSel {
+  background-clip: padding-box;
+  border-color: #e0e3e4;
+  color: #404040;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.c_selectset:after {
+  position: absolute;
+  /* content: ''; */
+  width: 0;
+  height: 0;
+  top: 49%;
+  right: 14px;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 6px dashed;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+.main-box-footer {
+  margin-top: 15px;
+}
+.c_datebgimg {
+  background: url(../img/xuanzeriqi.png) 94% 50% no-repeat;
+}
+.c_timebgimg {
+  background: url(../img/xuanzeshijian.png) 94% 50% no-repeat;
+}
+.c_selectimg {
+  background: url(../img_sj/jiantou.png) 94% 50% no-repeat;
+}
+
+.l-font-size{
+  font-size: 14px!important;
+}
+
+.fl {
+  float: left;
+}

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<meta name="keywords" content="" />
+    <meta name="description" content="" />
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no,uc-fitscreen=yes">
+		<title>通话</title>
+		<script src="jquery-2.2.3.min.js"></script>
+	</head>
+	<body>
+	  <style>
+	    ul, li {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+      }
+      a {
+          text-decoration: none;
+      }
+      * {
+          margin: 0;
+          padding: 0;
+          font-family:"PingFang-SC-Medium";
+      }
+      .clearfix:after, .clearfix:before {
+          display: table;
+          content:''
+      }
+      .clearfix:after {
+          clear: both;
+      }
+      .clearfix {
+          *zoom: 1;
+      }
+      body {
+          font-family:"MicrosoftYaHei";
+          background-color: #fff;
+      }
+	    .th_main{
+	      max-width:768px;
+	      margin:auto;
+	      background: #fff;
+	    }
+	    .th_audition{
+	      overflow-x: hidden;
+        overflow-y: auto;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 5px;
+        bottom: 0;
+        z-index: 1;
+	    }
+	    .th_message{
+        position: relative;
+	      width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 10px 15px 0;
+        z-index: 5;
+	    }
+	    .msg-item-wrapper{
+	      position: relative;
+        margin: 0;
+        padding: 0 0 20px;
+	    }
+	    .th_list_msg_left{
+	      padding-left: 45px;
+	      text-align: left;
+	    }
+	    .th_list_msg_right{
+	      padding-right: 45px;
+	      text-align: right;
+	    }
+	    .employee-wrapper img.avatar{
+	      display: block;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        cursor: pointer;
+        /*background: url(../img/avatar/employee_50x50-8ef8810c52.png) no-repeat;*/
+        background-size: contain;
+	    }
+	    .th_list_msg_left .employee-wrapper img.avatar{
+        position: absolute;
+        left: 0;
+	    }
+	    .th_list_msg_right .employee-wrapper img.avatar{
+        position: absolute;
+        right: 0;
+	    }
+	    .employee-wrapper .name {
+          display: block;
+          font-size: 13px;
+          color: #9c9c9c;
+          line-height: 12px;
+          padding-bottom: 7px;
+      }
+      .th_list_msg_left .employee-wrapper .name {
+          text-align: left;
+      }
+      .th_list_msg_right .employee-wrapper .name {
+          text-align: right;
+      }
+      .th_list_msg .th_msg {
+          display: inline-block;
+          position: relative;
+          max-width: 80%;
+          padding: 10px 15px;
+          border-radius: 5px;
+          color: #000000;
+          text-align: left;
+          word-wrap: break-word;
+          -webkit-user-select: text;
+          user-select: text;
+          z-index: 2;
+          font-size: 13px;
+          -webkit-transition: background-color .5s;
+          -moz-transition: background-color .5s;
+          -o-transition: background-color .5s;
+          transition: background-color .5s;
+      }
+      .th_list_msg_left.th_list_msg .th_msg{
+        background-color: #EBF2FA;
+        border: solid 1px #EBF2FA;
+      }
+      .th_list_msg_right.th_list_msg .th_msg{
+        background-color: #c0e6fa;
+        border: solid 1px #8acdf0;
+      }
+      .th_list_msg_left .th_msg.msg-text .i-arrow {
+          left: -3px;
+      }
+      .th_list_msg_right .th_msg.msg-text .i-arrow {
+          right: -13px;
+      }
+
+      /*.th_list_msg_left .th_msg .i-arrow { */
+      /*    top: 10px; */
+      /*    left: -7px;*/
+          /*background-image: url(https://a9.fspage.com/FSR/frontend/html/qx-dist/img/sprite/qx/chat-s50332f6d66.png);*/
+      /*    background-position: 0 -139px;*/
+      /*    background-repeat: no-repeat;*/
+      /*    background-size: 136px 2405px;*/
+      /*}*/
+      .th_msg .i-arrow {
+          position: absolute;
+          width: 7px;
+          height: 10px;
+      }
+      .th_message .th_message_list .th_list_msg .pz_audio{
+        padding: 8px 0px;
+      }
+      .th_message .th_message_list .th_list_msg .pz_audio audio {
+  				height: 30px !important;
+          width: 90% !important;
+  			}
+  		.th_list_msg_left .c_selshowhide::before {
+          position: absolute;
+          content: '';
+          width: 15px;
+          height: 15px;
+          top: 7px;
+          left: -6%;
+          /* border-bottom: 1px solid #e7e7e7; */
+          /* border-right: 1px solid #e7e7e7; */
+          transform: rotate(45deg) translateX(-50%);
+          -webkit-transform: rotate(45deg) translateX(-50%);
+          -ms-transform: rotate(45deg) translateX(-50%);
+          background: #ebf2fa;
+      }
+      .th_list_msg_right .c_selshowhide::before {
+          position: absolute;
+          content: '';
+          width: 14px;
+          height: 14px;
+          top: 13px;
+          right: -5%;
+          border-top: 1px solid #8acdf0;
+          border-right: 1px solid #8acdf0;
+          transform: rotate(45deg) translateX(-50%);
+          -webkit-transform: rotate(45deg) translateX(-50%);
+          -ms-transform: rotate(45deg) translateX(-50%);
+          background: #c0e6fa;
+      }
+	  </style>
+	  <div class="th_main">
+	    <div class="th_audition">
+	      <div class="th_message">
+         {volist name="$bills" id='vo'}
+         <!--role =0 为客服-->
+          {if condition="$vo.role eq 0"}
+          <div class="th_message_list">
+	          <div class="th_list_msg msg-item-wrapper th_list_msg_right" id="">
+	            <div class="employee-wrapper">
+                <img class="avatar" src="/public/images/pz_kefutouxiang.png">
+                <p class="name">
+                  <span class="j-name">机器人</span><span class="company"></span>
+                </p>
+              </div>
+              <div class="th_msg msg-text"><i class="c_selshowhide i-arrow"></i>
+                <div class="drag-handler" draggable="true"></div>
+                <div class="text-select">{$vo.message}</div>
+              </div>
+              <i class="select-radio"></i>
+            </div>
+          </div>
+         {else /}
+         
+          <div class="th_message_list">
+	          <div class="th_list_msg msg-item-wrapper th_list_msg_left" id="">
+	            <div class="employee-wrapper">
+                <img class="avatar" src="/public/images/pkehu.png">
+                <p class="name">
+                	{if condition="!empty($name)"}
+                	 <span class="j-name">{$name}</span><span class="company"></span>
+                	{else/}
+                  <span class="j-name">客户</span><span class="company"></span>
+                  {/if}
+                </p>
+              </div>
+              <div class="th_msg msg-text"><i class="i-arrow c_selshowhide"></i>
+                <div class="drag-handler" draggable="true"></div>
+                <div class="text-select">{$vo.message}</div>
+              </div>
+              <!--录音-->
+              <i class="select-radio"></i>
+              {if condition="!empty($vo.path)"}
+              <div class="pz_audio">
+  							<audio src="{:config('cut_audio_server_url')}/{$vo.path}" id="record_path" controls="controls"></audio>
+  						</div>
+  						{/if}
+            </div>
+          </div>
+          
+         {/if}
+        {/volist}
+	      </div>
+	    </div>
+
+    </div>
+	</body>
+</html>

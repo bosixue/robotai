@@ -1,0 +1,155 @@
+a, a:hover {
+  text-decoration: none;
+}
+.c_selshowhide {
+  margin-top: 0px;
+}
+.c_selshowhide_a::after {
+  position: absolute;
+  content: '';
+  width: 8px;
+  height: 8px;
+  bottom: 1px;
+  right: -14px;
+  border-top: 1px solid #0e90fe;
+  border-left: 1px solid #0e90fe;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+}
+.c_selshowhide .c_selshidea::after {
+  position: absolute;
+  content: '';
+  width: 8px;
+  height: 8px;
+  bottom: 7px;
+  right: -14px;
+  border-left: 0px;
+  border-top: 0px;
+  border-bottom: 1px solid #0e90fe;
+  border-right: 1px solid #0e90fe;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+}
+.s_content {
+  overflow: hidden;
+  white-space: pre-line;
+  text-overflow: ellipsis;
+  padding-left: 10%;
+  text-align: left;
+  line-height: 20px;
+}
+.c_selshowhide {
+  padding-left: 10%;
+  text-align: left;
+}
+.c_selshowhide p {
+  line-height: 8px;
+  height: 12px;
+  margin-bottom: 0px;
+}
+.s_setheight {
+  height: 90px;
+}
+.form-group .col-lg-10.col-sm-10 {
+  padding-top: 7px;
+}
+.imgclass > td > p>img{
+  width:50px;
+}
+.statusSelect {
+    line-height: 30px;
+    float: left;
+}
+
+.classifyBox>span {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 14px;
+    margin-right: 10px;
+    border: 1px solid rgb(0, 166, 90);
+    color: rgb(0, 166, 90);
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 1s cubic-bezier(.215,.61,.355,1);
+}
+.n_panel_title img{
+  vertical-align: sub;
+  margin-right:8px;
+}
+.n_panel_title i {
+  font-size: 20px;
+}
+.c_selectimg {
+  background: url(../img_sj/jiantou.png) 94% 50% no-repeat;
+}
+.resetSel {
+  background-clip: padding-box;
+  border-color: #e0e3e4;
+  color: #404040;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.r_headline {
+  margin-top: 5px;
+}
+.r_headline a {
+  font-size: 16px;
+  color: #404040;
+}
+.r_headline img {
+  vertical-align: text-bottom;
+  margin-right: 8px;
+}
+.r_maindata {
+  margin: 20px 0px;
+}
+.r_dlex {
+  display: flex;
+  display: -webkit-flex;
+}
+.r_maindata .form-group label {
+  text-align: right;
+  width: 100px;
+  line-height: 30px;
+}
+.r_maindata .form-group {
+  margin-bottom: 18px;
+}
+.r_datainput {
+  margin-left: 12px;
+}
+.r_maindata .form-group .r_datainput input, .r_maindata .form-group .r_datainput select {
+  width: 200px;
+}
+.r_maindata .form-group .r_datainput input[type=checkbox] {
+  width: auto;
+  margin-top: 9px;
+  margin-bottom: 9px;
+}
+.r_maindata .form-group .r_datainput textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  font-size: 13px;
+}
+.r_textarea {
+  width: 65%;
+}
+.r_cancle {
+  background-color: #e84e40;
+  border-color: #e84e40;
+  color: #fff;
+  margin-left: 8px;
+}
+.r_cancle:hover {
+  color: #fff;
+}
+.r_maindataheigth {
+  height: 100%;
+}

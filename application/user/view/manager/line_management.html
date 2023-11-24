@@ -1,0 +1,1222 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="device/dialog" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link  href="/public/css/line.css" type="text/css" rel="stylesheet">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/line_management.css"/>
+
+<!--<script src="__PUBLIC__/js/pubics.js"></script>-->
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="clearfix fadeInRight animated">
+			<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+				<li role="presentation" class='active' >
+					<a href="#home" aria-controls="home" role="tab" data-toggle="tab">线路列表</a>
+					<i></i>
+				</li>
+				<li role="presentation" >
+					<a href="#lineConfiguration" aria-controls="lineConfiguration" role="tab" data-toggle="tab">线路分配</a>
+					<i></i>
+				</li>
+				{if session('user_auth.role') == '管理员' || session('user_auth.role') == '运营商'}
+				<li role="presentation">
+					<a href="#Consumption" aria-controls="Consumption" role="tab" data-toggle="tab">线路统计计费</a>
+				</li>
+				{/if}
+			</ul>
+
+			<div class="main-box s_padding20 clearfix pz_manping_height">
+				<div class="tab-content">
+					<!--线路列表-->
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<section class="navbar clearfix">
+							<div class="form-inline pull-left">
+								<div class="form-group">
+									<label class="statusSelect pull-left" >线路名称：</label>
+									<input type="text" class="form-control pull-left l-search" id="username_list" autocomplete="off" placeholder="请输入线路名称" name="keyword" >
+								</div>
+								<div class="form-group">
+									<span class="btn btn-primary  pull-left" type="button" onclick="ajaxLineInfo(1)">查询</span>
+									<span class="btn btn-primary pull-left ant-btn btn-default" type="button" onclick="reset()">重置</span>
+								</div>
+							</div>
+							<div class="form-inline pull-right " >
+								{if $role_id neq 17 && $role_id neq 18}
+								<!--<span class="btn btn-primary" type="button" onclick="addLine(0);">添加私有线路</span>-->
+								<span class="btn btn-primary" type="button" onclick="addLineGroup();">添加线路组</span>
+								{/if}
+								<a href="#lineConfiguration" class="btn btn-primary" aria-controls="lineConfiguration" role="tab" data-toggle="tab" onclick="switch_lines();">线路分配</a>
+								<span class="btn btn-primary" type="button" onclick="delete_all();">线路删除</span>
+							</div>
+						</section>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+								<tr>
+									<th class="text-center"><input class=" check-all" type="checkbox"  name="all_checked"></th>
+									<th class="text-center">序号</th>
+									<th class="text-center">线路组名称</th>
+									<th class="text-center">价格 (元/分钟）</th>
+									<th class="text-center">线路数量</th>
+									<th class="text-center">线路组创建时间</th>
+									<th class="text-center">线路来源</th>
+									<th class="text-center">操作</th>
+									<th class="text-center">备注</th>
+								</tr>
+								</thead>
+								<tbody id="recharge-recored-list">
+
+								</tbody>
+							</table>
+						</div>
+						<div class="component-page-empty" id="consumeempty">
+							<div class="empty-tip line">
+								<p><img src="__PUBLIC__/img/none.png" /></p>
+								<p>暂无数据</p>
+							</div>
+						</div>
+						<div class="row">
+							<input type="hidden" value="" id="saveNowpage">
+							<footer class="main-box-footer clearfix col-sm-12">
+
+							</footer>
+							<div class="pull-left h_page checks" style="margin-left:8px">
+								<input type="checkbox" class="member_check rolecheck all_checked_count" name="all_checked">全  选</div>
+							<div class="paging"></div>
+						</div>
+					</div>
+
+					<!--线路配置-->
+					<div role="tabpanel" class="tab-pane" id="lineConfiguration">
+						<div class="sectionbg">
+							<section class="navbar l-navbar clearfix sectionstyle">
+								<div class="form-inline pull-left">
+									<div class="form-group l-formmargin">
+										<label class="control-label">用户名称：</label>
+										<select class="form-control" name="accountsel" id="accountsel" >
+											<option value="" id="show_all">请选择用户</option>;
+										</select>
+									</div>
+									<div class="form-group l-formmargin">
+										<label class="control-label">用户搜索：</label>
+										<input type="text" class="form-control" placeholder="请输入用户名" id="admin_name"  name="" value="">
+									</div>
+									<div class="form-group formmargin">
+										<button type="button" class="btn btn-primary" name="button" onclick="searchAdmin();">查询</button>
+										<button type="button" class="btn btn-primary ant-btn btn-default" name="button" onclick="reset();">重置</button>
+									</div>
+								</div>
+							</section>
+						</div>
+						<div class="content">
+							<div class="left-content l-overflow pz_innerbox">
+								<div class="maincontent">
+									<div class="list-title">
+										<p><i class="blueline"></i>账户列表</p>
+									</div>
+									<div class="operator" id="usershow">
+									</div>
+								</div>
+							</div>
+							<div class="right-content">
+								<div class="main-head clearfix">
+									<p class="pull-left line-details" id="adminfenpei"></p>
+									<button type="button" class="btn btn-primary pull-left" name="button" onclick="allocation_line();">分配线路</button>
+									<!--分配线路的uid 储存便于分配使用-->
+									<input id="fenpeiuid"  type="hidden" value="">
+								</div>
+								<div>
+									<table class="table table-bordered table-hover">
+										<tbody id="fenpeiline">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--/线路配置-->
+					<!--线路详情-->
+					{if session('user_auth.role') == '管理员' || session('user_auth.role') == '运营商'}
+					<div role="tabpanel" class="tab-pane" id="Consumption">
+						<section class="navbar clearfix">
+							<div class="form-inline pull-left">
+								<div class="form-group">
+									<label class="statusSelect pull-left" >线路名称：</label>
+									<select name="lineCountId" id="lineCountId" class="form-control resetSel c_selectimg l-search">
+										<option value="0">全部线路</option>
+									</select>
+								</div>
+								<div class="form-group e_headmargin">
+									<label class="statusSelect pull-left" >用户名称：</label>
+									<input type="text" class="form-control pull-left l-search" autocomplete="off" id="username_details" placeholder="请输入用户名" name="keyword" >
+								</div>
+								<div class="form-group">
+									<span class="btn btn-primary  pull-left" type="button" onclick="ajaxLineCount(1)">查询</span>
+									<span class="btn btn-primary  pull-left ant-btn btn-default" type="button" onclick="reset_statistics_charging();">重置</span>
+								</div>
+							</div>
+							<div class="form-inline pull-right " >
+								<!--<span class="btn btn-primary" type="button" data-title="删除多个线路" onclick="popTipswin(this)">批量删除</span>-->
+							</div>
+						</section>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+								<tr>
+									<!--<th class="text-center">-->
+									<!--	<input class="check-all" name='all_checked_count' type="checkbox"/>-->
+									<!--</th>-->
+									<th class="text-center">序号</th>
+									<th class="text-center">线路名称</th>
+									<th class="text-center">用户名称</th>
+									<th class="text-center">用户类型</th>
+									<th class="text-center">通话时长</th>
+									<th class="text-center">成本价</th>
+									<th class="text-center">成本总额</th>
+									<th class="text-center">销售价</th>
+									<th class="text-center">销售总额</th>
+									<th class="text-center">利润</th>
+									<th class="text-center">计费时间</th>
+									<th class="text-center">线路来源</th>
+								</tr>
+								</thead>
+								<tbody id="recharge-recored-list-xxxxx">
+
+								</tbody>
+							</table>
+							<input type="hidden" value="" id="saveCountNowpage">
+						</div>
+						<div class="component-page-empty" id="consumeemptys">
+							<div class="empty-tip line">
+								<p><img src="__PUBLIC__/img/none.png" /></p>
+								<p>暂无数据</p>
+							</div>
+						</div>
+						<div class="row">
+							<footer class="main-box-footer clearfix col-sm-12 footss">
+								<div class="pull-left h_page" style="margin-left:8px;line-height: 44px;">
+									全部数据：<span id="xianlujifei_count"></span>条
+									<!--<input type="checkbox" class="member_check rolecheck all_checked_count" name="all_checked_count">全  选-->
+								</div>
+								<div class="paging1"></div>
+							</footer>
+						</div>
+						<div class="row">
+							<footer class="clearfix col-sm-12">
+								<table class="table table-bordered table-hover sumdata">
+									<thead>
+									<tr>
+										<th class="text-center" >合计：</th>
+										<th >总通话时长：<label id="sumDuration">15000</label></th>
+										<th>成本总额：<label id="chengbenTotal">1800元</label></th>
+										<th>销售总额：<label id="xiaoshouTotal">3000元</label></th>
+										<th>总利润：<label id="lirunTotal">1200元</label></th>
+									</tr>
+									</thead>
+								</table>
+							</footer>
+						</div>
+					</div>
+					{/if}
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	//线路数据全选
+	$("input[name='all_checked'][type='checkbox']").click(function(){
+		if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+			$("input[name='chidecheck'][type='checkbox']").prop("checked",true);
+		} else {
+			$("input[name='chidecheck'][type='checkbox']").prop("checked",false);
+		}
+	});
+	//线路统计全选
+	$("input[name='all_checked_count'][type='checkbox']").click(function(){
+		if ($("input[name='all_checked_count'][type='checkbox']").is(":checked")) {
+			$("input[name='roleids'][type='checkbox']").prop("checked",true);
+		} else {
+			$("input[name='roleids'][type='checkbox']").prop("checked",false);
+		}
+	});
+
+
+	//重置
+	function orderChongzhi(){
+		$('#startDate').val("");
+		$('#endTime').val("");
+	}
+</script>
+
+
+
+<script type="text/javascript">
+	//重置
+	function reset(){
+		$("#username_list").val('');
+		$("#admin_name").val('');
+		$("#accountsel option:eq(0)").prop("selected", 'selected');
+		ajaxLineInfo(1);
+	}
+	getAllLines();
+
+	//得到全部路线
+	function getAllLines(){
+		var url = "{:url('user/Line/get_lines')}"
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			success:function(result){
+				var lineMembers = result.data.lineMembers;
+				//线路配置下的用户 select选择
+				if(lineMembers.length>0){
+					for(var i = 0; i<lineMembers.length; i++){
+						var string = '<option value="'+lineMembers[i]['id']+'">'+lineMembers[i]['name']+'</option>';
+						$("#lineCountId").append(string);
+					}
+				}
+			},
+		});
+	}
+	//删除线路计费统计数据
+	function delline(){
+		var arr=[];
+		$("input[name='chidecheck']:checked").each(function(index,item){
+			arr.push($(this).val())
+		});
+		if(!arr || arr.length==0){
+			alert('请最少选择一项,再导出');
+			return false;
+		}
+		$.post("{:url('user/Line/delete_statistics')}",{'data':arr},function(data){
+			if(data.code==0){
+				alert(data.msg);
+				var page = $("#saveCountNowpage").val();
+				ajaxLineCount(page);
+			}else{
+				alert(data.msg);
+			}
+			$('#tips_model').modal('hide');
+		});
+	}
+
+	/**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	 */
+	var Paging1 = new Paging01();
+	Paging1.init_args({
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging1', //放置分页的class
+		callback: ajaxLineCount, //回调函数 比如show_datas(页码, 显示条数)
+		key:1,
+	});
+
+	//线路计费的统计页面数据
+	function ajaxLineCount(page,limit){
+		if(!page){
+			var page=1;
+		}
+		if(!limit){
+			var limit=10;
+		}
+
+		//将页码存入某个隐身元素中
+		$("#saveCountNowpage").val(page);
+		var lineid = $("#lineCountId").val();
+		var username=$("#username_details").val();
+		var data = {
+			'lineid':lineid,
+			'username':username,
+			'page' :page,
+			'limit':limit
+		};
+		var url = "{:url('user/Line/line_statistics')}"
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				var total = result.data.total; //数据总条数
+				var Nowpage = result.data.Nowpage; //当前页码
+				var lines = result.data.lines; //线路统计的数据
+				console.log(result);
+				$("#sumDuration").text(result.data.sumDuration);
+				$("#chengbenTotal").text(result.data.chengbenTotal);
+				$("#xiaoshouTotal").text(result.data.xiaoshouTotal);
+				$("#lirunTotal").text(result.data.lirunTotal);
+				//string +='<td class="text-center"><input class="rolecheck" type="checkbox" name="roleids" value="'+lines[i]['id']+'" /></td>';
+				var  string="" ;
+				for(var i = 0; i<lines.length; i++){
+					string +='<tr>';
+
+					string +='<td class="text-center">'+((Nowpage-1)*limit+(i+1))+'</td>';
+					string +='<td class="text-center">'+lines[i]['line_name']+'</td>';
+					string +='<td class="text-center">'+lines[i]['username']+'</td>';
+					string +='<td class="text-center">'+lines[i]['role_name']+'</td>';
+					string +='<td class="text-center">'+lines[i]['duration']+'</td>';
+					string +='<td class="text-center">'+lines[i]['cost_price']+'</td>';
+					string +='<td class="text-center">'+lines[i]['cost_price_statistics']+'</td>';
+					string +='<td class="text-center">'+lines[i]['sale_price']+'</td>';
+					string +='<td class="text-center">'+lines[i]['sale_price_statistics']+'</td>';
+					string +='<td class="text-center">'+lines[i]['profit']+'</td>';
+					string +='<td class="text-center">'+lines[i]['date']+'</td>';
+					string +='<td class="text-center">'+lines[i]['laiyuan']+'</td>';
+					string +='</tr>';
+				}
+
+				if(lines.length >0){
+					$("#consumeemptys").hide();
+					$(".footss").show();
+				}else{
+					$("#consumeemptys").show();
+					$(".footss").hide();
+				}
+
+
+
+				$("#recharge-recored-list-xxxxx").html(string);
+				$('#xianlujifei_count').text(total);
+
+				//显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+				Paging1.paging(Nowpage, total, limit);
+
+
+
+				//给线路统计的前端显示的线路搜索信息
+				var lineMembers = result.data.lineMembers; //线路统计的数据
+			},
+			error:function(){
+				Paging1.paging(1, 0, 10);
+				console.log('错误');
+			}
+		});
+	}
+	//重置统计计费
+	function reset_statistics_charging()
+	{
+		$('#lineCountId').val(0);
+		$('#username_details').val('');
+	}
+	//得到分配线路中 左侧用户信息 和分配线路等信息
+	function  getUserandLine(){
+		//搜索用户名
+		var url = "{:url('user/Line/view_lines')}"
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			success:function(result){
+				//分配线路的线路选择 id 在device/dialog中  是选择要分配的线路的
+				var febpeilines = result.data.fenpeilines;
+				console.log(febpeilines);
+				if(febpeilines.length>0){
+					for(var i = 0; i<febpeilines.length; i++){
+						var string = '<option    value="'+febpeilines[i]['id']+'">'+febpeilines[i]['name']+'</option>';
+						$("#fenpeilineSelect").append(string);
+					}
+				}
+				//显示分配线路的 左侧的用户列表
+				var admininfos = result.data.adminInfo;// 改用户下所属的用户信息
+				if(admininfos.length>0){
+					for(var i = 0; i<admininfos.length; i++){
+						var string = '<div class="l-account " user-id="'+admininfos[i]['id']+'"  onclick="click_get_lines_admin_id(this)">'
+								+'<span >'+admininfos[i]['username']+'</span>'
+								+'</div>';
+						$("#usershow").append(string);
+					}
+				}
+				//线路分配 下的账户名称 中的账户username
+				if(admininfos.length>0){
+					for(var i = 0; i<admininfos.length; i++){
+						var string = '<option value="'+admininfos[i]['id']+'">'+admininfos[i]['username']+'</option>';
+						$("#accountsel").append(string);
+					}
+				}
+				//线路配置下用户列表 高亮加自动首选
+				$('.l-account').unbind('click');
+				$('.l-account').click(function(){
+					if($(this).hasClass('l-account-active') === false){
+						$(this).addClass('l-account-active').siblings().removeClass('l-account-active');
+					}
+				});
+				$('.l-account').eq(0).click();
+				// 显示第一个数据
+				var obj = ('.operator .l-account:nth-of-type(1)');
+				click_get_lines_admin_id(obj);
+			},
+			error:function(){
+				console.log('错误');
+			}
+		});
+	}
+	/**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	 */
+	var Paging = new Paging01();
+	Paging.init_args({
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: ajaxLineInfo, //回调函数 比如show_datas(页码, 显示条数)
+		key:2,
+	});
+	getUserandLine()
+	ajaxLineCount(1)
+	ajaxLineInfo(1)
+	//初始化用户信息
+	$("#fenpeiuid").empty();
+
+	//显示线路组信息
+	function ajaxLineInfo(page,limit){
+		if(!page){
+			var page=1;
+		}
+		if(!limit){
+			var limit=10;
+		}
+		//将页码存入某个隐身元素中
+		$("#saveNowpage").val(page);
+		//搜索用户名
+		var username = $("#username_list").val();
+		var url = "{:url('user/Line/view_lines')}"
+		var data={
+			'username':username,
+			'page' :page,
+			'limit':limit
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				window.lien_group_page = page;
+				var total = result.data.total; //数据总条数
+				var Nowpage = result.data.Nowpage; //当前页码
+				var lines = result.data.lines; //线路数据
+				var limit = result.data.limit; //线路数据
+				console.log(result);
+				var  string = "";
+				//显示线路列表
+				for(var i = 0; i<lines.length; i++){
+					string += '<tr> ';
+					string +='<td class="text-center"><input class=" check-all" type="checkbox" name= chidecheck  value="'+lines[i]['id']+'"></td>';
+					string +='<td class="text-center">'+((Nowpage-1)*limit+(i+1))+'</td>';
+					string +='<td class="text-center">'+lines[i]['name']+'</td>';
+					string +='<td class="text-center">'+lines[i]['sales_price']+'</td>';
+					string +='<td class="text-center">'+lines[i]['line_num']+'</td>';
+					string +='<td class="text-center">'+timestampToTime(lines[i]['create_time'])+'</td>';
+					string +='<td class="text-center">'+lines[i]['laiyuan']+'</td>';
+					string +='<td class="text-center">';
+					{if $role_id !=18 && $role_id != 17}
+					if(false&&lines[i]['pid']==0){
+						string +='<a href="javascript:void(0);"  onclick="addLine('+lines[i]['id']+');">编辑&nbsp;&nbsp;&nbsp;</a>';
+					}
+					{/if}
+						string +='<a href="/user/manager/line_details?id='+lines[i]['id']+'">线路详情</a>';
+						if(lines[i]['line_group_pid'] == 0){
+							string +='<a href="javascript:;" class="update_line_group_data" data-id="'+lines[i]['id']+'">编辑</a>';
+						}
+						string +='<a href="javascript:void(0);"  data-title="删除单个线路" onclick="delete_group_ond('+lines[i]['id']+');">删除</a>';
+						string +='</td>';
+						string +='<td class="text-center">'+lines[i]['remark']+'</td>';
+						string +='</tr>';
+					}
+					if(lines.length > 0 ){
+						$("#consumeempty").hide();
+						$(".checks").show();
+
+					}else {
+						$("#consumeempty").show();
+						$(".checks").hide();
+					}
+					$("#recharge-recored-list").html(string);
+					//显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+					Paging.paging(Nowpage, total, limit);
+					show_edit_line_group_window();
+				},
+				error:function(){
+					Paging.paging(1, 0, 10);
+					console.log('错误');
+				}
+			});
+	}
+	//点击编辑显示编辑的弹窗
+	function show_edit_line_group_window()
+	{
+		$('.update_line_group_data').unbind('click');
+		$('.update_line_group_data').click(function(){
+			var line_group_id = $(this).data('id');
+			var url = "{:url('user/line/get_line_group_data')}";
+			var data = {
+				line_group_id:line_group_id
+			};
+			$.ajax({
+				type:'POST',
+				dataType:'json',
+				url:url,
+				data:data,
+				success:function(result){
+					console.log(result);
+					if(result.code == 0){
+						$('#editLineGroupName').val(result.data.name);
+						$('#editLineGroupPrice').val(result.data.sales_price);
+						$('#editLineGrouRemarks').val(result.data.remark);
+						$('#edit_line_id').val(line_group_id);
+						$('#lineGroupEdit').modal('show');
+					}else if(result.code == 2){
+						alert(result.msg);
+					}else{
+						alert(result.msg);
+					}
+				},
+				error:function(){
+					console.log('请求失败');
+				}
+			});
+		});
+	}
+	//点击编辑 提交编辑请求
+	var update_line_group_status = true;
+	function update_line_group()
+	{
+		if(update_line_group_status == false){
+			return false;
+		}
+		update_line_group_status = false;
+
+		//1.获取数据
+		//2.判断数据是否完整
+		//3.提交数据
+		//4.根据返回结果 作出提示
+
+
+		//1.获取数据
+		var data = {
+			line_group_name:$('#editLineGroupName').val(),
+			sales_price:$('#editLineGroupPrice').val(),
+			remark:$('#editLineGrouRemarks').val(),
+			line_group_id:$('#edit_line_id').val()
+		};
+		//2.判断数据是否完整
+		if(data.line_group_name == ''){
+			alert('线路组名称不能为空');
+			update_line_group_status = true;
+			return false;
+		}
+
+		//3.提交数据
+		var url = "{:url('user/line/update_line_group_data')}";
+		$.ajax({
+			type:"POST",
+			dataType:'json',
+			data:data,
+			url:url,
+			success:function(result){
+				console.log(result);
+				if(result.code == 2){
+					alert(result.msg);
+				}else if(result.code == 1){
+					alert(result.msg);
+				}else{
+					alert('编辑成功');
+					$('#lineGroupEdit').modal('hide');
+					ajaxLineInfo(window.lien_group_page);
+				}
+				update_line_group_status = true;
+			},
+			error:function(){
+				alert('提交失败');
+				update_line_group_status = true;
+			}
+		});
+
+	}
+
+	//分配线路之线路变化 价钱跟着变
+	function get_price_by_lineid(){
+		var line_id = $("#fenpeilineSelect").val();
+		//先去隐藏 input中 读取uid
+		var uid = $("#fenpeiuid").val();
+		var url = "{:url('user/Line/fenpei_line_price')}";
+		var data={
+			'line_id': line_id,
+			'uid':uid,
+		}
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				//得到该线路的价格
+				var sales_price = result.data.sales_price
+				var sales_price_fen  = result.data.sales_price_fen
+
+				//将价格放入前端
+				var tag = $('#fenpeilineSelect').val();
+				// alert(tag);
+				if(tag != ''){
+					$('.distribution-line').removeClass('hidden');
+					$("#sales_price").text(sales_price+'元/分钟');
+					//如果线路分配过  分配线路的价钱不是0的话  就显示分配线路的价钱出来
+					if(sales_price_fen!=0){
+						$('#line-saleprice').val(sales_price_fen);
+					}
+				}else{
+					$('.distribution-line').addClass('hidden');
+				}
+
+
+			},
+			error:function(){
+				console.log('错误');
+			},
+		});
+	}
+	//刷新用户所拥有的线路
+	function refurbish_fenpei_line(){
+		var url = "{:url('user/Line/view_lines')}"
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			success:function(result){
+				$("#fenpeilineSelect").children("option:gt(0)").remove();
+				//分配线路的线路选择 id 在device/dialog中  是选择要分配的线路的
+				var febpeilines = result.data.fenpeilines;
+				console.log(febpeilines);
+				if(febpeilines.length>0){
+					for(var i = 0; i<febpeilines.length; i++){
+						var string = '<option    value="'+febpeilines[i]['id']+'">'+febpeilines[i]['name']+'</option>';
+						$("#fenpeilineSelect").append(string);
+					}
+				}
+			}
+
+		});
+	}
+	//分配线路 之显示数据
+	function allocation_line(){
+		//每次点击分配路线按钮 都刷新下线路 免得有新的线路没有及时显示出来
+		refurbish_fenpei_line();
+		//每次点击分配线路 都先清空之前分配线路 遗留的数据
+		clear_distribution_line();
+
+		//先去隐藏 input中 读取uid
+		var uid = $("#fenpeiuid").val();
+		var url = "{:url('user/Line/fenpei_get_username')}";
+		var data={
+			'uid': uid,
+		}
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				$('#username_fenpei').text(result.data.username);
+			},
+			error:function(){
+				console.log('错误');
+			},
+		});
+		$('#alloction-line').modal('show');
+	}
+	//分配线路 之 入库逻辑
+	var fenpeiLineStatus = true;
+	function fenpeiLine(){
+		if(fenpeiLineStatus == false){
+			return false;
+		}
+		fenpeiLineStatus = false;
+		//先去隐藏 input中 读取uid
+		var uid = $("#fenpeiuid").val();
+		//分配的线路id
+		var line_id = $("#fenpeilineSelect").val();
+		//销售价
+		var sales_price = $("#line-saleprice").val();
+		//备注
+		var notes =$("#notes").val();
+		var data ={
+			'uid':uid,
+			'line_id':line_id,
+			'sales_price':sales_price,
+			'notes':notes,
+		};
+		var url = "{:url('user/Line/add_fenpei')}";
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					alert(result.msg);
+					$('#alloction-line').modal('hide');
+					get_lines_admin_id(uid)
+				}else{
+					alert(result.msg);
+				}
+				fenpeiLineStatus = true;
+			},
+			error:function(){
+				fenpeiLineStatus = true;
+				console.log('错误');
+			},
+		});
+	}
+
+
+	//线路分配中的 用户查询
+	function searchAdmin(){
+		//得要要搜索的 adminname  和adminid
+		var adminid=$("#accountsel").val();
+		var adminname=$("#admin_name").val();
+		var url = "{:url('user/Line/view_lines')}"
+		var data={
+			'adminid':adminid,
+			'adminname':adminname,
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				//显示用户列表
+				var admininfos = result.data.adminInfo;// 该用户下所属的用户信息
+				console.log(admininfos);
+				//如果要搜索的用户不存在 的话 就提示之
+				if(admininfos.length==0){
+					alert('该用户不存在');
+					return false;
+				}
+				$("#usershow").find("div").remove();
+				if(admininfos.length>0){
+					for(var i = 0; i<admininfos.length; i++){
+						var string = '<div class="l-account " user-id="'+admininfos[i]['id']+'"  onclick="click_get_lines_admin_id(this)">'
+								+'<span >'+admininfos[i]['username']+'</span>'
+								+'</div>';
+						$("#usershow").append(string);
+					}
+				}
+				//线路配置下用户列表 高亮加自动首选
+				$('.l-account').unbind('click');
+				$('.l-account').click(function(){
+					if($(this).hasClass('l-account-active') === false){
+						$(this).addClass('l-account-active').siblings().removeClass('l-account-active');
+					}
+				});
+				$(".operator .l-account").hover(function(){
+					$(this).addClass('l-account-active').siblings().removeClass('l-account-active');
+				},function(){
+					$(".operator .l-account").removeClass('l-account-active');
+				});
+				$('.l-account').eq(0).click();
+				// 显示第一个数据
+				var obj = ('.operator .l-account:nth-of-type(1)');
+				click_get_lines_admin_id(obj);
+			},
+			error:function(){
+				console.log('错误');
+			}
+		});
+	}
+
+	//点击用户名 得到他所被分配的线路信息
+	function click_get_lines_admin_id(obj){
+		var uid =$(obj).attr('user-id');
+		//把user_id 放在隐藏标签中 便于分配线路使用
+		$("#fenpeiuid").val(uid);
+		var url = "{:url('user/Line/fenpei_view')}";
+		var data={
+			'uid': uid,
+		}
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				$("#fenpeiline").find("tr").remove();
+				var adminlin = result.data.lines;
+				console.log(adminlin);
+				console.log(adminlin.length);
+				if(adminlin.length>0){
+					for(var i = 0; i<adminlin.length; i++){
+						var string ='<tr><td><b>线路名称：</b>'+adminlin[i]['name']+'</td>'
+								+'<td><b>成本价：</b>'+adminlin[i]['chengben']+'元/条</td>';
+						{if session('user_auth.role') != '商家'}
+						string += '<td><b>销售价：</b>'+adminlin[i]['sales_price']+'元/条</td>';
+						{/if}
+							string += '<td><b>分配时间：</b>'+timestampToTime2(adminlin[i]['create_time'])+'</td>'
+									+'<td class="remarktab"><b>备注：</b>'+adminlin[i]['remark']+'</td>'
+									+'<td><a href="javascript:;" data-title="删除用户线路" data-user-id="'+uid+'" data-line-id="'+adminlin[i]['id']+'" onclick="popTipswin(this)"><img src="__PUBLIC__/img_sj/del.png" alt=""></a>'
+									+'</td></tr>';
+							$("#fenpeiline").append(string);
+						}
+					}
+					if(result.data.username){
+						$("#adminfenpei").html(result.data.username+'<span>('+result.data.role_name+')</span>');
+					}
+				}
+			});
+	}
+	//删除 给用户分配的线路
+	function delete_line(line_id,user_id){
+		var uid =$("#fenpeiuid").val();
+		var url = "{:url('user/Line/delet_line')}";
+		var data={
+			'id': line_id,
+		}
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					alert('删除成功');
+					$('#tips_model').modal('hide');
+					//删除成功之后 再用uid 重新刷新下 用户所属线路 然后显示之
+					get_lines_admin_id(uid);
+				}
+			},
+			error:function(){
+				console.log('错误');
+			},
+		});
+	}
+	//使用用户id 得到用户线路信息 用于删除线路的功能 因为这个不是用来点击用户了  代码和上面的点击用户 获取用户线路 几乎一模一样
+	function get_lines_admin_id(id){
+		//把user_id 放在隐藏标签中 便于分配线路使用
+		$("#fenpeiuid").val(id);
+		var url = "{:url('user/Line/fenpei_view')}";
+		var data={
+			'uid': id,
+		}
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				$("#fenpeiline").find("tr").remove();
+				var adminlin = result.data.lines;
+				console.log(result.data.username);
+				if(adminlin.length>0){
+					for(var i = 0; i<adminlin.length; i++){
+						var string ='<tr><td><b>线路名称：</b>'+adminlin[i]['name']+'</td>'
+								+'<td><b>成本价：</b>'+adminlin[i]['chengben']+'元/条</td>';
+						{if session('user_auth.role') != '商家'}
+						string += '<td><b>销售价：</b>'+adminlin[i]['sales_price']+'元/条</td>';
+						{/if}
+							string += '<td><b>分配时间：</b>'+timestampToTime(adminlin[i]['create_time'])+'</td>'
+									+'<td class="remarktab"><b>备注：</b>'+adminlin[i]['remark']+'</td>'
+									+'<td><a href="javascript:;" data-title="删除用户线路" data-line-id="'+adminlin[i]['id']+'" onclick="popTipswin(this)"><img src="__PUBLIC__/img_sj/del.png" alt=""></a>'
+									+'</td></tr>';
+							$("#fenpeiline").append(string);
+						}
+					}
+					if(result.data.username){
+						$("#adminfenpei").html(result.data.username+'<span>('+result.data.role_name+')</span>');
+					}
+				}
+			});
+	}
+	//添加和 编辑线路方法
+	function add_line(){
+		var type=1;
+		var name =$('#e-linename').val();
+		var inter_ip =$("#e-interface-IP").val();
+		var call_prefix =$("#e-call-prefix").val();
+		var sales_price =$("#e-cost-price").val();
+		var remark =$("#lineGrouRemarks").val();
+		var id=$("#line_id").val();
+		var type_link = $('#type_link').val();
+		var url = "{:url('user/Line/add_line_group')}"
+		var data={
+			'type':type,
+			'id':id,
+			'name' :name,
+			'inter_ip':inter_ip,
+			'call_prefix':call_prefix,
+			'sales_price':sales_price,
+			'remark':remark,
+			'type_link': type_link
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					$("#line-add").modal('hide');
+					alert(result.msg);
+					//读取当前页码 好刷新 免得从1页开始
+					var page =$("#saveNowpage").val();
+					ajaxLineInfo(page)
+				}else{
+					$("#line-add").modal('hide');
+					alert(result.msg);
+				}
+			}
+		});
+
+	}
+
+
+
+	//添加和 编辑线路方法
+	function add_line_group(){
+		var type=1;
+		var name =$('#lineGroupName').val();
+		var sales_price =$("#lineGroupPrice").val();
+		var remark =$("#lineGrouRemarks").val();
+		var id='';
+		var url = "{:url('user/Line/add_line_group')}";
+		var data={
+			'type':type,
+			'id':id,
+			'name' :name,
+			'sales_price':sales_price,
+			'remark':remark,
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					$("#lineGroupAdd").modal('hide');
+					alert(result.msg);
+					//读取当前页码 好刷新 免得从1页开始
+					var page =$("#saveNowpage").val();
+					ajaxLineInfo(page)
+				}else{
+					$("#lineGroupAdd").modal('hide');
+					alert(result.msg);
+				}
+			}
+		});
+
+	}
+
+
+
+
+	//删除
+	function delete_ond(id){
+		if(!confirm("是否要删除？")){
+			return false;
+		}
+		if(!id){
+			alert('请选择一项再删除');
+		}
+		var url = "{:url('user/Line/delet_line')}"
+		var data={
+			'id':id,
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					alert('删除成功');
+					//读取当前页码 好刷新 免得从1页开始
+					var page =$("#saveNowpage").val();
+					ajaxLineInfo(page);
+				}
+			},
+			error:function(){
+				console.log('错误');
+			},
+
+		});
+	}
+
+
+
+	//删除
+	function delete_group_ond(id){
+		if(!confirm("是否要删除？")){
+			return false;
+		}
+		if(!id){
+			alert('请选择一项再删除');
+		}
+		var url = "{:url('user/Line/delet_line_group')}"
+		var data={
+			'id':id,
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					alert('删除成功');
+					//读取当前页码 好刷新 免得从1页开始
+					var page =$("#saveNowpage").val();
+					ajaxLineInfo(page);
+				}else{
+					alert(result.msg);
+				}
+			}
+			,
+			error:function(){
+				console.log('错误');
+			},
+
+		});
+	}
+
+
+
+	function delete_all(){
+		if(!confirm("是否要删除？")){
+			return false;
+		}
+		var arr=[];
+		$("input[name='chidecheck']:checked").each(function(index,item){
+			arr.push($(this).val())
+		});
+		var url = "{:url('user/Line/delet_line_group')}"
+		var data={
+			'arr':arr,
+		};
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				if(result.code==0){
+					alert('删除成功');
+					//读取当前页码 好刷新 免得从1页开始
+					var page =$("#saveNowpage").val();
+					ajaxLineInfo(page);
+				}
+			},
+			error:function(){
+				console.log('错误');
+			},
+
+		});
+
+
+	}
+
+
+	//时间戳转换函数 xxxx-xx-xx xx:xx:xx
+	function timestampToTime(timestamp) {
+		var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+		var Y = date.getFullYear();
+		var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) ;
+		var D = date.getDate();
+		if(D<10){
+			D='0' + D;
+		}
+		var h = date.getHours() ;
+		if(h<10){
+			h='0' + h;
+		}
+		var m = date.getMinutes() ;
+		if(m<10){
+			m='0' + m;
+		}
+		var s = date.getSeconds();
+		if(s<10){
+			s='0' + s;
+		}
+		return Y+'-'+M+'-'+D+'  '+h+':'+m+':'+s;
+	}
+	//时间戳转换函数 xxxx-xx-xx
+	function timestampToTime2(timestamp) {
+		var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+		var Y = date.getFullYear();
+		var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) ;
+		var D = date.getDate();
+		if(D<10){
+			D='0' + D;
+		}
+		var h = date.getHours() ;
+		if(h<10){
+			h='0' + h;
+		}
+		var m = date.getMinutes() ;
+		if(m<10){
+			m='0' + m;
+		}
+		var s = date.getSeconds();
+		if(s<10){
+			s='0' + s;
+		}
+		return Y+'-'+M+'-'+D;
+	}
+
+	function displayUser() {
+		$('#user_list').modal('show');
+	}
+
+	function switch_lines() {
+		$('.nav-tabs>li:nth-of-type(2)').addClass('active').siblings().removeClass('active');
+	}
+
+
+	//分配线路清空
+	function clear_distribution_line(){
+		$('.distribution-line').addClass('hidden');
+		$('#fenpeilineSelect').val('');
+		$('#line-saleprice').val('');
+		$('#notes').val('');
+	}
+
+	//添加线路组弹框显示
+	function addLineGroup(){
+	  $('#lineGroupName').val('');
+	  $('#lineGroupPrice').val('');
+	  $('#lineGrouRemarks').val('');
+		$("#lineGroupAdd").modal('show');
+	}
+
+
+
+</script>
+
+
+{include file="sms/sms_targer" /}
+{/block}

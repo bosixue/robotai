@@ -1,0 +1,834 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<script src="__PUBLIC__/plugs/echarts/echarts.min.js"></script>
+
+<!-- <script src="__PUBLIC__/plugs/highcharts/js/highcharts.js"></script>
+ -->
+<script src="__PUBLIC__/plugs/highcharts/highcharts.js"></script>
+<script src="__PUBLIC__/plugs/highcharts/modules/series-label.js"></script>
+<script src="__PUBLIC__/plugs/highcharts/modules/exporting.js"></script>
+<script src="__PUBLIC__/plugs/highcharts/modules/export-data.js"></script>
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/controller.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/indexV_C.css"/>
+
+
+<div class="row">
+  <div class="col-lg-12 fadeInRight animated ">
+    <div class="panel panel-default ">
+     <div class="panel-body" style="padding:15px 30px;">
+       <div class="panel-top">
+         <span class="panel-title"><img src="__PUBLIC__/img_sj/xiaoshouguanli.png" style="width:18px;height:18px;"/>销售管理</span>
+        </div>
+        <!-- 销售管理 -->
+        <ul class="l-salesmanagement">
+          <li class="c_dialliOne">
+            <div class="c_recharge l_recharge">
+                <div class="c_rechargeImg dis-inline-block pull-left"><img src="__PUBLIC__/img_sj/zhanghaoshu.png"/></div>
+                <div class="pull-left salesmanagement">
+                  <p>销售账号数</p>
+                  <p id="salesCount"></p>
+                  <p><a href="{:url('manager/account_management')}"> 账号管理 > </a></p>
+                </div>
+            </div>
+          </li>
+          <li class="c_dialliOne">
+            <div class="c_recharge l_recharge">
+                <div class="c_rechargeImg dis-inline-block pull-left"><img src="__PUBLIC__/img_sj/jiqirengeshu.png"/></div>
+                <div class="pull-left salesmanagement">
+                  <p>机器人个数</p>
+                  <p id="robotInfo">分配完之后剩余的/总共拥有的</p>
+                  <p><a href="{:url('user/manager/robot_management')}"> 机器人管理 > </a></p>
+                </div>
+            </div>
+          </li>
+          <li class="c_dialliOne">
+            <div class="c_recharge l_recharge">
+                <div class="c_rechargeImg dis-inline-block pull-left"><img src="__PUBLIC__/img_sj/xianlushuliang.png"/></div>
+                <div class="pull-left salesmanagement">
+                  <p>线路数量</p>
+                  <p id="lineCount"></p>
+                  <p><a href="{:url('user/manager/line_management')}"> 线路管理 > </a></p>
+                </div>
+            </div>
+          </li>
+          <li class="c_dialliOne">
+            <div class="c_recharge l_recharge">
+                <div class="c_rechargeImg dis-inline-block pull-left"><img src="__PUBLIC__/img_sj/shenhe.png"/></div>
+                <div class="pull-left salesmanagement">
+                  <p>待审核话术数</p>
+                  <p id="pendingScenarios"></p>
+                  <p><a href="{:url('user/device/review_speech')}"> 话术审核 > </a></p>
+                </div>
+            </div>
+          </li>
+          <li class="c_dialliOne">
+            <div class="c_recharge l_recharge">
+                <div class="c_rechargeImg dis-inline-block pull-left"><img src="__PUBLIC__/img_sj/keyongyue.png"/></div>
+                <div class="pull-left salesmanagement">
+                  <p>当前余额</p>
+                  <p id="myMoneyBalance"></p>
+                  <p><a href="{:url('user/enterprise/admin_survey')}"> 财务管理 > </a></p>
+                </div>
+            </div>
+          </li>
+        </ul>
+        <!-- /销售管理 -->
+     </div>
+   </div>
+      <div class="l_loadfixed" style="display: none;">
+          <div class="l_loaddata">
+              <p><img src="/public/img_sj/reload.gif" alt="">正在查询中...</p>
+              <p>   </p>
+          </div>
+      </div>
+  <div class="panel panel-default ">
+  	  <div class="panel-body" style="padding:15px 30px;">
+  			<div class="panel-top">
+  				<span class="panel-title"><img src="__PUBLIC__/img/wodeshuju.png" style="width:16px;height:18px;"/>今日数据</span>
+          <a style="font-size: 16px;color: #1279d2;float: right;cursor: pointer;" href="{:url('plan/task_statistics')}">查看详情 ></a>
+        </div>
+        <!-- 我的数据 -->
+        <ul class="c_dialstatistic sj_c_dialstatistic">
+          <li class="c_dialliOne" title="等待拨打号码数" style="cursor: pointer;">
+            <p class="pz_dataTitle">待拨打</p>
+            <div class="c_recharge">
+              <div class="c_rechargeZongshu dis-inline-block"><p>{:$user_data['run_customer_count']}</p> <p class="hide">等待拨打号码数</p></div>
+              <!-- <span></span> -->
+              <div class="c_rechargeImg pz_rechargeImg dis-inline-block"><img src="__PUBLIC__/img/02daiboda.png"/></div>
+            </div>
+          </li>
+          <li class="c_dialliOne" title="已拨打总数" style="cursor: pointer;">
+            <p class="pz_dataTitle">已呼叫</p>
+            <div class="c_recharge">
+              <div class="c_rechargeZongshu dis-inline-block"><p>{:$user_data['calls_numbers']}</p> <p class="hide">已拨打总数</p></div>
+              <!-- <span></span> -->
+              <div class="c_rechargeImg pz_rechargeImg dis-inline-block"><img src="__PUBLIC__/img/03yihujiao.png"/></div>
+            </div>
+          </li>
+          <li class="c_dialliOne" title="已接通电话总数" style="cursor: pointer;">
+            <p class="pz_dataTitle">已接通</p>
+            <div class="c_recharge">
+              <div class="c_rechargeZongshu dis-inline-block"><p>{:$user_data['connected_numbers']}</p> <p class="hide">已接通电话总数</p></div>
+              <!-- <span></span> -->
+              <div class="c_rechargeImg pz_rechargeImg dis-inline-block"><img src="__PUBLIC__/img/04yijietong.png"/></div>
+            </div>
+          </li>
+          <li class="c_dialliOne" title="已接通电话占比" style="cursor: pointer;">
+            <p class="pz_dataTitle">接通率</p>
+            <div class="c_recharge">
+              <div class="c_rechargeZongshu dis-inline-block"><p>{:$user_data['connection_rate']}%</p> <p class="hide">已接通电话占比</p></div>
+              <!-- <span></span> -->
+              <div class="c_rechargeImg pz_rechargeImg dis-inline-block"><img src="__PUBLIC__/img/05jietongshu.png"/></div>
+            </div>
+          </li>
+          <li class="c_dialliOne" title="意向客户(A+B)总数" style="cursor: pointer;">
+            <p class="pz_dataTitle">意向客户</p>
+            <div class="c_recharge">
+              <div class="c_rechargeZongshu dis-inline-block"><p>{:$user_data['intentional_customers']}</p> <p class="hide">意向客户(A+B)总数</p></div>
+              <!-- <span></span> -->
+              <div class="c_rechargeImg pz_rechargeImg dis-inline-block"><img src="__PUBLIC__/img/06yixiangkehu.png"/></div>
+            </div>
+          </li>
+        </ul>
+        <!-- /我的数据 -->
+  	  </div>
+		</div>
+    <!-- 快捷操作 -->
+    <div class="panel panel-default" >
+      <div class="panel-body" id="panel-body-pz" style="padding:15px 30px;">
+        <div class="panel-top">
+          <span class="panel-title"><img src="__PUBLIC__/img/kuaijiecaozuo.png" style="width:18px;height:19px;"/>快捷操作</span>
+        </div>
+        <div class="" style="margin-bottom: 0px;margin-top:20px;display: flex;display: -webkit-flex;flex-wrap: wrap;-webkit-flex-wrap: wrap;">
+          <div class="panel panel-default panel-step ">
+            <a href="{:url('user/scenarios/scene')}">
+              <div class="panel-body pr date-right-text">
+                <div class="up-num "><p class="pz_upnumP"><img src="__PUBLIC__/img/tianjiahuashu01.png" /></p></div>
+                <div class="date-right">
+                  添加话术
+                </div>
+                <i class="date-rightborder"></i>
+              </div>
+            </a>
+          </div>
+          <div class="panel panel-default panel-step ">
+            <a href="{:url('user/plan/newadd')}">
+              <div class="panel-body pr date-right-text">
+                <div class="up-num "><p class="pz_upnumP"><img src="__PUBLIC__/img/tianjairenwu01.png" /></p></div>
+                <div class="date-right">
+                  添加任务
+                </div>
+                <i class="date-rightborder"></i>
+              </div>
+            </a>
+          </div>
+          <div class="panel panel-default panel-step ">
+            <a href="{:url('user/member/intentional_member')}">
+              <div class="panel-body pr date-right-text">
+                <div class="up-num "><p class="pz_upnumP"><img src="__PUBLIC__/img/daoruziyuan01.png" /></p></div>
+                <div class="date-right">
+                  导入资源
+                </div>
+                <i class="date-rightborder"></i>
+              </div>
+            </a>
+          </div>
+          <div class="panel panel-default panel-step ">
+            <a href="{:url('plan/newindex')}">
+              <div class="panel-body pr date-right-text">
+                <div class="up-num "><p class="pz_upnumP"><img src="__PUBLIC__/img/qidongrenwu01.png" /></p></div>
+                <div class="date-right">
+                  启动任务
+                </div>
+                <i class="date-rightborder"></i>
+              </div>
+            </a>
+          </div>
+          <div class="panel panel-default panel-step ">
+            <a href="{:url('user/callrecord/current_record')}">
+              <div class="panel-body pr date-right-text">
+                <div class="up-num "><p class="pz_upnumP"><img src="__PUBLIC__/img/tonghuajilu01.png" /></p></div>
+                <div class="date-right">
+                  通话记录
+                </div>
+                <i class="date-rightborder"></i>
+              </div>
+            </a>
+          </div>
+          <div class="panel panel-default panel-step ">
+            <a href="{:url('user/member/intentional_member')}">
+              <div class="panel-body pr date-right-text">
+                <div class="up-num "><p class="pz_upnumP"><img src="__PUBLIC__/img/kehuguanli01.png" /></p></div>
+                <div class="date-right">
+                  客户管理
+                </div>
+                <!-- <i class="date-rightborder"></i> -->
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <script>
+        $("#panel-body-pz .panel.panel-default").hover(function(){
+          $(this).find("a .date-right-text .up-num").addClass("pzUpnum_on fadeInRight animated");
+          var chick_img = $(this).find("a .date-right-text .up-num .pz_upnumP img").attr("src").replace("01.png","");
+          $(this).find("a .date-right-text .up-num .pz_upnumP img").attr("src",chick_img+"02.png");
+        },function(){
+          $("#panel-body-pz .panel.panel-default a .date-right-text .up-num").removeClass("pzUpnum_on fadeInRight animated");
+          var chick_img2 = $(this).find("a .date-right-text .up-num .pz_upnumP img").attr("src").replace("02.png","");
+          $(this).find("a .date-right-text .up-num .pz_upnumP img").attr("src",chick_img2+"01.png");
+        });
+      </script>
+    </div>
+    <!-- /快捷操作 -->
+
+	</div>
+  <div class="col-lg-12 fadeInRight animated" >
+    <div class="panel-top pz_renwu_title">
+			<span class="panel-title"><img src="/public/img/renwuzhongxin.png" style="width:16px;height:18px;">任务中心</span>
+		<!--	
+      <div style="float: right;margin-right: 30px;">
+        <a class="btn btn-primary c_addtask" style="font-size: 13px;color: #fff;cursor: pointer;padding: 4px 20px;margin-left: 21px;" href="{:url('user/plan/newadd')}">添加任务</a>
+        <a class="btn btn-primary pull-right c_addtask" id='task_query' href="javascript:;" onclick="show_task_list('html')">查询</a>
+        <div class="pr c_calen pull-right" style="margin-left: 10px;">
+          <input class="form-control task_name" type="text" name="" value="" placeholder="请输入任务名称" style="border-radius: 0px;">
+        </div>
+        <script>
+          $('#startDate').fdatepicker({
+            format: 'yyyy-mm-dd',
+            pickTime: false
+          });
+        </script>
+        <div class="pr c_calen pull-right">
+          <select name="userrole_id" class="form-control task_state" style="border-radius: 0px;">
+            <option value="">选择任务状态</option>
+            <option value="6">待启动</option>
+            <option value="1">进行中</option>
+            <option value="0">暂停</option>
+            <option value="8">已完成</option>
+            <option value="3">已终止</option>
+          </select>
+        </div>
+      </div>
+	  -->
+      <div style="border-bottom:1px solid #e2e2e2;margin:21px 30px 0px;"></div>
+    </div>
+  </div>
+  <div class="col-lg-12 c_taskdata fadeInRight animated" style="min-height: calc(50vh);">
+		<!--任务中心-->
+		<div class="c_taskleft">
+			<div class="panel panel-default pz_innerbox">
+        <div style="margin:15px 0px;border-right:1px solid #e7e7e7;">
+  				<div class="panel-body" style="padding:0px;">
+					<div class="panel-top" style="margin:10px 30px 20px;border-bottom: 1px solid #eaeaea;padding-bottom:18px;">
+	  				<span class="panel-title">
+              <span style="margin-right:6px;border-right:3px solid #0e90fe;"></span>我的任务列表
+              <!-- <a class="btn btn-primary c_addtask pz_addtask_colo pull-right" href="{:url('user/plan/newadd')}">添加任务</a> -->
+              <a style="font-size: 14px;color: #288ee6;float: right;cursor: pointer;line-height: 25px;" href="{:url('plan/newindex')}">任务管理 ></a>
+            </span>
+	  			</div>
+					<div class="c_taskleftdata pz_innerbox" style="padding:0px 30px 15px;">
+            <!-- 测试内容 -->
+
+            <!-- /测试内容 -->
+				</div>
+        </div>
+    	</div>
+		</div>
+
+	</div>
+		<!--任务详情-->
+		<div class="c_taskright">
+			<div class="panel panel-default pz_renwuxq_append">
+				<div class="panel-top c_taskrighttitle">
+  				<span class="panel-title"><img src="/public/img/renwuxiangqing.png" style="width:19px;height:20px;vertical-align: sub;">任务详情</span>
+  				<div class="pull-right c_detailbutton">
+  					<a href="/user/plan/newindex" class="c_pause" style="background: #fff;  border: none;color: #1279d2;font-size:16px;">任务中心 ></a></div>
+  			</div>
+		</div>
+
+</div>
+	</div>
+</div>
+<script type='text/template' id='task_data'>
+	<div class="panel panel-default">
+		<div class="panel-top c_taskrighttitle" style="color:#000000;font-size:20px;">
+			<span title="{%task_name%}" class="task-title">{%task_name%}</span>
+			<span style="color:#909090;">(任务详情)</span>
+		</div>
+		<div class="panel-body">
+			<div class="c_rightmiddle"></div>
+				<div class="c_dialstype clearfix">
+				<div>任务状态：<span>{%task_status%}</span></div>
+        <div>话术模板：<span>{%scenarios_name%}</span></div>
+        <div>拨打线路：<span>{%line_name%}</span></div>
+        <div>ASR：<span>{%ASR_name%}</span></div>
+        <div>占用机器人个数：<span>{%robot_count%}个</span></div>
+        <div>接通率：<span>{%connect_rate1%}%</span></div>
+        <div class="positionre">
+         <span>是否定时：<span>
+            <span id="is_timing">{%is_timing%}</span>
+            <div class="timings">
+              <div class="timing-show hide" id="timing">
+                  <div class="pz_innerbox_lay timing-body">
+                      <label>时间：</label>
+                      <div class="timing-time">
+                      </div>
+                      <label>日期：</label>
+                      <div class="timing-date">
+                      </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+        <div>是否加入CRM：<span>{%is_add_crm%}</span></div>
+        <div>是否推送公众号：<span>{%wx_push_status%}</span></div>
+        <div>是否短信推送：<span>{%send_sms_status%}</span></div>
+        <div class="pz_ellipsisshow">重复呼叫次数：{%again_call_count%}</div>
+        <div class="pz_ellipsisshow">最后拨打时间：{%last_dial_time%}</div>
+        <div class="pz_ellipsisshow" id="beizhu">备注：{%beizhu%}</div>
+				</div>
+			</div>
+			<div class="c_dialsdata" style="padding: 0px 30px;">
+				<div class="c_dialsdatatop clearfix">
+					<div style="width: 44%;">呼叫情况</div>
+					<div style="width: 28%;">意向等级</div>
+					<div style="width: 28%;">通话时长</div>
+				</div>
+				<div class="c_dialsshow clearfix">
+					<div class="task_main_fetail_left clearfix" style="width: 40%;">
+						<div class="clearfix">
+							<div><span style="color: #5493f9!important">{%connect_count%}通</span><span>已接通</span></div>
+							<div><span>{%not_connect_count%}通</span><span>拒接</span></div>
+							<!-- <div><span></span><span>待拨打</span></div> -->
+							<!-- <div><span></span><span>总数量</span></div> -->
+							<!-- <div><span>329通</span><span>空号</span></div> -->
+							<!-- <div style="border:0px"><span>300通</span><span>关机</span></div> -->
+						</div>
+						 <div class="clearfix">
+						 	<div><span>{%wait_count%}通</span><span>待拨打</span></div>
+							<div><span>{%count%}通</span><span>总数量</span></div>
+							<!-- <div><span>15通</span><span>停机</span></div> -->
+							<!-- <div><span>0通</span><span>未接</span></div> -->
+							<!-- <div><span>1136通</span><span>通话中</span></div> -->
+							<!-- <div style="border:0px"><span>29577通</span><span>其它</span></div> -->
+						</div>
+					</div>
+					<div class="task_level" style="width: 30%;">
+						<div class="task_level_total clean">
+							<div class="task_level_left">
+								<div>A-意向客户</div>
+								<div>B-一般意向</div>
+								<div>C-简单对话</div>
+								<div>D-明确拒绝</div>
+								<div>E-未接通</div>
+								<div>F-多次未接</div>
+							</div>
+							<div class="task_level_right">
+								<div>{%level_a%}%</div>
+								<div>{%level_b%}%</div>
+								<div>{%level_c%}%</div>
+								<div>{%level_d%}%</div>
+								<div>{%level_e%}%</div>
+								<div>{%level_f%}%</div>
+							</div>
+						</div>
+					</div>
+					<div class="task_level" style="width: 30%;">
+						<div class="task_level_total clean task_level_total1">
+							<div class="task_level_left">
+								<div>&lt;=10s</div>
+								<div>10s-30s</div>
+								<div>30s-1m</div>
+								<div>&gt;=1m</div>
+							</div>
+							<div class="task_level_right">
+								<div>{%duration_1%}%</div>
+								<div>{%duration_2%}%</div>
+								<div>{%duration_3%}%</div>
+								<div>{%duration_4%}%</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix percentage">
+					<div style="width: 40%;">
+						<div class="icn_f" style="width: 139px;height: 35px;line-height: 35px;padding:0px!important;">接通率：{%connect_rate%}%</div>
+					</div>
+					<div style="width: 30%;">
+						<div class="icn_f" style="width: 139px;height: 35px;line-height: 35px;padding:0px!important;">意向率(A+B)：（{%level_a_b_rate%}%）</div>
+					</div>
+					<div style="width: 30%;">
+						<div class="icn_f" style="width: 139px;height: 35px;line-height: 35px;padding:0px!important;">平均时长：{%average_duration%}s</div>
+					</div>
+				</div>
+        <div class="clearfix pz_percentage">
+          <a class="btn btn-primary search" id="search_prev" href="javascript:;" data-id='1'>上一条</a>
+          <a class="btn btn-primary search" id="search_next" href="javascript:;" data-id='2'>下一条</a>
+        </div>
+			</div>
+		</div>
+	</div>
+</script>
+<script type='text/template' id='task_option' title="{%title%}">
+	<div class="c_tasklshow" data-id="{%id%}">
+			<div class="task_user clearfix">
+				<p class="pull-left" title="{%name%}">{%name%}</p>
+			</div>
+			<div class="task_progress clearfix">
+				<div class="progress">
+						<div class="progress-bar  progress-bar-success" aria-valuenow="40" aria-valuemax="100" aria-valuemin="0" style="width:{%rate%}%"></div>
+				</div>
+				<span class="task_left_schedule_two">进度{%complete_count%}/{%count%}</span>
+		</div>
+		<div class="task_type">
+			<p>任务状态：{%state_name%}</p>
+			<p>创建时间：{%create_datetime%}</p>
+		</div>
+		<i></i>
+	</div>
+</script>
+<script>
+get_robot_data();
+  // 得到首页的 机器人概况 等信息
+  function get_robot_data(){
+     $(".l_loadfixed").show();
+  	 var url = '{:url("get_every_data")}';
+  	 $.ajax({
+			type:'GET',
+			dataType:"json",
+			url:url,
+			success:function(result){
+                $(".l_loadfixed").hide();
+                var  fenfaRobotCount = result.data.robotNum; //分发机器人
+				var  robotSurplusCount = result.data.robotSurplusCount; //剩余机器人
+				var  robotRunCount = result.data.robotRunCount; //运行机器人数量
+				var  adminNum = result.data.adminNum; //当前运行客户数
+				var  taskRunCount = result.data.taskRunCount; //当前运行任务数
+				var  robotUsageRate = result.data.robotUsageRate;//机器人使用率   
+				var  myMoneyBalance = result.data.myMoneyBalance;//账户余额
+				var monthRechargeMoney =result.data.monthRechargeMoney; //本月充值  
+				var monthConsumptionMoney =result.data.monthConsumptionMoney; //本月消耗
+				var agentCount = result.data.agentCount;     //代理商数量
+				var businessCount = result.data.businessCount; //商家数量
+				var salesCount= result.data.salesCount;  //销售数量
+				var robotInfo=robotSurplusCount+'/'+Number(fenfaRobotCount+robotSurplusCount);  //  剩余机器人/总共有的机器人=(分发+剩余)
+				var lineCount= result.data.lineCount; //线路数量
+				var pendingScenarios =result.data.pendingScenarios; //待审话术
+				
+				$("#fenfaRobotCount").text(fenfaRobotCount);
+				$("#robotSurplusCount").text(robotSurplusCount);
+				$("#robotRunCount").text(robotRunCount);
+				$("#runCustomerCount").text(adminNum);
+				$("#taskRunCount").text(taskRunCount);
+				$("#robotUsageRate").text(robotUsageRate+'%');
+				$("#myMoneyBalance").text(myMoneyBalance);
+				$("#monthRechargeMoney").text('本月充值：￥'+monthRechargeMoney);
+				$("#monthConsumptionMoney").text('本月消耗：￥'+monthConsumptionMoney);
+				$("#agentCount").text(agentCount);
+				$("#businessCount").text(businessCount);
+				$("#salesCount").text(salesCount);
+				$("#robotInfo").text(robotInfo);
+				$("#lineCount").text(lineCount);
+				$("#pendingScenarios").text(pendingScenarios);
+			},
+  	 	error:function(){
+				console.log('错误');
+			}
+  	 });
+  }
+	show_task_list();
+	window.currentPage = 1;
+	window.listcunt = 0;
+	var ajax_load = true;
+	//获取任务列表
+	function show_task_list(state){  
+	  if(ajax_load == false){
+	    return false;
+	  }
+	  ajax_load = false;
+		//设置默认值
+		var state = arguments[0]?arguments[0]:'html';
+		var task_state = $('.task_state option:selected').val();
+		isLoad = true;
+		var task_name = $('.task_name').val();
+		var url = '{:url("get_task_list_api")}';
+		$.ajax({
+			type:'POST',
+			dataType:"json",
+			data:{
+				task_state:task_state,
+				task_name:task_name,
+				currentPage: window.currentPage
+			},
+			url:url,
+			success:function(result){
+			  console.log(result);
+				if(result.code === 0){
+					var htmls = '';
+          if(result.data.list.length== 0){
+            var zanwushuju = '<div class="pz_zanwushuju"><p>暂无任务数据</p></div>';
+            $('.panel-body .c_taskleftdata.pz_innerbox').html(zanwushuju);
+						$('.c_taskright .panel.panel-default').remove();
+            var zanwushujuxq = '<div class="panel panel-default"><div class="pz_zanwushuju2"><p>暂无任务详情</p></div></div>';
+            $('.c_taskright').html(zanwushujuxq);
+          }else {
+            var pageCount = result.data.pageCount; //分页总数
+						var pageNo = result.data.pageNo; //分页个数
+  					$.each(result.data.list, function(index, object){
+  						var html = $('#task_option').html();
+  								html = html.replace('{%id%}', object.task_id);
+  								html = html.replace('{%name%}', object.task_name);
+  								html = html.replace('{%name%}', object.task_name);
+  								html = html.replace('{%count%}', object.denominator);
+  								html = html.replace('{%complete_count%}', object.Molecular);
+  								html = html.replace('{%call_type_name%}', object.call_type_name);
+  								html = html.replace('{%create_datetime%}', object.create_datetime);
+  								html = html.replace('{%rate%}', object.percent_complete);
+  								html = html.replace('{%state_name%}', object.status_name);
+                                if( object.arrears_user =='ASR_ADMIN'  ) {
+                                    html = html.replace( '{%title%}',  '当前ASR已经欠费，影响到您这次的任务执行，请尽快充值。');
+                                }
+                                else if( object.status_name.toString().indexOf('欠费')!=-1  ) {
+                                    html = html.replace( '{%title%}',  '账户名为('+ object.arrears_user + ')已经欠费，影响到您这次的任务执行，请尽快充值。');
+                                }
+                                else if( object.status_name.toString().indexOf('异常')!=-1  ) {
+                                    html = html.replace( '{%title%}',  ' 任务连续多次未能打通电话，判断为异常情况，进行暂停处理。');
+                                }else {
+                                    html = html.replace('{%title%}', '');
+                                }
+
+                        htmls += html;
+  						window.listcunt = window.listcunt + 1;
+  					});
+            window.page = window.currentPage;
+  					if (state === 'html') {
+							$('.c_taskleftdata').html(htmls);
+							$('.c_taskleftdata ').scrollTop(0); //等於空 停在原地不動 
+						} else {
+							if (htmls != '') {
+								if (window.currentPage == 1) {
+									$('.c_taskleftdata').html(htmls);
+								} else {
+									$('.c_taskleftdata').append(htmls);
+								}
+							}
+						}
+						if (window.currentPage < pageCount || window.listcunt < result.count) {
+							isLoad = true;
+						} else if (window.currentPage >= pageCount || window.listcunt == result.count) {
+							isLoad = false;
+						}
+  					$('.c_tasklshow').unbind('click');
+						$('.c_tasklshow').click(function(){
+							if($(this).hasClass('active') === false){
+								$(this).addClass('active').siblings().removeClass('active');
+								$(this).find('i').addClass('task-active');
+								$(this).siblings().find('i').removeClass('task-active');
+								var task_id = $(this).data('id');
+								show_task_data(task_id);
+							}
+						});
+	          $(".c_taskleftdata .c_tasklshow").hover(function(){
+	            $(this).addClass('active_pz').siblings().removeClass('active_pz');
+	          },function(){$(".c_taskleftdata .c_tasklshow").removeClass('active_pz');});
+						if(state === 'html'){
+							$('.c_tasklshow').eq(0).click();
+						}
+          }
+          ajax_load = true;
+          window.currentPage++;
+				}
+			},
+			error:function(){
+				console.log('获取任务列表失败');
+			}
+		});
+	}
+	
+	function isScrollLoad(obj) {
+		var divHeight = $(obj).height();
+		var nScrollHeight = $(obj)[0].scrollHeight;
+		var nScrollTop = $(obj)[0].scrollTop;
+		// console.log(nScrollTop+'+'+divHeight+'>='+nScrollHeight+'=>'+ (nScrollTop+divHeight))
+		if (nScrollTop + divHeight + 20 >= nScrollHeight) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	$(document).ready(function() {
+  	  $('.c_taskleftdata ').unbind('scroll');
+  		$('.c_taskleftdata ').scroll(function() {
+  			//是否滚动到底部
+  			var _needload = isScrollLoad(this);
+  			if (_needload == true && isLoad == true) {
+  				show_task_list('append');
+  			}
+  		});
+  	})
+	//获取任务详情
+	window.loadCount = 0;
+	function show_task_data(task_id)
+	{
+	  window.loadCount++;
+  	$(".c_taskright").removeClass("fadeInRight animated");
+		if(task_id){
+			var url = '{:url("get_task_data_api")}';
+			$.ajax({
+				type:"POST",
+				dataType:'json',
+				data:{
+					task_id:task_id
+				},
+				url:url,
+				success:function(result){
+				  console.log(result);
+					if(result.code === 0){
+  						var html = $('#task_data').html();
+  								html = html.replace('{%task_name%}', result.data.task_name);  //任务名称
+  								html = html.replace('{%task_name%}', result.data.task_name);  //任务名称
+									html = html.replace('{%line_name%}', result.data.line_name);   //拨打线路
+									html = html.replace('{%ASR_name%}', result.data.asr_name);   //asr   
+									html = html.replace('{%is_timing%}', result.data.is_auto_txt);   //asr
+									html = html.replace('{%task_status%}', result.data.task_status);  //任务状态
+									html = html.replace('{%scenarios_break%}', result.data.scenarios_break);  //是否启动打断
+									html = html.replace('{%is_add_crm%}', result.data.is_add_crm);    //是否加入CRM
+									html = html.replace('{%robot_count%}', result.data.robot_cnt);    //占用机器人个数
+									html = html.replace('{%send_sms_status%}', result.data.send_sms_status); //是否短信推送
+									html = html.replace('{%scenarios_name%}', result.data.scenarios_name);  //话术模板
+									html = html.replace('{%create_time%}', result.data.create_time);       //创建时间
+									html = html.replace('{%last_dial_time%}', result.data.last_dial_time); //最后拨打时间
+									html = html.replace('{%again_call_count%}', result.data.again_call_count); //重复呼叫次数
+									html = html.replace('{%connect_rate1%}', result.data.connect_rate);       //接通率 上面的
+									html = html.replace('{%wx_push_status%}', result.data.wx_push_status); //是否推送公众号
+  							  html = html.replace('{%beizhu%}', result.data.remarks); //备注 
+  								html = html.replace('{%connect_count%}', result.data.connect_count);
+  								html = html.replace('{%not_connect_count%}', result.data.not_connect_count);
+  								html = html.replace('{%wait_count%}', result.data.wait_count);
+  								html = html.replace('{%count%}', result.data.count);
+  								html = html.replace('{%level_a%}', result.data.level_a);
+  								html = html.replace('{%level_b%}', result.data.level_b);
+  								html = html.replace('{%level_c%}', result.data.level_c);
+  								html = html.replace('{%level_d%}', result.data.level_d);
+  								html = html.replace('{%level_e%}', result.data.level_e);
+  								html = html.replace('{%level_f%}', result.data.level_f);
+  								html = html.replace('{%duration_1%}', result.data.duration_1);
+  								html = html.replace('{%duration_2%}', result.data.duration_2);
+  								html = html.replace('{%duration_3%}', result.data.duration_3);
+  								html = html.replace('{%duration_4%}', result.data.duration_4);
+  								html = html.replace('{%connect_rate%}', result.data.connect_rate);
+  								html = html.replace('{%level_a_b_rate%}', result.data.level_a_b_rate);
+  								html = html.replace('{%average_duration%}', result.data.average_duration);
+  								$('.c_taskright').html(html);
+
+  								if($('.active').prev().length == 0){
+  									$('#search_prev').addClass('pz_active_now');
+  								}
+  								if($('.active').next().length == 0){
+  									$('#search_next').addClass('pz_active_now');
+  								}
+									console.log($('.active').prev().length);
+									console.log($('.active').next().length);
+  								$('.search').click(function(){
+  									var type = $(this).data('id');
+  									//上一条
+  									if(type == 1){
+  										if($('.active').prev().length != 0){
+  											$('.active').prev().click();
+  										}
+  									}
+  									//下一条
+  									if(type == 2){
+  										if($('.active').next().length != 0){
+  											$('.active').next().click();
+  										}
+  									}
+  						    });
+					}
+					if(window.loadCount >1 ){
+						$(".c_taskright").addClass("fadeInRight animated");
+					}	
+					is_timingshow(task_id);
+				},
+				error:function(){
+					console.log('获取数据失败');
+				}
+			});
+		}
+	}
+</script>
+<!-- 用户协议提示 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">用户协议</h4>
+				</div>
+				<div class="modal-body">
+					  <div>
+							<p><b>用户业务承诺书</b></p>
+
+					  <p>
+							为保证平台健康、稳定运行，所有平台使用方需知悉并确认，一旦平台发现使用方利用平台进行违法行为，平台有权立即停止服务，不退还所有已付款项，
+并立即向有关机关报案。承诺内容包含但不限于如下：
+						</p>
+						<p>
+							一、使用平台进行外呼业务，遵守国家有关法律、法规和各行政规章制度。不开展任何违法、违规业务。
+							</p>
+							<p>
+							二、不利用平台开展各种形式违反社会公德和商业操守的外呼业务。
+						</p>
+						<p>
+							三、不利用提供的平台资源从事危害国家安全、泄露国家机密等违法犯罪行为。
+						</p>
+						<p>
+							四、不利用平台传播妨碍社会治安和宣传封建迷信、淫秽黄色等信息；窃取、泄露国家秘密、情报或者军事机密；煽动民族仇恨、民族歧视，破坏民族团结；组织邪教活动、联络邪教组织成员破坏国家法律、行政法规实施。
+						</p>
+						<p>
+							五、不利用平台进行窃取、诈骗、敲诈勒索。
+							</p>
+							<p>
+							六、用户明确表示拒绝后，不得继续向其发起呼叫。
+						</p>
+						<p>
+							七、规范外呼时段、频率行为等，不得对用户正常生活造成影响。
+						</p>
+
+	        	</div>
+				</div>
+				<div class="modal-footer">
+
+					<div class="checkbox" style="float:left;">
+						<label>
+							<input type="checkbox" value="1" name="isagreeshow" id="isagreeshow"> 不再显示
+						</label>
+					</div>
+
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+				</div>
+    </div>
+  </div>
+
+	<script type="text/javascript">
+		$('#myModal').on('hidden.bs.modal', function (e) {
+
+		  var isagreeshow =	$("#isagreeshow").prop('checked');
+
+			if(isagreeshow){
+
+				 	$.ajax({
+				 		type: "POST",
+				 		dataType:'json',
+				 		url: "{:url('changeShow')}",
+				 		cache: false,
+				 		data:{},
+				 		success: function(res) {
+				 			console.log(res);
+				 		},
+				 		error: function(data) {
+				 		 // alert("获取数据失败");
+				 		}
+				 	});
+			}
+
+		})
+    function is_timingshow(task_id){
+    if($('#is_timing').html() == '是'){
+      //任务详情中显示定时的时间和日期
+		  $(".timings").hover(function () {
+          $("#timing").removeClass('hide');
+      }, function () {
+          $("#timing").addClass('hide');
+      });
+      $("#timing").hover(function () {
+          $("#timing").removeClass('hide');
+      }, function () {
+          $("#timing").addClass('hide');
+      });
+      var href = "{:url('index/get_date_time')}"
+      $.ajax({
+          type: "POST",
+          dataType: 'json',
+          url: href,
+          data: {task_id:task_id},
+          success: function (data) {
+            console.log(data);
+            var html_date = '';
+            var html_time = '';
+            $.each(data.data.date,function(index,object){
+              html_date +='<p><span>'+object.start_date+'</span><span>~</span><span>'+object.end_date+'</span></p>';
+            })
+            $.each(data.data.time,function(index,object){
+              html_time +='<p><span>'+object.start_time+'</span><span>~</span><span>'+object.end_time+'</span></p>';
+            })
+            $('#timing').find('.timing-time').html(html_time);
+            $('#timing').find('.timing-date').html(html_date);
+          },
+          error: function (data) {
+          }
+      })
+    }else{
+      
+    }
+  }
+	</script>
+
+
+
+</div>
+<!-- 底部版权信息 -->
+<!-- <div class="pz_footer">
+  <p>Copyright  All rights reserved. © 2010-2019</p>
+</div> -->
+
+{include file="index/dialog" /}
+{/block}

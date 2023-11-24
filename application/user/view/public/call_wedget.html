@@ -1,0 +1,40 @@
+<!-- 拨打窗口  -->
+<div id="main-call" class="hidden">
+    <div id="online-call" class="online ">
+        <div class="online-title clearfix">
+            <div class="pull-left"><span>在线拨打</span></div>
+            <div class="pull-right"><img src="__PUBLIC__/img/suoxiao.png" onclick="smallWidge();"></div>
+        </div>
+        <div class="online-body">
+            <img src="__PUBLIC__/img/hujiao01.png" class="tel_img1">
+            <span class="tel_text1">正在呼叫中...</span>
+            <span class="tel_timer"></span>
+        </div>
+
+        <div class="online-foot">
+            <button class="btn btn-primary btn-hangup" onclick="hangupAndclose();">挂断</button>
+        </div>
+    </div>
+    <div id="online-call-small" class="online hidden">
+        <div class="small-body" ondblclick="recoverWidge();">
+            <img src="__PUBLIC__/img/hujiao02.png" class="tel_img2">
+            <span class="tel_text2">正在呼叫中...</span>
+            <button class="btn btn-primary btn-hangup-samll pull-right" onclick="hangupAndclose();">挂断</button>
+        </div>
+    </div>
+</div>
+<!-- 拨打窗口  -->
+
+<script>
+    window.onbeforeunload=function(e){
+        var e = window.event||e;
+        if(call_unique_id_list.length>0 && typeof window.call_unique_id !='undefined'){
+            closeExplorer();
+            return null
+
+        }
+
+
+
+    }
+</script>

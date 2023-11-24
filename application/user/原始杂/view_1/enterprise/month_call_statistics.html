@@ -1,0 +1,494 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+
+<style>
+  .contenttips{
+    overflow-y: hidden!important;
+    }
+  .btn-header{
+    padding: 4px 35px;
+  }
+  .accountsel{
+  	width: 160px;
+  	display: inline-block;
+  }
+label{
+	margin-bottom: 0px;
+}
+</style>
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img/e_months.png" alt="">
+          月消费统计
+         </span>
+		  </div>
+      <div class="pull-right">
+        <button class="btn btn-primary btn-header"  type="button" onclick="refresh();">刷新</button>
+        <button class="btn btn-primary btn-header" type="button" onclick="importdata();">导出</button>
+		  </div>
+		</header>
+
+		<div class="main-box-body clearfix">
+       <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center"><input class="check_page" name='all_checked' data-page="0" type="checkbox" onclick="check_page_record();"/></th>
+								<th class="text-center">序号</th>
+                <th class="text-center">账户名</th>
+								<th class="text-center">统计月份</th>
+                <th class="text-center">呼叫次数</th>
+								<th class="text-center">接通次数</th>
+                <th class="text-center">接通率</th>
+                <th class="text-center">平均通话时长（秒）</th>
+                <th class="text-center">计费时长（分钟）</th>
+                <th class="text-center">通话费用（元）</th>
+              	<th class="text-center">语音识别次数</th>
+                <th class="text-center">语音识别费用（元）</th>
+                <th class="text-center">机器人月租费用（元）</th>
+              	<th class="text-center">发送短信数</th>
+                <th class="text-center">短信费用（元）</th>
+                <th class="text-center">合计（元）</th>
+					    </tr>
+				    </thead>
+				   <tbody id="month-recored-list">
+
+				    </tbody>
+				  </table>
+
+          <!-- <div class="pull-left pz-fenye" style="margin-left:8px">已选中 <span id="count">0</span> 条</div> -->
+          <div class="pull-left pz-fenye" style="margin-left:8px"><input type="checkbox" class="check_all" onclick="check_all_record();">全选（已选中<span id="count">0</span> 条月通话记录）</div>
+					<div class="pull-right pz-fenye">
+              <div class="pull-left" style="margin:0px 8px;line-height:40px;">
+              	<span style="font-size: 12px;">总页数：
+        					<span id="all_count">13889 </span>&nbsp;&nbsp;页
+        				</span>
+              </div>
+              <div id="statpage" class="pull-right">
+
+              </div>
+					</div>
+
+					<!-- <div class="row">
+						<div class="col-sm-12" id="consumepage"></div>
+					</div> -->
+
+			  </div>
+
+				<!-- <footer class="main-box-footer clearfix">
+					<div class="pull-left">
+            <input class="check_page" name='DataCheck_all' type="checkbox"/> 已选择<span id="count">0</span>条记录
+					</div>
+          <div class="pull-right" id="modalpagebody">
+						<span>全部数据0条</span>
+
+					</div>
+				</footer> -->
+
+  				<div class="component-page-empty" id="consumeempty">
+  					<div class="empty-tip line">暂无数据</div>
+  				</div>
+
+		</div>
+	</div>
+</div>
+
+<div class="modal fade in" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body contenttips">
+				确定导出该数据？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消			</button>
+				<button type="button" class="btn btn-primary" onclick="derived_daily_statistics();">		确认			</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id='recharge_record' type='text/tepmate'>
+	<tr>
+		<td class="text-center">
+			<input class="rolecheck" name='roleids' value="{%id%}" type="checkbox" onclick="check_record();"/>
+		</td>
+		<td>{%sequence%}</td>
+		<td>{%name%}</td>
+		<td>{%statistics_data%}</td>
+		<td>{%call_count%}</td>
+		<td>{%connect_count%}</td>
+    <td>{%connection_rate%}</td>
+    <td>{%average_duration%}</td>
+    <td>{%charging_duration%}</td>
+    <td>{%duration_price%}</td>
+		<td>{%distinguish_count%}</td>
+    <td>{%asr_price%}</td>
+    <td>{%month_price%}</td>
+		<td>{%messages_sent_count%}</td>
+    <td>{%messages_sent%}</td>
+		<td>{%summary_money%}</td>
+	</tr>
+</script>
+ <script type="text/javascript">
+   //刷新
+   function refresh(){
+     window.location.href = "";
+   }
+
+   //所有数据全选
+   function check_all_record(){
+   	if($('.check_all').is(':checked')){
+			$('.check_page').prop("checked",true);
+			$('.rolecheck').prop("checked",true);
+			$('#count').text($('#count').attr('data-total'));
+			$('.check_page').attr('data-page',$('#count').attr('data-total'));
+			// var usercheck = [];
+			// type = 'day';
+ 		// 	var data = {};
+		 // data.start_time = $('#startDate').val();
+		 // data.end_time = $('#endTime').val();
+		 // data.type = "day";
+		 // var url = '{:url("get_all_daily")}';
+		 // $.ajax({
+		 //    url : url,
+		 //    dataType : "json",
+		 //    type : "post",
+		 //    data : data,
+		 //    success:function(result){
+		 //      if(result.code === 0){
+		 //          $.each(result.data.list, function(index, object){
+		 //            usercheck.push(object.id);
+		 //          });
+		 //          usercheck = usercheck.join(',');
+		 //          $('.check_all').attr('data-id',usercheck);
+		 //          console.log(usercheck);
+		 //      }
+		 //    },
+		 //    error:function(){
+		 //      console.log('获取导出数据失败');
+		 //    }
+		 //  });
+		}else{
+			$('.check_page').prop("checked",false);
+			$('.rolecheck').prop("checked",false);
+			$('#count').text(0);
+			$('.check_page').attr('data-page',0);
+		}
+   }
+   //本页全选
+   function check_page_record(){
+   	if($('.check_page').is(':checked')) {
+			$('.rolecheck').prop("checked",true);
+      if($('.rolecheck:checked').length == $('#count').attr('data-total')){
+        $('.check_all').prop("checked",true);
+        $('.check_page').prop("checked",true);
+        $('.check_page').attr('data-page',$('#count').attr('data-total'));
+      }else {
+        $('.check_page').attr('data-page',$('#count').attr('data-page'));
+      }
+      // $('.check_page').attr('data-page',$('#count').attr('data-page'));
+      $('#count').text($('.rolecheck:checked').length);
+		}else{
+			$('.check_all').prop("checked",false);
+			$('.rolecheck').prop("checked",false);
+			$('#count').text(0);
+			$('.check_page').attr('data-page',0);
+		}
+   }
+   //单个选项框选中事件
+   function check_record(){
+   	if(!$(".rolecheck").checked) {
+			$('.check_page').prop("checked",false);
+			$('.check_all').prop("checked",false);
+			$('.check_page').attr('data-page',0);
+		}
+		var check_pagenum = $('.rolecheck').length;
+		var check_num = $('.rolecheck:checked').length;
+		if(check_pagenum == check_num){
+			$('.check_page').prop("checked",true);
+			$('.check_page').attr('data-page',$('#count').attr('data-page'));
+		}
+    if(check_num == $('#count').attr('data-total')){
+      $('.check_all').prop("checked",true);
+      $('.check_page').prop("checked",true);
+      $('.check_page').attr('data-page',$('#count').attr('data-total'));
+    }
+		$('#count').text(check_num);
+   }
+
+   //导出月通话统计
+   var excel_statelist = true;
+   function derived_daily_statistics(){
+     $('#import-data').modal('hide');
+ 		if(excel_statelist === true){
+ 			excel_statelist = false;
+ 			//获取选中的id
+ 			var usercheck = [];
+ 			//判断是否全部选中
+ 			if($('.check_all').is(':checked')){  //导出所有数据
+ 				var export_type = 1;
+ 			}else{
+ 				var export_type = 0;
+ 			}
+ 			$.each($('input[name="roleids"]:checked'), function(index, object){
+ 				usercheck.push($(object).val());
+ 			});
+ 			console.log(usercheck);
+ 			$.post("{:url('export_daily_statistics')}",
+ 			{
+ 				'usercheck':usercheck,
+ 				'type':"month",
+		    'export_type':export_type
+ 			},
+ 			function(data){
+ 				console.log(data);
+ 				if(data.code === 0){
+ 					window.location.href = data.data;
+ 					// alert('导出成功');
+ 				}else{
+ 					alert('导出失败');
+ 				}
+ 				excel_statelist = true;
+
+ 			});
+ 		}
+   }
+
+   //分页显示
+   function fenye(total_page,now_page,limit,show=5){
+    if(show > total_page){
+      show = total_page;
+    }
+    now_page = parseInt(now_page);
+    var star = now_page - 2;
+    var end = now_page + 2;
+
+    if(star < 1){
+      end = end - star;
+      star = 1;
+
+    }
+    if(end > total_page){
+      end = total_page;
+    }
+
+    var limits = [10,30,50,100];
+    var fenye_html = "";
+    fenye_html = '<ul class="pagination">';
+
+    fenye_html += '<div style="font-size: 12px;display: inline-block;"><select class="limit" style="width: 80px;margin: 0px 8px;height:32px;background:#fff;border:1px solid #ddd;">';
+    for(var i = 0; i < limits.length; i++){
+      if(limits[i] == limit){
+        fenye_html += '<option value="'+limits[i]+'" selected>'+limits[i]+'条/页</option>';
+      }else{
+        fenye_html += '<option value="'+limits[i]+'">'+limits[i]+'条/页</option>';
+      }
+    }
+    fenye_html += '</select></div>';
+
+    fenye_html +=  '<div style="font-size: 12px;margin: 0px;display: inline-block;">跳至'
+                 +	'<input class="Nowpage" type="number" style="width: 50px;height:32px; margin: 1px 8px;border:1px solid #ddd;border-radius: 5px;text-align: center;"value="" max="13889" min="1">页'
+                 +  '</div><button class="btn btn-primary go_up lp_tz" type="button" >确定</button>';
+    if(total_page > 1){
+
+
+     if(now_page == 1){
+       fenye_html += '<li id="prevbtn" class="disabled"><span>«</span></li>';
+     }
+
+     if(now_page > 1){
+       fenye_html += '<li data-page="'+(now_page - 1)+'" title="'+(now_page - 1)+'"><a href="javascript:void(0);"> « </a></li>';
+     }
+     for(star; star <= end; star++ ){
+       if(star == now_page){
+         fenye_html += '<li class="active" title="'+star+'"><a href="javascript:void(0);">'+star+'</a></li>';
+       }else{
+         fenye_html += '<li data-page="'+star+'" title="'+star+'"><a href="javascript:void(0);">'+star+'</a></li>';
+       }
+     }
+     if(now_page < total_page){
+       fenye_html += '<li data-page="'+(now_page + 1)+'" title="'+(now_page + 1)+'"><a href="javascript:void(0);"> » </a></li>';
+     }else if(now_page == total_page){
+       fenye_html += '<li  class="disabled"><span> » </span></li>';
+     }
+     fenye_html += '</ul>';
+   }else{
+
+     fenye_html += '<li id="prevbtn" class="disabled"><span>«</span></li>';
+     fenye_html += '<li class="active" title="1"><a href="javascript:void(0);">1</a></li>';
+     fenye_html += '<li  class="disabled"><span> » </span></li>'
+     fenye_html += '</ul>';
+   }
+
+    $('#statpage').html(fenye_html);
+    $('.Nowpage').val(now_page);
+    //获取选中框隐藏的选中状态
+    var check_state = $('.check_page').attr('data-page');
+    if(check_state == now_page){
+      $('.check_page').prop("checked",true);
+      $('.rolecheck').prop("checked",true);
+      $('#count').text($('.rolecheck:checked').length);
+      $('.check_page').attr('data-page',$('#count').attr('data-page'));
+      // $('.check_page').click();
+    }else if(check_state == $('#count').attr('data-total')){
+      $('.check_all').prop("checked",true);
+      $('.check_page').prop("checked",true);
+      $('.rolecheck').prop("checked",true);
+      $('#count').text($('#count').attr('data-total'));
+      $('.check_page').attr('data-page',$('#count').attr('data-total'));
+      // $('.check_all').click();
+    }else{
+      console.log(check_state);
+      // $('#count').text(0);
+      $('.check_page').prop("checked",false);
+      $('.check_all').prop("checked",false);
+    }
+
+    //分页页码点击事件
+    $('.pagination>li[data-page]').unbind('click');
+    $('.pagination>li[data-page]').click(function(){
+      var page = $(this).data('page');
+      $(this).siblings('li').removeClass('active');
+      $(this).addClass('active');
+      show_data(page,limit);
+    });
+    //分页输入内容变化事件
+    $('.Nowpage').change(function(){
+     if($('.Nowpage').val() > total_page){
+       alert("输入的页数不能大于总页数");
+       $('.Nowpage').val("");
+     }
+    });
+    //分页输入内容跳转事件
+    $('.lp_tz').unbind('click');
+    $('.lp_tz').click(function(){
+     var page = $('.Nowpage').val();
+     console.log("跳转页"+page);
+     var nowlimit = $('.limit').val();
+     show_data(page,nowlimit);
+    });
+    //分页选项框跳转事件
+    $('.limit').change(function(){
+     var nowlimit = $('.limit').val();
+     var numbers = $(".limit").find("option");
+     for (var j = 1; j < numbers.length; j++) {
+       if ($(numbers[j]).val() == nowlimit) {
+         $(numbers[j]).attr("selected", "selected");
+       }else {
+         $(numbers[j]).attr("selected", false);
+       }
+     }
+     show_data(1,nowlimit);
+    });
+
+  }
+   show_data(1,10);
+   //显示数据
+   function show_data(page,limit){
+     var url = '{:url("get_daily_statistics")}';
+     if(!page){
+       page = 1;
+     }
+     if(!limit){
+       limit = 10;
+     }
+     var data = {};
+     data.page = parseInt(page);
+     data.limit = parseInt(limit);
+     // data.start_time = $('#startDate').val();
+     // data.end_time = $('#endTime').val();
+     data.type = "month";
+     $.ajax({
+       url : url,
+       dataType : "json",
+       type : "post",
+       data : data,
+       success:function(result){
+         console.log(result);
+         if(result.code === 0){
+           if(result.data.list.length == 0){
+             $('#consumeempty').show();
+             $('#month-recored-list tr').remove();
+             $('.pz-fenye').addClass('hide');
+             $('#record_count').text(0);
+             $('#all_count').text(0);
+           }else {
+             $('#consumeempty').hide();
+             $('.pz-fenye').removeClass('hide');
+             var htmls = '';
+             $.each(result.data.list, function(index, object){
+               var html = $('#recharge_record').html();
+                   html = html.replace('{%id%}', object.id);
+                   html = html.replace('{%sequence%}', object.sequence);
+                   html = html.replace('{%name%}', object.member_name);
+                   html = html.replace('{%statistics_data%}', object.date);
+                   html = html.replace('{%call_count%}', object.call_count);
+                   html = html.replace('{%connect_count%}', object.connect_count);
+                   html = html.replace('{%connection_rate%}', object.connect_rate);
+                   html = html.replace('{%average_duration%}', object.average_duration);
+                   html = html.replace('{%charging_duration%}', object.charging_duration);
+                   html = html.replace('{%duration_price%}', object.connect_cost);
+                   html = html.replace('{%distinguish_count%}', object.asr_count);
+                   html = html.replace('{%asr_price%}', object.asr_cost);
+                   html = html.replace('{%month_price%}', object.robot_cost);
+                   html = html.replace('{%messages_sent_count%}', object.send_sms_count);
+                   html = html.replace('{%messages_sent%}', object.sms_cost);
+                   html = html.replace('{%summary_money%}', object.total_cost);
+                   htmls += html;
+             });
+
+             $('#month-recored-list').html(htmls);
+             
+             $('#count').attr('data-page',page);
+             $('#count').attr('data-total',result.data.count);
+             var total_page = Math.ceil(result.data.count/limit);
+             $('#all_count').text(total_page);
+             console.log(total_page);
+             fenye(total_page,page,limit);
+
+           }
+         }
+       },
+       error:function(){
+         alert('获取数据失败');
+       }
+     });
+   }
+
+
+ function importdata(){
+ 	if($('.rolecheck:checked').length == 0){
+ 		alert("请至少选择一条数据");
+ 	}else{
+ 		$('#import-data').modal('show');
+ 	}
+   
+ }
+
+  </script>
+
+
+</div>
+
+{include file="sms/sms_targer" /}
+
+{/block}
+count

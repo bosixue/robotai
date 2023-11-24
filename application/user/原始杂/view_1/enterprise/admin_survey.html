@@ -1,0 +1,550 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="enterprise/dialog" /}
+
+<script src="__PUBLIC__/plugs/echarts/echarts.min.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/financialManage.css">
+<style>
+  .row{
+    padding:0px !important;
+  }
+  .f_surveyright .pz_surveys{
+    padding-left:7px;
+  }
+  #footer-bar{
+    position:absolute;
+    left: 0;
+    right: 0;
+  }
+  .pz_navbar{
+    background: #fff;
+    margin-bottom: 10px;
+    padding:0px 20px;
+  }
+  .typeSelect{}
+  .f_rateul li {
+    padding: 40px 0px;
+  }
+  .f_rateuldata {
+  	width: 170px;
+  }
+</style>
+<div class="pz_manping_height fadeInRight animated pz_manping_height" style="padding:0px 15px;">
+	{if session('user_auth.role') != '销售人员'}
+  <section class="pz_navbar clearfix">
+    <form class="" action="" method="get" role="form">
+      <div class="form-group clearfix" style="margin-bottom:0px;padding: 13px 0px;">
+        <label class="typeSelect">账号类型：</label>
+				<select style="width:160px;display: inline-block;margin-right:40px;" name="allType" id="allType" class="form-control c_selectimg">
+					<!--<option value="全部类型">全部类型</option>-->
+					{volist name="user_type" id="vo"}
+						
+						<option value="{$vo}">{$vo}</option>
+						
+						
+          {/volist}
+				</select>
+
+        <label class="typeSelect">账户名：</label>
+				<select style="width:160px;display: inline-block;margin-right:20px;" name="allName" id="allName" class="form-control c_selectimg">
+          <option value="全部账户">全部账户</option>
+			
+				</select>
+
+        <div class="dis_in c_marleft pz_annius">
+					<button class="btn btn-primary" type="button" onclick="searchClickz();" style="margin-left:0px;">查询</button>
+					<button class="btn btn-primary pz_chongzhi_anniuStyle" onclick="resetClickz();" type="button">重置</button>
+				</div>
+      </div>
+    </form>
+  </section>
+	{/if}
+	
+  <div class="c_taskdata">
+		<!--账号概况-->
+		<div class="c_taskleft">
+			<div class="panel panel-default" style="margin-bottom:10px;">
+				<div class="panel-body">
+					<div class="panel-top">
+	  				<span class="n_panel_title"><img src="__PUBLIC__/img/e_zhanghao.png"/>账号概况</span>
+	  			</div>
+          <!-- 内容展示 -->
+          <div class="f_maindata f_survey dflex" id="pz_maindata">
+            <div class="f_surveyleft">
+            	<input type="file" name="photo" id="head_portrait_file" style="display:none;" />
+              <div class="f_suleftimg pr">
+
+                <img src="__PUBLIC__/img/e_touxiang.png" alt="" style="width:100px;height:100px;border-radius: 100px;" class="show_head_portrait">
+
+                <img src="__PUBLIC__/img/e_touxiangshangchuan.png" alt="">
+              </div>
+              <div class="f_sulefdata">
+                <p class="f_sulefttype"><span id="user_role"></span></p>
+                <p class="f_suleftname" style="margin:;">您的账户：<span id="user_name"></span></p>
+                <p class="f_suleftname"><a class="pz_xiaofeitongji" href="/user/enterprise/admin_consumption_statistics">查看消费统计</a></p>
+              </div>
+            </div>
+            <div class="f_surveyright">
+              <div class="f_surighttop">
+                <p class="pz_surveys">当前账户余额</p>
+                <p class="pz_surveys"><span id="user_money">0</span>元</p>
+              </div>
+              <div class="f_surightbot">
+                <p class="pz_surveys">机器人数量</p>
+                <p class="pz_surveys"><span id="user_robotCnt">0</span>个</p>
+                <p class="pz_surveys due_time" style="color:#999;font-size:12px;line-height: 20px;">机器人到期时间：0</p>
+              </div>
+
+              <!-- <p class="pz_surveys">余额</p> -->
+              <!-- <p>当前账户余额</p> -->
+            </div>
+          </div>
+			  </div>
+		  </div>
+	  </div>
+		<!--费率-->
+    <div class="c_taskright">
+			<div class="panel panel-default" style="margin-bottom: 10px;">
+        <div class="panel-body">
+          <div class="panel-top">
+	  				<span class="n_panel_title"><img src="__PUBLIC__/img/e_feilv.png">费率</span>
+	  			</div>
+          <!-- 内容展示 -->
+          <div class="f_maindata">
+            <ul class="f_rateul dflex">
+              <li>
+                <img src="__PUBLIC__/img/e_yuyuntonghua.png" alt="">
+                <div class="f_rateuldata">
+                  <p>语音通话费率</p>
+                  <p id="connect_cost"><span>0</span>元/分钟<a class="pz_zifeixiangqing" href="javascript:;" style="color:#0e90fe;font-size:14px;margin-left:10px;">更多资费详情</a></p>
+                </div>
+              </li>
+              <li>
+                <img src="__PUBLIC__/img/e_yuezu.png" alt="">
+                <div class="f_rateuldata">
+                  <p>机器人月租</p>
+                  <p><span id="robot_cost">0</span>元/月/个</p>
+                </div>
+              </li>
+              <li>
+                <img src="__PUBLIC__/img/e_duanxinfeilv.png" alt="">
+                <div class="f_rateuldata">
+                  <p>短信费率</p>
+
+                  <p id="sms_cost"><span>0</span>元/条<a class="pz_zifeixiangqing" href="javascript:;" style="color:#0e90fe;font-size:14px;margin-left:10px;">更多资费详情</a></p>
+                </div>
+              </li>
+              <li>
+                <img src="__PUBLIC__/img/e_shiubiefeilv.png" alt="">
+                <div class="f_rateuldata">
+                  <p>语音识别费率</p>
+                  <p id="asr_cost"><span>0</span>元/次<a class="pz_zifeixiangqing" href="javascript:;" style="color:#0e90fe;font-size:14px;margin-left:10px;">更多资费详情</a></p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+	  	</div>
+    </div>
+  </div>
+  <!-- 数据 -->
+  <div class="" style="margin-bottom:60px;">
+    <div class="panel panel-default pz_manping_height" style="margin-bottom:0px;">
+      <div class="panel-body" >
+        <div class="panel-top">
+          <span class="n_panel_title"><img src="__PUBLIC__/img/e_shuju.png"/>我的数据</span>
+        </div>
+        <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">昨日/今日</th>
+								<th class="text-center">呼叫次数</th>
+								<th class="text-center">接通次数</th>
+								<th class="text-center">接通率</th>
+								<th class="text-center">计费时长(分钟)</th>
+								<th class="text-center">平均通话时长(秒)</th>
+								<th class="text-center">通话费用(元)</th>
+								<th class="text-center">识别费用(元)</th>
+								<th class="text-center">机器人月租(元)</th>
+								<th class="text-center">短信费用(元)</th>
+								<th class="text-center">技术服务费用(元)</th>
+								<!--<th class="text-center">子账户消费总额(元)</th>-->
+                <th class="text-center">账户消费总额(元)</th>
+					    </tr>
+				    </thead>
+				   <tbody id="today-recored">
+
+				    </tbody>
+				  </table>
+			  </div>
+      </div>
+    </div>
+	</div>
+</div>
+<script id='recharge_record' type='text/tepmate'>
+	<tr>
+		<th class="text-center">昨日<br/>数据</th>
+		<td class="text-center">{%y_call_count%}</td>
+		<td class="text-center">{%y_connect_count%}</td>
+		<td class="text-center">{%y_connect_rate%}</td>
+  	<td class="text-center">{%y_charging_duration%}</td>
+    <td class="text-center">{%y_average_connect_duration%}</td>
+    <td class="text-center">{%y_connect_cost%}</td>
+    <td class="text-center">{%y_asr_cost%}</td>
+    <td class="text-center">{%y_robot_cost%}</td>
+  	<td class="text-center">{%y_sms_cost%}</td>
+  	<td class="text-center">{%y_technology_service_cost%}</td>
+    <td class="text-center">{%y_total_cost%}</td>
+	</tr>
+	<tr>
+		<th class="text-center">今日<br/>数据</th>
+		<td class="text-center">{%t_call_count%}</td>
+		<td class="text-center">{%t_connect_count%}</td>
+		<td class="text-center">{%t_connect_rate%}</td>
+  	<td class="text-center">{%t_charging_duration%}</td>
+    <td class="text-center">{%t_average_connect_duration%}</td>
+    <td class="text-center">{%t_connect_cost%}</td>
+    <td class="text-center">{%t_asr_cost%}</td>
+    <td class="text-center">{%t_robot_cost%}</td>
+  	<td class="text-center">{%t_sms_cost%}</td>
+  	<td class="text-center">{%t_technology_service_cost%}</td>
+    <td class="text-center">{%t_total_cost%}</td>
+	</tr>
+</script>
+<script type="text/javascript">
+
+  //更多资费详情
+  $('.f_rateuldata p .pz_zifeixiangqing').click(function(){
+    var zifei_title = $(this).parents('.f_rateuldata').find("p:eq(0)").text();
+    console.log(zifei_title);
+    $('#pz_Rate').modal('show');
+    $('#rate_type').text(zifei_title);
+    //ajax获取数据,
+    if("{:session('user_auth.role')}"=='销售人员'){
+    	var allType = "销售人员";//账号类型
+  		var allName = "{:session('user_auth.username')}";//账户名
+    }else{
+    	var allType = $("#allType option:selected").val();//账号类型
+  		var allName = $("#allName").val();//账户名
+    }
+  	var url = "{:url('user/Enterprise/get_rate_api')}";
+  	$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : {'type':allType,'username':allName,'rate_type':zifei_title},
+			success: function(result){
+				if (result.code == 0) {
+          console.log(result);
+          var htmls = '';
+					if(result.data.type == '语音通话费率'){
+            $("#rate_type_title01").text('线路名称');
+            $("#rate_type_title02").text('费率');
+            $.each(result.data.rate_info , function(index, object){
+              var price = object.sales_price+'元/分钟';
+              // console.log("name"+object[0]);
+              var html = $('#bgrate_info_list').html();
+                  html = html.replace('{%name%}', object.name);
+                  html = html.replace('{%price%}', parseFloat(price).toFixed(3));
+                  htmls += html;
+            });
+            $('#rate_info').html(htmls);
+					}else if(result.data.type == '语音识别费率'){
+            $("#rate_type_title01").text('ASR名称');
+            $("#rate_type_title02").text('费率');
+            $.each(result.data.rate_info , function(index, object){
+              var price = object.sale_price+'元/次';
+              // console.log("name"+object[0]);
+              var html = $('#bgrate_info_list').html();
+                  html = html.replace('{%name%}', object.name);
+                  html = html.replace('{%price%}', parseFloat(price).toFixed(4));
+                  htmls += html;
+            });
+            $('#rate_info').html(htmls);
+					}else{  //短信费率
+            $("#rate_type_title01").text('短信通道名称');
+            $("#rate_type_title02").text('费率');
+            $.each(result.data.rate_info , function(index, object){
+              var price = object.price+'元/条';
+              // console.log("name"+object[0]);
+              var html = $('#bgrate_info_list').html();
+                  html = html.replace('{%name%}', object.name);
+                  html = html.replace('{%price%}', parseFloat(price).toFixed(3));
+                  htmls += html;
+            });
+            $('#rate_info').html(htmls);
+					}
+
+
+				}
+
+			},
+			error : function() {
+				alert('获取费率信息失败。');
+			}
+		});
+
+  });
+  //关闭提示窗
+  function hidden_delnote()
+  {
+    $('#pz_Rate').modal('hide');
+  }
+
+  // 重置
+  function resetClickz(){
+    $("#allType").val("{:session('user_auth.role')}");
+    $('#allType').change();
+    // $("#allName").val("{:session('user_auth.username')}");
+  	searchClickz();
+  }
+
+	//第一次加载账户名状态值
+	var i = 0;
+  // 选择类型联动账户名
+  $('#allType').change(function(){
+    var nowlimit = $(this).val();//选中的账号类型的val
+    var numbers = $(this).find("option");
+    for (var j = 1; j < numbers.length; j++) {
+    	if ($(numbers[j]).val() == nowlimit) {
+    		$(numbers[j]).attr("selected", "selected");
+    	}else {
+    		$(numbers[j]).attr("selected", false);
+    	}
+    }
+    var option_mub = "";
+    var url = "{:url('user/Enterprise/get_username_api')}";
+		$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : {'type':nowlimit},
+			success: function(result){
+
+				if (result.code == 0) {
+					if(result.data.length == 0){
+						option_mub = '<option value="全部账户">全部账户</option>';
+					}else{
+						if(nowlimit == "{:session('user_auth.role')}"){
+							option_mub = '';
+						}else{
+							option_mub = '<option value="全部账户">全部账户</option>';
+						}
+						
+						$.each(result.data, function(index, object){
+            	option_mub += '<option value="'+object.username+'">'+object.username+'</option>';
+          	});
+          	console.log(result);
+					}
+
+					$("#allName").html(option_mub);
+					{if session('check_name') != ''}
+						if(i == 0){
+							{if session('check_type') == '管理员'}
+								$("#allName").val("全部账户");
+							{else/}
+								$("#allName").val("{:session('check_name')}");
+							{/if}
+							
+							searchClickz();
+							i++;
+						}
+					{/if}
+				}
+
+			},
+			error : function() {
+				alert('获取账号名失败。');
+			}
+		});
+
+  });
+	//刷新页面更改账户类型
+
+	{if session('check_type') != ''}
+		{if session('check_type') == '管理员'}
+			$('#allType').val("运营商");
+		{else/}
+			$('#allType').val("{:session('check_type')}");
+		{/if}
+		$('#allType').change();
+	{/if}
+
+	searchClickz();
+  //查询显示数据
+  function searchClickz(){
+  	if("{:session('user_auth.role')}"=='销售人员'){
+    	var allType = "销售人员";//账号类型
+  		var allName = "{:session('user_auth.username')}";//账户名
+    }else{
+    	
+    	var allType = $("#allType").val();//账号类型
+    	//账户名
+  		var allName = $("#allName").val();
+  		if(allName == '' || allName == null){
+  			allName = '全部账户';
+  		}
+  		if(allType == "{:session('user_auth.role')}"){
+  			allName = "{:session('user_auth.username')}";
+  		}
+    }
+  
+    var url = "{:url('user/Enterprise/search_survey_api')}";
+		$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : {'type':allType,'username':allName},
+			success: function(result){
+				console.log(result);
+				if (result.code == 0) {
+					var data = result.data.user_info;
+					var y_data = data.yesterday;
+					var t_data = data.today;
+					var line_info = data.rate_info.line_info;
+					var sms_info = data.rate_info.sms_info;
+					var asr_info = data.rate_info.asr_info;
+					var robot_info = data.rate_info.robot_info;
+					//账号概况
+					$('#user_role').text(data.role_name);
+					$('#user_name').text(data.username);
+					$('#user_money').text(parseFloat(data.money).toFixed(2));
+					$('#user_robotCnt').text(data.robot_cnt);
+					if(data.logo == null || data.logo == ''){
+						var path = '__PUBLIC__/img/e_touxiang.png';
+					}else{
+						var path = '/'+data.logo;
+					}
+					$('.show_head_portrait').attr("src", path);
+					if(data.end_time == '' || data.end_time == null){
+						$('.due_time').hide();
+					}else{
+						$('.due_time').show();
+						var str = '机器人到期时间：'+data.end_time;
+						$('.due_time').text(str);
+					}
+					//费率
+					if(line_info.length == 0){
+						$('#connect_cost>a').hide();
+						$('#connect_cost>span').text('0.000');
+					}else{
+						$('#connect_cost>a').show();
+						$('#connect_cost>span').text(parseFloat(line_info[0].sales_price).toFixed(3));
+					}
+					console.log(sms_info.length);
+					if(sms_info.length == 0){
+						$('#sms_cost>a').hide();
+						$('#sms_cost>span').text('0.000');
+					}else{
+						$('#sms_cost>a').show();
+						$('#sms_cost>span').text(parseFloat(sms_info[0].price).toFixed(3));
+					}
+					if(asr_info.length == 0){
+						$('#asr_cost>a').hide();
+						$('#asr_cost>span').text('0.0000');
+					}else{
+						$('#asr_cost>a').show();
+						$('#asr_cost>span').text(parseFloat(asr_info[0].sale_price).toFixed(4));
+					}
+					$('#robot_cost').text(robot_info[0]);
+
+					//我的数据
+					
+					var htmls = '';
+					var html = $('#recharge_record').html();
+					if(y_data == null || y_data == ''){
+						html = html.replace('{%y_call_count%}', 0);
+						html = html.replace('{%y_connect_count%}', 0);
+						html = html.replace('{%y_connect_rate%}', '0%');
+						html = html.replace('{%y_charging_duration%}', 0);
+						html = html.replace('{%y_average_connect_duration%}', 0);
+						html = html.replace('{%y_connect_cost%}', 0.000);
+						html = html.replace('{%y_asr_cost%}', 0.0000);
+						html = html.replace('{%y_robot_cost%}', 0.000);
+			 			html = html.replace('{%y_sms_cost%}', 0.000);
+			 			html = html.replace('{%y_technology_service_cost%}', 0.0000);
+			 			html = html.replace('{%y_total_cost%}', 0.00);
+					}else{
+						html = html.replace('{%y_call_count%}', y_data.call_count ? y_data.call_count : 0);
+						html = html.replace('{%y_connect_count%}', y_data.connect_count ? y_data.connect_count : 0);
+						html = html.replace('{%y_connect_rate%}', parseInt(y_data.connect_rate)+'%');
+						html = html.replace('{%y_charging_duration%}', y_data.charging_duration ? y_data.charging_duration : 0);
+						html = html.replace('{%y_average_connect_duration%}', y_data.average_duration);
+						html = html.replace('{%y_connect_cost%}', y_data.connect_cost ? parseFloat(y_data.connect_cost).toFixed(3) : '0.000');
+						html = html.replace('{%y_asr_cost%}', y_data.asr_cost ? parseFloat(y_data.asr_cost).toFixed(4) : '0.0000');
+						html = html.replace('{%y_robot_cost%}', y_data.robot_cost ? parseFloat(y_data.robot_cost).toFixed(3) : '0.000'); 
+			 			html = html.replace('{%y_sms_cost%}', y_data.sms_cost ? parseFloat(y_data.sms_cost).toFixed(3) : '0.000');
+			 			html = html.replace('{%y_technology_service_cost%}', y_data.technology_service_cost ? parseFloat(y_data.technology_service_cost).toFixed(4) : '0.0000');
+			 			html = html.replace('{%y_total_cost%}', y_data.total_cost ? parseFloat(y_data.total_cost).toFixed(2) : '0.00');
+					}
+					
+		 			html = html.replace('{%t_call_count%}', t_data.call_count ? t_data.call_count : 0);
+					html = html.replace('{%t_connect_count%}', t_data.connect_count ? t_data.connect_count : 0);
+					html = html.replace('{%t_connect_rate%}', t_data.connect_rate ? parseInt(t_data.connect_rate)+'%' : '0%');
+					html = html.replace('{%t_charging_duration%}', t_data.charging_duration ? t_data.charging_duration : 0);
+					html = html.replace('{%t_average_connect_duration%}', t_data.average_duration);
+					html = html.replace('{%t_connect_cost%}', t_data.connect_cost ? parseFloat(t_data.connect_cost).toFixed(3) : '0.000');
+					html = html.replace('{%t_asr_cost%}', t_data.asr_cost ? parseFloat(t_data.asr_cost).toFixed(4) : '0.0000');
+					html = html.replace('{%t_robot_cost%}', t_data.robot_cost ? parseFloat(t_data.robot_cost).toFixed(3) : '0.000');
+		 			html = html.replace('{%t_sms_cost%}', t_data.sms_cost ? parseFloat(t_data.sms_cost).toFixed(3) : '0.000');
+		 			html = html.replace('{%t_total_cost%}', t_data.total_cost ? parseFloat(t_data.total_cost).toFixed(2) : '0.00');
+		 			html = html.replace('{%t_technology_service_cost%}', t_data.technology_service_cost ? parseFloat(t_data.technology_service_cost).toFixed(4) : '0.0000');
+					htmls += html;
+					$('#today-recored').html(htmls);
+					
+					
+				}
+
+			},
+			error : function() {
+				alert('获取概况页面数据失败。');
+			}
+		});
+  }
+
+</script>
+
+<script type="text/javascript">
+	//点击上传图片
+  $('.f_suleftimg').click(function(){
+  	var allType = $("#allType option:selected").val();//账号类型
+  	if((allType == '全部类型' && "{:session('user_auth.role')}" == '管理员') || allType == "{:session('user_auth.role')}"){
+  		$('#head_portrait_file').click();
+  	}
+
+  });
+
+  //选择图片后 上传到服务器
+	$('#head_portrait_file').change(function () {
+	  // var imageObject = $(this).prop('files')[0];
+	  var imageObject = document.getElementById("head_portrait_file").files[0];
+	  var formFile = new FormData();
+	  formFile.append("image", imageObject); //加入文件对象
+	  formFile.append("enctype", "multipart/form-data");
+	  var url = "{:url('user/system/edit_headimg')}";
+	  console.log(formFile);
+	  $.ajax({
+	    data: formFile,
+	  	url: url,
+	  	type: "POST",
+	  	dataType: "json",
+	  	cache: false,			//上传文件无需缓存
+	  	processData: false,		//用于对data参数进行序列化处理 这里必须false
+	  	contentType: false, 	//必须
+	  	success: function(result){
+	  	  console.log(result);
+	  		if(result.code == 0){
+	        // console.log(result.datas.filename);
+	      //   var path = "__PUBLIC__/../"+result.data.filename;
+	  		  // $('#show_head_portrait').attr('src', path);
+	  		  window.location.reload();
+	  		}
+	  	},
+	  	error: function(result){
+	  		alert('上传失败');
+	  	}
+	  });
+	});
+</script>
+{/block}

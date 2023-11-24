@@ -1,0 +1,719 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/bootstrap-select/dist/css/bootstrap-select.min.css" />
+<script type="text/javascript" src="__PUBLIC__/plugs/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
+
+<section class="navbar navbar-default main-box-header main-head clearfix l-navbar">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-left form-inline">
+                <button class="btn btn-knowledgebase" onclick="showGrade();" type="button" name="button">
+                <img src="__PUBLIC__/img/tianjia.png" alt=""> 添加模板</button>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-knowledgebase cancelkn" data-title="删除多个等级分类" onclick="del_intention();">
+                    <img src="__PUBLIC__/img/piliangshanchu.png" alt="">批量删除</button>
+            </div>
+        </div>
+        <div class="col-sm-6"></div>
+    </div>
+</section>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center">
+                <input type="checkbox" name="mobiles" class="intention_checks" data-page="0" onclick="check_intentions();">
+            </th>
+            <th class="text-center">序号</th>
+            <th class="text-center">模板</th>
+            <th class="text-center ">模板描述</th>
+            <th class="text-center">模板启用
+              <i class="hint" data-toggle="tooltip" title="" data-placement="top" data-original-title="通过标签进行精确筛选通话记录">?</i>
+            </th>
+            <th class="text-center">操作</th>
+        </tr>
+    </thead>
+    <tbody id="gradeList">
+
+    </tbody>
+</table>
+<div class="row">
+    <footer class="main-box-footer clearfix col-sm-12 intention_footer">
+        <div class="pull-left">
+            <input type="checkbox" name="mobiles" class="intention_allcheck" data-page="0" onclick="check_allintention();">全选 （已选中<span id="intention_count">0</span>条意向等级）
+        </div>
+        <div class="intentionlevel_paging"></div>
+    </footer>
+</div>
+<div class="datatips datatips_know intention_data"> <span>暂无相关内容</span>
+</div>
+
+<!--编辑,添加弹窗内容模板-->
+<script type="text/template" id="intentionlevel">
+  <div class="form-group">
+    <label class="col-lg-2 control-label intention_id{%lel%}">{%level%}</label>
+      <div class="col-lg-9 col-sm-9">
+        <div class="template-config">
+          <div class="right-content">
+            <div class="from-inline">
+              <input type="checkbox"  name="grade{%lel%}" value="invite_succ" data-title="是否邀约成功">
+              <span>是否邀约成功</span>
+              <div class="hidden ldisplay">
+                <input type="text" class="form-control equalInput" name="" value="=" readonly="readonly">
+                <select class="form-control selwidth" id="isInviteSuccess{%id%}" name="isInviteSuccess">
+                  <option value="1">是</option>
+                  <option value="0">否</option>
+                </select>
+              </div>
+            </div>
+            <div class="from-inline">
+                <input type="checkbox" name="grade{%lel%}" value="final_refusal" data-title="客户最后是否拒绝"><span>客户最后是否拒绝</span>
+                <div class="hidden ldisplay">
+                <input type="text" class="form-control equalInput" name="" value="=" readonly="readonly">
+                <select class="form-control selwidth" id="IsRefuse{%id%}" name="IsRefuse">
+                  <option value="1">是</option>
+                  <option value="0">否</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="from-inline">
+                <input type="checkbox" name="grade{%lel%}"  value="hit_problem_times" data-title="命中问题"><span>命中问题</span>
+                <div class="hidden ldisplay">
+                <select class="form-control equalInput" id="selIsHitProblem{%id%}" name="selIsHitProblem">
+                  <option value=">=">>=</option>
+                  <option value="<="><=</option>
+                </select>
+                <input type="number" class="form-control selwidth" id="HitProblemTimes{%id%}" min="0" value=""><span>次</span>
+              </div>
+            </div>
+            
+            
+            <div class="from-inline">
+                <input type="checkbox" name="grade{%lel%}" value="affirm_times" data-title="肯定次数"><span>肯定次数</span>
+                <div class="hidden ldisplay">
+                <select class="form-control equalInput" id="selIsSure{%id%}" name="selIsSure">
+                  <option value=">=">>=</option>
+                  <option value="<="><=</option>
+                </select>
+                <input type="number" id="isSureTimes{%id%}" name="isSureTimes" class="form-control selwidth" value=""><span>次</span>
+              </div>
+            </div>
+            <div class="from-inline">
+              <input type="checkbox" name="grade{%lel%}" value="reject_times" data-title="拒绝次数"><span>拒绝次数</span>
+              <div class="hidden ldisplay">
+              <select class="form-control equalInput" id="selRefuseTimes{%id%}" name="selRefuseTimes">
+                <option value=">=">>=</option>
+                <option value="<="><=</option>
+              </select>
+              <input type="number" id="refuseTimes{%id%}" name="refuseTimes" class="form-control selwidth" value=""><span>次</span>
+              </div>
+            </div>
+            <div class="from-inline">
+                <input type="checkbox" name="grade{%lel%}" value="speak_count" data-title="客户讲话次数"><span>客户讲话次数</span>
+                <div class="hidden ldisplay">
+                <select class="form-control equalInput" id="selCustomerTalkTimes{%id%}" name="selCustomerTalkTimes">
+                  <option value=">=">>=</option>
+                  <option value="<="><=</option>
+                </select>
+                <input type="number" id="customerTalkTimes{%id%}" name="customerTalkTimes" class="form-control selwidth" value=""><span>次</span>
+              </div>
+            </div>
+            <div class="from-inline">
+              <input type="checkbox" name="grade{%lel%}" value="call_duration" data-title="通话时长"><span>通话时长</span>
+              <div class="hidden ldisplay">
+                <select class="form-control equalInput" id="selCallTime{%id%}" name="selCallTime">
+                  <option value=">=">>=</option>
+                  <option value="<="><=</option>
+                </select>
+                <input type="number" id="callTime{%id%}" name="callTime" class="form-control selwidth" value=""><span>秒</span>
+              </div>
+            </div>
+            <div class="from-inline">
+              <input type="checkbox" name="grade{%lel%}" value="call_status" data-title="通话状态"><span>通话状态</span>
+              <div class="hidden ldisplay">
+                <select class="form-control  equalInput equalInputs" id="selPhoneState{%id%}" name="selPhoneState">
+                  <option value="=">=</option>
+                </select>
+                <select class="form-control selwidth selwidths selectpicker show-tick" title="请选择"  name="PhoneState" multiple style="with:125px;">
+                  <option value="3">无人接听</option>
+                  <option value="4">停机</option>
+                  <option value="5">空号</option>
+                  <option value="6">正在通话中</option>
+                  <option value="7">关机</option>
+                  <option value="8">用户拒接</option>
+                  <option value="9">网络忙</option>
+                  <option value="10">来电提醒</option>
+                  <option value="11">呼叫转移失败</option>
+                </select>
+                
+              </div>
+            </div>
+            <div class="from-inline">
+              <input type="checkbox" name="grade{%lel%}" value="say_keyword" data-title="客户通话内容"><span>客户通话内容</span>
+              <div class="hidden ldisplay">
+                <select class="form-control equalInput" id="selCallContent{%id%}" name="selCallContent">
+                  <option value="in">包含任一</option>
+                  <option value="all">包含全部</option>
+                </select>
+                <input type="text" id="callKeyword{%id%}" name="callKeyword" class="form-control writeKeyword equalInput"  value="" placeholder='请填写关键词，多个关键字之间用英文逗号","隔开'>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   </div>
+</script>
+
+<!--编辑,添加,删除弹窗内容数据显示-->
+<script>
+  //添加，编辑弹窗
+  function showGrade(id){
+    //滚动事件(让弹窗滚动到顶部)
+    $(".modal-body").animate({scrollTop:0},200)
+    
+    if(id == '' || id == null){
+      $('#grade_edit_add').modal('show');
+      //添加模板
+      var htmls = '';
+      grade = ["A级意向等级","B级意向等级","C级意向等级","D级意向等级","E级意向等级","F级意向等级"];
+      $.each(grade,function(index,obj){
+        var html = $('#intentionlevel').html();
+        //等级级别class
+        html = html.replace('{%lel%}',obj[0]);
+        //等级级别
+        html = html.replace('{%level%}',obj);
+        //是否邀约成功
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        //客户最后是否拒绝
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        //命中问题
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+        //肯定次数
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+        //拒绝次数
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+        //客户讲话次数
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+        //通话时长
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+        //通话状态
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+        //客户通话内容
+        html = html.replace('{%lel%}',obj[0]);
+        html = html.replace('{%id%}',index);
+        html = html.replace('{%id%}',index);
+
+        htmls += html;
+      });
+       $('#level').html(htmls);
+       $('.selectpicker').selectpicker();
+      //选中显示
+      $.each(grade,function(index,obj){
+        $(".right-content .from-inline input[name='grade"+obj[0]+"']").unbind();
+        $(".right-content .from-inline input[name='grade"+obj[0]+"']").click(function(){
+          if($(this).is(':checked')){
+            console.log(obj[0]);
+            $(this).siblings(".ldisplay").removeClass('hidden');
+          }else{
+            $(this).siblings(".ldisplay").addClass('hidden');
+          }
+        });
+      });
+      
+      //让所有的条件隐藏
+      $(".ldisplay").addClass('hidden');
+      $('#grade-title').html('添加模板');
+      //模板名
+			$('#intention_modelname').val('');
+			//模板描述
+			$('#model_describe').val('');
+			$('#grade_edit_add').attr('data-id','');
+      //默认E,F选中
+      $("input[name='gradeE'][value='call_status']").click();
+      $("input[name='gradeE'][value='call_status']").nextAll('.ldisplay').find('select').last().selectpicker('val', ['3','6','7','8','9','10','11']).trigger("change");
+      $("input[name='gradeF'][value='call_status']").click();
+      $("input[name='gradeF'][value='call_status']").nextAll('.ldisplay').find('select').last().selectpicker('val', ['4','5']).trigger("change");
+      
+    }else{
+      
+      showGrade();
+      $('#grade_edit_add').attr('data-id',id);
+      var url = '{:url("edit_intentionlevel_info")}';
+			$.ajax({
+				url:url,
+				dataType: 'json',
+				type: 'post',
+				data:{id:id},
+				success: function(result) {
+				  console.log(result);
+				  var intention_name = result.data.intention_name;
+				  var intention_rule = result.data.intention_rule;
+					if(result.code == 0){
+					  $('#grade-title').html('编辑模板');
+					  //模板名
+						$('#intention_modelname').val(intention_name.name);
+						//模板描述
+						$('#model_describe').val(intention_name.describe);
+						//默认意向等级
+						$('#default_level').text(result.data.default_level);
+						//取消默认E,F选中
+						$("input[name='gradeE'][value='call_status']").click();
+						$("input[name='gradeF'][value='call_status']").click();
+						//显示选中的规则
+						$.each(intention_rule,function(index,object){
+						  
+						  $(".intention_id"+object.level).attr('data-id',object.id);
+						  $.each(object.rule,function(i,n){
+						    console.log('等级：'+object.level+' key = '+n.key);
+						    
+						    $(".right-content .from-inline input[name='grade"+object['level']+"'][value='"+n.key+"']").click();
+						    if(n.key == 'invite_succ' || n.key == 'final_refusal'){
+        		      
+        		      $("input[name='grade"+object['level']+"'][value='"+n.key+"']").nextAll('.ldisplay').find('select').val(n.value);
+        		      
+        		    }else if(n.key == 'call_status'){
+        		    
+        		      $("input[name='grade"+object['level']+"'][value='"+n.key+"']").nextAll('.ldisplay').find('select').last().selectpicker('val', n.value).trigger("change");
+        		      
+        		    }else if(n.key == 'say_keyword'){
+        		      $("input[name='grade"+object['level']+"'][value='"+n.key+"']").nextAll('.ldisplay').find('select').val(n.op);
+        		      $("input[name='grade"+object['level']+"'][value='"+n.key+"']").nextAll('.ldisplay').find('input').val(n.value);
+        		    }else{
+        		      $("input[name='grade"+object['level']+"'][value='"+n.key+"']").nextAll('.ldisplay').find('select').val(n.op);
+        		      $("input[name='grade"+object['level']+"'][value='"+n.key+"']").nextAll('.ldisplay').find('input').val(n.value);
+        		    }
+						  });
+						  
+						});
+					}
+				},
+				error: function(e) {
+					alert('获取编辑意向等级信息失败');
+				}
+			});
+    }
+  }
+  
+  //添加，编辑
+  function add_intentionSubmit(){
+		//提交ajax方法的状态
+		var commit_ajax_state = true;
+		var id = $('#grade_edit_add').attr('data-id');
+		var name = $('#intention_modelname').val();
+		var description = $('#model_describe').val();
+		var scenarios_id = $('.active .Idlist').val();
+		var ruler = [];
+		var rule_name = [];
+		//获取选中内容
+		var grade = ["A","B","C","D","E","F"];
+		$.each(grade,function(index,obj){
+		  $.each($(".right-content .from-inline input[name='grade"+obj+"']:checked"),function(i,n){
+		    var item = {};
+		    var rtem = {};
+		    item.one = $(n).val();
+		    rtem.onetxt = $(n).attr('data-title');
+		
+		    item.level = obj;
+		    rtem.level = obj;
+		    if($(n).val() == 'invite_succ' || $(n).val() == 'final_refusal'){
+		      item.two = '=';
+		      item.three = $(n).nextAll('.ldisplay').find('select').val();
+		      item.four = 'bool';
+		      rtem.twotxt = '=';
+		      rtem.threetxt = $(n).nextAll('.ldisplay').find('select').find("option:selected").text();
+		      
+		    }else if($(n).val() == 'call_status'){
+		      item.two = '=';
+		      item.three = $(n).nextAll('.ldisplay').find('select').last().val();
+		      item.four = 'array';
+		      rtem.twotxt = '=';
+		      rtem.threetxt = $(n).nextAll('.ldisplay').find('select').last().find("option:selected").text();
+		    }else if($(n).val() == 'say_keyword'){
+		      item.two = $(n).nextAll('.ldisplay').find('select').last().val();
+		      item.three = $(n).nextAll('.ldisplay').find('input').val();
+		      item.four = 'array';
+		      rtem.twotxt = $(n).nextAll('.ldisplay').find('select').last().find("option:selected").text();
+		      rtem.threetxt = $(n).nextAll('.ldisplay').find('input').val();
+		    }else{
+		      item.two = $(n).nextAll('.ldisplay').find('select').val();
+		      item.three = $(n).nextAll('.ldisplay').find('input').val();
+		      item.four = 'int';
+		      rtem.twotxt = $(n).nextAll('.ldisplay').find('select').val();
+		      rtem.threetxt = $(n).nextAll('.ldisplay').find('input').val();
+		    }
+		    ruler.push(item);
+		    rule_name.push(rtem);
+		  });
+		  
+    });
+    //判断状态
+    if(name == '' || name == null){
+		  alert('模板名称不能为空');
+		  commit_ajax_state = false;
+		}else if($("input[name='gradeA']").is(':checked') == false ||
+    		     $("input[name='gradeB']").is(':checked') == false ||
+    		     $("input[name='gradeC']").is(':checked') == false ||
+    		     $("input[name='gradeD']").is(':checked') == false)
+		{
+		  //判断A,B,C,D的内容有没有选择
+      alert('A,B,C,D意向等级为必选项');
+      commit_ajax_state = false;
+    }else {
+		  commit_ajax_state = true;
+		}
+    
+    // //判断E,F有没有选择
+    // if($("input[name='gradeE']").is(':checked') == false){
+    //   var rule_E = {};
+    //   var rule_nameE = {};
+    //   rule_E.one = "call_status";
+    //   rule_E.two = '=';
+    //   rule_E.three = ["3", "6", "7", "8", "9", "10", "11"];
+    //   rule_E.four = 'array';
+    //   rule_E.level = "E";
+    //   rule_nameE.onetxt = "通话状态";
+    //   rule_nameE.twotxt = '=';
+    //   rule_nameE.threetxt = "无人接听,正在通话中,关机,用户拒接,网络忙,来电提醒,呼叫转移失败";
+    //   rule_nameE.level = "E";
+      
+    //   ruler.push(rule_E);
+		  // rule_name.push(rule_nameE);
+    // }
+    // if($("input[name='gradeF']").is(':checked') == false){
+    //   var rule_F = {};
+    //   var rule_nameF = {};
+    //   rule_F.one = "call_status";
+    //   rule_F.two = '=';
+    //   rule_F.three = ["4", "5"];
+    //   rule_F.four = 'array';
+    //   rule_F.level = "F";
+    //   rule_nameF.onetxt = "通话状态";
+    //   rule_nameF.twotxt = '=';
+    //   rule_nameF.threetxt = "停机,空号";
+    //   rule_nameF.level = "E";
+      
+    //   ruler.push(rule_F);
+		  // rule_name.push(rule_nameF);
+    // }
+    console.log(ruler);
+    if(commit_ajax_state === true){
+      $('#grade_edit_add').modal('hide');
+      var url = '{:url("add_editor_intentionlevel")}';
+		
+  		$.ajax({
+				url:url,
+				dataType: 'json',
+				type: 'post',
+				data:{id:id, scenarios_id:scenarios_id, name:name, description:description, ruler:ruler, rule_name:rule_name},
+				success: function(result) {
+				  console.log(result);
+					if(result.code == 0){
+						if(id == '' || id == null){
+							alert('添加意向等级成功');
+						}else{
+							alert('编辑意向等级成功');
+						}
+						show_intentionleve_data();	
+						// window.location.reload()；
+					}else if(result.code == 3){
+					  alert('该模板名已存在');
+					}else if(result.code == 5){
+					  alert('参数传递错误，话术id为空');
+					}else{
+						alert('编辑添加意向等级信息失败');
+					}
+					
+				},
+				error: function(e) {
+					alert('编辑添加意向等级信息失败');
+				}
+			});
+    }
+		
+  }
+  
+  
+  //删除弹窗
+  function del_intention(id){
+    if(id == '' || id == null){
+		  if($('.intention_check:checked').length == 0){
+		    alert('请至少选择一条数据');
+		  }else{
+		    $("#delModal_intention").modal('show');
+    		$('#delModal_intention').attr('data-id', '');
+    		//批量
+    		$('#delModal_intention').attr('data-state',0);
+		  }
+		}else{
+		  $("#delModal_intention").modal('show');
+			$('#delModal_intention').attr('data-id', id);
+			//单个
+			$('#delModal_intention').attr('data-state',1); 
+		}
+  }
+  
+  //删除
+  function delintention(){
+    var data = {};
+		var id = $('#delModal_intention').attr('data-id');
+		var del_state = $('#delModal_intention').attr('data-state');
+		//判断是否全选
+		if($('.intention_allcheck').is(':checked')){
+			data.state = 0;
+			//获取话术id
+			data.sceneId = $('.active .Idlist').val();
+		}else{
+			//定义传递的参数id数组
+			var del_ids = [];
+			if(del_state == 1){
+				//单个删除
+				del_ids[0] = id;
+			}else{
+				//批量删除
+				$.each($('.intention_check:checked'), function(index, object){
+	 				del_ids.push($(object).attr('data-id'));
+	 			});
+			}
+			data.state = 1;
+			data.del_ids = del_ids;
+		}
+		console.log(data);
+		var url = "{:url('del_intentionlevel')}";
+		
+		$.ajax({
+			url:url,
+			dataType: 'json',
+			type: 'post',
+			data:data,
+			success: function(result) {
+				console.log(result);
+				if(result.code == 0){
+					alert('删除成功');
+					show_intentionleve_data();	
+					// window.location.reload()；
+				}else{
+					alert('删除失败');
+				}
+				
+			},
+			error: function(e) {
+				alert('删除失败');
+			}
+		});
+		//将全选，本页选取消选中
+		$('.intention_checks').prop("checked",false);
+		$('.intention_allcheck').prop("checked",false);
+		//将删除模板隐藏
+		$("#delModal_intention").modal('hide');
+  }
+
+</script>
+
+<!--显示意向等级模板数据以及更改模板启用状态-->
+<script>
+  /**
+   * 配置分页
+   *
+   * @param int args.page 页码 页码参数统一"page"
+   * @param int args.limit 每页显示的数量 参数统一"limit"
+   * @param string args.paging_class 放置分页的class
+   * @param function args.callback 回调函数
+  */
+  var intentionlevel_paging = new Paging01();
+  intentionlevel_paging.init_args({
+    page: 1, //初始页码
+    limit: 10, //初始每页显示的数据量
+    paging_class: 'intentionlevel_paging', //放置分页的class
+    callback: show_intentionleve_data, //回调函数 比如show_datas(页码, 显示条数)
+    key:2,
+  });
+  
+  //页面加载事件
+  $(function () {
+    show_intentionleve_data();
+  });
+  //显示意向等级模板数据
+  function show_intentionleve_data(page,pagesize){
+    var url = '{:url("get_grade_classification_data")}';
+    var data = {};
+    if(page == '' || page == null){
+      data.page = 1;
+    }else{
+      data.page = page;
+    }
+    
+    if(pagesize == '' || pagesize == null){
+      data.pagesize = 10;
+    }else{
+      data.pagesize = pagesize;
+    }
+    //获取话术id
+    data.sceneId = $('.active .Idlist').val();
+    console.log(data);
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'post',
+      data:data,
+      success: function(result) {
+        console.log('-----------------------');
+        console.log(result);
+        console.log('-----------------------');
+        var htmls = '';
+        $("#gradeList").find("tr").remove();
+        $('.intention_footer').hide();
+        $('.intention_data').show();
+        if(result.code === 0) {
+          $('.intention_footer').show();
+          $('.intention_data').hide();
+        
+          for(var i = 0; i < result.data.data.length; i++){
+            var key = result.data.data[i].key;
+            var name = result.data.data[i].name;
+            var describe = result.data.data[i].describe;
+            var id = result.data.data[i].id;
+            var state = result.data.data[i].state;
+            if(state == '' || state == null){
+              var intention_status = 0;
+            }else{
+              var intention_status = 1;
+            }
+            
+            var string = '<tr>'
+            + '<td class="text-center"><input type="checkbox" name="mobiles" class="intention_check" data-id="'+id+'" onclick="check_intention_sigle();"></td>'
+            + '<td>'+key+'</td>'
+            +	'<td>'+name+'</td>'
+            +	'<td>'+describe+'</td>';
+            if(state == '' || state == null){
+              string += '<td><input type="checkbox" name="change_intention" data-state="'+intention_status+'" data-id="'+id+'" class="precision_query intentionModel_state" onclick="change_intention_state(this);"></td>';
+            }else{
+              string += '<td><input type="checkbox" name="change_intention" data-state="'+intention_status+'" data-id="'+id+'" checked="'+state+'" class="precision_query intentionModel_state" onclick="change_intention_state(this);"></td>';
+            }
+            string += '<td><a href="javascript:;" onclick="showGrade('+id+');">编辑</a> &nbsp;<a href="javascript:;" data-title="删除单个语义标签" onclick="del_intention('+id+');">删除</a></td>';
+            string += '</tr>';
+            $("#gradeList").append(string);
+          }
+          
+          $('#intention_count').attr('data-total',result.data.count);
+          $('#intention_count').attr('data-page',result.data.page);
+          //显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+          intentionlevel_paging.paging(result.data.page, result.data.count, result.data.pagesize);
+          check_allintention();
+          check_intentions();
+        }else if(result.code == 3){
+          console.log('参数传递错误，话术id为空,获取意向等级失败');
+        }
+      
+        
+      },
+      error: function(e) {
+        alert('获取意向等级失败');
+      }
+    });
+  }
+  
+  //更改意向等级模板启用状态
+  function change_intention_state(obj){
+    var flag = $(this).prop("checked"); //先记录下点击后应该的状态
+    $("input[type='checkbox'][name='change_intention']").prop("checked", false);
+    $(this).prop("checked", flag);
+    
+    var intentionId = $(obj).attr('data-id');
+    $(obj).removeClass('intentionModel_state');
+    // var other_ids = [];
+    // $.each($('.intentionModel_state'),function(index,object){
+    //   other_ids.push($(object).attr('data-id'));
+    // });
+    var sceneId = $('.active .Idlist').val();
+    var state = $(obj).attr('data-state');
+    if(state == 1){
+      state = 0;
+    }else{
+      state = 1;
+    }
+    $.post("{:url('change_intentionlevel_state')}",{'intentionId':intentionId,'state':state,'sceneId':sceneId},function(data){
+      if(data.code === 0){
+        alert('更新成功');
+      }else{
+        alert('更新失败');
+      }
+      show_intentionleve_data();
+    });
+  }
+</script>
+
+<!--全选，本页选，单选-->
+<script>
+  //所有数据全选
+  function check_allintention(){
+    if($('.intention_allcheck').is(':checked')){
+      $('.intention_checks').prop("checked",true);
+      $('.intention_check').prop("checked",true);
+      $('#intention_count').text($('#intention_count').attr('data-total'));
+      $('.intention_checks').attr('data-page',$('#intention_count').attr('data-total'));
+    }else{
+      $('.intention_checks').prop("checked",false);
+      $('.intention_check').prop("checked",false);
+      $('#intention_count').text(0);
+      $('.intention_checks').attr('data-page',0);
+    }
+  }
+  //本页全选
+  function check_intentions(){
+    if($('.intention_checks').is(':checked')) {
+      $('.intention_check').prop("checked",true);
+      if($('.intention_check:checked').length == $('#intention_count').attr('data-total')){
+        $('.intention_allcheck').prop("checked",true);
+        $('.intention_checks').prop("checked",true);
+        $('.intention_checks').attr('data-page',$('#intention_count').attr('data-total'));
+      }else {
+        $('.intention_checks').attr('data-page',$('#intention_count').attr('data-page'));
+      }
+      
+      $('#intention_count').text($('.intention_check:checked').length);
+    }else{
+      $('.intention_allcheck').prop("checked",false);
+      $('.intention_check').prop("checked",false);
+      $('#intention_count').text(0);
+      $('.intention_checks').attr('data-page',0);
+    }
+  }
+  //单个选项框选中事件
+  function check_intention_sigle(){
+    if(!$(".intention_check").checked) {
+      $('.intention_checks').prop("checked",false);
+      $('.intention_allcheck').prop("checked",false);
+      $('.intention_checks').attr('data-page',0);
+    }
+    var check_pagenum = $('.intention_check').length;
+    var check_num = $('.intention_check:checked').length;
+    if(check_pagenum == check_num){
+      $('.intention_checks').prop("checked",true);
+      $('.intention_checks').attr('data-page',$('#intention_count').attr('data-page'));
+    }
+    if(check_num == $('#intention_count').attr('data-total')){
+      $('.intention_allcheck').prop("checked",true);
+      $('.intention_checks').prop("checked",true);
+      $('.intention_checks').attr('data-page',$('#intention_count').attr('data-total'));
+    }
+    $('#intention_count').text(check_num);
+  }
+</script>
+
+
+
+

@@ -1,0 +1,252 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+
+<link href="/public/css/systemManage.css" rel="stylesheet" type="text/css">
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<style>
+  .form-group{
+    margin-bottom:0px!important;
+  }
+  .c_marleft {
+    margin-left: 10px;
+  }
+  .version {
+    margin-left: 31px;
+  }
+  .version input {
+    width: 160px;
+  }
+  table, .table thead>tr>th, .table tbody>tr>td {
+    border: solid 1px #e7ebee;
+  }
+  .table thead>tr>th {
+    border-top: solid 1px #e7ebee !important;
+  }
+  .s_content {
+    padding-left: 5%;
+  }
+  .c_selshowhide {
+  	padding-left: 5%;
+  }
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><img src="__PUBLIC__/img_sj/fankuiliebiao.png" alt="">反馈列表</span>
+		  </div>
+		</header>
+
+		<div class="main-box-body clearfix">
+	      <section class="navbar clearfix">
+					<form method="get" role="form">
+						<div class="form-group dis_in  c_seldate clearfix">
+							<!-- 选择日期 -->
+							 <label class="levelSelect statusSelect">提交时间:</label>
+							 <div class="formgroup">
+								 <div class="dis_in c_dateSelbg pr">
+									 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+									 <script>
+											 $('#startDate').fdatepicker({
+												 format: 'yyyy-mm-dd',
+												 // pickTime: true
+											 });
+									 </script>
+								 </div>
+								 <span class="pz_zhi">至</span>
+								 <div class="dis_in c_dateSelbg pr">
+									 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+									 <script>
+										 $('#endTime').fdatepicker({
+											 format: 'yyyy-mm-dd',
+											 // pickTime: true
+										 });
+									 </script>
+								 </div>
+							 </div>
+
+							<!-- 搜索版本号 -->
+							<div class="dis_in c_marleft version">
+                <label class="levelSelect statusSelect">用户号:</label>
+                <div class="dis_in formgroup">
+                  <input type="text" class="form-control" id="keyword" name="keyword" placeholder="请输入版本号" autocomplete="off">
+                </div>
+							</div>
+
+							<!-- 查询、重置按钮 -->
+							<div class="dis_in c_marleft">
+								<button class="btn btn-primary" type="submit">查询</button>
+							</div>
+					  </div>
+				 </form>
+				</section>
+
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover" style="table-layout:fixed;">
+				   <thead>
+					    <tr>
+								<!-- <th class="text-center" style="width:10%"><input class="check-all" name='all_checked' type="checkbox"/></th> -->
+								<th class="text-center"style="width:5%">序号</th>
+								<th class="text-center"style="width:10%">用户名</th>
+								<th class="text-center"style="width:13%;">联系电话</th>
+								<th class="text-center" style="width:10%;padding:13px 20px;">邮箱</th>
+								<th class="text-center" style="width:13%;padding:13px 20px;">微信</th>
+								<th class="text-center" style="padding:13px 20px;">反馈内容</th>
+								<th class="text-center" style="width:10%;padding:13px 20px;">提交时间</th></th>
+								<th class="text-center" style="width:8%;padding:13px 20px;">操作</th>
+					    </tr>
+				    </thead>
+				   <tbody>
+				   {volist name="list" id="vo"}
+
+				   <tr>
+					   <!-- <td class="text-center"><input type="checkbox" name="roleids" class="rolecheck" value=""/></td> -->
+					   <td class="text-center">{$vo.id}</td>
+					   <td class="text-center">{$vo.user_info.username}</td>
+					   <td class="text-center">{$vo.phone}</td>
+					   <td class="text-center">{$vo.email}</td>
+					   <td class="text-center">{$vo.weixin}</td>
+					   <td class="text-center updatecontent" style="padding:13px 20px;">
+						   <div class="s_content s_setheight">
+
+							   <p style="text-align: center">{$vo.title}</p>
+							   {$vo.content}
+
+						   </div>
+						   <div class="c_selshowhide">
+							   <p>...</p>
+							   <a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+						   </div>
+					   </td>
+					   <td class="text-center">2018-12-10</td>
+					   <td class="text-center"><a href="javascript:;" data-id="{$vo.id}" data-title="删除反馈内容" onclick="popTipswin(this);">删除</a></td>
+				   </tr>
+
+
+				   {/volist}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				    </tbody>
+				  </table>
+				    <div class="row">
+								<div class="col-sm-4 text-left"></div>
+								<div class="col-sm-8 text-right">{$page}</div>
+						</div>
+
+			  </div>
+
+				<footer class="main-box-footer clearfix">
+					<div class="pull-left">
+						<!-- <input class="check-all" name='DataCheck_all' type="checkbox"/> 已选择<span id="check_count">0</span>条记录 -->
+            <p>全部日志：<span>50</span>条</p>
+					</div>
+				</footer>
+		</div>
+	</div>
+
+</div>
+
+ <script type="text/javascript">
+ $(function(){
+		var keyword = "{$_GET['keyword']|default=''}";
+		$('#keyword').val(keyword);
+})
+function c_selectshow(obj) {
+  var state = $(obj).attr('data-state');
+  if (state == '1') {
+     $(obj).text('收起全部');
+     $(obj).attr('data-state', '0');
+     $(obj).removeClass('c_selshidea');
+     $(obj).parent().siblings('.s_content').removeClass('s_setheight');
+     $(obj).siblings('p').addClass('dis_no');
+  } else {
+    $(obj).attr('data-state', '1');
+    $(obj).text('展开全部');
+    $(obj).addClass('c_selshidea');
+    $(obj).parent().siblings('.s_content').addClass('s_setheight');
+    $(obj).siblings('p').removeClass('dis_no');
+  }
+}
+ //当前页全选
+  $("input[name='all_checked'][type='checkbox']").click(function(){
+ 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+   	} else {
+  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+  	}
+    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+  });
+ 	//子复选框的事件
+ 	$('input[type="checkbox"][name="roleids"]').click(function(){
+ 		//当没有选中某个子复选框时，check-all取消选中
+ 		if (!$(".rolecheck").checked) {
+ 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+ 		}
+ 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+ 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+ 		if (checkedsub == chsub) {
+ 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+ 		}
+    $("#check_count").text(checkedsub);
+ 	});
+  //全部数据全选 DataCheck
+  $("input[name='DataCheck_all'][type='checkbox']").click(function(){
+   if ($("input[name='DataCheck_all'][type='checkbox']").is(":checked")) {
+      $("input[name='roleids'][type='checkbox']").prop("checked",true);
+      $("input[name='all_checked'][type='checkbox']").prop("checked",true);
+    } else {
+      $("input[name='roleids'][type='checkbox']").prop("checked",false);
+      $("input[name='all_checked'][type='checkbox']").prop("checked",false);
+    }
+    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+  });
+ function feedback_del(id){
+	 var url = location.href.slice(0,location.href.lastIndexOf('/'))+'/feedback_del';
+	 var datas={id:id};
+	 $.ajax({
+		 url : url,
+		 dataType : "json",
+		 type : "post",
+		 data : datas ,
+		 success: function(msg){
+			 if(msg.code == 0){
+				 alert('删除成功');
+				 location.reload();
+			 }else{
+				 alert('删除失败，请重试。');
+			 }
+		 },
+		 error : function() {
+			 alert('失败。');
+		 }
+	 });
+ }
+ </script>
+
+</div>
+
+
+{include file="sms/sms_targer" /}
+
+{/block}

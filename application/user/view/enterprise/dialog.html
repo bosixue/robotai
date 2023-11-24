@@ -1,0 +1,223 @@
+<!--销售账户充值弹框-->
+<div class="modal fade in" id="sale-rechargedialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="recharge"><span></span>账户充值</h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="rechargeform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								<div class="form-group e_bottom">
+									<label class="col-lg-4 col-sm-4 control-label">账户名:</label>
+									<div class="col-lg-6 col-sm-6">
+                    <label class="e_accountname" id="c_username">小明</label>
+									</div>
+								</div>
+								<div class="form-group e_bottom">
+									<label class="col-lg-4 col-sm-4 control-label">账户类型:</label>
+									<div class="col-lg-6 col-sm-6">
+                    <label class="e_accountname" id="c_role_name">运营商</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 col-sm-4 control-label">当前账户余额:</label>
+									<div class="col-lg-6 col-sm-6">
+                    <label class="e_accountname" id="c_balance"><span></span>元</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 col-sm-4 control-label">充值金额:</label>
+									<div class="col-lg-7 col-sm-7">
+                    <input type="text" class="form-control"  id="recharge-money"><span class="l-yuan">元</span>
+                    <span class="e_pricenote">您当前账户可用余额为：<span id="z_balance">1000</span>元</span>
+									</div>
+								</div>
+								<div class="form-group" style="margin-bottom:18px;">
+									<label class="col-lg-4 col-sm-4 control-label">确认金额:</label>
+									<div class="col-lg-7 col-sm-7">
+                    <input type="text" class="form-control"  id="confir-money"><span class="l-yuan">元</span>
+									</div>
+
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 col-sm-4 control-label">备注:</label>
+									<div class="col-lg-7 col-sm-7 l-radio">
+                    <textarea class="l-textarea form-control" name="" id="remak"></textarea>
+									</div>
+								</div>
+					 </form>
+				 </div>
+				 <input hidden id="pid_name_role_only" value="">
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" id="sale_record"  data_id =''  onclick="sale_record()" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+	<style media="screen">
+		/* 财务概况 */
+		.modal-body-tips table.table-bordered.table-hover thead>tr>th{
+			line-height: 35px;
+			height: 36px;
+			width: 50%;
+			padding: 0px;
+		}
+		.modal-body-tips table.table-bordered.table-hover tbody>tr>td{
+			padding:0px 0px !important;
+			line-height: 39px;
+			height: 40px;
+		}
+	</style>
+	<!-- 财务概况 费率弹窗 -->
+	<div class="modal fade in pz_modal" role="dialog" id="pz_Rate" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width:476px;top: 8%;">
+	    <div class="modal-content">
+	      <div class="modal-header" style="border-bottom:none;">
+	        <button type="button" class="close" onclick="hidden_delnote();"><span class="pz_clockshan">×</span></button>
+	        <h4 class="modal-title" style="text-align: center;"><span id="rate_type"></span></h4>
+	      </div>
+	      <div class="modal-body modal-body-tips pz_innerbox_lay" style="padding-top:0px;overflow-y: scroll;max-height: 400px;">
+					<table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center" id="rate_type_title01"></th>
+								<th class="text-center" id="rate_type_title02"></th>
+					    </tr>
+				    </thead>
+				   	<tbody id="rate_info">
+
+				    </tbody>
+				  </table>
+				</div>
+	    </div>
+	  </div>
+	</div>
+	<script id='bgrate_info_list' type='text/tepmate'>
+		<tr>
+			 <td class="text-center">{%name%}</td>
+			 <td class="text-center">{%price%}</td>
+		</tr>
+	</script>
+
+	<!-- 财务概况 短信费率 SMSRates-->
+<!--	<div class="modal fade in pz_modal" role="dialog" id="pz_smsRates" style="display: none;">-->
+<!--	  <div class="modal-dialog modal-sm" style="width:476px; top:20%;">-->
+<!--	    <div class="modal-content">-->
+<!--	      <div class="modal-header" style="border-bottom:none;">-->
+<!--	        <button type="button" class="close" onclick="hidden_delnote();">-->
+<!--	        <span class="pz_clockshan">×</span>-->
+<!--	        </button>-->
+<!--	        <h4 class="modal-title" style="text-align: center;">短信费率</h4>-->
+<!--	      </div>-->
+<!--				<div class="modal-body modal-body-tips" style="padding-top:0px;">-->
+<!--					<table class="table table-bordered table-hover">-->
+<!--				   <thead>-->
+<!--					    <tr>-->
+<!--								<th class="text-center">短信通道名称</th>-->
+<!--								<th class="text-center">费率</th>-->
+<!--					    </tr>-->
+<!--				    </thead>-->
+<!--				   	<tbody>-->
+<!--  						<tr>-->
+<!--  						 <td class="text-center">短信通道01</td>-->
+<!--  						 <td class="text-center">0.15元/条</td>-->
+<!--  						</tr>-->
+<!--              <tr>-->
+<!--  						 <td class="text-center">短信通道02</td>-->
+<!--  						 <td class="text-center">0.02元/条</td>-->
+<!--  						</tr>-->
+<!--				    </tbody>-->
+<!--				  </table>-->
+<!--				</div>-->
+<!--	    </div>-->
+<!--	  </div>-->
+<!--	</div>-->
+
+	<!-- 财务概况 语音识别费率 SMSRates-->
+<!--	<div class="modal fade in pz_modal" role="dialog" id="pz_smsASR" style="display: none;">-->
+<!--	<div class="modal-dialog modal-sm" style="width:476px; top:20%;">-->
+<!--		<div class="modal-content">-->
+<!--			<div class="modal-header" style="border-bottom:none;">-->
+<!--				<button type="button" class="close" onclick="hidden_delnote();">-->
+<!--				<span class="pz_clockshan">×</span>-->
+<!--				</button>-->
+<!--				<h4 class="modal-title" style="text-align: center;">语音识别费率</h4>-->
+<!--			</div>-->
+<!--			<div class="modal-body modal-body-tips" style="padding-top:0px;">-->
+<!--				<table class="table table-bordered table-hover">-->
+<!--				 <thead>-->
+<!--						<tr>-->
+<!--							<th class="text-center">ASR名称</th>-->
+<!--							<th class="text-center">费率</th>-->
+<!--						</tr>-->
+<!--					</thead>-->
+<!--					<tbody>-->
+<!--						<tr>-->
+<!--						 <td class="text-center">ASR1</td>-->
+<!--						 <td class="text-center">0.15元/条</td>-->
+<!--						</tr>-->
+<!--						<tr>-->
+<!--						 <td class="text-center">ASR2</td>-->
+<!--						 <td class="text-center">0.02元/条</td>-->
+<!--						</tr>-->
+<!--					</tbody>-->
+<!--				</table>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</div>-->
+
+<div class="modal fade effect" id="effectTmp" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"   >
+	<div class="modal-dialog" style="width:365px;">
+		<div class="modal-content effect-content import">
+			<div class="modal-header effect-header">
+				<!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>-->
+				<!--</button>-->
+				<h4 class="modal-title effect-title" id="singleTel"><span>数据导出</span></h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="effect-1">
+						<span >当前进度</span>
+						<span class="pull-right color90 Progress_value">0%</span>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="progress">
+						<div class="progress-bar progress-bar-data" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+							<span class="sr-only">0%完成</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer effect-footer">
+				<div>取 消</div>
+			</div>
+		</div>
+		<div class="modal-content effect-content hidden finish">
+			<div class="modal-header effect-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title effect-title">数据导出</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group effect-flex">
+					<i class="effect-success"></i>
+					<div class="effect-success-tip" id="effect-tips-content">
+
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer effect-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" id="upload_ok">确定</button>
+			</div>
+		</div>
+	</div>
+</div>

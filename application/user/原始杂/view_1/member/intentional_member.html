@@ -1,0 +1,1567 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+
+{include file="public/crm_tageter"/}
+<link href="/public/css/intentional_member.css" rel="stylesheet" type="text/css"/>
+<style media="screen">
+@media (min-width: 768px){
+	.form-horizontal .control-label {
+    min-width: 125px;
+	}
+}
+</style>
+<div class="row">
+	<div class="col-lg-12">
+	  <div class="main-box clearfix fadeInRight animated pz_manping_height">
+				<header class="main-box-header n_head_box n_head_box_b clearfix">
+	  		  <div class="pull-left">
+	  			  <span class="n_panel_title">
+	            <img src="/public/img/e_yixiang.png">客户管理</span>
+	  		  </div>
+	        <!--待处理-->
+	        <div class="pull-right headbutton">
+	          <button class="btn btn-primary" type="button"  onclick="customer_edit();" style="width:80px;">添加客户</button>
+	          <button class="btn btn-primary" type="button" onclick="putin_data();" style="width:50px;">导入</button>
+	          <button class="btn btn-primary" type="button" onclick="import_data();" style="width:50px;">导出</button>
+	          <button class="btn btn-primary allocation_seats" type="button" data-type='1' style="width:50px;">分配</button>
+	          <button class="btn btn-primary" type="button"   data-title="建任务呼叫" onclick="addNewPlan(this);" style="width:114px;">建任务呼叫</button>
+	          <button class="btn btn-primary" target-form="ids" onclick="customer_delete_all();" style="width:73px;">删除</button>
+	        </div>
+	  		</header>
+
+			<div class="main-box-body clearfix">
+	      <section class="navbar navbar-default  clearfix pr">
+					<div class="pull-left l-width">
+						<form method="get" role="form">
+					 		<div class="form-inline c_filter">
+								<div class="main-box-header  l-head">
+									<div class="form-group form-inline">
+										<label class="levelSelect statusSelect">请&nbsp;选&nbsp;择&nbsp;:</label>
+	                  <div class="form-group l-sel">
+	           <!--         <select class="form-control l-margin" name="tiaojian" id="tiaojian">-->
+												<!--<option value="">请选择类型</option>-->
+												<!--<option value="1">姓名</option>-->
+												<!--<option value="2">公司</option>-->
+												<!--<option value="3">电话</option>-->
+	           <!--         </select>-->
+	                    <input type="text" class="form-control l-input-width" style="margin-left:10px;" id="keyword" name="keyword" value="" placeholder="请输入关键字查询">
+	                  </div>
+	                  <div class="form-group l-sel">
+	                    <label class="levelSelect l-margin ">坐席:</label>
+	                    <select class="form-control" name="sitchair" id="sitchair">
+	                      <option value="">请选择坐席</option>
+	                      {volist name="seats" id="seat"}
+	                      <option value="{$seat.id}">{$seat.username}</option>
+	                      {/volist}
+	                    </select>
+	                  </div>
+
+										<div class="form-group formGroupt">
+											<div class="form-group">
+	      								<label class="l-margin"  style="float:left;margin-top:5px;">创建日期:</label>
+	      								<div class="col-lg-8 col-sm-8">
+	      									<div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+	      										<input type="text" class="form-control l-input-width c_datebgimg" placeholder="选择开始日期" id="startCreateDate" name="startCreateDate" value="">
+	      									</div>
+
+	      									<script>$('#startCreateDate').fdatepicker({format: 'yyyy-mm-dd h:i',pickTime: true});</script>
+	      								</div>
+	      							</div>
+	      						  <span class="l-zhi">至</span>
+	      							<div class="form-group">
+	      								<div class="col-lg-11 col-sm-11">
+	      									<div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+	      										<input type="text" class="form-control l-input-width c_datebgimg" placeholder="选择结束日期"  id="endCreateTime" name="endCreateTime" value="" style="width:130px;">
+	      									</div>
+	      									<script>
+	      										$('#endCreateTime').fdatepicker({
+	      											format: 'yyyy-mm-dd h:i',
+	      											pickTime: true
+	      										});
+	      									</script>
+	      								</div>
+	      							</div>
+										</div>
+										<div class="form-group l-sel">
+	                    <label class="levelSelect l-margin ">拨打次数:</label>
+	                    <input type='number' class="form-control" id='call_count' />
+	                  </div>
+	      						<!-- <div class="form-group formGroup" >
+		      						<div class="form-group">
+		    								<label class="l-margin" style="float:left;margin-top:5px;">通话日期:</label>
+		    								<div class="col-lg-8 col-sm-8">
+		    									<div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+		    										<input type="text" class="form-control l-input-width c_datebgimg" placeholder="选择开始日期"  id="startCallDate" name="startCallDate" value="">
+		    									</div>
+		    									<script>$('#startCallDate').fdatepicker({format: 'yyyy-mm-dd'});</script>
+		    								</div>
+		    							</div>
+		    							<span class="l-zhi">至</span>
+		    							<div class="form-group">
+		    								<div class="col-lg-11 col-sm-11">
+		    									<div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+		    										<input type="text" class="form-control l-input-width c_datebgimg" placeholder="选择结束日期"  id="endCallTime" name="endCallTime" value="" style="width:130px;">
+		    									</div>
+		    									<script>
+		    										$('#endCallTime').fdatepicker({
+		    											format: 'yyyy-mm-dd',
+		    											// pickTime: true
+		    										});
+		    									</script>
+		    								</div>
+		    							</div>
+	      						</div> -->
+
+	                </div>
+
+	               <div class="form-inline">
+									  <div class="form-group l-width" style="margin-top:5px;">
+								  		<label class="levelSelect statusSelect">意向等级:</label>
+								  		<div class="formgroup statusSelect">
+									  			<label class="checkbox-wrapper l-margin">
+									  					<input class="check-all-level levelcheck " type="checkbox" name="checkAllLevel">
+									  				  <span class="word">全选</span>
+									  			</label>
+
+												<label class="checkbox-wrapper l-margin">
+													 <input type="checkbox" name="level" class="levelcheck" value="6">
+													 <span class="word">A级(意向客户)</span>
+												</label>
+
+												<label class="checkbox-wrapper l-margin">
+													<input type="checkbox" name="level" class="levelcheck" value="5">
+													<span class="word">B级(一般意向)</span>
+												</label>
+
+												<label class="checkbox-wrapper l-margin">
+													<input type="checkbox" name="level" class="levelcheck" value="4">
+													<span class="word">C级(简单对话)</span>
+												</label>
+	                  	</div>
+									  </div>
+								 </div>
+	               <div class="form-inline">
+									  <div class="form-group l-width" >
+								  		<label class="levelSelect statusSelect">类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型:</label>
+								  		<div class="formgroup statusSelect">
+									  			<label class="checkbox-wrapper l-margin">
+									  					<input class="check-all-level crm_cate " type="checkbox" name="checkALLCrmCate"/>
+									  				  <span class="word">全选</span>
+									  			</label>
+
+                         <label class="checkbox-wrapper l-margin">
+													 <input type="checkbox" name="crm_cate" class="crm_cate" value="0">
+													 <span class="word">未分类</span>
+												</label>
+												<label class="checkbox-wrapper l-margin">
+													 <input type="checkbox" name="crm_cate" class="crm_cate" value="1">
+													 <span class="word">意向客户</span>
+												</label>
+
+												<label class="checkbox-wrapper l-margin">
+													<input type="checkbox" name="crm_cate" class="crm_cate" value="2">
+													<span class="word">潜在客户</span>
+												</label>
+
+												<label class="checkbox-wrapper l-margin">
+													<input type="checkbox" name="crm_cate" class="crm_cate" value="3">
+													<span class="word">试用客户</span>
+												</label>
+												<label class="checkbox-wrapper l-margin">
+													<input type="checkbox" name="crm_cate" class="crm_cate" value="4">
+													<span class="word">成交客户</span>
+												</label>
+	                  	</div>
+									  </div>
+								 </div>
+	               <div class="form-inline">
+									  <div class="form-group l-width" style="margin-top:5px;">
+	                    <button  class="btn btn-primary l-primary" type="button" name="button" onclick="ajax_member()">查询</button>
+	                    <button  class="btn btn-primary l-primary" type="button" name="button" onclick="reset_click()">重置</button>
+	                  </div>
+	                </div>
+	              </div>
+	            </div>
+	          </form>
+	        </div>
+	      </section>
+
+				  <div class="table-responsive">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center">
+											<input class="check-all flow-label" name='all_checked' type="checkbox" />
+									</th>
+									<th class="text-center">序号</th>
+									<th class="text-center">客户姓名</th>
+									<th class="text-center">性别</th>
+									<th class="text-center">电话</th>
+									<th class="text-center">客户公司</th>
+	                <th class="text-center">呼叫次数</th>
+	                <th class="text-center">意向等级</th>
+	                <th class="text-center">客户类型</th>
+	                <th class="text-center">隶属坐席</th>
+	                <th class="text-center">跟进内容</th>
+	                <th class="text-center">创建时间</th>
+									<th class="text-center">最后跟进时间</th>
+									<th class="text-center">操作</th>
+						    </tr>
+					    </thead>
+					   <tbody id="memberlist">
+	             <!-- <tr>
+	              <td class="text-center">
+	                <input type="checkbox" name="roleids" class='flow-label rolecheck' />
+	              </td>
+	             	 <td class="text-center">1</td>
+	              <td class="text-center">小明</td>
+	              <td class="text-center">男</td>
+	              <td class="text-center">15236983695</td>
+	              <td class="text-center">深圳XXXX公司</td>
+	              <td class="text-center">2018-11-11</td>
+	              <td class="text-center">客户有意向</td>
+	              <td class="text-center">2</td>
+	              <td class="text-center">2018-11-11</td>
+	              <td class="text-center">有意向在犹豫</td>
+	              <td class="text-center">
+	                <a href="intention_customer_details.html" >详情</a>
+	                <a href="javascript:void(0);" onclick="customer_edit();">编辑</a>
+	                <a href="javascript:void(0);" onclick="customer_delete();">删除</a>
+	              </td>
+	             </tr> -->
+
+					    </tbody>
+					  </table>
+				    <div class="row">
+							<div class="col-sm-4 text-left"></div>
+							<div class="col-sm-8 text-right"></div>
+						</div>
+				  </div>
+					<footer id="modalpagebody" class="main-box-footer clearfix"></footer>
+					<div class="pull-left h_page" style="margin-left:8px"><input type="checkbox" class="member_check rolecheck all_checked_count" name="checkedAll">全选（已选中<span id='user_count'>0</span>个客户）</div>
+	<div class="paging"></div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<!--添加客户弹窗-->
+<div class="modal fade" id="customer-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" style="width:450px; ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">
+        添加客户
+        </h4>
+      </div>
+      <div class="modal-body l-modal-body" style="padding: 20px 20px 3px;">
+        <form id="addblacklist-number" method="post" id="addForm" class="form-horizontal margintop" enctype="multipart/form-data" >
+            <div class="form-group">
+              <label class="col-lg-3 control-label"><span class="asterisk">*</span>客户名称：</label>
+              <div class="col-lg-7 col-sm-7">
+                 <input type="text" class="form-control"  name="name" id="customer-name"  placeholder="请输入姓名" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">性别：</label>
+              <div class="col-lg-7 col-sm-7">
+                <select name="sex" id="sex" class="form-control">
+                  <option value="">请选择</option>
+                  <option value="男">男</option>
+                  <option value="女">女</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label"><span class="asterisk">*</span>联系电话：</label>
+              <div class="col-lg-7 col-sm-7">
+                 <input type="text" class="form-control"  name="phone" placeholder="请输入联系电话" id="phone" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">公司名称：</label>
+              <div class="col-lg-7 col-sm-7">
+                 <input type="text" class="form-control"  name="compay_name" placeholder="请输入公司名称" id="corporate-name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">客户分类：</label>
+              <div class="col-lg-7 col-sm-7">
+                 <select class="form-control" name="crm_cate" id="crm_cate">
+                   <option value="0">未分类</option>
+                   <option value="1">意向客户</option>
+                   <option value="2">潜在客户</option>
+                   <option value="3">试用客户</option>
+                   <option value="4">成交客户</option>
+                 </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label">备注：</label>
+              <div class="col-lg-7 col-sm-7">
+                <textarea style="padding:9px;" id="blacklist-remark1" name="note" rows="2" cols="29" maxlength="30" placeholder="请输入备注信息，限定30个字以内" ></textarea>
+                <!-- <span id="text-count" value="">0</span>/30 -->
+              </div>
+            </div>
+       </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+        <button type="button" class="btn btn-primary" id="users_add" onclick="checkform()" >	确定    </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--导出提示-->
+ <div class="modal fade" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-dialog modal-sm" style="width:340px; ">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips l-modal-body">
+				 确定要导出所选数据？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+				 <button type="button" class="btn btn-primary" id="sel_excel">	确定 </button>
+			 </div>
+		 </div>
+	 </div>>
+ </div>
+
+
+<!--单个删除提示-->
+ <div class="modal fade" id="customer-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-dialog modal-sm" style="width:340px; ">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips l-modal-body">
+				 确定要删除所选数据？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+				 <button type="button" class="btn btn-primary" id="delete_command" onclick="delete_one();">	确定    </button>
+			 </div>
+		 </div>
+	 </div>>
+ </div>
+ <!--批量删除提示-->
+ <div class="modal fade" id="customer-delete-all" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-dialog modal-sm" style="width:340px; ">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips l-modal-body">
+				 确定要批量删除所选数据？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+				 <button type="button" class="btn btn-primary" id="delete_command" onclick="delete_all()">	确定    </button>
+			 </div>
+		 </div>
+	 </div>>
+ </div>
+
+<!-- 确定提交 提示框 -->
+<!-- <style>.pz_modal{background:rgba(0, 0, 0, 0.62);}</style> -->
+<div class="modal fade in pz_modal" role="dialog" id="l-delnotex" style="display: none;">
+	<div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+				<span class="pz_clockshan">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">操作提示</h4>
+			</div>
+			<div class="modal-body modal-body-tips">确定新建客户？</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default"  data-dismiss="modal">   取消		</button>
+				<button type="button" class="btn btn-primary" onclick="add_intentional_member();">	 确定    </button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--分配坐席弹框-->
+<div class="modal fade" id="allocationOfSeats" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" style="width:430px; ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="myAllocationLabel">
+        分配坐席
+        </h4>
+      </div>
+      <div class="modal-body l-modal-body">
+        <div class="form-group allocation clearfix">
+          <label class="col-lg-4 col-sm-4 control-label">请选择坐席：</label>
+          <div class="col-lg-6 col-sm-6">
+            <select class="form-control" name="" id='distribution_seat_id'>
+              <option value="">请选择坐席</option>
+              {volist name="seats" id="seat"}
+              <option value="{$seat.id}">{$seat.username}</option>
+              {/volist}
+            </select>
+          </div>
+        </div>
+        <input type='hidden' value="" id='distribution_type' />
+        <input type="hidden" value="" id='crm_id' />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+        <button type="button" class="btn btn-primary" id="distribution_crm">	确定    </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--导入弹框-->
+<div class="modal fade" id="putin-data" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+		<div class="modal-dialog" style="width:430px;">
+			<div class="modal-content n_modalcontent">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">选择excel文件</h4>
+				 </div>
+				 <div class="modal-body">
+						 <form id="fileform" action="{:url('user/member/importExcelCallMember')}" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+							 <input type="file" class="" id="excelId" name="excel" />
+
+						   <!-- 当前任务的ID -->
+							 <input type="hidden" name="taskID" id="taskexampletaskID" value="" />
+
+					 </form>
+				 <br/>
+				 <a href="__STATIC__/Merbertemplate.xlsx" >模板下载</a>
+				 </div>
+				 <div style="clear:both;"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" onclick="Savechange()" class="btn btn-primary">保存</button>
+				</div>
+			</div>
+
+			</div>
+
+</div>
+ <!--添加拨打弹窗-->
+<div class="modal fade" id="joinShout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" style="width:450px; ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">
+        添加拨打
+        </h4>
+      </div>
+      <div class="modal-body l-modal-body" style="padding: 20px 20px 3px;">
+        <form id="addblacklist-number" method="post" id="addForm" class="form-horizontal margintop" enctype="multipart/form-data" >
+           <div class="form-group">
+              <label class="col-lg-3 control-label">号码：</label>
+              <div class="col-lg-7 col-sm-7">
+                 <input type="text" class="form-control"  name="joinPhone"  id="joinPhone"  value="" readonly />
+              </div>
+            </div>
+            <p ></p>
+            <div class="form-group">
+              <label class="col-lg-3 control-label"><span class="asterisk">*</span>线路：</label>
+              <div class="col-lg-7 col-sm-7">
+                   <select name="line_id" id="line_id" class="form-control">
+                    <option value="">请选择</option>
+                    {volist name="line_datas" id="vo"}
+                       <option value="{$vo['id']}">{$vo['name']}</option>
+                    {/volist}
+                    
+                   </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label"><span class="asterisk">*</span>话术：</label>
+              <div class="col-lg-7 col-sm-7">
+                   <select name="scenarios_id_join_shout" id="scenarios_id_join_shout" class="form-control">
+                    <option value="">请选择</option>
+                    {volist name="scenarioslist" id="vo"}
+                       <option value="{$vo['id']}">{$vo['name']}</option>
+                    {/volist}
+                    
+                   </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-3 control-label"><span class="asterisk">*</span>ASR：</label>
+              <div class="col-lg-7 col-sm-7">
+                 <select name="asr_id" id="asr_id" class="form-control">
+                    <option value="">请选择</option>
+                    {volist name="asr_list" id="vo"}
+                       <option value="{$vo['id']}">{$vo['name']}</option>
+                    {/volist}
+                 </select>
+              </div>
+            </div>
+       </form>
+
+      </div>
+      <div class="modal-footer">
+         <input type="hidden" id="Nowpagehidden" value="">
+        <input type="hidden" id="Nowlimithidden" value="">
+        <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+        <button type="button" class="btn btn-primary" id="users_add" onclick="checkJoinShout()" >	确定    </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+
+ <script>
+//显示加入呼叫的内容
+ function joinShout(phone){
+     $('#joinPhone').val(phone);
+     $('#joinShout').modal('show');
+  }
+  //加入呼叫的后台逻辑 
+   function checkJoinShout(){
+    if(!confirm("是否确认添加拨打")){
+        return false;
+    }
+    var joinPhone = $('#joinPhone').val();
+    if(!joinPhone){
+      alert('添加拨打的号码不能为空');
+      return false;
+    }
+    var line_id = $('#line_id').val();
+    if(!line_id){
+      alert('必须选择拨打的线路');
+      return false;
+    }
+    var scenarios_id =$('#scenarios_id_join_shout').val();
+    if(!scenarios_id){
+      alert('必须选择话术');
+      return false;
+    }
+    var asr_id = $('#asr_id').val();
+    if(!asr_id){
+      alert('必须选择ASR线路');
+      return false;
+    }
+    var url ='{:url("Callrecord/joinPhone")}'
+    //加入拨打
+    $.ajax({
+  		type:'POST',
+  		data:{
+  			'joinPhone' :joinPhone,'line_id' :line_id,'asr_id' :asr_id,'scenarios_id':scenarios_id,
+  		},
+  		dataType:'json',
+  		url:url,
+  		success:function(data){
+  			console.log(data);
+  			if(data.code==0){
+  			   alert(data.msg);
+  			   $('#joinShout').modal('hide');
+  			}else{
+  			  alert(data.msg);
+  			  $('#joinShout').modal('hide');
+  			}
+  		},
+  		error:function(){
+  		   
+  		}
+  	});
+    
+  }
+
+   //全选 类 型
+    $("input[name='checkALLCrmCate'][type='checkbox']").click(function(){
+   	 if ($("input[name='checkALLCrmCate'][type='checkbox']").is(":checked")) {
+     		$("input[name='crm_cate'][type='checkbox']").prop("checked",true);
+     	} else {
+    		$("input[name='crm_cate'][type='checkbox']").prop("checked",false);
+    	}
+    });
+    //全选 意向等级
+    $("input[name='checkAllLevel'][type='checkbox']").click(function(){
+   	 if ($("input[name='checkAllLevel'][type='checkbox']").is(":checked")) {
+     		$("input[name='level'][type='checkbox']").prop("checked",true);
+     	} else {
+    		$("input[name='level'][type='checkbox']").prop("checked",false);
+    	}
+    });
+
+  
+   
+  	//重置
+  	function reset_click(){
+  		$('input[id="startCreateDate"][type="text"]').val("");//创建 开始日期
+  		$('input[id="endCreateTime"][type="text"]').val("");//创建 结束日期
+      $('input[id="startCallDate"][type="text"]').val("");//通话 开始日期
+  		$('input[id="endCallTime"][type="text"]').val("");//通话 结束日期
+      $("#tiaojian").val("");
+			$("#call_count").val("");
+      $("#sitchair").val("");//坐席
+  		$('input[name="keyword"][type="text"]').val("");//关键字查询
+  		$("input[name='crm_cate'][type='checkbox']").prop("checked",false);
+  		$("input[name='level'][type='checkbox']").prop("checked",false);
+  		$("input[name='checkALLCrmCate'][type='checkbox']").prop("checked",false);
+  		$("input[name='checkAllLevel'][type='checkbox']").prop("checked",false);
+  		ajax_member();
+  	}
+  	function timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear();
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) ;
+        var D = date.getDate();
+        if(D<10){
+        	 D='0' + D;
+        }
+        var h = date.getHours() ;
+        if(h<10){
+        	 h='0' + h;
+        }
+        var m = date.getMinutes() ;
+         if(m<10){
+        	 m='0' + m;
+        }
+        var s = date.getSeconds();
+         if(s<10){
+        	 s='0' + s;
+        }
+        return Y+'-'+M+'-'+D+'  '+h+':'+m+':'+s;
+    }
+
+	/**
+	 * 分配意向客户
+	 *
+	 * @param int type 分配类型 0 单选 1 多选
+	 * @param int id 指定ID
+	*/
+	$('#distribution_crm').click(function(){
+		//获取当前指定分配的形式
+		var type = $('#distribution_type').val();
+		var url = "{:url('user/member/distribution_crm_api')}";
+		var distribution_seat_id = $('#distribution_seat_id').val();
+		//指定的座席
+		// var seat_id = $('')
+		var data = {};
+		//分配单个意向客户
+		if(type == 0){
+			data.distribution_seat_id = distribution_seat_id;
+			data.type = 0;
+			data.ids = [];
+			var crm_id = $('#crm_id').val();
+			data.ids.push(crm_id);
+		//多个
+		}else{
+			//判断是否全选 全选
+			if($('.all_checked_count').prop('checked') === false){
+				data.type = 1;
+				data.ids = [];
+				$.each($('input[name="checkids"]:checked'), function(index, object){
+					data.ids.push($(object).val());
+				});
+			//多选
+			}else{
+				data.type = 2;
+				//关键词
+				data.keyword = $('#keyword').val();
+				//座席ID
+				data.seat_id = $('#seat_id').val();
+				//创建日期-开始
+				data.start_create_time = $('#startCreateDate').val();
+				//创建时间-结束
+				data.end_create_time = $('#endCreateTime').val();
+				//意向等级
+				data.level = [];
+				$.each($('input[name="levelcheck"]:checked'), function(index, object){
+					data.level.push($(object).val());
+				});
+				//客户类型
+				data.userType = [];
+				$.each($('input[name="crm_cate"]:checked'), function(index, object){
+					data.userType.push($(object).val());
+				});
+
+			}
+			data.distribution_seat_id = distribution_seat_id;
+			console.log(data);
+		}
+		$.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				console.log(result);
+				if(result.code != 0){
+					console.log('提交错误');
+				}
+				alert('成功');
+			  var page = $('#Nowpagehidden').val();
+        var limit =$('#Nowlimithidden').val();
+  			 ajax_member(page,limit);
+				$('#allocationOfSeats').modal('hide');
+			},
+			error:function(){
+				console.log('错误');
+			}
+		});
+	})
+	//点击显示分配意向客户到坐席的窗口
+  function allocation_seats(){
+  	$('.allocation_seats').unbind('click');
+  	$('.allocation_seats').click(function(){
+  		var type = $(this).data('type');
+  		var crm_id = $(this).data('id');
+  		$('#crm_id').val(crm_id);
+  		$('#distribution_type').val(type);
+
+  		$('#allocationOfSeats').modal('show');
+  	});
+  }
+	var Paging = new Paging01();
+	$(function(){
+
+		Paging.init_args({
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'paging', //放置分页的class
+			callback: ajax_member //回调函数 比如show_datas(页码, 显示条数)
+		});
+		//点击显示分配窗口的事件
+		allocation_seats();
+	  //导入用到的参数和方法
+	  // 1.基本参数设置
+    var options = {
+	         type: 'POST',     // 设置表单提交方式
+	         url: "{:url('user/member/importExcelCallMember')}",    // 设置表单提交URL,默认为表单Form上action的路径
+	         dataType: 'json',    // 返回数据类型
+	         beforeSubmit: function(formData, jqForm, option){    // 表单提交之前的回调函数，一般用户表单验证
+	             // formData: 数组对象,提交表单时,Form插件会以Ajax方式自动提交这些数据,格式Json数组,形如[{name:userName, value:admin},{name:passWord, value:123}]
+	             // jqForm: jQuery对象,，封装了表单的元素   
+	             // options: options对象
+	          //   var str = $.param(formData);    // name=admin&passWord=123
+	           //  var dom = jqForm[0];    // 将jqForm转换为DOM对象
+	            // var name = dom.name.value;    // 访问jqForm的DOM元素
+	             /* 表单提交前的操作 */
+	             return true;  // 只要不返回false,表单都会提交 
+	         },
+	         success: function(responseText, statusText, xhr, $form){    // 成功后的回调函数(返回数据由responseText获得),
+						 alert(responseText.msg);
+						 console.log(responseText);
+						 if (responseText.code == 0) {
+						 	  //客户导入成功刷新 ajax_member(1)
+                ajax_member(1);
+						 }else{
+							//$('#exampleModal').modal('show');
+						 }
+
+	         },  
+	         error: function(xhr, status, err) {            
+	             alert("操作失败!");    // 访问地址失败，或发生异常没有正常返回
+	         },
+	         clearForm: true,    // 成功提交后，清除表单填写内容
+	         resetForm: true    // 成功提交后，重置表单填写内容
+	     };
+	    
+    // 2.绑定ajaxSubmit()
+    $("#fileform").submit(function(){     // 提交表单的id
+        $(this).ajaxSubmit(options);
+        return false;   //防止表单自动提交
+    });
+		ajax_member(1);
+	});
+	function ajax_member(page, limit){
+		var url = '/user/Member/ajax_intentional_member';
+		if(!page){
+			var page = 1;
+		}
+		if(!limit){
+			var limit = 10;
+		}
+		//把当前页码 和每页limit 数量存入 隐藏的input中方便 别的功能调用 
+		$('#Nowpagehidden').val(page);
+		$('#Nowlimithidden').val(limit);
+		var tiaojian = $("#tiaojian").val(); //条件  value = 1 姓名  2 电话 3 公司
+		var keyword = $("#keyword").val(); //查询关键字
+		var sitchair =$("#sitchair").val();//坐席
+		var startCreateDate = $('#startCreateDate').val();//创建日期开始
+		var endCreateTime = $('#endCreateTime').val();//创建日期结束
+		// var limit = $('.limit').val(); //自定义 分页限制
+		if( startCreateDate > endCreateTime ){
+			 alert("创建日期查询不正确");
+			 return false;
+		}
+
+		var startCallDate=$("#startCallDate").val();//通话日期开始
+		var endCallTime =$("#endCallTime").val();//通话日期结束
+		if( startCallDate > endCallTime ){
+			 alert("通话日期查询不正确");
+			 return false;
+		}
+		//拨打次数
+		var call_count = $('#call_count').val();
+		var arr=[];
+		$("input[name='level'][type='checkbox']:checked").each(function(index,element){
+			 arr[index]=$(element).val();     //意向等级 搜索条件的获取
+		});
+		console.log(arr);
+		var brr=[];
+		$("input[name='crm_cate'][type='checkbox']:checked").each(function(index,element){
+			 brr[index]=$(element).val();     //类型  搜索条件的获取
+		});
+		console.log(brr);
+
+  	$.ajax({
+        type: 'POST',
+        url: url,
+        data:{
+        	'tiaojian':tiaojian,
+        	'keyword':keyword,
+        	'sitchair':sitchair,
+        	'startCreateDate':startCreateDate,
+        	'endCreateTime':endCreateTime,
+        	'startCallDate':startCallDate,
+        	'endCallTime':endCallTime,
+        	'page':page,
+        	'arr':arr,
+        	'brr':brr,
+          'limit':limit,
+          'call_count':call_count
+        },
+        success: function(data){
+        	console.log(data);
+        	var total = data.data.total; //数据总条数
+        	var Nowpage = data.data.Nowpage; //当前页码
+					var page = data.data.page; //数据总页数
+					window.count = total;
+					window.page = page;
+					var limit = data.data.limit;//每页的分页条数
+					var Nowpage = parseInt(Nowpage);
+					var dataList = data.data.list;
+        	$("#memberlist").find("tr").remove();
+        	if(dataList.length > 0){
+        		for(var i = 0; i<dataList.length; i++){
+        			 var id = dataList[i].id; //序号
+        			 var name = dataList[i].name; //客户名称
+        			 var sex = dataList[i].sex; //性别
+        			 var seat_name = dataList[i].seat_name; //座席名称
+        			 if(!sex){
+        			 		sex = '未知';
+        			 }
+        			 var phone = dataList[i].phone; //电话
+        			 var compay_name = dataList[i].compay_name; //客户公司
+        			 if(!compay_name){
+        			 		compay_name = '暂无数据';
+        			 }
+        			 var call_times = dataList[i].call_times; //呼叫次数
+        			 var level =dataList[i].level;   //意向等级 6：A  5：B  4：C   3：D  2：E  1：F
+        			 if(level == 6){
+        			 	level = "A级(意向客户)";
+        			 }else if(level == 5){
+        			 	level = "B级(一般意向)";
+        			 }else if(level == 4){
+        			 	level = "C级(简单对话)";
+        			 }else if(level == 3){
+        			 	level = "D(无有效对话)";
+        			 }else if(level == 2){
+        			 	level = "E(未接通号码)";
+        			 }else if(level == 1){
+        			 	level = "F(无效号码)";
+        			 }else{
+        			   level="暂无意向等级";
+        			 }
+        			 var crm_cate = dataList[i].crm_cate//客户分类  0：未分类  1：意向客户   2：潜在客户   3：试用客户   4：成交客户
+        			 switch(crm_cate){
+        			 	  case 0:
+							      crm_cate="未分类";
+									break;
+									case 1:
+							      crm_cate="意向客户";
+									break;
+									case 2:
+							      crm_cate="潜在客户";
+									break;
+									case 3:
+							      crm_cate="试用客户";
+									break;
+									case 4:
+							      crm_cate="成交客户";
+									break;
+									case null:
+										crm_cate="未分类";
+									break;
+        			 }
+        			 var zuoxi = "暂无隶属坐席";//隶属坐席
+        			 if(seat_name && seat_name != 'null'){
+        			 	zuoxi = seat_name;
+        			 }
+        			 var note = dataList[i].get_note; //跟进内容
+        			 if(!note){
+        			 	  note="暂无跟进信息";
+        			 }
+
+
+        			 var create_time =timestampToTime(dataList[i].create_time); //创建时间
+        			 var get_times = dataList[i].get_times; //最后跟进时间
+        			 if(!get_times){
+        			 		get_times = '暂无最后跟进';
+        			 }else{
+        			 		get_times = timestampToTime(get_times);
+        			 }
+        			 //这个跟进类内容暂时没用
+        			 /*
+        			 var get_note = dataList[i].get_note; //跟进类容
+        			 if(!get_note){
+        			 		get_note = '暂时数据';
+        			 }
+        			 */
+        			 var string = '<tr class="itemId'+id+'" alt="'+id+'">'
+								+'<td class="text-center"><input type="checkbox" class="member_check rolecheck" value="'+id+'" name="checkids" /></td>'
+								+'<td class="text-center">'+((Nowpage-1)*limit+(i+1))+'</td>'
+								+'<td class="text-center">'+name+'</td>'
+								+'<td class="text-center">'+sex+'</td>'
+								+'<td class="text-center">'+phone+'</td>'
+								+'<td class="text-center">'+compay_name+'</td>'
+								+'<td class="text-center">'+call_times+'</td>'
+								+'<td class="text-center">'+level+'</td>'
+								+'<td class="text-center">'+crm_cate+'</td>'
+								+'<td class="text-center">'+zuoxi+'</td>'
+								+'<td class="text-center">'+note+'</td>'
+								+'<td class="text-center">'+create_time+'</td>'
+								+'<td class="text-center">'+get_times+'</td>'
+								+'<td class="text-center">'
+                +'<a href="{:url("user/member/intention_customer_details")}?id='+id+'" >详情</a>&nbsp;'
+                +'<a href="javascript:void(0);" class="allocation_seats" data-id="'+id+'" data-type="0">分配</a>&nbsp;'
+                +'<a href="javascript:void(0);"  data-id="'+id+'" onclick="joinShout('+phone+')" data-type="0">加入呼叫</a>&nbsp;'
+                +'<a href="javascript:void(0);" onclick="customer_delete('+id+');">删除</a>&nbsp;'
+                +'</td>'
+								string += '</tr>';
+								$("#memberlist").append(string);
+        		  }
+        		  //点击显示分配窗口的事件
+							allocation_seats();
+
+        		  //Nowpage  当前页
+							//count    数据总条数
+							//total    总共页数
+							//limit    分页数量
+							Paging.paging(Nowpage, total, limit);
+							//全选
+							election();
+        	}else{
+						Paging.paging(0, 0, 1, 10);
+        	}
+        }
+    })
+	}
+
+  // //添加客户
+  function customer_edit(){
+  	//添加之前 全部清空
+  	$('#customer-name').val('');
+  	$("#sex option:first").prop("selected", 'selected');
+  	$('#phone').val('');
+  	$('#corporate-name').val('');
+  	$("#crm_cate option:first").prop("selected", 'selected');
+  	$('#blacklist-remark1').val('');
+    $('#customer-add').modal('show');
+  }
+
+
+  //导出文件
+  function putin_data(){
+    $('#putin-data').modal('show');
+  }
+  //导入保存页面
+	 function Savechange(){
+			var excel = document.getElementById('excelId');
+			if(excel.files[0] == undefined){
+				alert('未上传文件！');
+				return false;
+			}
+			var filevalue = excel.value;
+			var index = filevalue.lastIndexOf('.');
+			var ename = filevalue.substring(index);
+			if(ename != ".xlsx"){
+				if(ename != ".xls"){
+					alert('文件格式错误。"xlsx"或者"xls"，请用下载的模板改。');
+					return false;
+				}
+			}
+			$("#fileform").submit();
+			$('#putin-data').modal('hide');
+
+		}
+
+
+	// 验证手机号
+	 function isPhoneNo(phone) {
+		   var pattern = /^1[3456789]\d{9}$/;
+		   return pattern.test(phone);
+	 }
+
+  //导出数据
+  function import_data(){
+  	var type=0;
+  	if($("input[name='checkedAll'][type='checkbox']").is(':checked')){
+  		 type=1;
+  	}
+  	var arr =[];
+    $("input[name='checkids'][type='checkbox']:checked").each(function(i){
+					arr[i] = $(this).val();
+		});
+  	if( arr.length > 0){
+	  	$('#import-data').modal('show');
+	    $('#sel_excel').unbind('click');
+	    $('#sel_excel').on('click',function(){
+		    	$.ajax({
+						type: 'POST',
+		        url: '/user/Member/import_data',
+		        data: {
+		        	     'arr':arr,
+		        	     'type':type
+		        },
+		        success:function(data){
+							alert(data.msg);
+							// window.href:data.msg;
+							window.location.href = data.data;
+							$('#import-data').modal('hide');
+		        }
+					})
+		   });
+    }else{
+    	alert('请选择导出的数据');
+    	return false;
+    }
+  }
+  //单删数据--弹出提示框
+  function customer_delete(id){
+  	 $('#customer-delete').modal('show');
+     window.delete_id=id;
+  }
+  //单个删除 逻辑执行
+  function delete_one(){
+    $.ajax({
+				type: 'POST',
+        url: '/user/Member/delete_customer',
+        data: {'id':delete_id},
+        success:function(data){
+        	console.log(data);
+        	//codel=1 为删除成功 刷新页面
+        	if(data.code == 1){
+        		alert(data.msg);
+        		var page = $('#Nowpagehidden').val();
+            var limit =$('#Nowlimithidden').val();
+  			  	ajax_member(page,limit);
+        		$('#customer-delete').modal('hide');
+        	}else{
+        		alert(data.msg);
+        		$('#customer-delete').modal('hide');
+        	}
+        }
+			})
+  }
+  //多删数据--弹出提示框
+  function customer_delete_all(){
+  	  var aaarr=[];
+			$("input[name='checkids'][type='checkbox']:checked").each(function(i){
+					if($(this).context.checked == true){
+						aaarr[i] = $(this).val();
+					}
+			});
+		 if(aaarr.length==0 || !aaarr.length){
+		 	alert("请至少选择一项再删除");
+		 	return false;
+		 }
+  	 $('#customer-delete-all').modal('show');
+  	 //多删的数据id存入全局变量中
+     window.delete_id_aaarr=aaarr;
+  }
+  //多删数据---逻辑实现
+  function delete_all(){
+  	var type=0;
+  	//判断全选是否勾选
+  	if($("input[name='checkedAll'][type='checkbox']").is(":checked")) {
+     		 //如果全选勾选了 删除全部
+     		 type=1;
+     }
+
+
+  	 console.log(delete_id_aaarr); //多删数据id数组
+  	  $.ajax({
+				type: 'POST',
+        url: '/user/Member/delete_all_customer',
+        data: {'vals':delete_id_aaarr,'type':type},
+        success:function(data){
+		  		if(data.code == 1 ){
+		  			alert(data.msg);
+		  			var page = $('#Nowpagehidden').val();
+            var limit =$('#Nowlimithidden').val();
+  			  	ajax_member(page,limit);
+		    		$('#customer-delete-all').modal('hide');
+		    	}else if(data.code == 0){
+		    		alert(data.msg);
+		    		$('#customer-delete-all').modal('hide');
+
+		    	}
+        }
+			})
+  }
+  //确定按钮提交 先验证 后显示弹窗提示
+	function checkform(){
+		var name = $("#customer-name").val();//客户名称
+		var phone = $("#phone").val();//电话
+		if(!name){
+			alert("客户名称不能为空");
+			return false;
+		} else if(!phone){
+			alert("电话不能为空");
+			return false;
+		}else if( !isPhoneNo(phone) ){
+			 alert("电话不正确");
+			 return false;
+		}else {
+			$('#l-delnotex').modal('show');
+		}
+	}
+	//新增意向客户
+	function add_intentional_member(){
+	 	  $('#customer-add').modal('hide');
+	 	  $('#l-delnotex').modal('hide');
+	 	  var url = '{:url("Member/add_intentional_member")}';
+	 	  var name = $("#customer-name").val(); //客户姓名
+	 	  var sex = $("#sex").val(); //客户性别
+	 	  var phone = $("#phone").val(); //客户性别
+	 	  var compay_name	 = $("#corporate-name").val(); //公司名称   crm_cate
+	 	  var crm_cate = $("#crm_cate").val();//客户分类
+	 	  var note = $("#blacklist-remark1").val();//备注
+			$.post(url,{'name':name,'sex':sex,'phone':phone,'compay_name':compay_name,'crm_cate':crm_cate,'note':note,},function(data){
+				console.log(data);
+				//0是失败
+				if(data.code == 0){
+					 alert(data.msg);
+				}else{
+				 	 ajax_member(1);
+				   alert(data.msg);
+				}
+			});
+
+
+	 }
+	//检查表单的必填项
+	function adFlowNote(){
+
+    		/**
+				* 提交规则
+				* 	1.任务名称不能重复（范围：当前用户）
+				* 	2.任务名称、话术、机器人数量、线路、工作日期和工作时间不能为空
+				* 	3.工作时间必须在08:00到21:30范围内
+				*/
+				//获取提交数据
+				var data = {};
+				//任务名称
+				data.task_name = $('#form input[name="task_name"]').val();
+				//话术
+				data.scenarios_id = $('#form select[name="scenarios_id"]').val();
+				//机器人数量
+				data.robot_count = $('#form input[name="robot_count"]').val();
+				//线路
+				data.line_id = $('#form select[name="line_id"]').val();
+				//ASR
+				data.asr_id = $('#form select[name="asr_id"]').val();
+				//指定日期
+				var start_date_objects = $('#form input[name="start_date"]');
+				var end_date_objects = $('#form input[name="end_date"]');
+				data.start_date = [];
+				data.end_date = [];
+				$.each(start_date_objects, function(index, object){
+					data.start_date.push($(object).val());
+				});
+				$.each(end_date_objects, function(index, object){
+					data.end_date.push($(object).val());
+				});
+				//指定时间
+				var start_time_objects = $('#form input[name="start_time"]');
+				data.start_time = [];
+				var end_time_objects = $('#form input[name="end_time"]');
+				data.end_time = [];
+				$.each(start_time_objects, function(index, object){
+					data.start_time.push($(object).val());
+				});
+				$.each(end_time_objects, function(index, object){
+					data.end_time.push($(object).val());
+				});
+				//是否自动开启
+				data.is_auto = $('#form input[name="is_auto"]:checked').val();
+				//是否设置默认线路
+				// data.is_default_line = $('#form input[name="is_default_line"]').val();
+				if($("input[type='checkbox'][name='is_default_line']").is(':checked')) {
+					data.is_default_line = 1;
+				}else{
+					data.is_default_line = 0;
+				}
+				//验证是否发送短信
+				var send_sms_status = $('input[name="Duanxinfasong"]:checked').val();
+				if(send_sms_status == '是'){
+					data.send_sms_status = 1;
+					//验证是否有选择意向等级
+					var level_length = $('input[name="Duanxinfasong-dengji"]:checked').length;
+					if(level_length == 0){
+						alert('至少需要选中一项触发发送短信的意向等级');
+						return false;
+					}
+					data.send_sms_level = [];
+					$.each($('input[name="Duanxinfasong-dengji"]:checked'), function(index, object){
+						data.send_sms_level.push($(object).val());
+					});
+					data.sms_template_id = $('#sms-template').val();
+				}else{
+					data.send_sms_status = 0;
+				}
+				var is_add_crm = $('input[name="joinCRM"]:checked').val();
+				if(is_add_crm == '是'){
+					data.is_add_crm = 1;
+					data.add_crm_level = [];
+					if($('input[name="crm-Yixiangdengji"]:checked').length == 0){
+						alert('请选择加入CRM的客户意向等级');
+					}
+					$.each($('input[name="crm-Yixiangdengji"]:checked'), function(index, object){
+						data.add_crm_level.push($(object).val());
+					});
+				}else{
+					data.is_add_crm = 0;
+					data.add_crm_level = [];
+				}
+				var wx_push_status = $('input[name="Tuisong"]:checked').val();
+				if(wx_push_status == '是'){
+					data.wx_push_status = 1;
+					data.wx_push_level = [];
+					if($('input[name="wx_push-Yixiangdengji"]:checked').length == 0){
+						alert('请选择微信推送的客户意向等级');
+						return false;
+					}
+					$.each($('input[name="wx_push-Yixiangdengji"]:checked'), function(index, object){
+						data.wx_push_level.push($(object).val());
+					});
+					data.wx_push_user_id = $('#wx-push-users').val();
+					if(data.wx_push_user_id == ''){
+						alert('请选择推送的人员');
+						return false;
+					}
+				}else{
+					data.wx_push_status = 0;
+					data.wx_push_level = [];
+					data.wx_push_user_id = '';
+				}
+				//任务异常短信提醒的手机号码
+				data.task_abnormal_remind_phone = $('#task_abnormal_remind_phone').val();
+				if(data.task_abnormal_remind_phone != ''){
+				  // task_abnormal_remind_phone
+				   if(is_phone(data.task_abnormal_remind_phone) == false){
+				     alert('任务异常短信提醒的手机号码格式错误');
+				     return false;
+				   }
+				}
+				//验证是否开启重新呼叫功能
+				var is_again_call = $('input[name="is_again_call"]:checked').val();
+				if(is_again_call == '是'){
+				  //验证是否有选择需要重新呼叫的通话状态
+				  var again_call_status = $('input[name="again_call_status"]:checked').length;
+				  if(again_call_status == 0){
+				    alert('至少需要选中一项重新呼叫的通话状态');
+				    return false;
+				  }
+				  //验证重新呼叫次数
+				  var again_call_count = $('#again_call_count').val();
+				  if(again_call_count == 0){
+				    alert('请选择重新呼叫次数');
+				    return false;
+				  }
+				}
+				//验证是否开启微信云控推送
+				var yunkong_push_status = $("input[name='yunkong']:checked").val();
+				if(yunkong_push_status == '是'){
+				  data.yunkong_push_status = 1;
+				  if(query_yunkong_username_status == 0){
+				    alert('请先检索推送给微信云控的用户是否存在');
+				    return false;
+				  }
+				  if(query_yunkong_username_status == 2){
+				    alert('该微信云控推送用户不存在');
+				    return false;
+				  }
+				  data.yunkong_push_username = $('#yunkong_username').val();
+				  data.yunkong_push_level = [];
+				  $.each($('input[name="yunkong-Yixiangdengji"]:checked'), function(index, object){
+				    data.yunkong_push_level.push($(object).val());
+				  });
+				  if(data.yunkong_push_level.length == 0){
+				    alert('请选择需要推送到微信云控的意向等级');
+				    return false;
+				  }
+				}
+				//备注
+				data.remark = $('#form textarea[name="remark"]').val();
+		  	if($('#all_checked_count').is(":checked")){
+		  			type = 1;
+		  	}
+		  	//0不是全选
+			  data.checkAllType=0;
+		  	//是否全选 如果全选 得到筛选条件
+		  	if($("input[name='checkedAll'][type='checkbox']").is(':checked')){
+		  		  var tiaojian = $("#tiaojian").val(); //条件  value = 1 姓名  2 电话 3 公司
+						var keyword = $("#keyword").val(); //查询关键字
+						var sitchair =$("#sitchair").val();//坐席
+						var startCreateDate = $('#startCreateDate').val();//创建日期开始
+						var endCreateTime = $('#endCreateTime').val();//创建日期结束
+				    var startCallDate=$("#startCallDate").val();//通话日期开始
+						var endCallTime =$("#endCallTime").val();//通话日期结束
+
+				    var arr=[];
+						$("input[name='level'][type='checkbox']:checked").each(function(index,element){
+							 arr[index]=$(element).val();     //意向等级 搜索条件的获取
+						});
+						console.log(arr);
+						var brr=[];
+						$("input[name='crm_cate'][type='checkbox']:checked").each(function(index,element){
+							 brr[index]=$(element).val();     //类型  搜索条件的获取
+						});
+						console.log(brr);
+						//告诉 后端php 这个是全选了 需要过滤条件 得到crm的用户信息
+						data.checkAllType=1;
+						data.tiaojian=tiaojian;
+						data.keyword=keyword;
+						data.sitchair=sitchair;
+						data.startCreateDate=startCreateDate;
+						data.endCreateTime=endCreateTime;
+						data.startCallDate=startCallDate;
+						data.endCallTime=endCallTime;
+						data.arr=arr;
+						data.brr=brr;
+		  	}
+		  	//如果没有全选 那么就需要读取 各条数据下的 多选框 并且读取值 name=checkids
+		  	var xrr=[];
+		    $("input[name='checkids'][type='checkbox']:checked").each(function(index,element){
+					xrr[index]=$(element).val();     //crm 表中的 客户id
+				});
+			  data.xrr=xrr;
+			  var href = "{:url('User/Member/create_task')}";
+				$.ajax({
+						type: "POST",
+						dataType:'json',
+						url: href,
+						cache: false,
+						data: data,
+						success: function(result) {
+							console.log(result);
+							if(result.code == 0){
+								alert('添加成功');
+								window.location.href = '{:url("user/plan/newindex")}';
+							}else if(result.code == 2){
+								alert(result.msg);
+							}else{
+								alert('添加失败！！！！');
+							}
+						},
+						error: function(data) {
+							alert("添加失败");
+						}
+					})
+		}
+	function addNewPlan(obj){
+				$("#newplanName").val("");
+				$("#scenarios_id").val("");
+
+				// $("#morning").val("");
+				$("#startDate").timepicker("setTime", "08:00");
+				$("#endTime").timepicker("setTime", "20:00");
+
+				// $("#afternoon").val("");
+				// $("#evening").val("");
+
+				$("#pmstartDate").timepicker("setTime", "20:00");
+				$("#pmendTime").timepicker("setTime", "20:00");
+
+				$("#exclude").val("");
+
+        $(".mr15").attr("class","mr15 btn btn-primary");
+				$(".mr15").find("input").val(1);
+				$("#daystartDate").datepicker("setDate", "");
+
+        $("#call_type").val("1");
+
+        $("#callTypezero").attr("class","btn btn-primary call-type");
+				$("#phone_id").val("0");
+				$("#startup").prop("checked",false);
+				$("#first-disabled2").selectpicker('val', "");//默认选中
+				for(var i=0; i<5; i++){
+				  $("#level"+(i+1)).prop("checked",false);
+
+				};
+
+				// var child = $("#l-push").children();
+			 // for(var i = 1 i< child.length; i++){
+			 // 	var ids = child[i].id;
+			 // 	if(ids.indexOf("pushdetails") > -1){
+			 // 		child[i].remove();
+			 // 	}
+			 // }
+
+			 // var child = $("#l-push").children();
+				// 	for(var i = 1; i < child.length; i++) {
+				//     var ids = child[i].id;
+				//     if(ids.indexOf("pushdetails") > 0) {
+				// 			child[i].remove();
+				//     	console.log(child[i]);
+				//     }
+				//   	// $('#pushdetails'+i).remove();
+
+				// }
+				$('.smspushs').remove();
+				bindCallNums(1,0);
+				$("#configId").val("");
+				$("#lunch").val(" ");
+				$("#remark").val("");
+				$("#taskId").val("");
+				$("#groupId").val("");
+				$("#onetime").val("");
+				$("#twotime").val("");
+				$("#threetime").val("");
+				$("#fourtime").val("");
+				$("#robot_cnt2").val("");
+
+				//显示机器人可用数量
+        //show_usable_robot_count();
+        var url = '{:url("Plan/get_usable_robot_count_api")}';
+				$.ajax({
+					type:'GET',
+					data:{},
+					dataType:'json',
+					url:url,
+					success:function(result){
+						console.log(result);
+						if(result.code === 0){
+							$('#usable_robot_count > span').text(result.data);
+						}
+					},
+					error:function(){
+						console.log('获取机器人数量失败');
+					}
+			 	});
+				//修改标题
+				$('#myModalLabeltitle').text($(obj).attr('data-title'));
+				var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+				if(checkedsub >0){
+					$('#NewPlan').modal('show');
+				}else{
+					alert('请选择意向客户');
+				}
+
+		}
+	//跳转
+	function go_up(page, limit){
+		paging(page, window.total, window.totalPage, limit);
+		ajax_member(page);
+	}
+ function limitSet(obj){
+ 	 //页码类型换了 之后 自动跳转第一页  因为预防页码过多  比如一共300条数据 10条每页的时候翻页到30页 我弄30条每页 如果还处于30页 会出现bug 跳转第一页 可以避免这样的情况
+ 	  paging(1, window.total, window.totalPage, $(obj).val());
+ 	  ajax_member(1);
+ }
+// pz 日期对比
+			(function($) {
+			    $.extend({
+			        myTime: {
+			            // 当前时间戳
+			            // @return <int>        unix时间戳(秒)
+			            CurTime: function(){
+			                return Date.parse(new Date())/1000;
+			            },
+			            // 日期 转换为 Unix时间戳
+			            // @param <string> 2014-01-01 20:20:20  日期格式
+			            // @return <int>        unix时间戳(秒)
+			            DateToUnix: function(string) {
+			                var f = string.split(' ', 2);
+			                var d = (f[0] ? f[0] : '').split('-', 3);
+			                var t = (f[1] ? f[1] : '').split(':', 3);
+			                return (new Date(
+			                        parseInt(d[0], 10) || null,
+			                        (parseInt(d[1], 10) || 1) - 1,
+			                        parseInt(d[2], 10) || null,
+			                        parseInt(t[0], 10) || null,
+			                        parseInt(t[1], 10) || null,
+			                        parseInt(t[2], 10) || null
+			                        )).getTime() / 1000;
+			            },
+			            // 时间戳转换日期
+			            // @param <int> unixTime    待时间戳(秒)
+			            // @param <bool> isFull    返回完整时间(Y-m-d 或者 Y-m-d H:i:s)
+			            // @param <int>  timeZone   时区
+			            UnixToDate: function(unixTime, isFull, timeZone) {
+			                if (typeof (timeZone) == 'number')
+			                {
+			                    unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+			                }
+			                var time = new Date(unixTime * 1000);
+			                var ymdhis = "";
+			                ymdhis += time.getUTCFullYear() + "-";
+			                ymdhis += (time.getUTCMonth()+1) + "-";
+			                ymdhis += time.getUTCDate();
+			                if (isFull === true)
+			                {
+			                    ymdhis += " " + time.getUTCHours() + ":";
+			                    ymdhis += time.getUTCMinutes() + ":";
+			                    ymdhis += time.getUTCSeconds();
+			                }
+			                return ymdhis;
+			            }
+			        }
+			    });
+			})(jQuery);
+
+ </script>
+
+
+
+{/block}

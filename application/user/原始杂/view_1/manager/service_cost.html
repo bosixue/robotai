@@ -1,0 +1,414 @@
+{extend name="public/base" /} 
+{block name="body"} 
+{include file="device/dialog" /}
+{include file="manager/servicedialog" /}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link href="/public/css/line.css" type="text/css" rel="stylesheet">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/line_management.css" />
+<div class="row">
+	<div class="col-lg-12">
+		<div class="clearfix fadeInRight animated">
+			<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+				<li role="presentation" class='active'> 
+				  <a href="#home" aria-controls="home" role="tab" data-toggle="tab">服务费列表</a>
+					<i></i>
+				</li>
+				<li role="presentation"> 
+				  <a href="#service_cost" aria-controls="service_cost" role="tab" data-toggle="tab">服务费计费统计</a>
+				</li>
+			</ul>
+			<div class="main-box s_padding20 clearfix pz_manping_height">
+				<div class="tab-content">
+					<!--服务费列表-->
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<section class="navbar clearfix">
+							<div class="form-inline pull-left">
+								<div class="form-group">
+									<label class="statusSelect pull-left">用户名：</label>
+									<input type="text" class="form-control pull-left l-search" id="userName" autocomplete="off" placeholder="请输入用户名"
+									 name="keyword">
+								</div>
+								<div class="form-group"> 
+								  <span class="btn btn-primary  pull-left" type="button" onclick="show_data(1);">查询</span>
+									<span class="btn btn-primary pull-left ant-btn btn-default" type="button" onclick="reset();">重置</span>
+								</div>
+							</div>
+							<button class="btn btn-primary pull-right" type="button" data-title="删除多个服务费率" onclick="popTipswin(this);">批量删除</button>
+						</section>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="text-center">序号</th>
+										<th class="text-center">用户名</th>
+										<th class="text-center">用户类型</th>
+										<th class="text-center">服务成本费率</th>
+										<th class="text-center">服务销售费率</th>
+										<th class="text-center">操作</th>
+										<th class="text-center">备注</th>
+									</tr>
+								</thead>
+								<tbody id="recharge-recored-list">
+								 <!-- 	<tr>-->
+  							<!--			<td class="text-center">-->
+  							<!--				<input class=" check-all" type="checkbox" name="all_checked">-->
+  							<!--			</td>-->
+  							<!--			<td class="text-center">001</td>-->
+  							<!--			<td class="text-center">SCY001</td>-->
+  							<!--			<td class="text-center">运营商</td>-->
+  							<!--			<td class="text-center">0.003元/分钟</td>-->
+  							<!--			<td class="text-center">0.005元/分钟</td>-->
+  							<!--			<td class="text-center">-->
+  							<!--			  <a href="javascript:;" onclick="editServiceCost();">编辑</a>-->
+  							<!--		    <a href="javascript:;" data-title="删除单个服务费率" onclick="popTipswin(this);">删除</a>-->
+  										  
+  							<!--			</td>-->
+									<!--</tr>-->
+								  
+								</tbody>
+							</table>
+						</div>
+						<div class="component-page-empty" id="consumeempty">
+							<div class="empty-tip line">暂无数据</div>
+						</div>
+						<div class="row">
+							<footer class="clearfix col-sm-12">
+								<div class="pull-left margintop">
+									全部数据：<span id="totalData"></span>
+									</div>
+								<div class="text-right pull-right">
+									<div class="paging clearfix">
+
+									</div>
+								</div>
+							</footer>
+						</div>
+					</div>
+					
+					<!--服务费计计费-->
+					<div role="tabpanel" class="tab-pane" id="service_cost">
+						<section class="navbar clearfix">
+							<div class="form-inline pull-left">
+								<div class="form-group">
+									<label class="statusSelect pull-left">用户类型：</label>
+									<select name="userType" id="userType" class="form-control resetSel c_selectimg l-search">
+										<option value="">全部用户类型</option>
+									  {volist name="role_options" id="option"}
+									  <option value="{$option}">{$option}</option>
+									  {/volist}
+									</select>
+								</div>
+								<div class="form-group e_headmargin">
+									<label class="statusSelect pull-left">用户名称：</label>
+									<input type="text" class="form-control pull-left l-search" autocomplete="off" id="username_details"
+									 placeholder="请输入用户名" name="keyword">
+								</div>
+								<div class="form-group"> <span class="btn btn-primary  pull-left" type="button" onclick="show_statistics_data(1, 10);">查询</span>
+									<span class="btn btn-primary  pull-left ant-btn btn-default" type="button" onclick="statistics_reset();">重置</span>
+
+								</div>
+							</div>
+							<div class="form-inline pull-right "></div>
+						</section>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="text-center">序号</th>
+										<th class="text-center">用户名称</th>
+										<th class="text-center">用户类型</th>
+										<th class="text-center">计费时长(分钟)</th>
+										<th class="text-center">成本价</th>
+										<th class="text-center">成本总额</th>
+										<th class="text-center">销售价</th>
+										<th class="text-center">销售总额</th>
+										<th class="text-center">利润</th>
+										<th class="text-center">计费时间(天)</th>
+									</tr>
+								</thead>
+								<tbody id="recharge-recored-list-xxxxx"></tbody>
+							</table>
+							<input type="hidden" value="" id="saveCountNowpage">
+						</div>
+						<div class="row">
+							<footer class="main-box-footer clearfix col-sm-12">
+								<!--<div class="pull-left h_page" style="margin-left:8px;line-height: 44px;">全部数据：<span id="xianlujifei_count"></span>条-->
+								<!--</div>-->
+								<div class="paging1"></div>
+							</footer>
+						</div>
+						<div class="row">
+							<footer class="clearfix col-sm-12">
+								<table class="table table-bordered table-hover sumdata">
+									<thead>
+										<tr>
+											<th class="text-center"></th>
+											<th>总计费时长：
+												<label id="sumDuration">0</label>
+											</th>
+											<th>总成本总额：
+												<label id="chengbenTotal">0元</label>
+											</th>
+											<th>总销售总额：
+												<label id="xiaoshouTotal">0元</label>
+											</th>
+											<th>总利润：
+												<label id="lirunTotal">0元</label>
+											</th>
+										</tr>
+									</thead>
+								</table>
+							</footer>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--数据展示-->
+<script id="service-data" type="text/template">
+	<tr>
+			<td class="text-center">{%sequence%}</td>
+			<td class="text-center">{%username%}</td>
+			<td class="text-center">{%usertype%}</td>
+			<td class="text-center">{%c_price%}</td>
+			<td class="text-center">{%x_price%}</td>
+			<td class="text-center">
+			  <a href="javascript:;" onclick="editServiceCost({%id%});">编辑</a>
+			</td>
+			<td class="text-center">{%remark%}</td>
+	</tr>
+</script>
+<script type='text/template' id="service-statistics-data">
+  <tr>
+			<td class="text-center">{%key%}</td>
+			<td class="text-center">{%username%}</td>
+			<td class="text-center">{%role_name%}</td>
+			<td class="text-center">{%duration%}</td>
+			<td class="text-center">{%cost_price%}</td>
+			<td class="text-center">{%cost_price_statistics%}</td>
+			<td class="text-center">{%sale_price%}</td>
+			<td class="text-center">{%sale_price_statistics%}</td>
+			<td class="text-center">{%profit%}</td>
+			<td class="text-center">{%date%}</td>
+	</tr>
+</script>
+<script type="text/javascript">
+  function editServiceCost(id){
+    $('#edit_service_cost').modal('show');
+    var url = "{:url('edit_service_cost')}"
+    $.ajax({
+  		url:url,
+  		dataType:'json',
+  		type:'get',
+  		data:{'id':id},
+  		success:function(result){
+  		  console.log(result);
+  		  if(result.code ==0){
+  		    $('#service_cost_price').val(result.data.technology_service_price);  
+  		    $('#only_id_sercice').val(result.data.id);
+  		    $('#edit_username').text(result.data.username);
+  		    $('#service_remark').val(result.data.remark);
+  		    $('#service_cost_cost').text(result.data.technology_service_cost + '元/分钟');
+  		  }
+  		},
+  		error: function(error) {
+  			alert('数据获取失败！');
+  		}
+  	});
+  }
+  function edit_service_cost(){
+    var id = $('#only_id_sercice').val();
+    var price = $('#service_cost_price').val();
+    var remark = $('#service_remark').val();
+    if(price == ''){
+      alert('服务金额不能空');
+      return false
+    }else{
+      if(0-price > 0){
+        alert('服务金额不能小于0');
+      }else{
+        var url = "{:url('edit_service_cost')}"
+        $.ajax({
+      		url:url,
+      		dataType:'json',
+      		type:'post',
+      		data:{'id':id,'price':price,'remark':remark},
+      		success:function(result){
+      		  console.log(result);
+      		  if(result.code == 0){
+      		    $('#edit_service_cost').modal('hide');
+      		    show_data();
+      		  }
+      		},
+      		error: function(error) {
+      			alert('数据获取失败！');
+      		}
+      	});
+      }
+    }
+  }
+  var Paging = new Paging01();
+		Paging.init_args({
+		// url: 
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+	function reset()
+	{
+	  $('#userName').val('');
+	}
+  show_data();
+  function show_data(page,limit) {
+    if (!page){
+		  page = 1;
+  	}
+  	if(!limit){
+  		limit = 10;
+  	}
+  	var data = {};
+  	var url = "{:url('service_cost')}"
+  	data.userName = $('#userName').val();
+  	data.page = page;
+	  data.limit = limit;
+	  $.ajax({
+  		url:url,
+  		dataType:'json',
+  		type:'post',
+  		data:data,
+  		success:function(result){
+  			console.log(result);
+  			if(result.code === 0){
+  				var htmls = '';
+  				if(result.data.list.length == 0){
+  					$('#consumeempty').show();
+  					Paging.paging(1, 0, 10);
+  				}else{
+  					$('#consumeempty').hide();
+  					var total = result.data.page;   //总页数
+  					var Nowpage = result.data.Nowpage;  //当前页码
+  					var count  = result.data.total;  //总条数
+  					var Nowpage = parseInt(Nowpage);
+  					var i = (Nowpage - 1) * limit + 1;
+  					$.each(result.data.list,function(index,object){
+  						data.i = i;
+  						var html = $('#service-data').html();
+  						html = html.replace('{%sequence%}',i);
+  						html = html.replace('{%username%}',object.username);
+  						html = html.replace('{%usertype%}',object.role_name);
+  						html = html.replace('{%c_price%}',object.pid_service_price);
+  						html = html.replace('{%x_price%}',object.technology_service_price);
+  					  html = html.replace('{%id%}',object.id);
+  					  html = html.replace('{%remark%}',object.cinert);
+  						htmls += html;
+  						i++;
+  					});
+  					$('#totalData').text(result.data.total);
+  					//Nowpage  当前页
+  					//count    数据总条数
+  					//total    总共页数
+  					//limit    分页数量
+  					//Paging.paging(当前页码, 总数量, 每页显示的条数) 
+       			Paging.paging(Nowpage, count, limit);
+  				}
+  				$('#recharge-recored-list').html(htmls);
+  			}
+  		},
+  		error: function(error) {
+  			console.log(error);
+  			alert('数据获取失败！');
+  		}
+  	});
+  }
+  
+  show_statistics_data(1, 10);
+  var Paging1 = new Paging01();
+		Paging1.init_args({
+		// url: 
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging1', //放置分页的class
+		callback: show_statistics_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+	//技术服务费计费统计重置
+	function statistics_reset()
+	{
+	  $('#userType').val('');
+	  $('#username_details').val('');
+	}
+  //获取技术服务费计费统计
+  function show_statistics_data(page, limit)
+  {
+    var data = {};
+    data.username = $('#username_details').val();
+    data.role_name = $('#userType').val();
+    var url = '{:url("/user/manager/service_cost_statistics_api")}';
+    $.ajax({
+      type:"POST",
+      url:url,
+      data:data,
+      success:function(result){
+        console.log(result);
+        if(result.code == 0){
+          var htmls = '';
+          $.each(result.data.data, function(index, object){
+            var html = $('#service-statistics-data').html();
+                html = html.replace('{%key%}', object.key);
+                html = html.replace('{%cost_price%}', object.cost_price);
+                html = html.replace('{%cost_price_statistics%}', object.cost_price_statistics);
+                html = html.replace('{%date%}', object.date);
+                html = html.replace('{%duration%}', object.duration);
+                html = html.replace('{%profit%}', object.profit);
+                html = html.replace('{%role_name%}', object.role_name);
+                html = html.replace('{%sale_price%}', object.sale_price);
+                html = html.replace('{%sale_price_statistics%}', object.sale_price_statistics);
+                html = html.replace('{%username%}', object.username);
+            htmls += html;
+          });
+          $('#recharge-recored-list-xxxxx').html(htmls);
+          Paging1.paging(page, result.data.count, limit);
+        }
+      },
+      error:function(){
+        console.log('错误');
+      }
+    });
+  }
+  show_total_data();
+  //获取技术服务费计费合计
+  function show_total_data()
+  {
+    var url = '{:url("/user/manager/service_cost_total_api")}';
+    $.ajax({
+      type:"POST",
+      data:{},
+      url:url,
+      dataType:"json",
+      success:function(result){
+        console.log(result);
+        if(result.code == 0){
+          $('#sumDuration').text(result.data.duration + '分钟');
+          $('#chengbenTotal').text(result.data.cost_price_statistics + '元');
+          $('#xiaoshouTotal').text(result.data.sale_price_statistics + '元');
+          $('#lirunTotal').text(result.data.profit + '元');
+        }
+      },
+      error:function(){
+        console.log('错误');
+      }
+    })
+  }
+</script>
+{include file="sms/sms_targer" /}
+{/block}

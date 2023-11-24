@@ -1,0 +1,62 @@
+.dis_in {
+  display: inline-block;
+}
+#checkpage .modal-dialog {
+  width: 450px;
+  margin-top:80px;
+}
+.modal-body {
+  padding: 20px;
+}
+.t_marbott {
+  margin-top: 8px;
+}
+.inwidth3 {
+  width: 130px !important;
+  padding: 0px 8px;
+}
+.inwidth6 {
+  width: 160px !important;
+  padding: 0px 8px;
+}
+.inmargin {
+  margin-right: 10px;
+  margin-bottom: 8px !important
+}
+.navbar {
+  margin-bottom: 10px;
+}
+#checkseat .modal-dialog {
+  width: 490px;
+}
+.s_addphone {
+  line-height: 34px;
+  color: #0e90fe;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0px;
+}
+.s_addphone img {
+  margin-right: 3px;
+  vertical-align: sub;
+}
+.nopadding {
+  padding: 0px;
+}
+.s_newphone input {
+  margin-top: 8px;
+}
+.s_newphone img {
+  position: absolute;
+  right: -24px;
+  top: 11px;
+  cursor: pointer;
+}
+.dis_in {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.fl {
+  float: left;
+}

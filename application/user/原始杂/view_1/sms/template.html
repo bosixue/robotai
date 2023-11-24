@@ -1,0 +1,767 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<style>
+	.main-box .main-box-header{
+
+	}
+	.examineTips{
+		color:#909090;
+	}
+	.not-pass{
+		color:red;
+	}
+
+	.navbar{
+		margin-bottom:0px;
+	}
+	.form-group{
+    margin-bottom: 5px!important;
+	}
+@media (max-width: 1391px){
+	.c_dateSelbg input {
+    width: 135px;
+	}
+	.c_marleft {
+    margin-left: 15px !important;
+	}
+}
+@media (max-width: 1340px){
+	.c_seldate select {
+    width: 135px !important;
+	}
+}
+@media (max-width: 1311px){
+	.c_marleft {
+    margin-left: 10px !important;
+	}
+}
+@media (max-width: 1294px){
+	.c_marleft {
+		margin-left: 20px !important;
+	}
+	.c_dateSelbg input {
+	    width: 170px;
+	    padding:6px 14px;
+	}
+	.pz_zhi{
+		margin:0px 10px !important;
+	}
+	.c_seldate select {
+    width: 160px !important;
+	}
+	.pz_keyMarleft{
+		margin-left: 72px !important;
+		margin-top:10px ;
+	}
+	.pz_annius{
+		margin-top:10px;
+	}
+}
+@media (max-width: 1192px){
+	.pz_selectss {
+    margin-top: 0px !important;
+    margin-left: 20px !important;
+	}
+}
+@media (max-width: 1113px){
+	.c_dateSelbg input {
+	    width: 145px !important;
+	}
+	.c_seldate select {
+    width: 140px !important;
+	}
+	.pz_selectss {
+    margin-left: 14px !important;
+	}
+	.c_marleft {
+    margin-left: 11px !important;
+	}
+	.pz_zhi {
+    margin: 0px 5px !important;
+	}
+}
+
+.pz_zhi{
+	margin:0px 4px;
+}
+ .group{
+ 	margin-bottom: 10px!important;
+ }
+
+ .groupwidth{
+ 	width: 250px;
+ }
+
+ .variabletips{
+ 	font-size: 12px;
+ 	color: #909090;
+ }
+
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><img src="__PUBLIC__/img/pz_qianming.png" alt="">短信模板</span>
+		  </div>
+	  	<a class="btn s_addnew pull-right headbtn" data-title="批量删除模板"  onclick="popTipswin(this);" target-form="ids">批量删除</a>
+			<a class="btn s_addnew pull-right headbtn" href="javascript:void(0);" onclick="template_sms(0);">添加短信模板</a>
+		</header>
+
+		<div class="main-box-body clearfix">
+	      <section class="navbar clearfix">
+					<form method="get" role="form">
+						<div class="form-group dis_in  c_seldate clearfix ">
+							<!--运营商-->
+							 <label class="levelSelect statusSelect">模板名称:</label>
+							 <div class="dis_in  pull-left">
+	 							<input style="width:130px;margin-right:20px;" id="username" name="username" class="form-control " type="text" placeholder="请输入模板名称">
+	 						</div>
+							<!--/运营商-->
+
+							<!-- 选择日期 -->
+							 <label class="levelSelect statusSelect">创建时间:</label>
+							 <div class="formgroup">
+								 <div class="dis_in c_dateSelbg pr">
+									 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+									 <script>
+											 $('#startDate').fdatepicker({
+												 format: 'yyyy-mm-dd',
+												 // pickTime: true
+											 });
+									 </script>
+								 </div>
+								 <span class="pz_zhi">至</span>
+								 <div class="dis_in c_dateSelbg pr">
+									 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+									 <script>
+										 $('#endTime').fdatepicker({
+											 format: 'yyyy-mm-dd',
+											 // pickTime: true
+										 });
+									 </script>
+								 </div>
+							 </div>
+
+							 <!-- 选择模板类型 销售，运营商中没有该筛选 -->
+							 <!-- <div class="dis_in c_marleft c_selectset pull-left">
+	 							<select style="width:100px;" name="status" id="status" class="form-control resetSel c_selectimg">
+	 								<option value=" " selected="">请选择模板类型</option>
+	 								<option value="0">验证码类</option>
+									<option value="1">通知类</option>
+									<option value="2">营销类</option>
+	 							</select>
+	 						</div> -->
+
+							<!-- 选择审核状态 -->
+							<!-- <label class="levelSelect statusSelect">审核状态:</label> -->
+							<div class="dis_in c_marleft c_selectset pull-left pz_selectss">
+							 <select style="width:100px;" name="shenghe" id="shenghe" class="form-control resetSel c_selectimg">
+								 <option value=" " selected="">请选择审核状态</option>
+								 <option value="0">未提交审核</option>
+								 <option value="1">审核中</option>
+								 <option value="2">审核未通过</option>
+								 <option value="3">审核通过</option>
+							 </select>
+						  </div>
+
+							<!-- 搜索关键字 -->
+							<div class="dis_in c_marleft pz_keyMarleft">
+								<input type="text" class="form-control" id="keyword" name="keyword" placeholder="请输入签名内容关键字">
+							</div>
+
+							<!-- 查询、重置按钮 -->
+							<div class="dis_in c_marleft pz_annius">
+								<button class="btn btn-primary" type="button" onclick="ajaxGetTemplateDta(1);">查询</button>
+								<button class="btn btn-primary pz_kongxin_anniusty" onclick="reset_click();" type="button">重置</button>
+							</div>
+					  </div>
+				 </form>
+				</section>
+
+			  <div class="table-responsive">
+
+				 <table class="table table-bordered table-hover">
+				   <thead>
+						 <!--销售人员-->
+						<!--
+					    <tr>
+								<th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>
+								<th class="text-center">序号</th>
+								<th class="text-center">账号</th>
+								<th class="text-center">模板ID</th>
+								<th class="text-center">模板内容</th>
+								<th class="text-center">签名类型</th>
+								<th class="text-center">关联签名</th>
+								<th class="text-center">创建时间</th>
+								<th class="text-center">审核状态</th>
+								<th class="text-center">操作</th>
+					    </tr>
+					  -->
+					 <!--/销售人员-->
+
+				 	 <!--运营商账号-->
+							<tr>
+								<th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>
+								<th class="text-center">序号</th>
+								<th class="text-center">模板名称</th>
+								<th class="text-center">通道名称</th>
+								<th class="text-center">模板ID</th>
+								<th class="text-center">关联签名</th>
+								<th class="text-center">模板内容</th>
+								<th class="text-center">变量名</th>
+								<th class="text-center">创建时间</th>
+								<th class="text-center">审核状态</th>
+								<th class="text-center">审核人</th>
+								<th class="text-center">操作</th>
+					    </tr>
+					 <!--/运营商账号-->
+				    </thead>
+
+						<tbody id="templateBody">
+						<!--运营商-->
+
+
+						</tbody>
+
+
+						<!--/运营商-->
+
+						<!--销售人员-->
+				   <!--
+				   <tbody>
+
+				    </tbody> -->
+		    	<!--/销售人员-->
+				  </table>
+			  </div>
+				<div class="component-page-empty" id="consumeempty">
+					<div class="empty-tip line">暂无数据</div>
+				</div>
+				<footer class="main-box-footer clearfix">
+					<div class="pull-left margintop">
+            <input class="ppzrolecheck all_checked_count"  type="checkbox"/>全选（已选中<span id='user_count'>0</span>个模板）</div>
+          <div class="text-right pull-right">
+          	<div class="paging clearfix">
+          	</div>
+          </div>
+				</footer>
+						
+		</div>
+
+	</div>
+
+</div>
+
+ <script type="text/javascript">
+  //把时间戳转换为 时间格式XXXX-XX-XX XX:XX:XX
+  function timestampToTime(timestamp) {
+        var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var Y = date.getFullYear();
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) ;
+        var D = date.getDate();
+        if(D<10){
+        	 D='0' + D;
+        }
+        var h = date.getHours() ;
+        if(h<10){
+        	 h='0' + h;
+        }
+        var m = date.getMinutes() ;
+         if(m<10){
+        	 m='0' + m;
+        }
+        var s = date.getSeconds();
+         if(s<10){
+        	 s='0' + s;
+        }
+        return Y+'-'+M+'-'+D+'  '+h+':'+m+':'+s;
+    }
+	//显示编辑和添加短信模板 tag=0为添加 tag=1位编辑  id默认为0 编辑时候 id为要编辑的模板的id
+	function template_sms(tag,id=0){
+	  $('#template-sms').modal('show');
+		if(tag ==1){
+			//编辑短信模板
+			$('#template span').text('编辑短信模板');
+			
+			//去接口读取要编辑的数据 显示给前端
+			var data={
+				'id':id,
+			};
+			var url = "{:url('user/Sms/edit_template_vie')}"
+	    $.ajax({
+				type:'POST',
+				dataType:'json',
+				url:url,
+				data:data,
+				success:function(result){
+					 var template = result.data.template;
+					 console.log(template);
+					 	if(result.code==0){
+							 $('#templateName').val(template['name'])   //模板名称
+							 var sms_channels =  result.data.sms_channels;
+							 var sms_signs =  result.data.sms_signs;
+							 var i ;
+							 var x ;
+							 //遍历短信通道
+							 for(var i=0;i<sms_channels.length;i++){
+							 	   if(template['channel_id'] ==sms_channels[i]['id'] ){
+							 	   	  break;
+							 	   }
+							 }
+
+							 if(i==1){
+								 //得到i 对应短信通道下拉条的位置 然后selected之
+								 $('#sms-passageway option:eq('+Number(i)+')').prop("selected", true);
+							 }else{
+							 	 $('#sms-passageway option:eq('+Number(i+1)+')').prop("selected", true);
+							 }
+							 //遍历短信签名
+							 for(var x=0; x<sms_signs.length; x++){
+							 	   if(template['sign_id'] ==sms_signs[x]['id'] ){
+							 	   	  break;
+							 	   }
+							 }
+							 if(x==1){
+								 //得到x 对应短信签名的下拉条的位置 然后selected之
+								 $('#sms-signature option:eq('+Number(x)+')').prop("selected", true);
+							 }else{
+							 	 $('#sms-signature option:eq('+Number(x+1)+')').prop("selected", true);
+							 }
+							 $('#template-content').val(template['content']) //模板内容
+							 $('#varname').val(template['variable'])  //变量名
+							 $('#editId').val(id);//把要编辑的id 放入隐藏input中
+					 }
+				},
+	    	error:function(){
+				   console.log('错误');
+			  }
+	    });
+
+		}else{
+		   //添加短信模板
+		   $('#template span').text('添加短信模板');
+			 
+		 	 //每次都要清空 避免上次 编辑了 模板中还存在 编辑的数据 就不好了
+			 $('#templateName').val('')   //模板名称
+			 $('#template-content').val('') //模板内容
+			 $('#varname').val('')  //变量名
+			 $('#editId').val('');//把要编辑的id 放入隐藏input中
+			 $('#sms-signature option:eq(0)').prop("selected", true);
+			 $('#sms-passageway option:eq(0)').prop("selected", true);
+		}
+	}
+	//添加 and 编辑 方法
+	function add_edit_template(){
+		 		var templateName =  $('#templateName').val();
+		 		if(!templateName){
+		 			alert("模板名称不能为空");
+		 			return false;
+		 		}
+				var channel_id = $("#sms-passageway").val();
+				if(!channel_id ){
+					alert("短信通道不能为空");
+					return false;
+				}
+				var sign_id = $("#sms-signature").val();
+				if(!sign_id){
+					alert("短信签名不能为空");
+					return false;
+				}
+			  var content = $("#template-content").val();
+				 if(!content){
+					 alert("模板内容不能为空");
+						 return false;
+				 }
+			 var varname = $("#varname").val();
+
+				var editId = $("#editId").val();
+        var data={
+        	 'id':editId,
+        	 'templateName':templateName,
+        	 'channel_id':channel_id,
+        	 'sign_id':sign_id,
+        	 'content':content,
+        	 'varname':varname,
+        };
+				var url = "{:url('User/Sms/add_template')}";
+		 		 $.ajax({
+		 		     type: "POST",
+		 		     dataType:'json',
+		 		     url: url,
+		 		     cache: false,
+		 		     data: data,
+		 		     success: function(result) {
+		 		    	if (result.code == 0) {
+		 		    	     //如果 editId 存在是编辑 所以 需要获取当前页码 用来直接翻页
+		 		    	     if(editId){
+			 		    	     //用来储存页面 编辑成功 好直接翻页到哪个页面
+			 		    	     var page = $("#saveNowpage").val();
+			 		    	     ajaxGetTemplateDta(page);
+		 		    	     }else{
+		 		    	     	//editId是空的话 为新增 直接跳转第一页了
+		 		    	     	ajaxGetTemplateDta(1);
+		 		    	     }
+		 		    	     alert(result.msg);
+		 		    	}else{
+		 		    		   alert(result.msg);
+		 		    	}
+		 		     },
+		 		     error: function(data) {
+		 		    	 alert("提交失败");
+		 		     }
+		 		 })
+		   $('#template-sms').modal('hide');
+		 }
+
+
+	 /**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	*/
+	var Paging = new Paging01();
+	Paging.init_args({
+	  page: 1, //初始页码
+	  limit: 10, //初始每页显示的数据量
+	  paging_class: 'paging', //放置分页的class
+	  callback: ajaxGetTemplateDta, //回调函数 比如show_datas(页码, 显示条数)
+	  key:1,
+	});
+  //得到短信模板数据
+  ajaxGetTemplateDta(1)
+  function ajaxGetTemplateDta(page=1,limit=10){
+		//将页码存入某个隐身元素中 比如删除 修改 的时候 是在第三页完成的 那么记录当前页码 很有必要
+ 	  $("#saveNowpage").val(page);
+ 	  var username= $("#username").val();
+ 	  var startDate= $("#startDate").val();
+ 	  var endTime= $("#endTime").val();
+ 	  var status= $("#status").val();
+ 	  var shenghe= $("#shenghe").val();
+ 	  var keyword= $("#keyword").val();
+ 	  var data={
+   	  	 'username':username,
+   	  	 'startDate':startDate,
+   	  	 'endTime':endTime,
+   	  	 'status':status,
+   	  	 'shenghe':shenghe,
+   	  	 'keyword':keyword,
+   	  	 'page' :page,
+   	  	 'limit':limit
+   	};
+   	var url = "{:url('user/Sms/getTemplateData')}"
+    $.ajax({
+			type:'POST',
+			dataType:'json',
+			url:url,
+			data:data,
+			success:function(result){
+				console.log(result);
+				if(result.code == 0){
+				var total = result.data.total; //数据总条数
+				window.count = total;
+      	var Nowpage = result.data.Nowpage; //当前页码
+				$("#templateBody").find("tr").remove();
+				 var template =result.data.templates;
+				 var string = "";
+				 if(template.length == 0 ){
+				 	$('#consumeempty').show();
+				 	$('.main-box-footer').hide();
+					window.count = 0;
+				 }else{
+				 	$('#consumeempty').hide();
+				 	$('.main-box-footer').show();
+				 	 for(var i = 0; i<template.length; i++){
+  		         string += '<tr>';
+							 string +='<td class="text-center"><input class="check-all" name="checkids" type="checkbox" value="'+template[i]['id']+'"/></td>';
+							 string +='<td class="text-center">'+ ((Nowpage-1)*limit+(i+1)) +'</td>';
+							 string +='<td class="text-center">'+template[i]['name']+'</td>';
+							 string +='<td class="text-center">'+template[i]['tongdaoname']+'</td>';
+							 string +='<td class="text-center">'+template[i]['id']+'</td>';
+							 string +='<td class="text-center">'+template[i]['sign']+'</td>';
+							 string +='<td class="text-center">'+template[i]['content']+'</td>';
+							 string +='<td class="text-center">'+template[i]['variable']+'</td>';
+						   string +='<td class="text-center">'+timestampToTime(template[i]['create_time'])+'</td>';
+						   string +='<td class="text-center">'+template[i]['shuangtai']+'</td>';
+							 string +='<td class="text-center">'+template[i]['channel_username']+'</td>';
+							 string +='<td class="text-center">';
+							 string +='<a href="javascript:;" onclick="template_sms(1,'+template[i]['id']+');">编辑</a>';
+							if(template[i]['status']==0){
+						   string +='<a href="javascript:;" data-title="提交审核" onclick="setStatus('+template[i]['id']+');">提交审核</a>';
+							}
+							 string +='	<a href="javascript:;" data-template-id="'+template[i]['id']+'" data-title="删除单个短信模板" onclick="popTipswin(this);">删除</a>';
+							 string +='</td>';
+							 string +='</tr>';
+				 	 	}
+					}
+					 $("#templateBody").html(string);
+			     //显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+			     Paging.paging(Nowpage, total, limit);
+			     election();
+				}
+			},
+  		error:function(){
+				console.log('错误');
+			}
+    });
+  }
+ //将模板中 未提交的模板 设置成提交中
+ function setStatus(id){
+ 		var url = "{:url('setTemplateStatus')}";
+ 		$.ajax({
+ 					url : url,
+ 					dataType : "json",
+ 					type : "post",
+ 					data : {'id':id},
+ 					success: function(result){
+ 						if (result.code==0) {
+ 					  	alert(result.msg);
+ 						  //用来储存页面 编辑成功 好直接翻页到哪个页面
+ 	    	      var page = $("#saveNowpage").val();
+ 	    	      ajaxGetTemplateDta(page);
+		 				}else{
+		 						alert(result.msg);
+		 				}
+ 				},
+ 				error : function() {
+ 					console.log('错误');
+ 				}
+ 		});
+ }
+//删除模板--- 单删
+ function del_template(id){
+     	if(!id){
+     		 alert("至少选择一条再删除");
+     		 $('#tips_model').modal('hide');
+     		 return false;
+     	}
+     	var url = "{:url('delete_template')}";
+     		$.ajax({
+ 					url : url,
+ 					dataType : "json",
+ 					type : "post",
+ 					data : {'id':id},
+ 					success: function(result){
+ 						if (result.code==0) {
+ 					  	alert(result.msg);
+ 						  //用来储存页面 编辑成功 好直接翻页到哪个页面
+ 	    	      var page = $("#saveNowpage").val();
+ 	    	      ajaxGetTemplateDta(page);
+		 				}else{
+		 						alert(result.msg);
+		 				}
+		 				$('#tips_model').modal('hide');
+ 				},
+ 				error : function() {
+ 					console.log('错误');
+ 				}
+ 		});
+ }
+ //删除模板--- 群删
+ function del_template_all(){
+	 	var arr=[];
+			$("input[name='checkids']:checked").each(function(index,item){
+		   	arr.push($(this).val())
+			});
+			if(arr.length==0){
+				 alert("至少选择一条再删除");
+				 $('#tips_model').modal('hide');
+     		 return false;
+			}
+			var url = "{:url('delete_template_all')}";
+     	$.ajax({
+ 					url : url,
+ 					dataType : "json",
+ 					type : "post",
+ 					data : {'arr':arr},
+ 					success: function(result){
+ 						if (result.code==0) {
+ 					  	alert(result.msg);
+ 						  //用来储存页面 编辑成功 好直接翻页到哪个页面
+ 	    	      var page = $("#saveNowpage").val();
+ 	    	      ajaxGetTemplateDta(page);
+		 				}else{
+		 						alert(result.msg);
+		 				}
+		 				$('#tips_model').modal('hide');
+ 				},
+ 				error : function() {
+ 					console.log('错误');
+ 				}
+ 		});
+ }
+
+	//重置
+	function reset_click(){
+		$('#username').val("");//用户名
+		$('input[name="startDate"][type="text"]').val("");//开始日期
+		$('input[name="endTime"][type="text"]').val("");//结束日期
+		$('select[name="status"] option:eq(0)').prop("selected", 'selected');//模板类型
+		$('select[name="shenghe"] option:eq(0)').prop("selected", 'selected');//审核状态
+		$('input[name="keyword"]').val("");//签名内容关键字
+		ajaxGetTemplateDta();
+	}
+ </script>
+</div>
+
+<!-- 新建(编辑)短信模板 -->
+<div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel">添加短信模板</h4>
+				  </div>
+				  <div class="modal-body">
+						  <form id="form" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+
+									<div class="form-group">
+										<label class="col-lg-3 control-label">关联签名：</label>
+										<div class="col-lg-9 col-sm-9">
+											<div class="dis_in c_selectset pr">
+												<select id="tplSign" name="tplSign" class="form-control textwidth resetSel">
+                         <option value=" ">请选择</option>
+
+												 <option value=""></option>
+
+ 											 </select>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-lg-3 control-label">模板类型：</label>
+										<div class="col-lg-9 col-sm-9">
+											<div class="dis_in c_selectset pr">
+												<select id="tplType" name="tplType" class="form-control textwidth resetSel">
+	                        <option value="">请选择</option>
+	                        <option value="0">验证码类</option>
+	                        <option value="1">通知类</option>
+	                        <option value="2">营销类</option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">模板内容：</label>
+										<div class="col-lg-9 col-sm-9">
+											 <textarea name="templateInfo" id="templateInfo" class="textwidth" style="border: 1px solid #cfdadd;"></textarea>
+										</div>
+
+									</div>
+
+				          <input type="hidden" name="tplId" id="tplId" value="" />
+
+							</form>
+				 </div>
+				 <div style="clear:both;"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" onclick="uploadData();" class="btn btn-primary">提交</button>
+				</div>
+			</div>
+			</div>
+    <script type="text/javascript">
+			var pc = 0,pt = null;
+			function getprice(obj, type){
+
+				if(type == "c"){
+					 pc = $(obj).val();
+				}
+				else if(type == "t"){
+
+					if($(obj).val() == ""){
+						pt = null;
+					}else{
+						pt = $(obj).val();
+					}
+				}
+			}
+    </script>
+</div>
+
+<!--运营商中添加和变价短信模板弹框-->
+<div class="modal fade in " id="template-sms" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+    <div class="modal-dialog modal-sm" style="width: 470px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+
+                </button>
+                	<h4 class="modal-title" id="template"><span>添加短信模板</span></h4>
+
+            </div>
+            <div class="modal-body pagelists" style="padding-bottom:15px;">
+                <form id="cus_accountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                	<div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">模板名称：</label>
+                        <div class="col-lg-7 col-sm-7">
+                              <input type="text" class="form-control groupwidth " placeholder="请输入模板名称" name="templateName" id="templateName" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">选择短信通道：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="" id="sms-passageway" class="form-control groupwidth">
+                                <option value="">请选择短信通道</option>
+																{volist name="sms_channels" id="sms_channel"}
+                                   <option value="{$sms_channel['id']}">{$sms_channel['name']}</option>
+																{/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">选择短信签名：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="" id="sms-signature" class="form-control groupwidth">
+                                <option value="">请选择短信签名</option>
+																{volist name="sms_signs" id="sms_sign"}
+                                  <option value="{$sms_sign['id']}">{$sms_sign['name']}</option>
+																{/volist}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">输入模板内容：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea name="" id="template-content" class="groupwidth" rows="5" placeholder=" 请输入模板内容"></textarea>
+                            <span class="variabletips">变量设置为“[变量]”</span>
+                        </div>
+                    </div>
+                    <div class="form-group group">
+                        <label class="col-lg-4 col-sm-4 control-label">变量名：</label>
+                        <div class="col-lg-7 col-sm-7">
+                        	  <textarea name="" id="varname" class="groupwidth" rows="5" placeholder=" 请输入变量名"></textarea>
+                            <span class="variabletips">支持微信号，QQ号，手机号，缩短的网址，若添加多个，以“,”分割且按轮询的形式进行发送</span>
+
+                        </div>
+                    </div>
+                    <input type="hidden" id="editId" name="editId" value="">
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="add_edit_template()" type="button">保 存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="sms/sms_targer" /}
+{/block}

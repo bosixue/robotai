@@ -1,0 +1,63 @@
+<!--导出数据时验证的对话框-->
+<style>
+  .star{
+    color:red;
+    margin-right:3px;
+  }
+
+  .verification-code{
+    position:relative;
+  }
+
+  .send-code{
+    position: absolute;
+    top: 17%;
+    right: 18px;
+  }
+</style>
+<div class="modal fade in" id="export-validation" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 550px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="export-val"><span>导出验证</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="distributionform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+							 <div class="form-group  ">
+								<label class="col-lg-4 control-label"><span class="star">*</span>请输入用户名：</label>
+								<div class="col-lg-6 col-sm-6">
+                  <input type="text" class="form-control" name="" id="export-user" value="" placeholder="请输入用户名">
+								</div>
+							</div>
+              <div class="form-group  ">
+               <label class="col-lg-4 control-label">  <span class="star">*</span>请输入电话号码：</label>
+               <div class="col-lg-6 col-sm-6">
+                 <input type="text" class="form-control" name="" id="export-phone" value="" placeholder="请输入电话号码">
+               </div>
+             </div>
+             <div class="form-group  ">
+              <label class="col-lg-4 control-label"><span class="star">*</span>请输入验证码：</label>
+              <div class="col-lg-6 col-sm-6 verification-code">
+                <input type="text" class="form-control" name="" value="" id="export-verification-code" placeholder="请输入验证码">
+                <a href="javascript:;" class="send-code">发送短信验证码</a>
+              </div>
+            </div>
+            <div class="form-group  ">
+             <label class="col-lg-4 control-label">备注：</label>
+             <div class="col-lg-6 col-sm-6">
+               <textarea name="name" rows="5" cols="80" id="export-remark" class="form-control" maxlength="30" placeholder="请输入备注信息，限定30个字以内"></textarea>
+             </div>
+           </div>
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="export_val()" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>

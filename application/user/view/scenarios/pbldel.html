@@ -1,0 +1,80 @@
+
+    <div class="modal fade" id="pbl-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+       <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+               <span aria-hidden="true">×</span>
+             </button>
+             <h4 class="modal-title" id="myModalLabel">
+               操作提示
+             </h4>
+           </div>
+           <div class="modal-body modal-body-tips">
+             确定删除所选数据？
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+             <button type="button" class="btn btn-primary" onclick="dellear()">	 确定    </button>
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+    <div class="modal fade" id="nodata-pbl" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+       <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+               <span aria-hidden="true">×</span>
+             </button>
+             <h4 class="modal-title" id="myModalLabel">
+               操作提示
+             </h4>
+           </div>
+           <div class="modal-body modal-body-tips">
+             请至少选择一条数据。
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+    <!-- 单条问题学习删除-->
+    <div class="modal fade" id="pbl-single-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+       <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+         <div class="modal-content">
+           <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+               <span aria-hidden="true">×</span>
+             </button>
+             <h4 class="modal-title" id="myModalLabel">
+               操作提示
+             </h4>
+           </div>
+           <div class="modal-body modal-body-tips">
+             确定删除所选数据？
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+             <button type="button" class="btn btn-primary" onclick="dellear()">	 确定    </button>
+           </div>
+         </div>
+       </div>
+     </div>
+
+
+
+<script>
+function dellear(){
+	var id = $('#pbl-delete').attr('data-id');
+	del(id);
+	$('#pbl-delete').modal('hide');
+	console.log(id);
+}
+
+</script>

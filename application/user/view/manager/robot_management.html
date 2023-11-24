@@ -1,0 +1,457 @@
+{extend name="public/base" /}
+{block name="body"}
+
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link href="/public/css/enterpriseA.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/js/pubics.js"></script>
+
+{include file="sms/sms_targer" /}
+{include file="manager/dialog" /}
+{include file="manager/managedialog"/}
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="main-box clearfix fadeInRight animated pz_manping_height">
+				<header class="main-box-header clearfix">
+				  <div class="pull-left">
+					   <span class="n_panel_title"><img src="__PUBLIC__/img_sj/jiqirenguanlli.png" alt="">机器人管理</span>
+				  </div>
+				</header>
+				<div class="main-box-body clearfix">
+					<section class=" navbar main-box-header clearfix" style="padding: 5px 0px 8px;">
+						<div class="form-inline">
+							<div class="form-group clearfix">
+		            <label class="statusSelect pull-left" >用户名：</label>
+		            <input type="text" class="form-control pull-left l-search" autocomplete="off" id="username" name="keyword" placeholder="请输入用户名" >
+		         </div>
+		        {if $role_id eq 16 || $role_id eq 17}
+		         <!--运营商、代理商-->
+		         <div class="form-group clearfix e_headmargin">
+		            <label class="statusSelect pull-left" >用户类型：</label>
+		            <select class="form-control resetSel c_selectimg l-search " id="role_name" name="">
+		            	<option value="">全部类型</option>
+		            	{volist name='role_list' id='vo'}
+		            	<option value="{$vo.source_id}">{$vo.name}</option>
+									{/volist}
+								</select>
+		         </div>
+		         <!--/运营商、代理商-->
+		         {/if}
+		         <div class="form-group">
+		         	  <botton class="btn btn-primary " type="button" onclick="show_data()">搜索</botton>
+		            <botton class="btn btn-primary " type="button" onclick="reset();">重置</botton>
+		         </div>
+						</div>
+
+		       </section>
+				  <div class="table-responsive">
+						<table class="table table-bordered table-hover">
+							<thead>
+							  <tr>
+									<!-- <th class="text-center">
+										<input class="check-all" name='all_checked' type="checkbox"/>
+									</th> -->
+									<th class="text-center">序号</th>
+							    <th class="text-center">用户名</th>
+								  <th class="text-center">用户类型</th>
+									<th class="text-center">机器人数量</th>
+									{if $role_id != 12}
+										<th class="text-center">租金</th>
+									{/if}
+									<th class="text-center">到期时间</th>
+							  	<th class="text-center">操作</th>
+									<th class="text-center">备注</th>
+							  </tr>
+							</thead>
+							<tbody id="recharge-recored-list">
+							</tbody>
+						</table>
+						<div class="row">
+							<footer class="clearfix col-sm-12 paging">
+							</footer>
+						</div>
+				  </div>
+				  <div class="component-page-empty" id="consumeempty">
+						 <div class="empty-tip line">
+							 <p><img src="__PUBLIC__/img/none.png" /></p>
+							 <p>暂无数据</p>
+						 </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script id='operator_list' type='text/tepmate'>
+		<tr>
+			<td class="text-center">{%sequence%}</td>
+	    <td class="text-center">{%username%}</td>
+	    <td class="text-center">{%role_name%}</td>
+	    <td class="text-center">{%robot_cnt%}</td>
+	  	{if $role_id != 12}
+	  	<td class="text-center">{%month_price%}{%type_price%}</td>
+	  	{/if}
+	    <td class="text-center">{%robot_date%}</td>
+	    <td class="text-center current">
+				<a href="javascript:void(0);" onclick="show_edit({%id%});">编辑</a>
+				<a href="javascript:void(0);" data-title="强制回收机器人" data_id="{%id%}" onclick="popTipswin(this);">强制回收</a>
+	    </td>
+	    <td class="text-center">{%remark%}</td>
+		</tr>
+	</script>
+	<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+	<script type="text/javascript" src='/public/js/paging.js'></script>
+	<script type="text/javascript">
+		//编辑销售账号切换机器人租金方式
+		$('input[name=lprice]').change(function(){
+			if($('input[name="lprice"][value="1"]').prop('checked')){
+				$('#distributionMonthPrice').addClass('hidden');
+				$('#distributionDayPrice'). removeClass('hidden');
+			}else{
+				$('#distributionMonthPrice').removeClass('hidden');
+				$('#distributionDayPrice').addClass('hidden');
+			}
+		});
+	 //当前页全选
+	  $("input[name='all_checked'][type='checkbox']").click(function(){
+	 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+	   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+	   	} else {
+	  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+	  	}
+	  });
+	 	//子复选框的事件
+	 	$('input[type="checkbox"][name="roleids"]').click(function(){
+	 		//当没有选中某个子复选框时，check-all取消选中
+	 		if (!$(".rolecheck").checked) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+	 		}
+	 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+	 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+	 		if (checkedsub == chsub) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+	 		}
+	 	});
+
+		//重置
+		function orderChongzhi(){
+			$('#startDate').val("");
+			$('#endTime').val("");
+		}
+		</script>
+
+	<script type="text/javascript">
+		onmyTime();
+		//显示机器人管理页面 编辑弹窗
+		function show_edit(id){
+				//
+                        $('#spoils_num').val('');
+			$('#remark').val('');
+			var url = "{:url('manager/distribution_robot')}";
+			$.ajax({
+				type:'GET',
+				data: {id:id},
+				dataType:'json',
+				url:url,
+				success:function(data){
+					console.log(data);
+					var data = data.data;
+					$("#editrobotmanage").modal('show');
+					if(data){
+						$('#pz_username').text(data.username);
+						$('#pz_role_name').text(data.role_name);
+						$('#pz_robot_num').text(data.usable_robot_cnt);
+						$('.pid_role_name').text(data.pid_role_name);
+						if(data.p_robot_num == -1){
+							$('#pz_robotNumber').parent().hide();
+						}else{
+							$('#pz_robotNumber').text(data.p_robot_num);
+						}
+						if(data.p_robot_date == -1){
+							$('#pz_robotEndDate').parent().hide();
+						}else{
+							$('#pz_robotEndDate').text(data.p_robot_date);
+						}
+						$('#pz_DueTime').text((data.robot_date));
+						$('#nb_click').attr('data_id',data.id);
+						if(data.robot_date ==0 || data.robot_date <50000){
+							$('#sdate').val('');
+							$('#pz_DueTime').text('暂未设置');
+						}else{
+							$('#sdate').val(data.robot_date);
+							$('#pz_DueTime').text((data.robot_date));
+						}
+						if(data.type_price == 1){
+	  					data.type_price_name ='元 / 天 / 个';
+	  				}else if(data.type_price == 2){
+	  					data.type_price_name ='元 / 月 / 个'
+	  				}
+						if(data.pid_role_id == 12){
+							$('.zhujin').hide();
+							$('.chengben').hide();
+							$('.xiaoshou').hide();
+							$('.shijian2').hide();
+						}else if(data.pid_role_id == 18){
+							$('.chengben').hide();
+							$('.chengben').hide();
+							$('.shijian').hide();
+							$('.xiaoshou').hide();
+							$('#pz_robotrent #price').text(toFixed_num(data.month_price,3));//租金
+							$('#pz_robotrent #company').text(data.type_price_name);
+						}else if(data.pid_role_id == 16 || data.pid_role_id == 17){
+							if(data.role_id ==18 || data.role_id == 19){
+								$('.zhujin').hide();
+								$('.chengben').hide();
+								$('.shijian2').hide();
+								$('.xiaoshou').show();
+								if(data.type_price == 1){
+									$(".type_price[value='1']").prop("checked",true);
+									$(".type_price[value='2']").prop("checked",false);
+									$('#distributionMonthPrice').addClass('hidden');
+									$('#distributionDayPrice'). removeClass('hidden');
+								}else if(data.type_price == 2){
+									$(".type_price[value='1']").prop("checked",false);
+									$(".type_price[value='2']").prop("checked",true);
+									$('#distributionMonthPrice').removeClass('hidden');
+									$('#distributionDayPrice').addClass('hidden');
+								}
+								$('#rental-price').val(data.month_price);
+							}else {
+								$('.zhujin').hide();
+								$('.chengben').hide();
+								$('.xiaoshou').hide();
+								$('.shijian2').hide();
+							}
+						}
+
+
+
+						// else
+						// if(data.pid_role_id == 16){
+						// 	$('.zhujin').hide();
+						// 	$('.chengben').hide();
+						// 	// if(data.type_price == 1){
+						// 	// 	$(".type_price[value='1']").attr("checked","checked");
+						// 	// }else if(data.type_price == 2){
+						// 	// 	$(".type_price[value='2']").attr("checked","checked");
+						// 	// }
+						// 	$('#rental-price').val(data.month_price);
+						// 	$('.shijian2').hide();
+						// }
+						// // else if(data.pid_role_id == 17){
+						// // 	$('.zhujin').hide();
+						// // 	$('#pz_robotcost').text(data.robot_cost); //成本
+						// // 	$('.shijian2').hide();
+						// // 	$('.xiaoshou').hide();
+						// // }else if(data.pid_role_id == 18){
+						// // 	$('.chengben').hide();
+						// // 	$('.xiaoshou').hide();
+						// // 	$('.shijian').hide();
+						// // 	$('#pz_robotrent').text(data.month_price);//租金
+						// // }
+						window.whole_robotdate = $('#sdate').val();
+						window.pid_role_id = data.pid_role_id;
+					}
+				},
+				error:function(e){
+				}
+			})
+		}
+		window.amount = true;
+		function robot_spoils(obj){
+			var data = {};
+			data.id = $(obj).attr('data_id');
+			data.robot_num = $('#spoils_num').val();//分配机器人数量
+			var pz_robot_num = $('#pz_robot_num').text();
+			if((-data.robot_num)> pz_robot_num){
+				alert('扣除机器人不能大于当前可用机器人数量');
+				return false;
+			}
+			var pz_tobot_n = $('#pz_robotNumber').text()
+			if($('#pz_robotNumber').parent().is(':visible')){
+				if( parseInt(data.robot_num) > parseInt(pz_tobot_n)){
+					alert('分配机器人不能大于当前您可用机器人数量');
+					return false;
+				}
+			}
+			// if($('#spoils_num').val() == '') {
+			// 	alert('分配机器人数量不能为空');
+			// 	return false;
+			// }
+			data.robot_date	 = $('#sdate').val();//分配机器人时间
+			var pdi_role_name = $('.pid_role_name:last').text();
+			var timestamp = Date.parse(new Date())/1000;
+				if(data.robot_date != ''){
+					if( $.myTime.DateToUnix(data.robot_date)  <= timestamp ){
+						alert('结束日期不能小于等于当前日期');
+						return false;
+					}
+					if(window.pid_role_id != 12){
+						if(!$('pid_role_name').is(':visible')){
+							var pz_robotEndDate = $('#pz_robotEndDate').text();
+							if( $.myTime.DateToUnix(data.robot_date)  > $.myTime.DateToUnix(pz_robotEndDate )){
+								alert('结束日期不能大于'+pdi_role_name+'到期日期');
+								return false;
+							}
+						}
+					}
+					if(window.amount){
+						if(Contrastdate(window.whole_robotdate,data.robot_date)){
+							alert('您的本次到期时间编辑对您的下级有一定的影响！');
+						  return window.amount = false;
+						}
+					}
+				}else{
+					alert('结束日期不能为空');
+					return false;
+				}
+			data.remark = $('#remark').val();//备注
+			if($('.xiaoshou').is(':visible')){
+				data.type_price = $('.type_price:checked').val();//机器人销售价格状态
+				data.month_price = $('#rental-price').val();//机器人销售价格
+			}
+			console.log(data);
+			var url = "{:url('manager/distribution_robot')}";
+			$.ajax({
+                            type:'POST',
+                            data: data,
+                            dataType:'json',
+                            url:url,
+                            success:function(data){
+                                console.log(data);
+                                if(data.code == 0){
+                                    alert(data.msg);
+                                    $('#editrobotmanage').modal('hide');
+//                                    dfa
+                                    show_data(window.page,window.limit);
+                                }
+                                // window.amount = true;
+                            },
+                            error:function(e){
+                            }
+			})
+		}
+		function mandatory_recovery_robot(id){
+			var url = "{:url('manager/force_recovery')}";
+			$.ajax({
+				type:'POST',
+				data: {id:id},
+				dataType:'json',
+				url:url,
+				success:function(data){
+					console.log(data);
+					if(data.code == 0){
+                                            alert(data.msg);
+                                            $('#tips_model').modal('hide');
+                                            show_data(window.page,window.limit);
+					}
+				},
+				error:function(e){
+				}
+			})
+		}
+		/**
+		 * 配置分页
+		 *
+		 * @param int args.page 页码 页码参数统一"page"
+		 * @param int args.limit 每页显示的数量 参数统一"limit"
+		 * @param string args.paging_class 放置分页的class
+		 * @param function args.callback 回调函数
+		*/
+		var Paging = new Paging01();
+		Paging.init_args({
+			// url:
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'paging', //放置分页的class
+			callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+		});
+		show_data();
+		function show_data(page,limit){
+			var data = {};
+			if(!page){page = 1;}
+			if(!limit){limit = 10;}
+			data.username = $('#username').val();
+			data.role_name = $('#role_name').find("option:selected").val();
+			data.page = page;
+			data.limit = limit;
+			window.page = data.page;
+			window.limit = data.limit;
+			var url = "{:url('manager/robot_management')}";
+			$.ajax({
+			type:'POST',
+			data: data,
+			dataType:'json',
+			url:url,
+			success:function(data){
+				console.log(data);
+				var htmls = '';
+				if(data.code === 1) {	//数据获取成功
+					if(data.data.list.length == 0) {
+						$('#consumeempty').show();
+						$('#recharge-recored-list').html(htmls);
+					}else{
+						$('#consumeempty').hide();
+						 var htmls = '';
+						 var total = data.data.page;   //总页数
+						 var Nowpage = data.data.Nowpage;  //当前页码
+						 var count  = data.data.total;  //总条数
+						 var Nowpage = parseInt(Nowpage);
+						 var i = (Nowpage - 1) * limit + 1;
+						 $.each(data.data.list, function(index, object) {
+						 	data.i = i;
+						 	if(object.robot_date == 0 || object.robot_date <50000){
+						 		object.robot_date = '暂无设置';
+						 	}else{
+						 		object.robot_date = timestampToTime(object.robot_date);
+						 	}
+					 		if(object.type_price == 1){
+								object.type_price = '元/天/个'
+							}else if(object.type_price == 2){
+								object.type_price = '元/月/个'
+							}
+							var html = $('#operator_list').html();
+							// html = html.replace('{%id%}', object.id);
+							html = html.replace('{%sequence%}', i);
+							html = html.replace('{%username%}', object.username);
+							html = html.replace('{%role_name%}', object.role_name);
+							html = html.replace('{%robot_cnt%}', object.robot_cnt);
+	  					{if $role_id != 12}
+							html = html.replace('{%month_price%}', toFixed_num(object.month_price,3));
+							html = html.replace('{%type_price%}', object.type_price);
+							{/if}
+							html = html.replace('{%robot_date%}',object.robot_date);
+							html = html.replace('{%id%}', object.id);
+							html = html.replace('{%id%}', object.id);
+							html = html.replace('{%remark%}', object.cinert);
+							htmls += html;
+							i++;
+						});
+
+						// 在获取数据的接口中
+						//Paging.paging(当前页码, 总数量, 每页显示的条数)
+						Paging.paging(Nowpage, count, limit);
+						$('#recharge-recored-list').html(htmls);
+					}
+				}
+			},
+			error:function(e){
+			}
+		})
+		}
+	function reset(){
+		$('#username').val("");
+		$('#role_name').val("");
+		show_data();
+	}
+
+
+	</script>
+
+{/block}

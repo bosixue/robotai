@@ -1,0 +1,524 @@
+{extend name="public/base" /}
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js_manage/account_manage.js"></script>
+<link rel="stylesheet" href="/application/user/static/css/chat.css" type="text/css"/>
+<link href="/public/css/callrecord.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script type="text/javascript" src='/public/js_validation/validation.js'></script>
+
+
+<link href="/public/css/intentionnal_member2.css" rel="stylesheet" type="text/css"/>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class=" clearfix fadeInRight animated">
+            <div class=" main-box">
+                <header class="main-box-header clearfix  callrecord-title">
+                    <div class="pull-left"> <span class="n_panel_title"><img src="__PUBLIC__/img/e_yixiang.png" alt="">客户管理</span>
+                    </div>
+                </header>
+        <div class="l_loadfixed" style="display: none;">
+                    <div class="l_loaddata">
+                        <p><img src="/public/img_sj/reload.gif" alt="">正在查询中...</p>
+                        <p>由于您的数据过大，加载需要一些时间，我们在努力的加载中...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid callrecord-bg">
+                <div class="condition pz_manping_height ">
+                    <div class="condition-title">
+                        <img src="__PUBLIC__/img/tiaojianshaixuan.png"> <span>条件筛选</span>
+                        <div class="pull-right">
+                            <input type="text" class="form-control c_seachbgimg" id="phone_query" placeholder="请输入号码查询" />
+                        </div>
+                    </div>
+                    <div class="condition-content">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="levelSelect">客户姓名:</label>
+                                <input type="text" name="" id="name_query" class="form-control width160 marginr30 " value="" placeholder="请输入客户名称">
+                            </div>
+                            <div class="form-group">
+                                <label class="levelSelect ">所属坐席:</label>
+                                <select class="form-control width160 marginr30" name="" id="sitchair">
+                                    <option value="">全部坐席</option>
+                                    {volist name="seats" id="seat"}
+                                    <option value="{$seat.id}">{$seat.username}</option>
+                                    {/volist}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="levelSelect ">所属任务:</label>
+                                <select class="form-control width160 marginr30" name="" id="config_id">
+                                    <option value="">全部任务</option>
+                                    {volist name="crm_push_config" id="config"}
+                                     <option value="{$config.id}">{$config.task_name}</option>
+                                     {/volist}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="levelSelect ">创建时间:</label>
+                                <input type="text" name="" class="form-control width160 c_datebgimg " id="startCreateDate" value="" placeholder="开始时间">
+                                <script>
+                                    $('#startCreateDate').fdatepicker({
+                                        format: 'yyyy-mm-dd hh:ii',
+                                        pickTime: true
+                                    });
+                                </script>
+                                <span class="word marginB4">至</span>
+                                <input type="text" name="" class="form-control width160 c_datebgimg" id="endCreateDate" value="" placeholder="结束时间">
+                                <script>
+                                    $('#endCreateDate').fdatepicker({
+                                        format: 'yyyy-mm-dd hh:ii',
+                                        pickTime: true
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <!--<div class="form-inline" style="margin-bottom:8px!important;">-->
+                        <!--    <div class="form-group">-->
+                        <!--        <label class="levelSelect">通话次数:</label>-->
+                        <!--        <input type="number" name="" id="min_call_count" class="form-control width58" value="" >-->
+                        <!--        <span class="word marginB4">至</span>-->
+                        <!--        <input type="number" name="" id="max_call_count" class="form-control width58" value="">-->
+                        <!--        <span class="word marginB4">次</span>-->
+                        <!--    </div>-->
+                        <!--</div>-->
+                        <div class="form-inline" style="margin-bottom:8px!important;">
+                           <div class="form-inline intention">
+                              <div class="form-group">
+                                  <label class="levelSelect">意向等级:</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="grade_all" value="">
+                                  <label>全部</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="grade" value="6">
+                                  <label>A级意向</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="grade" value="5">
+                                  <label>B级意向</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="grade" value="4">
+                                  <label>C级意向</label>
+                              </div>
+                          </div>
+                        </div>
+                        <script>
+                        $("input[name='grade_all']").click(function(){
+                            if ($("input[name='grade_all']").is(':checked')) {
+                                $("input[name='grade']").prop("checked",true)
+                            } else {
+                                $("input[name='grade']").prop("checked",false)
+                            }
+                        });
+                        $("input[name='grade']").click(function(){
+                           if($("input[name='grade']:checked").length==3){
+                              $("input[name='grade_all']").prop("checked",true)
+                           }else{
+                              $("input[name='grade_all']").prop("checked",false)
+                           }
+                        });
+                    </script>
+                        <div class="form-inline" style="margin-bottom:8px!important;">
+                           <div class="form-inline intention">
+                              <div class="form-group">
+                                  <label class="levelSelect">通话查看:</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="call_all" value="">
+                                  <label>全部</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="call" value="1">
+                                  <label>已查看</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="call" value="0">
+                                  <label>未查看</label>
+                              </div>
+                          </div>
+                        </div>
+                        <script>
+                        $("input[name='call_all']").click(function(){
+                            if ($("input[name='call_all']").is(':checked')) {
+                                $("input[name='call']").prop("checked",true)
+                            } else {
+                                $("input[name='call']").prop("checked",false)
+                            }
+                        });
+                        $("input[name='call']").click(function(){
+                           if($("input[name='call']:checked").length==2){
+                              $("input[name='call_all']").prop("checked",true)
+                           }else{
+                              $("input[name='call_all']").prop("checked",false)
+                           }
+                        });
+                    </script>
+                        <div class="form-inline" style="margin-bottom:8px!important;">
+                           <div class="form-inline intention">
+                              <div class="form-group">
+                                  <label class="levelSelect">客户分配:</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="distribution_all" value="">
+                                  <label>全部</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="distribution" value="1">
+                                  <label>已分配</label>
+                              </div>
+                              <div class="form-group intention">
+                                  <input type="checkbox" name="distribution" value="0">
+                                  <label>未分配</label>
+                              </div>
+                          </div>
+                        </div>
+                        <script>
+                        $("input[name='distribution_all']").click(function(){
+                            if ($("input[name='distribution_all']").is(':checked')) {
+                                $("input[name='distribution']").prop("checked",true)
+                            } else {
+                                $("input[name='distribution']").prop("checked",false)
+                            }
+                        });
+                         $("input[name='distribution']").click(function(){
+                           if($("input[name='distribution']:checked").length==2){
+                              $("input[name='distribution_all']").prop("checked",true)
+                           }else{
+                              $("input[name='distribution_all']").prop("checked",false)
+                           }
+                        });
+                    </script>
+                        <div class="form-inline intention">
+                            <div class="form-group">
+                                <label class="levelSelect">客户意愿:</label>
+                            </div>
+                            <div class="form-group intention">
+                                <input type="checkbox" name="desire_all" value="">
+                                <label>全部</label>
+                            </div>
+                            <div class="form-group intention">
+                                <input type="checkbox" name="desire" value="0">
+                                <label>未分类</label>
+                            </div>
+                            <div class="form-group intention">
+                                <input type="checkbox" name="desire" value="1">
+                                <label>有意向</label>
+                            </div>
+                            <div class="form-group intention">
+                                <input type="checkbox" name="desire" value="2">
+                                <label>沟通中</label>
+                            </div>
+                            <div class="form-group intention">
+                                <input type="checkbox" name="desire" value="3">
+                                <label>试用中</label>
+                            </div>
+                            <div class="form-group intention">
+                                <input type="checkbox" name="desire" value="4">
+                                <label>已成交</label>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $("input[name='desire_all']").click(function(){
+                            if ($("input[name='desire_all']").is(':checked')) {
+                                $("input[name='desire']").prop("checked",true)
+                            } else {
+                                $("input[name='desire']").prop("checked",false)
+                            }
+                        });
+                         $("input[name='desire']").click(function(){
+                           if($("input[name='desire']:checked").length==5){
+                              $("input[name='desire_all']").prop("checked",true)
+                           }else{
+                              $("input[name='desire_all']").prop("checked",false)
+                           }
+                        });
+                    </script>
+                    <div class="record-list">
+                        <div class="customer-list clearfix">
+                            <div class="pull-left">
+                                <img src="__PUBLIC__/img/jiluliebiao.png"> <span>客户列表</span>
+                            </div>
+                            <button type="button" class="btn btn-primary search" onclick="ajax_member();">查询</button>
+                            <!--<button type="button" class="btn-primary" onclick="start()">test</button>-->
+                            <div class="btn-op pull-right">
+                                <!--<button type="button" class="btn btn-primary btn-operation" onclick="constomerAdd();">添加客户</button>
+                                <button type="button" class="btn btn-primary btn-operation" onclick="constomerImport();">导入</button>-->
+                                {php}if(config('export_phone_status') == true):{/php}
+                                <!--<button type="button" class="btn btn-primary btn-operation" onclick="validation10();">导出</button>-->
+                                {php}endif;{/php}
+                                {if $role_id neq 20}
+                                  <button type="button" class="btn btn-primary btn-operation" onclick="constomerAdd();">添加客户</button>
+                                  <button type="button" class="btn btn-primary btn-operation" onclick="constomerImport();">导入</button>
+                                  <button type="button" class="btn btn-primary btn-operation" onclick="validation10();">导出</button>
+                                  
+                                  <button type="button" class="btn btn-primary btn-operation" onclick="allocationOfSeats();">分配坐席</button>
+                                  <!-- <button type="button" class="btn btn-primary btn-operation" onclick="newTask();">建任务呼叫</button> -->
+                                  <button class="btn btn-primary btn-operation" type="button" data-title="建任务呼叫" onclick="addNewPlan(this);" >建任务呼叫</button>
+                                  <button type="button" class="btn btn-primary btn-operation" onclick="customer_delete_all();">删除</button>
+                                {/if}
+                            </div>
+                        </div>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input class="icheckbox_square-blue" id="member_all_check" type="checkbox" name='all_checked'>
+                                </th>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">姓名</th>
+                                <th class="text-center">电话</th>
+                                <th class="text-center">所属任务</th>
+                                <th class="text-center">意向等级</th>
+                                <th class="text-center">客户意愿</th>
+                                <th class="text-center">所属坐席</th>
+                                <th class="text-center">创建时间 </th>
+                                <th class="text-center">最后跟进时间</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="memberlist">
+                            </tbody>
+                        </table>
+                        <div class="component-page-empty" id="consumeempty">
+                            <div class="empty-tip line">
+                                <p><img src="__PUBLIC__/img/none.png" /></p>
+                                <p>暂无数据</p>
+                            </div>
+                        </div>
+                        <footer class="main-box-footer clearfix footerB">
+                            <div class="row">
+                                <div class="col-sm-3 text-left"><input class="check-all all_checked_count" name='DataCheck_all' type="checkbox"/>全选（已选中<span id="user_count">0</span>条客户）</div>
+                                <div class="col-sm-9 text-right paging"></div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加拨打弹窗-->
+<div class="modal fade" id="joinShout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:450px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"  aria-hidden="true">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    添加拨打
+                </h4>
+            </div>
+            <div class="modal-body l-modal-body" style="padding: 20px 20px 3px;">
+                <form id="addblacklist-number" method="post" id="addForm" class="form-horizontal margintop" enctype="multipart/form-data" >
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">号码：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control"  name="joinPhone"  id="joinPhone"  value="" readonly />
+                        </div>
+                    </div>
+                    <p ></p>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>线路：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="line_id" id="line_id" class="form-control">
+                                <option value="">请选择</option>
+                                {volist name="line_datas" id="vo"}
+                                <option value="{$vo['id']}">{$vo['name']}</option>
+                                {/volist}
+
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>话术：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="scenarios_id" id="scenarios_id" class="form-control">
+                                <option value="">请选择</option>
+                                {volist name="scenarioslist" id="vo"}
+                                <option value="{$vo['id']}">{$vo['name']}</option>
+                                {/volist}
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>ASR：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="asr_id" id="asr_id" class="form-control">
+                                <option value="">请选择</option>
+                                {volist name="asr_list" id="vo"}
+                                <option value="{$vo['id']}">{$vo['name']}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="Nowpagehidden" value="">
+                <input type="hidden" id="Nowlimithidden" value="">
+                <button type="button" class="btn btn-default" data-dismiss="modal">   关闭    </button>
+                <button type="button" class="btn btn-primary" id="users_add" onclick="checkform_dial()" > 确定    </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade effect" id="effectTmp" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"   >
+    <div class="modal-dialog" style="width:365px;">
+        <div class="modal-content effect-content import">
+            <div class="modal-header effect-header">
+
+                <h4 class="modal-title effect-title" id="singleTel"><span>导入号码</span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="effect-1">
+                        <span >当前进度</span>
+                        <span class="pull-right color90 Progress_value">0%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-data" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span class="sr-only">0%完成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <div>取 消</div>
+            </div>
+        </div>
+        <div class="modal-content effect-content hidden finish">
+            <div class="modal-header effect-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title effect-title">导入号码</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group effect-flex">
+                    <i class="effect-success"></i>
+                    <div class="effect-success-tip" id="effect-tips-content">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="upload_ok">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade effect" id="out_effectTmp" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"   >
+    <div class="modal-dialog" style="width:365px;">
+        <div class="modal-content effect-content import">
+            <div class="modal-header effect-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>-->
+                <!--</button>-->
+                <h4 class="modal-title effect-title" id="singleTel"><span>导出号码</span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="effect-1">
+                        <span >当前进度</span>
+                        <span class="pull-right color90 Progress_value">0%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-data" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span class="sr-only">0%完成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <div>取 消</div>
+            </div>
+        </div>
+        <div class="modal-content effect-content hidden finish">
+            <div class="modal-header effect-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title effect-title">导出号码</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group effect-flex">
+                    <i class="effect-success"></i>
+                    <div class="effect-success-tip" id="effect-tips-content_outexcel">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="upload_oks">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="show_validation1"></div>
+
+
+
+
+
+<!-- 页面js引入 -->
+<script src="__PUBLIC__/js_CRM/intentional_member.js" charset="utf-8"></script>
+<!-- 页面所有弹框引入 -->
+<script>
+  $(function(){
+    $('#start_date').val(getFormatDate(10));
+    $('#end_date').val(getFormatDate(10));
+  })
+  //导出数据
+  function validation10() {
+    $("#export-data").modal('show');
+    $('#sel_excel').unbind('click');
+    $('#sel_excel').on('click', function() {
+      var typez = 10;
+      var arr = [];
+      $("input[name='checkids'][type='checkbox']:checked").each(function(i) {
+          arr[i] = $(this).val();
+      });
+      if (arr.length <= 0) {
+        alert('请选择导出的数据');
+        return false;
+      } else {
+        <?php if($is_verification == 1): ?>
+          $('#export-data').modal('hide');
+          $('#show_validation1').html(html);
+          $('#export_val').attr('onclick','export_val('+typez+')')
+          $('#export-validation').modal('show');
+          msm_send();
+        <?php else: ?>
+          $('#export-data').modal('hide');
+          constomerExport();
+        <?php endif; ?>
+      }
+    })
+  }
+</script>
+
+{include file="member/dialog" /}
+{include file="member/crm_calldetail" /}
+{include file="public/crm_tageter"/}
+{include file="public/call_wedget"/}
+{/block}

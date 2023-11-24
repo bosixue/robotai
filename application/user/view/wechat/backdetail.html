@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    
+    <head>
+        <meta charset="utf-8">
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no,uc-fitscreen=yes">
+        <title>通话详情</title>
+        <script src="jquery-2.2.3.min.js"></script>
+        <link href="/public/css/backdetail.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="th_main">
+            <div class="th_audition">
+                <div class="th_message">
+                    <div class="main">
+                        <p class="taskNames"> 
+                           <span>任务名称：</span>
+                           <span id="taskName ">{$task_name}</span>
+                           <span class="dateStyle">{$time}</span>
+
+                        </p>
+                        <p class="customerName"> 
+                          <span class="nameTitle">客户姓名：</span>
+                          <span id="customerName">{$name}</span>
+
+                        </p>
+                        <p class="customerPhone"> 
+                          <span class="nameTitle">客户号码：</span>
+                          <a id="customerPhone " href="tel:{$mobile}">{$mobile}</a>
+
+                        </p>
+                        <p class="customerIntention"> 
+                          <span class="nameTitle">客户意向：</span>
+                          <span id="customerIntention ">{$level}<span class="intention">({$level_text})</span></span>
+                        </p>
+                    </div>
+                    <div class="main">
+                        <div class="main-title">
+                            <img src="/public/img/yxdjfl.png"><span>意向等级分类</span>
+
+                        </div>
+                        <div class="main-body">
+                            <div class="intentions"> <span>{$level}</span>
+
+                            </div>
+                            <div class="grades"> 
+                            {if condition="$rules_code eq 0"}
+                              <div class="grade">
+                                <span>{$rules}</span>
+                              </div>
+                            {else /}
+                               {volist name="rules" id="vo" key="k"}
+                                <div class="grade">
+                                   <!--判断数组 的长度-->
+                                {if  condition="count($vo) eq 1"}
+                                     {if condition="$vo[0]['key']=='call_duration'"}
+                                        <span>通话时长 {$vo[0]['op']} {$vo[0]['value']}秒</span>
+                                     {elseif condition="$vo[0]['key']=='speak_count'"/}
+                                        <span>客户讲话次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='hit_problem_times'"/}
+                                        <span>命中问题次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='affirm_times'"/}
+                                        <span>肯定次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='reject_times'"/}
+                                        <span>否定次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='say_keyword'"/}
+                                        {if condition="$vo[0]['op'] eq 'all'"}
+                                           <span>客户通话内容 包含全部 {$vo[0]['value']}</span>
+                                        {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                           <span>客户通话内容 包含任一 {$vo[0]['value']}</span>
+                                        {/if}
+                                     {elseif condition="$vo[0]['key']=='call_status'"/}
+                                        <span>客户通话内容 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                        {elseif condition="$vo[0]['key']=='liuchenglable'"/}
+                                           {if condition="$vo[0]['op'] eq 'all'"}
+                                           <span>流程标签 包含全部 {$vo[0]['value']}</span>
+                                           {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>流程标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                      {elseif condition="$vo[0]['key']=='wendalable'"/}
+                                            {if condition="$vo[0]['op'] eq 'all'"}
+                                            <span>问答标签 包含全部 {$vo[0]['value']}</span>
+                                            {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>问答标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                       {elseif condition="$vo[0]['key']=='yuyilable'"/}
+                                           {if condition="$vo[0]['op'] eq 'all'"}
+                                            <span>语义标签 包含全部 {$vo[0]['value']}</span>
+                                            {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>语义标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                     {/if} 
+                                {elseif condition="count($vo) eq 2"/}
+                                    {if condition="$vo[0]['key']=='call_duration'"}
+                                        <span>通话时长 {$vo[0]['op']} {$vo[0]['value']}秒</span>
+                                     {elseif condition="$vo[0]['key']=='speak_count'"/}
+                                        <span>客户讲话次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='hit_problem_times'"/}
+                                        <span>命中问题次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='affirm_times'"/}
+                                        <span>肯定次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='reject_times'"/}
+                                        <span>否定次数 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                     {elseif condition="$vo[0]['key']=='say_keyword'"/}
+                                        {if condition="$vo[0]['op'] eq 'all'"}
+                                           <span>客户通话内容 包含全部 {$vo[0]['value']}</span>
+                                        {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                           <span>客户通话内容 包含任一 {$vo[0]['value']}</span>
+                                        {/if}
+                                     {elseif condition="$vo[0]['key']=='call_status'"/}
+                                        <span>通话状态 {$vo[0]['op']} {$vo[0]['value']}</span>
+                                        {elseif condition="$vo[0]['key']=='liuchenglable'"/}
+                                           {if condition="$vo[0]['op'] eq 'all'"}
+                                           <span>流程标签 包含全部 {$vo[0]['value']}</span>
+                                           {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>流程标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                      {elseif condition="$vo[0]['key']=='wendalable'"/}
+                                            {if condition="$vo[0]['op'] eq 'all'"}
+                                            <span>问答标签 包含全部 {$vo[0]['value']}</span>
+                                            {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>问答标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                       {elseif condition="$vo[0]['key']=='yuyilable'"/}
+                                           {if condition="$vo[0]['op'] eq 'all'"}
+                                            <span>语义标签 包含全部 {$vo[0]['value']}</span>
+                                            {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>语义标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                     {/if} 
+                                    <span class="red">且</span>
+                                   {if condition="$vo[1]['key']=='call_duration'"}
+                                        <span>通话时长 {$vo[1]['op']} {$vo[1]['value']}秒</span>
+                                     {elseif condition="$vo[1]['key']=='speak_count'"/}
+                                        <span>客户讲话次数 {$vo[1]['op']} {$vo[1]['value']}</span>
+                                     {elseif condition="$vo[1]['key']=='hit_problem_times'"/}
+                                        <span>命中问题次数 {$vo[1]['op']} {$vo[1]['value']}</span>
+                                     {elseif condition="$vo[1]['key']=='affirm_times'"/}
+                                        <span>肯定次数 {$vo[1]['op']} {$vo[1]['value']}</span>
+                                     {elseif condition="$vo[1]['key']=='reject_times'"/}
+                                        <span>否定次数 {$vo[1]['op']} {$vo[1]['value']}</span>
+                                     {elseif condition="$vo[1]['key']=='say_keyword'"/}
+                                        {if condition="$vo[1]['op'] eq 'all'"}
+                                           <span>客户通话内容 包含全部 {$vo[1]['value']}</span>
+                                        {elseif condition="$vo[1]['op'] eq 'in'" /}
+                                           <span>客户通话内容 包含任一 {$vo[1]['value']}</span>
+                                        {/if}
+                                     {elseif condition="$vo[1]['key']=='call_status'"/}
+                                        <span>通话状态通话状态 {$vo[1]['op']} {$vo[1]['value']}</span>
+                                        {elseif condition="$vo[0]['key']=='liuchenglable'"/}
+                                           {if condition="$vo[0]['op'] eq 'all'"}
+                                           <span>流程标签 包含全部 {$vo[0]['value']}</span>
+                                           {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>流程标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                      {elseif condition="$vo[0]['key']=='wendalable'"/}
+                                            {if condition="$vo[0]['op'] eq 'all'"}
+                                            <span>问答标签 包含全部 {$vo[0]['value']}</span>
+                                            {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>问答标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                       {elseif condition="$vo[0]['key']=='yuyilable'"/}
+                                           {if condition="$vo[0]['op'] eq 'all'"}
+                                            <span>语义标签 包含全部 {$vo[0]['value']}</span>
+                                            {elseif condition="$vo[0]['op'] eq 'in'" /}
+                                             <span>语义标签 包含任一 {$vo[0]['value']}</span>
+                                           {/if}
+                                     {/if} 
+                                {/if}
+                              
+                                </div>
+                             {/volist}
+                            {/if}
+                            
+                           
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main">
+                        <div class="main-title">
+                            <img src="/public/img/khbq.png "><span>客户标签</span>
+
+                        </div>
+                        <div class="labels">
+                             {volist name="$lables" id="vo"}
+                                {if condition="!empty($vo)"} 
+                                  <span>{$vo}</span>
+                                {/if}
+                             {/volist}
+                        </div>
+                    </div>
+                    <div class="main">
+                        <div class="main-title">
+                            <img src="/public/img/wnhddwt.png "><span>未能回答的问题</span>
+
+                        </div>
+                        <div class="question">
+                          {if condition="!empty($tel_bills)"} 
+                            {volist name="$tel_bills" key="k" id="vo"}
+                              <p> 
+                                <span>问题{$daxie[$k]}：</span>
+                                <span>{$vo['message']}</span>
+                              </p>
+                             {/volist} 
+                          {/if}
+                        </div>
+                    </div>
+                    <div class="main mains">
+                        <div class="main-title">
+                            <img src="/public/img/thjl.png "><span>通话记录</span>
+                        </div>
+                        <div class="call-record">
+                        <div class="center"><audio src="{$record_path}" id="" controls="controls"></audio></div>
+                          {volist name="$bills" id='vo'}
+                           <!--role =0 为客服-->
+                            {if condition="$vo.role eq 0"}
+                            <div class="th_message_list">
+                  	          <div class="th_list_msg msg-item-wrapper th_list_msg_left" id="">
+                  	            <div class="employee-wrapper">
+                                  <img class="avatar" src="/public/img/you.png">
+                                
+                                </div>
+                                <div class="th_msg msg-text"><i class="c_selshowhide i-arrow"></i>
+                                  <div class="drag-handler" draggable="true"></div>
+                                  <div class="text-select">{$vo.message}</div>
+                                </div>
+                              </div>
+                            </div>
+                           {else /}
+                            <div class="th_message_list">
+                  	          <div class="th_list_msg msg-item-wrapper th_list_msg_right" id="">  
+                  	            <div class="employee-wrapper">
+                                  <img class="avatar" src="/public/img/me.png">
+                                </div>
+                                <div class="th_msg msg-text"><i class="i-arrow c_selshowhide"></i>
+                                  <div class="drag-handler" draggable="true"></div>
+                                  <div class="text-select">{$vo.message}</div>
+                                </div>
+                                <!--录音-->
+                                <i class="select-radio"></i>
+                                {if condition="!empty($vo.path)"}
+                                <div class="pz_audio">
+                    							<audio src="{$vo.path}" id="record_path" controls="controls"></audio>
+                    						</div>
+                    						{/if}
+                              </div>
+                            </div>
+                           {/if}
+                          {/volist}
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</html>

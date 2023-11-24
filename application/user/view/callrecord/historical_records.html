@@ -1,0 +1,2262 @@
+{extend name="public/base" /}
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<link href="/application/user/static/css/chat.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type="text/javascript" src='/public/js_validation/validation.js'></script>
+<style>
+
+	.datepicker-dropdown:after{
+		border: 0!important;
+	}
+
+	.datepicker-dropdown:before{
+		border-bottom-color:transparent!important;
+	}
+
+	.query-date{
+		background-color: #5cadf0;
+		padding: 5px 15px;
+		position: absolute;
+		border-radius: 5px;
+		z-index: 5;
+		right: 0;
+		bottom: -48px;
+	}
+
+	.query-date::after{
+		content: '';
+		width: 12px;
+		height: 12px;
+		position: absolute;
+		background-color: #5cadf0;
+		top: -6px;
+		transform: rotate(45deg);
+		right: 25px;
+	}
+
+	.query-date p{
+		color: #fff;
+		display: inline;
+		margin-right: 0px;
+		font-size: 14px;
+	}
+
+	.query-date span{
+		font-size: 14px;
+		border: 0px;
+		width: auto;
+		cursor: text;
+	}
+</style>
+<link href="/public/css/callrecord.css?1" rel="stylesheet" type="text/css">
+<div class="row">
+	<div class="col-lg-12">
+		<div class=" clearfix fadeInRight animated">
+			<div class=" main-box">
+				<header class="main-box-header clearfix  callrecord-title">
+					<div class="pull-left"> <span class="n_panel_title"><img src="__PUBLIC__/img/tonghuajilu1.png" alt="">历史通话记录</span>
+					</div>
+					<div class="pull-right screen">
+						时间筛选：
+						{volist name="data" id="vo" key="num"}
+						{if $num <= 5}
+						<span class="screenBtn {if $show_date == $num}screenBtn-active{/if}" id="{$num}days" value="{$num}" onclick="click_date(this,1)">{$vo}</span>
+						{/if}
+						{/volist}
+						<span class=" screenBtn screenBtn-active" id="moreDates">更多日期</span>
+						<input type="text" value="" readonly="" id="moreDate" class="moreDate" onchange="change_date(this)" />
+
+						<div class="query-date hide">
+							<p>当前查询日期：<p id="queryDate"></p></p>
+						</div>
+
+						<script>
+							var show_all_days  =  {$show_all_days};
+							if(!show_all_days || show_all_days == ''){
+								show_all_days = 5;
+							}
+
+							var nowTemp = new Date();
+							var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+
+							$('#moreDate').fdatepicker({
+								format: 'yyyy-mm-dd',
+								onRender: function (date) {
+									return (date.valueOf() >= now.valueOf()) || (date.valueOf() <= now.valueOf() - show_all_days * 24 * 60 * 60 * 1000) ? 'disabled' : '';
+								}
+							});
+						</script>
+					</div>
+				</header>
+				<div class="l_loadfixed" style="display: none;">
+					<div class="l_loaddata">
+						<p><img src="/public/img_sj/reload.gif" alt="">正在查询中...</p>
+						<p>由于您的数据过大，加载需要一些时间，我们在努力的加载中...</p>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid callrecord-bg">
+				<div class="callrecord-bg2">
+					<section class="navbar ">
+						<div class="form-inline pull-left ">
+							<div class="form-group ">
+								<label class="contorl-label">任务筛选：</label>
+								<select  name="calltask" id="calltask" onchange="monitor_task()"  class="form-control textwidth resetSel c_selectimg">
+
+								</select>
+							</div>
+							<div class="form-group ">
+								<label class="contorl-label">话术筛选：</label>
+								<select name="scenarios" id="scenarios" onchange="monitor_scen()" class="form-control textwidth resetSel c_selectimg">
+									<option value="">请选择话术</option>
+									{volist name="scenarioslist" id="item"}
+									<option value="{$item['id']}">
+										{$item['name']}
+									</option>
+									{/volist}
+								</select>
+							</div>
+							<div class="form-group ">
+								<label class="contorl-label">电话号码：</label>
+								<input type="text" id="h_phone" class="form-control textwidth phone" placeholder="请输入电话号码">
+							</div>
+							<div class="form-group margint">
+								<label class="contorl-label">拨打时间：</label>
+								<input type="text" class="form-control c_datebgimg" placeholder="开始拨打时间" id="startDate" name="startDate" value="" readonly="" style="width:150px;" />
+								<script>
+									$('#startDate').fdatepicker({
+										format: 'yyyy-mm-dd hh:ii',
+										pickTime: true
+									});
+								</script> <span class="z-word">至</span>
+
+								<input type="text" class="form-control c_datebgimg" placeholder="结束拨打时间" id="endTime" name="endTime" value="" readonly="" style="width:150px;" />
+								<script>
+									$('#endTime').fdatepicker({
+										format: 'yyyy-mm-dd hh:ii',
+										pickTime: true
+									});
+								</script>
+							</div>
+							<div class="form-group">
+								<input type="hidden" id="Nowpagehidden" value="">
+								<input type="hidden" id="Nowlimithidden" value="">
+								<input type="hidden" id="click_value" value="{$show_date}">
+
+								<button class="btn btn-primary"  onclick="show_datas(1);">查询</button>
+							</div>
+							<div class="form-group form-inline schedule_total" style="margin-left:10px;">
+								完成进度： <span id="schedule">0</span>/<span id="total">0</span>
+							</div>
+						</div>
+					</section>
+					<div class="screening-conditions">
+						<div class="left-condition pz_manping_height ">
+							<div class="condition-title">
+								<img src="__PUBLIC__/img/tiaojianshaixuan.png"> <span>条件筛选</span>
+
+								<div class="pull-right"> <a href="javascript:;" onclick="moreCondition();">更多条件</a>
+
+								</div>
+							</div>
+							<div class="condition-content" id="search-content">
+								<div class="form-inline">
+									<div class="form-group l-width c_dflex" style="margin-top:5px;">
+										<label class="levelSelect statusSelect">意向等级:</label>
+										<div class="formgroup statusSelect c_dflex_1" id="yixiangdiv">
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<input type="checkbox" name="levelcheck[]" class="levelcheck" value="6"> <span class="word">A级意向</span>
+
+											</div>
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<input type="checkbox" name="levelcheck[]" class="levelcheck" value="5">	<span class="word">B级意向</span>
+
+											</div>
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<input type="checkbox" name="levelcheck[]" class="levelcheck" value="4">	<span class="word">C级意向</span>
+
+											</div>
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<input type="checkbox" name="levelcheck[]" class="levelcheck" value="3">	<span class="word">D级意向</span>
+
+											</div>
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<input type="checkbox" name="levelcheck[]" class="levelcheck" value="2">	<span class="word">E级意向</span>
+
+											</div>
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<input type="checkbox" name="levelcheck[]" class="levelcheck" value="1">	<span class="word">F级意向</span>
+
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-inline">
+									<div class="form-group l-width c_dflex" style="margin-top:5px;">
+										<label class="levelSelect statusSelect">语义标签:</label>
+										<div class="formgroup statusSelect c_dflex_1"  id="yuyidiv">
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<!--<input type="checkbox" name="semantic-label[]" class="levelcheck" value="6"> <span class="word">语义标签</span>-->
+
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<div class="form-inline">
+									<div class="form-group l-width c_dflex" style="margin-top:5px;">
+										<label class="levelSelect statusSelect">流程标签:</label>
+										<div class="formgroup statusSelect c_dflex_1"  id="liuchengdiv">
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<!--   <input type="checkbox" name="flow-label[]" class="levelcheck" value="6"> <span class="word">流程标签</span>-->
+
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<div class="form-inline">
+									<div class="form-group l-width c_dflex" style="margin-top:5px;">
+										<label class="levelSelect statusSelect">问答标签:</label>
+										<div class="formgroup statusSelect c_dflex_1"  id="wendadiv">
+											<div class="checkbox-wrapper radio_t" data-type="false">
+												<!--<input type="checkbox" name="knowledge-label[]" class="levelcheck" value="6"> <span class="word">问答标签</span>-->
+
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+								<!-- 需要进行动态展示的搜索项木 -->
+								<div id="externaldiv" >
+
+									<div class="form-inline">
+										<div class="form-group l-width c_dflex flexout_1_total hidden_force" style="margin-top:5px;">
+											<label class="levelSelect statusSelect">通话状态:</label>
+											<div class="formgroup statusSelect c_dflex_1 flexout_1p callStatus"  id="wendadiv">
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="2"> <span class="word">已接通</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="3">	<span class="word">无人接听</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="4">	<span class="word">停机</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="5">	<span class="word">空号</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="6">	<span class="word">正在通话</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="7">	<span class="word">关机</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t" data-type="false">
+													<input type="checkbox" name="phoneState[]" class="levelcheck" value="8">	<span class="word">用户拒接</span>
+
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+									<div class="form-inline">
+										<div class="form-group l-width c_dflex flexout_2_total hidden_force" style="margin-top:5px;">
+											<label class="levelSelect statusSelect">通话时长:</label>
+											<div class="formgroup statusSelect c_dflex_1 flexout_2p phontTime"   id="wendadiv">
+												<div class="checkbox-wrapper radio_t width-auto" data-type="false">
+													<input type="checkbox" class="levelcheck hidden" value="6">
+													<input type="number" name="startNum" id="startNum" min="0" class="form-control flexout_2p_input_1" />
+													<span style="margin:0px 3px;">至</span>
+													<input type="number" name="endNum" id="endNum" min="0" class="form-control flexout_2p_input_2"/>
+													<span class="marginl5">秒</span>
+												</div>
+												<div class="checkbox-wrapper radio_t width-auto" data-type="false">
+													<input type="checkbox"  class="levelcheck hidden" value="5">
+													<input type="number" name="second_upper" id="second_upper" min="0" class="form-control flexout_2p_input_3" />
+													<span class="marginl5">秒以上</span>
+
+												</div>
+												<div class="checkbox-wrapper radio_t width-auto" data-type="false">
+													<input type="checkbox"  class="levelcheck hidden" value="5">
+													<input type="number" name="second_lower" id="second_lower" min="0" class="form-control flexout_2p_input_4"/>
+													<span class="marginl5">秒以下</span>
+												</div>
+
+
+
+											</div>
+										</div>
+									</div>
+
+									<div class="form-inline">
+										<div class="form-group l-width c_dflex flexout_3_total hidden_force" style="margin-top:5px;">
+											<label class="levelSelect statusSelect">说话次数:</label>
+											<div class="formgroup statusSelect c_dflex_1 flexout_3p talkTimes"  id="wendadiv">
+												<div class="checkbox-wrapper radio_t width185"  data-type="false">
+													<span>客户说话次数</span>
+													<input type="checkbox"  class="levelcheck hidden" value="6">
+													<select class="form-control sels" id="call_times_sel">
+														<option value="<="><=</option>
+														<option value=">=">>=</option>
+													</select>
+													<input type="number"min="0" class="form-control flexout_3p_input_1" id='call_times' value="">
+													<!-- <span class="marginl5">次</span> -->
+
+												</div>
+												<div class="checkbox-wrapper radio_t width185" data-type="false">
+													<span>有效说话次数</span>
+													<input type="checkbox"  class="levelcheck hidden" value="5">
+													<select class="form-control sels" id="effective_times_sel">
+														<option value="<="><=</option>
+														<option value=">=">>=</option>
+													</select>
+													<input type="number" min="0" class="form-control flexout_3p_input_2" id='effective_times'  value="">
+													<!-- <span class="marginl5">次</span> -->
+
+												</div>
+												<div class="checkbox-wrapper radio_t width185" data-type="false">
+													<span>触发问题次数</span>
+													<input type="checkbox"  class="levelcheck hidden" value="5">
+													<select class="form-control sels" id="hit_times_sel">
+														<option value="<="><=</option>
+														<option value=">=">>=</option>
+													</select>
+													<input type="number" min="0" class="form-control flexout_3p_input_3" id='hit_times'  value="">
+													<!-- <span class="marginl5">次</span> -->
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-inline">
+										<div class="form-group l-width c_dflex flexout_4_total hidden_force" style="margin-top:5px;">
+											<label class="levelSelect statusSelect">客户语气:</label>
+											<div class="formgroup statusSelect c_d flex_1 flexout_4p clientTone"  id="wendadiv">
+												<div class="checkbox-wrapper radio_t width185" data-type="false">
+													<input type="checkbox"  class="levelcheck hidden" >
+													<span>肯定次数</span>
+													<select class="form-control sels" id="affirm_times_sel">
+														<option value="<="><=</option>
+														<option value=">=">>=</option>
+													</select>
+													<input type="number" min="0" class="form-control flexout_4p_input_1" id="affirm_times" value="">
+													<!--<input type="checkbox" name="levelcheck" class="levelcheck" value="6"> <span class="word">问公司</span>-->
+													<!-- <span class="marginl5">次</span> -->
+												</div>
+												<div class="checkbox-wrapper radio_t width185" data-type="false">
+													<input type="checkbox"  class="levelcheck hidden" >
+													<span>中性次数</span>
+													<select class="form-control sels" id="neutral_times_sel">
+														<option value="<="><=</option>
+														<option value=">=">>=</option>
+													</select>
+													<input type="number" min="0" class="form-control flexout_4p_input_2"  id="neutral_times"  value="">
+													<!-- <span class="marginl5">次</span> -->
+													<!--<input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">问业务</span>-->
+
+												</div>
+												<div class="checkbox-wrapper radio_t width185" data-type="false">
+													<input type="checkbox"  class="levelcheck hidden" >
+													<span>否定次数</span>
+													<select class="form-control sels" id="negative_times_sel">
+														<option value="<="><=</option>
+														<option value=">=">>=</option>
+													</select>
+													<input type="number" min="0" class="form-control flexout_4p_input_3" id="negative_times"  value="">
+													<!--<input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">问业务</span>-->
+
+												</div>
+												<!-- <div class="checkbox-wrapper radio_t" data-type="false">
+                                                    <input type="checkbox"  class="levelcheck hidden" >
+                                                    <span>是否邀约成功</span>
+                                                    <span>>=</span>
+                                                    <select class="form-control" id="invitations">
+                                                        <option value="">----</option>
+                                                        <option value="1">是</option>
+                                                        <option value="0">否</option>
+                                                    </select>
+                                                    <!--<input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">问业务</span>-->
+
+												<!-- </div> -->
+											</div>
+										</div>
+									</div>
+
+									<div class="form-inline">
+										<div class="form-group l-width c_dflex flexout_5_total hidden_force" style="margin-top:5px;">
+											<label class="levelSelect statusSelect">是否已查看:</label>
+											<div class="formgroup statusSelect c_d  flexout_5p "  id="">
+												<div class="checkbox-wrapper radio_t width185" data-type="false">
+													<input type="checkbox"  class="levelcheck hidden" >
+													<span>是否已查看</span>
+													<select class="form-control sel1 flexout_5p_select_1" id="reviewIf">
+
+														<option value="" >全部</option>
+														<option value="1" >已查看</option>
+														<option value="0" >未查看</option>
+													</select>
+
+
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+
+
+
+
+
+
+
+								<!-- 需要进行动态展示的搜索项木END-->
+							</div>
+
+
+
+
+
+
+							<div class="record-list">
+								<div class="record-list-title clearfix">
+									<div class="pull-left">
+										<img src="__PUBLIC__/img/jiluliebiao.png"> <span>记录列表</span>
+									</div>
+									<!-- <button type="button" class="btn btn-primary">查询</button>  -->
+									<div class="btn-op pull-right">
+										<button type="button" class="btn btn-primary btn-operation" data-title="加入CRM" onclick="popTipswin(this);">加入CRM</button>
+										{php}if(config('export_phone_status') == true):{/php}
+										<button type="button" class="btn btn-primary btn-operation" data-title="导出话单" onclick="popTipswin(this);">导出话单</button>
+										<button type="button" class="btn btn-primary btn-operation" data-title="当前通话导出号码" onclick="popTipswin(this);">导出号码</button>
+										{php}endif;{/php}
+										<button type="button" class="btn btn-primary btn-operation addBtn" data-title="生成任务"onclick="addtask(this);">新建任务拨打</button>
+
+
+
+
+									</div>
+								</div>
+								<table class="table table-bordered table-hover">
+									<thead>
+									<tr>
+										<th class="text-center">
+											<input class="icheckbox_square-blue" id="member_all_check" type="checkbox" name='all_checked'>
+										</th>
+										<th class="text-center">序号</th>
+										<th class="text-center">姓名</th>
+										<th class="text-center">手机号码</th>
+										<th class="text-center">通话时长(S)
+											<div class="sort"><i data-type='duration' data-value='desc' class="first gray-color"></i><i data-type='duration' data-value='asc' class="second gray-color1"></i>
+
+											</div>
+											<!--默认是 call_tiem   desc-->
+											<input type="hidden" id="order_type" value="call_time"/>
+											<input type="hidden" id="order_order" value="desc"/>
+										</th>
+										<th class="text-center">状态</th>
+										<th class="text-center">意向等级</th>
+										<th class="text-center">任务名称</th>
+										<th class="text-center">话术名称</th>
+										<th class="text-center">拨打时间
+											<div class="sort"><i data-type='call_time' data-value='desc' class="first active-selected"></i><i data-type='call_time' data-value='asc' class="second gray-color1"></i>
+
+											</div>
+										</th>
+										<th class="text-center">操作</th>
+									</tr>
+									</thead>
+									<tbody id="tablepagelist">
+
+									</tbody>
+								</table>
+							</div>
+
+							<div class="pull-left h_page" style="margin-left:8px"><input type="checkbox" class="member_check rolecheck all_checked_count" name="">全选<span class="check_count" id="check_count">0</span> 条</div>
+							<div class="paging"></div>
+
+							<div class="shrink" id="shrink">
+								<i class="shrinkIcon"></i>
+								<span style="line-height: 16px; display: block;   margin-top: 2px;">收起</span>
+							</div>
+						</div>
+						<div class="right-condition pz_innerbox pz_manping_height ">
+							<div class="grade-title">
+								<img src="__PUBLIC__/img/yixiangdengji.png"> <span>意向等级</span>
+
+							</div>
+							<div id="intensiondiv">
+
+								<!--<div class="grade">
+                                <label>A级</label>
+                                <p class="gradeShow" title="客户说话 >= 5次">
+                                  <span>通话时长 > 40S</span>
+                                  <span class='lword'>且</span>
+                                  <span>客户说话 >= 5次</span>
+                                </p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+                             <div class="grade">
+                                <label>A级</label>
+                                <p class="gradeShow" title="客户说话 >= 5次">
+                                  <span>通话时长 > 40S</span>
+                                  <span class='lword'>且</span>
+                                  <span>客户说话 >= 5次</span>
+                                </p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--添加拨打弹窗-->
+<div class="modal fade" id="joinShout" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm" style="width:450px; ">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					添加拨打
+				</h4>
+			</div>
+			<div class="modal-body l-modal-body" style="padding: 20px 20px 3px;">
+				<form id="addblacklist-number" method="post" id="addForm" class="form-horizontal margintop" enctype="multipart/form-data" >
+					<div class="form-group">
+						<label class="col-lg-3 control-label">号码：</label>
+						<div class="col-lg-7 col-sm-7">
+							<input type="text" class="form-control"  name="joinPhone"  id="joinPhone"  value="" readonly />
+						</div>
+					</div>
+					<p ></p>
+					<div class="form-group">
+						<label class="col-lg-3 control-label"><span class="asterisk">*</span>线路：</label>
+						<div class="col-lg-7 col-sm-7">
+							<select name="line_id" id="line_id" class="form-control">
+								<option value="">请选择</option>
+								{volist name="line_datas" id="vo"}
+								<option value="{$vo['id']}">{$vo['name']}</option>
+								{/volist}
+
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label"><span class="asterisk">*</span>话术：</label>
+						<div class="col-lg-7 col-sm-7">
+							<select name="scenarios_id" id="scenarios_id" class="form-control">
+								<option value="">请选择</option>
+								{volist name="scenarioslist" id="vo"}
+								<option value="{$vo['id']}">{$vo['name']}</option>
+								{/volist}
+
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label"><span class="asterisk">*</span>ASR：</label>
+						<div class="col-lg-7 col-sm-7">
+							<select name="asr_id" id="asr_id" class="form-control">
+								<option value="">请选择</option>
+								{volist name="asr_list" id="vo"}
+								<option value="{$vo['id']}">{$vo['name']}</option>
+								{/volist}
+							</select>
+						</div>
+					</div>
+				</form>
+
+			</div>
+			<div class="modal-footer">
+				<input type="hidden" id="Nowpagehidden" value="">
+				<input type="hidden" id="Nowlimithidden" value="">
+				<button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+				<button type="button" class="btn btn-primary" id="users_add" onclick="checkform()" >	确定    </button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{include file="callrecord/dialog" /}
+{include file="callrecord/historical_calldetail" /}
+{include file="public/call_historical_record_tageter" /}
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script type='text/javascript' src='/public/js/historical_calldetail.js'></script>
+
+
+<script>
+	function change_date(obj){
+		console.log(obj)
+		var date = $(obj).val();
+
+		$(".query-date").removeClass('hide');
+
+		$("#queryDate").text(date);
+
+		$("#moreDate").attr('value',Math.abs(DateDiff(date)) );
+
+		click_date(obj,0);
+
+	}
+
+	$("#moreDate").click(function(){
+
+		$("#moreDates").addClass('screenBtn-active').siblings().removeClass('screenBtn-active');
+
+	})
+
+	function DateDiff(d1){
+
+		var myDate = new Date();
+
+		var year = myDate.getFullYear();
+		var month = myDate.getMonth() + 1;
+		var date = myDate.getDate();
+
+		currentDate = year + '-' + month + '-' + date;
+
+		var day = 24 * 60 * 60 *1000;
+
+		try{
+
+			var dateArr = d1.split("-");
+
+			var checkDate = new Date();
+
+			checkDate.setFullYear(dateArr[0], dateArr[1]-1, dateArr[2]);
+
+			var checkTime = checkDate.getTime();
+
+			var dateArr2 = currentDate.split("-");
+
+			var checkDate2 = new Date();
+
+			checkDate2.setFullYear(dateArr2[0], dateArr2[1]-1, dateArr2[2]);
+
+			var checkTime2 = checkDate2.getTime();
+
+			console.log(checkTime+""+checkTime2)
+
+			var cha = (checkTime - checkTime2)/day;
+
+			return cha;
+
+		}catch(e){
+
+			return false;
+
+		}
+	}
+
+	function joinShout(id,type){
+		var url="{:url('get_call_phone')}";
+		var select_type = $("#click_value").val();
+		var data={id:id,recordType:type,select_type:select_type};
+		$.post(url,data,function(msg){
+			if(msg.code!=0){
+				console.log(msg.msg);
+			}else{
+				let phone=msg.data.mobile;
+				$('#joinPhone').val(phone);
+				$('#joinShout').modal('show');
+			}
+
+		});
+	}
+
+	function checkform(){
+		if(!confirm("是否确认添加拨打")){
+			return false;
+		}
+		var joinPhone = $('#joinPhone').val();
+		if(!joinPhone){
+			alert('添加拨打的号码不能为空');
+			return false;
+		}
+		var line_id = $('#line_id').val();
+		if(!line_id){
+			alert('必须选择拨打的线路');
+			return false;
+		}
+		var scenarios_id =$('#scenarios_id').val();
+		if(!scenarios_id){
+			alert('必须选择话术');
+			return false;
+		}
+		var asr_id = $('#asr_id').val();
+		if(!asr_id){
+			alert('必须选择ASR线路');
+			return false;
+		}
+		var url ='{:url("Callrecord/joinPhone")}'
+//加入拨打
+		$.ajax({
+			type:'POST',
+			data:{
+				'joinPhone' :joinPhone,'line_id' :line_id,'asr_id' :asr_id,'scenarios_id':scenarios_id,
+			},
+			dataType:'json',
+			url:url,
+			success:function(data){
+				if(data.code==0){
+					alert(data.msg);
+					$('#joinShout').modal('hide');
+				}else{
+					alert(data.msg);
+					$('#joinShout').modal('hide');
+				}
+			},
+			error:function(){
+
+			}
+		});
+
+	}
+
+	function c_selectshow(obj) {
+		$('.c_filter').toggleClass('c_factorheight');
+		var state = $(obj).attr('data-state');
+		if (state == '1') {
+			$(obj).text('展开全部');
+			$(obj).attr('data-state', '0');
+			$(obj).addClass('c_selshidea');
+		} else {
+			$(obj).attr('data-state', '1');
+			$(obj).text('收起全部');
+			$(obj).removeClass('c_selshidea');
+		}
+	}
+
+	//选中意向等级后 调整筛选项 原本选中的意向等级自动取消
+	$('.statuscheck,#startNum,#endNum,#second_upper,#second_lower,#call_times,#effective_times,#hit_times,#affirm_times,#neutral_times,#negative_times,#invitations').change(function(){
+		$('input[name="levelcheck"]:checked').prop('checked', false);
+	});
+	function monitor_task(){
+		var calltask_val = $('#calltask').val();
+		var url = "{:url('monitor')}";
+		$('.l_loadfixed').show();
+		$.ajax({
+			type:'POST',
+			data:{
+				'Choice' :calltask_val
+			},
+			dataType:'json',
+			url:url,
+			success:function(data){
+				$('.l_loadfixed').hide();
+				if(data){
+					$("#scenarios").find("option").not(":first").remove();
+					$.each(data, function(key, val) {
+						var option2 = $("<option>").val(val.id).text(val.name);
+						$("#scenarios").append(option2);
+					});
+					$("#scenarios").get(0).selectedIndex=0;
+				}
+			},
+			error:function(){
+			}
+		});
+	}
+	function monitor_scen(){
+
+		let scenarios_val = $('#scenarios').val();
+		let url = "{:url('monitor_scen')}";
+		$.ajax({
+			type:'POST',
+			data:{
+				'Choice' :scenarios_val
+			},
+			dataType:'json',
+			url:url,
+			success:function(data){
+				//1 流程 2 问答 3 语义
+				var list1 = data.data.list1;
+				var list2 = data.data.list2;
+				var list3 = data.data.list3;
+				if(data){
+
+					var htmls = '';
+					$.each(list1, function(key, val) {
+						var html = '<div class="checkbox-wrapper radio_t" data-type="false">'
+								+ '<input type="checkbox" name="flow-label[]" class="levelcheck" value="'+val.flow_label+'"> <span class="word">'+val.flow_label+'</span>'
+								+'</div>';
+						htmls += html;
+					});
+					$("#liuchengdiv").empty().html(htmls);
+
+
+					var htmls = '';
+					$.each(list2, function(key, val2) {
+						var html = '<div class="checkbox-wrapper radio_t" data-type="false">'
+								+ '<input type="checkbox" name="knowledge-label[]" class="levelcheck" value="'+val2.label+'"> <span class="word">'+val2.label+'</span>'
+								+'</div>';
+						htmls += html;
+					});
+					$("#wendadiv").empty().html(htmls);
+
+
+					var htmls = '';
+					$.each(list3, function(key, val3) {
+						var html = '<div class="checkbox-wrapper radio_t" data-type="false">'
+								+ '<input type="checkbox" name="semantic-label[]" class="semantic-label" value="'+val3.label+'"> <span class="word">'+val3.label+'</span>'
+								+ '</div>';
+						htmls += html;
+					});
+					$('#yuyidiv').empty().html(htmls);
+				}
+			},
+			error:function(){
+			}
+		});
+
+
+		let url_1="{:url('get_intention_rule')}";
+		$.ajax({
+			type:'POST',
+			data:{
+				'scenarios_id' :scenarios_val
+			},
+			dataType:'json',
+			url:url_1,
+			success:function(data){
+				//1 流程 2 问答 3 语义
+				let list = data.data;
+				let typeList=['默认意向','F级意向','E级意向','D级意向','C级意向','B级意向','A级意向'];
+				let tellStatusList=['未分配','已分配','已接通' ,'无人接听','停机','空号','正在通话中','关机','用户拒接','网络忙','来电提醒或稍后再拨','呼叫转移失败'];
+				let nameList={'duration':'通话时长','hit_problem_times':'命中问题','affirm_times':'肯定次数',
+					'speak_count':'讲话次数','status':'通话状态','call_status':'通话状态','say_keyword':'通话内容','reject_times':'拒绝次数',
+					'invite_succ':'是否邀请成功','final_refusal':'最终拒绝','call_duration':'通话时长','liuchenglable':'流程标签','wendalable':'问答标签','yuyilable':'语义标签'};
+				//预定义的  rule 数据格式为  [       [一个意向级别  [ 一个或的条件    ] [    两个且的条件 [    ] [   ]     ]        ]       ,[          ]      ]
+
+				if(list){
+
+					var htmls = '';
+					//每一个等级分类
+					$.each(list, function(key, val) {
+
+
+						let html='';
+						let phtml='';
+						//对于每个规则可以有多个条件，和或者并  每个条件内部包含 一个或者两个关系， 两个的表示这两个是且的关系
+						for(let i in val ){
+
+							let spanhtml='';
+							if(i>val.length)break;
+							let ruleitem=val[i].rule;
+
+							if( ruleitem instanceof  Array){
+								var title='';
+								if(ruleitem.length>1){
+									for( let ii in ruleitem){
+										//最多两项并列项
+										if( ii>0 ){spanhtml+= ' <span class=\'lword\'>且</span>';title+=' 且 ';}
+
+										if(ruleitem[ii].key =='status'||ruleitem[ii].key =='call_status'){
+											//通话状态的文字显示
+											let statusList=ruleitem[ii].value.toString().split(',');
+
+											ruleitem[ii].value='';
+											for(let x in statusList){
+												ruleitem[ii].value+=  tellStatusList[ statusList [x] ]+' '|| '';
+											}
+
+										}
+										if(ruleitem[ii].op=='in')ruleitem[ii].op=' 包含之一 ';
+										if(ruleitem[ii].op=='all')ruleitem[ii].op=' 包含所有 ';
+
+										spanhtml+= ' <span >'+ (nameList [ ruleitem[ii].key ] || ruleitem[ii].key) +''+ruleitem[ii].op+''+ruleitem[ii].value+'</span>';
+										title += (nameList [ ruleitem[ii].key ] || ruleitem[ii].key) +''+ruleitem[ii].op+''+ruleitem[ii].value ;
+
+
+									}
+								}else{
+									for( let ii in ruleitem){
+
+
+										if(ruleitem[ii].key =='status'||ruleitem[ii].key =='call_status'){
+											//通话状态的文字显示
+											let statusList=ruleitem[ii].value.toString().split(',');
+
+											ruleitem[ii].value='';
+											for(let x in statusList){
+												ruleitem[ii].value+=  tellStatusList[ statusList [x] ]+' '|| '';
+											}
+
+										}
+										if(ruleitem[ii].op=='in')ruleitem[ii].op=' 包含之一 ';
+										if(ruleitem[ii].op=='all')ruleitem[ii].op=' 包含所有 ';
+
+										spanhtml+= ' <span class="gradeShowOne">'+ (nameList [ ruleitem[ii].key ] || ruleitem[ii].key) +''+ruleitem[ii].op+''+ruleitem[ii].value+'</span>';
+										title += (nameList [ ruleitem[ii].key ] || ruleitem[ii].key) +''+ruleitem[ii].op+''+ruleitem[ii].value ;
+
+
+									}
+
+
+								}
+
+							}
+
+
+							phtml += '<p class="gradeShow" title="'+title+'">'+spanhtml +'</p>';
+						}
+
+
+						html += '<div class="grade"><label>'+  typeList[ val[0].level ] +'</label>' + phtml  + '</div>';
+
+
+						htmls = html+htmls;
+
+					});
+					// debugger;
+
+					$("#intensiondiv").empty().html(htmls);
+
+					display_intensiondiv();
+				}
+			},
+			error:function(){
+			}
+		});
+
+
+
+
+
+
+	}
+
+
+
+	// 查看意向等级弹窗
+	function levelfun() {
+		$('#levelexplain').modal('show');
+	}
+
+	//刷新
+	function refresh(){
+		window.location.href = "";
+	}
+
+	//导出话单
+	function outrecord() {
+
+		$('#tips_model').modal('hide');
+	}
+
+	//重置表单填写内容
+	function reset_click(){
+		$("#calltask").val("");
+		$("#scenarios").val("");
+		//清空选中框
+		$("input[type='checkbox']").prop("checked",false);
+		$("input[type='radio']").removeAttr("checked");
+		$("#startDate").val("");
+		$("#endTime").val("");
+		$("#startNum").val("");
+		$("#endNum").val("");
+		$("#call_times").val("");
+		$("#affirm_times").val("");
+		$("#negative_times").val("");
+		$("#neutral_times").val("");
+		$("#effective_times").val("");
+		$("#hit_times").val("");
+		$("#talk_time").val("");
+		$("#invitations").val("");
+		$("#h_phone").val('');
+		$("#second_upper").val('');
+		$("#second_lower").val('');
+		show_datas(1, 10);
+	}
+
+	window.onpageshow = function(event) {
+		var a=event||window.event;
+	};
+	var despage = 1;
+	$(function(){
+
+
+
+
+		// 1.基本参数设置
+		var options = {
+			type: 'POST',     // 设置表单提交方式
+			url: "{:url('user/member/importExcel')}",    // 设置表单提交URL,默认为表单Form上action的路径
+			dataType: 'json',    // 返回数据类型
+			beforeSubmit: function(formData, jqForm, option){    // 表单提交之前的回调函数，一般用户表单验证
+				/* 表单提交前的操作 */
+				return true;  // 只要不返回false,表单都会提交 
+			},
+			success: function(responseText, statusText, xhr, $form){    // 成功后的回调函数(返回数据由responseText获得),
+				if (responseText.code == 0) {
+					window.location.href=window.location.href;
+				}else{
+					alert(responseText.msg);
+					//$('#exampleModal').modal('show');
+				}
+
+			},
+			error: function(xhr, status, err) {
+				alert("操作失败!");    // 访问地址失败，或发生异常没有正常返回
+			},
+			clearForm: true,    // 成功提交后，清除表单填写内容
+			resetForm: true    // 成功提交后，重置表单填写内容
+		};
+
+		// 2.绑定ajaxSubmit()
+		$("#fileform").submit(function(){     // 提交表单的id
+			$(this).ajaxSubmit(options);
+			return false;   //防止表单自动提交
+		});
+
+
+	})
+
+
+	//导出记录
+	// function outexcel(){
+	// 	$.post("{:url('exportmemberExcel')}",
+	// 	{
+	// 		'mobile':mobile,
+	// 		'startNum':startNum,
+	// 		'endNum':endNum,
+	// 		// 'startDate':startDate,
+	// 		// 'endTime':endTime,
+	// 		'calltask':calltask,
+	// 		'levelids':levelids,
+	// 		'statusids':statusids
+	// 	},
+	// 	function(data){
+
+	// 				window.location.href = data;
+
+	// 	});
+	// }
+
+
+	//全选用户
+	function allcheck(obj){
+		if ($(obj).is(":checked")) {
+			$('.usercheck').prop("checked","checked");
+			$('.check-all').prop("checked","checked");
+			$('.check-all-th').prop("checked","checked");
+		}else{
+			$('.usercheck').prop("checked",false);
+			$('.check-all').prop("checked",false);
+			$('.check-all-th').prop("checked",false);
+		}
+		var len = $(".usercheck:checkbox:checked").length;
+		$('#selectNum').text(len);
+	}
+
+	//全选意向等级，通话状态，流程标签，语义标签，问答标签
+	// function search_check(typename,type){
+	// 	if(!$(this).attr("checked")){
+	// 		console.log(typename);
+	// 	$('.typename').attr("checked","checked");
+
+	// }else{
+	// 	$('.typename').removeAttr("checked");
+	// }
+
+	// if($('.typename').is(':checked')) {
+	// 	console.log(type);
+	// 	$.each($('.type'), function(index, object){
+	// 		$(object).prop("checked",true);
+	// 	})
+
+	// }else{
+	// 	$.each($('.type'), function(index, object){
+	// 		$(object).prop("checked",false);
+	// 	})
+
+	// }
+	// }
+
+
+
+	//单选意向等级
+	$('.radio_levelcheck').click(function(){
+		// console.log($(this).prop('checked'));
+		// console.log(value);
+		var $radio = $(this);
+		if($radio.siblings("input").is(":checked")){
+			$radio.siblings("input").prop('checked',false);
+		}else{
+			$radio.siblings("input").prop('checked',true);
+		}
+		if($radio.siblings("input").is(":checked")){
+			var leveid = $radio.siblings("input").val();
+		}
+
+		$.each($("input[type='checkbox'][name='conversation']"),function(index, object){
+			$(object).prop("checked",false);
+		});
+		$("#startDate").val("");
+		$("#endTime").val("");
+		$("#startNum").val("");
+		$("#endNum").val("");
+		$("#call_times").val("");
+		$("#affirm_times").val("");
+		$("#negative_times").val("");
+		$("#neutral_times").val("");
+		$("#effective_times").val("");
+		$("#hit_times").val("");
+		$("#talk_time").val("");
+		$("#invitations").val("");
+		$('#second_upper').val('');
+		$('#second_lower').val('');
+		$('#hit_times').siblings('label').find('span').text('>=');
+		$('#affirm_times').siblings('label').find('span').text('>=');
+		$('#negative_times').siblings('label').find('span').text('>=');
+		$('#call_times').siblings('label').find('span').text('>=');
+
+		var scenarios_id = $('#scenarios').val();
+		var url = "{:url('scenarios_rule')}"
+		if(scenarios_id){
+			$.ajax({
+				type:'POST',
+				data:{
+					'scenarios_id':scenarios_id
+					,'leveid':leveid
+				},
+				dataType:'json',
+				url:url,
+				success:function(data){
+					console.log(data);
+					//清空选中框
+
+					if(data.code == 0){
+
+						var data = data.data;
+						$.each(data, function(key, val) {
+							$.each(val.rule, function(key2, val2) {
+								switch(val2.key){
+									case 'invite_succ':
+										$('#invitations').val(val2.value);
+										break;
+									case 'hit_problem_times':
+										$('#hit_times').val(val2.value);
+										$('#hit_times').siblings('label').find('span').text(val2.op);
+										break;
+									case 'affirm_times':
+										$('#affirm_times').val(val2.value);
+										$('#affirm_times').siblings('label').find('span').text(val2.op);
+										break;
+									case 'reject_times':
+										$('#negative_times').val(val2.value);
+										$('#negative_times').siblings('label').find('span').text(val2.op);
+										break;
+									case 'call_duration':
+										if(val2.op == '<='){
+											$('#second_lower').val(val2.value);
+										}
+										$('#second_upper').val(val2.value);
+										break;
+									case 'speak_count':
+										$('#call_times').val(val2.value);
+										$('#call_times').siblings('label').find('span').text(val2.op);
+										break;
+									case 'call_status':
+										$.each($(val2.value), function(index, object){
+											$("input:checkbox[value="+object+"]").prop('checked',true);
+										});
+										break;
+									default:
+										break;
+								}
+							})
+						})
+					}
+				},
+				error:function(){
+				}
+			})
+		}
+	});
+
+
+
+	//语气标签点击，清空意向等级单选
+	$('#call_times').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#affirm_times').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#negative_times').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#invitations').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#neutral_times').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#effective_times').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#hit_times').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+	$('#talk_time').click(function(){
+		$("input[type='radio']").removeAttr("checked");
+	});
+
+
+
+	//全选通话状态
+	$(".conversation_state").unbind('click');
+	$(".conversation_state").click(function(){
+		if(!$(this).attr("checked")){
+			$(this).attr("checked","checked");
+
+		}else{
+			$(this).removeAttr("checked");
+		}
+
+		if($('.conversation_state').is(':checked')) {
+			$.each($('.conversation'), function(index, object){
+				$(object).prop("checked",true);
+			})
+
+		}else{
+			$.each($('.conversation'), function(index, object){
+				$(object).prop("checked",false);
+			})
+
+		}
+	});
+
+	//全选流程标签
+	$(".allflabellist").unbind('click');
+	$(".allflabellist").click(function(){
+		if(!$(this).attr("checked")){
+			$(this).attr("checked","checked");
+
+		}else{
+			$(this).removeAttr("checked");
+		}
+
+		if($('.allflabellist').is(':checked')) {
+			$.each($('.flow-label'), function(index, object){
+				$(object).prop("checked",true);
+			})
+
+		}else{
+			$.each($('.flow-label'), function(index, object){
+				$(object).prop("checked",false);
+			})
+
+		}
+
+	});
+
+	//全选语义标签
+	$(".allsemantic").unbind('click');
+	$(".allsemantic").click(function(){
+		if(!$(this).attr("checked")){
+			$(this).attr("checked","checked");
+
+		}else{
+			$(this).removeAttr("checked");
+		}
+
+		if($('.allsemantic').is(':checked')) {
+			$.each($('.semantic-label'), function(index, object){
+				$(object).prop("checked",true);
+			})
+
+		}else{
+			$.each($('.semantic-label'), function(index, object){
+				$(object).prop("checked",false);
+			})
+
+		}
+
+	});
+
+	//全选问答标签
+	$(".allknowledge").unbind('click');
+	$(".allknowledge").click(function(){
+		if(!$(this).attr("checked")){
+			$(this).attr("checked","checked");
+
+		}else{
+			$(this).removeAttr("checked");
+		}
+
+		if($('.allknowledge').is(':checked')) {
+			$.each($('.knowledge-label'), function(index, object){
+				$(object).prop("checked",true);
+			})
+
+		}else{
+			$.each($('.knowledge-label'), function(index, object){
+				$(object).prop("checked",false);
+			})
+
+		}
+
+	});
+
+	//加入  crm
+	function insert_crm(mobile,id){
+    //查询类型
+		var select_type = $("#click_value").val();
+		var url = "{:url('insert_crm')}";
+		$.ajax({
+			type:'POST',
+			data:{
+				phone:mobile,
+				id:id,
+				select_type:select_type
+			},
+			dataType:'json',
+			url:url,
+			success:function(result){
+				if(result.code === 0){
+					alert('加入CRM成功');
+					var page = $('#Nowpagehidden').val();
+					var limit =$('#Nowlimithidden').val();
+					show_datas(page,limit);
+					//window.location.href = '';
+				}else{
+					alert('加入失败');
+				}
+			},
+			error:function(){
+				alert('加入失败');
+			}
+
+		})
+
+	}
+
+	function getzf(num){
+		if(parseInt(num) < 10){
+			num = '0'+num;
+		}
+		return num;
+	}
+
+	function getMyDate(str){
+
+		var oDate = new Date(str),
+				oYear = oDate.getFullYear(),
+				oMonth = oDate.getMonth()+1,
+				oDay = oDate.getDate(),
+				oHour = oDate.getHours(),
+				oMin = oDate.getMinutes(),
+				oSen = oDate.getSeconds(),
+				oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);//最后拼接时间
+		return oTime;
+	}
+
+
+
+	/**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	 */
+	var Paging = new Paging01();
+	Paging.init_args({
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_datas //回调函数 比如show_datas(页码, 显示条数)
+	});
+	function test(page){
+		console.log(page + '&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+	}
+
+	// return false;
+	$('input[name="startNum"]').change(function() {
+		$('#second_upper').val('');
+		$('#second_lower').val('');
+	})
+	$('input[name="endNum"]').change(function() {
+		$('#second_upper').val('');
+		$('#second_lower').val('');
+	})
+
+
+	$('input[name="second_upper"]').change(function() {
+		$('#startNum').val('');
+		$('#endNum').val('');
+		$('#second_lower').val('');
+	})
+	$('input[name="second_lower"]').change(function() {
+		$('#startNum').val('');
+		$('#endNum').val('');
+		$('#second_upper').val('');
+	})
+
+
+	$(function(){
+		$("#startDate").val("");
+		$("#endTime").val("");
+		window.times = 0;
+	})
+
+
+
+
+	var mobile,startNum,endNum,startDate,endTime,calltask,scenarios,call_times,affirm_times,negative_times,neutral_times,effective_times,hit_times,invitations;
+	var levelids=[],statusids=[],semanticLabels=[],flowLabels=[],knlgLabels=[];
+	//获取url中的参数
+	function getUrlParam(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+		if (r != null) return unescape(r[2]); return null; //返回参数值
+	}
+	var task_id = getUrlParam('task_id');
+
+	$('#calltask').val(task_id);
+	$('#calltask').trigger('change');
+	show_task();
+	show_datas();
+	var show_datas_status = true;
+
+
+	function show_datas(page, limit,type="",order=""){
+
+		/*
+        if(show_datas_status == false){
+         return false;
+         }
+         */
+		//把当前页码 和每页limit 数量存入 隐藏的input中方便 别的功能调用
+		$('#Nowpagehidden').val(page);
+		$('#Nowlimithidden').val(limit);
+		//查询类型
+		var select_type = $("#click_value").val();
+
+		show_datas_status = false;
+		window.times = 0;
+
+		searchdata();
+		if(!order){
+			var order = $("#order_order").val();
+		}else{
+			order=order
+		}
+		if(!type){
+			var type = $("#order_type").val();
+		}else{
+			type=type
+		}
+
+		data = {};
+		data.order = order;
+		data.type = type;
+		data.status = Array();
+		data.semantic_label = Array();
+		data.flow_labels = Array();
+		data.knowledge_labels = Array();
+		data.page = page;
+		data.limit = limit; //自定义
+		data.record_type = 1;
+		data.task_id = $('#calltask').val();//呼叫任务
+		data.scenarios_id = $('#scenarios').val();//场景话术
+		data.start_call_time = $('#startDate').val();//开始拨打时间
+		data.end_call_time = $('#endTime').val();//结束拨打时间
+		data.phone = $('#h_phone').val();//查询电话
+
+		data.select_type = select_type;
+		// data.level = $('input[name="levelcheck"]:checked').val();//意向等级  修改为多选----------------------------------
+		data.level = $("input[name='levelcheck[]']:checked").map(function(){return $(this).val();}).get();
+		data.status=$("input[name='phoneState[]']:checked").map(function(){return $(this).val();}).get();
+		data.semantic_label=$("input[name='semantic-label[]']:checked").map(function(){return $(this).val();}).get();
+		data.flow_labels=$("input[name='flow-label[]']:checked").map(function(){return $(this).val();}).get();
+		data.knowledge_labels=$("input[name='knowledge-label[]']:checked").map(function(){return $(this).val();}).get();
+
+
+		if( $('#startNum').is(':visible')&&( $('#startNum').val() != '' || $('#endNum').val()) )  {
+			data.min_duration = $('#startNum').val();
+			data.max_duration =$('#endNum').val();
+		}else if( $('#second_upper').is(':visible')&& $('#second_upper').val() !==''){
+			data.min_duration = $('#second_upper').val();
+		}else if($('#second_lower').val() !==''){
+			data.max_duration = $('#second_lower').val();
+		}
+
+		data.call_times =($('#call_times').is(':visible'))? $('#call_times').val() :'' ;//客户说话次数
+		data.effective_times = ($('#effective_times').is(':visible'))? $('#effective_times').val():'' ;//有效对话次数
+		data.hit_times = ($('#hit_times').is(':visible'))? $('#hit_times').val():'' ;//触发问题次数
+		data.affirm_times = ($('#affirm_times').is(':visible'))? $('#affirm_times').val():'' ;//肯定次数
+		data.neutral_times = ($('#neutral_times').is(':visible'))? $('#neutral_times').val():'' ;//中性次数
+		data.negative_times = ($('#negative_times').is(':visible'))? $('#negative_times').val():'' ;//否定次数
+		data.invitations = ($('#invitations').is(':visible'))? $('#invitations').val():'' ;//是否邀约成功
+		data.review = ($('#reviewIf').is(':visible'))?$('#reviewIf').val():'';//是否已经查询过
+
+		data.call_times_sel =$('#call_times_sel').val()  ;//客户说话次数
+		data.effective_times_sel = $('#effective_times_sel').val() ;//有效对话次数
+		data.hit_times_sel = $('#hit_times_sel').val();//触发问题次数
+		data.affirm_times_sel = $('#affirm_times_sel').val();//肯定次数
+		data.neutral_times_sel = $('#neutral_times_sel').val();//中性次数
+		data.negative_times_sel = $('#negative_times_sel').val() ;//否定次数
+
+		$("#chaxun_tiaojian").val(JSON.stringify(data));
+		var OrderObject = $('.sort > i.active-selected');
+		// data.orderby = OrderObject.data('type');
+		// data.order = OrderObject.data('value');
+		// var url = "{:url('get_new_call_record')}";
+		var url = "{:url('get_new_call_historical_record')}";
+		/*$("#click_value").val();
+        times_interval = setTimeout(function(){
+        window.times++;
+        if(window.times >= 1){
+        $('.l_loadfixed').show();
+        }
+        },1000);
+        */
+		$('.l_loadfixed').show();
+		$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : data,
+			success: function(data){
+				var total = data.data.total;   //总页数
+				var Nowpage = data.data.Nowpage;  //当前页码
+				var page = data.data.page;       //undefined  垃圾数据
+				var count  = data.data.count;  //总条数
+				var limit = data.data.limit;
+				var Nowpage = parseInt(Nowpage);
+				var data = data.data.list;
+				//完成进度处理
+				var calltask = $('#calltask').val();
+				if(calltask !=''){
+					$('.schedule_total').show();
+					$.ajax({
+						url:'schedule_total',
+						type:'post',
+						data:{'task_id':calltask},
+						success:function(res){
+							console.log(res);
+							console.log('---------$-------')
+							$('#total').text(res.data.count);
+							$('#schedule').text(res.data.status);
+						}
+					})
+				}
+				else{
+					$('.schedule_total').hide();
+				}
+
+				if(data.length > 0){
+					$('.h_page').show();
+					$("#pegeempty").css("display","none");
+
+					$("#tablepagelist").find("tr").remove();
+
+					for(var i=0;i<data.length;i++){
+
+						var id = data[i].id;
+						var user_id = data[i].owner;
+						var mobile = data[i].mobile;
+						var nickname = data[i].nickname;
+						var customer_name = data[i].customer_name;
+						if(customer_name == null || customer_name == ""){
+							customer_name = "暂无数据";
+							var compay_name = "";
+						}
+						var call_times = data[i].last_dial_time;
+						var username = data[i].username;
+						var status = data[i].status;
+						var state_crm = data[i].state_crm;
+						var duration = data[i].duration;
+						var last_dial_time = data[i].last_dial_time;
+						var level = data[i].level;
+						var review = data[i].review;
+						var task_id = data[i].task_id;
+						var scenename = data[i].scenarios_name;
+						var task_name = data[i].task_name;
+						if(task_name == null || task_name == ""){
+							task_name = "暂无数据";
+						}
+						if(scenename == null || scenename == ""){
+							scenename = "话术不存在";
+						}
+						if(call_times == null || call_times == ""){
+							call_times = "暂无拨打记录";
+						}
+						var reviewstr = '<a href="javascript:void(0);" class="show_record click_show_record" data-id="'+id+'" onclick="gotoDetail(\''+mobile+'\','+task_id+','+id+', \'record\', \'historical\','+select_type+');">未查看</a>&nbsp;&nbsp;';
+						if(review == 1){
+							reviewstr = '<a href="javascript:void(0);" class="show_record click_show_record" data-id="'+id+'" style="color: #5b5d5f;" onclick="gotoDetail(\''+mobile+'\','+task_id+','+id+', \'record\', \'historical\','+select_type+');">已查看</a>&nbsp;&nbsp;';
+						}
+						// reviewstr += '<a href="javascript:void(0);" class="show_record" data-title="删除通话记录" data-id="'+id+'"  onclick="popTipswin(this);">删除&nbsp;&nbsp;</a>';
+						if(state_crm == 0){
+							reviewstr += '<a href="javascript:void(0);" class="show_record" data-id="'+id+'" onclick="insert_crm('+mobile+','+id+');">加入CRM</a>&nbsp;&nbsp;';
+						}else{
+							reviewstr += '<a href="javascript:void(0);" class="show_record" data-id="'+id+'" style="color:gray;cursor: no-drop;">已加CRM</a>&nbsp;&nbsp;';
+						}
+						// reviewstr+= '<a href="javascript:void(0);" class="show_record" data-id="'+id+'" onclick="joinShout('+mobile+')" >加入呼叫</a>';
+						reviewstr+= '<a href="javascript:void(0);" class="show_record" data-id="'+id+'" onclick="joinShout('+id+',\'history\','+select_type+')" >加入呼叫</a>';
+						var originating_call = data[i].originating_call;
+						if(originating_call == null){
+							originating_call = "";
+						}
+
+						var strstatus = "未拨打";
+
+						switch (status) {
+							case 2:
+								strstatus = "已接通";
+								break;
+							case 3:
+								strstatus = "无人接听";
+								break;
+							case 4:
+								strstatus = "停机";
+								break;
+							case 5:
+								strstatus = "空号";
+								break;
+							case 6:
+								strstatus = "正在通话中";
+								break;
+							case 7:
+								strstatus = "关机";
+								break;
+							case 8:
+								strstatus = "用户拒接";
+								break;
+							case 9:
+								strstatus = "网络忙";
+								break;
+							case 10:
+								strstatus = "来电提醒";
+								break;
+							case 11:
+								strstatus = "呼叫转移失败";
+								break;
+							default:
+								strstatus = "--";
+						}
+
+						var strlevel = "";
+						switch (level) {
+							case 6:
+								strlevel = "A级(意向客户)";
+								break;
+							case 5:
+								strlevel = "B级(一般意向)";
+								break;
+							case 4:
+								strlevel = "C级(简单对话)";
+								break;
+							case 3:
+								strlevel = "D级(无效对话)";
+								break;
+							case 2:
+								strlevel = "E级(有效未接通)";
+								break;
+							case 1:
+								strlevel = "F级(无效号码)";
+								break;
+							default:
+								strlevel = "--";
+						}
+
+						var string = '<tr class="itemId'+id+'" alt="'+id+'">'
+								+'<td class="text-center"><input type="checkbox" class="member_check rolecheck" value="'+id+'" name="checkids" /></td>'
+								+'<td class="text-center">'+((Nowpage-1)*limit+(i+1))+'</td>'
+								+'<td class="text-center">'+nickname+'</td>'
+								+'<td class="text-center">'+mobile+'</td>'
+								+'<td class="text-center">'+duration+'</td>'
+								+'<td class="text-center">'+strstatus+'</td>'
+								+'<td class="text-center">'+strlevel+'</td>'
+								// +'<td class="text-center">'+customer_name+'</td>'
+								+'<td class="text-center">'+task_name+'</td>'
+								+'<td class="text-center">'+scenename+'</td>'
+								// +'<td class="text-center">'+username+'</td>'
+								+'<td class="text-center">'+call_times+'</td>'
+								// +'<td class="text-center">'+last_dial_time+'</td>'
+								+'<td class="text-center">'+reviewstr+'</td>';
+						string += '</tr>';
+						$("#tablepagelist").append(string);
+					}
+					//Paging.paging(当前页码, 总数量, 每页显示的条数)
+					Paging.paging(Nowpage, count, limit);
+					click_show_record();
+          			paging_change();
+					//全选
+					if($('.all_checked_count').is(":checked")){
+						$("input[name='checkids'][type='checkbox']").prop("checked",true);
+						$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+						$('.check_count').text(count);
+					}else{
+						$('.check_count').text(0);
+						$("input[name='all_checked'][type='checkbox']").prop("checked",false);
+					}
+					$("input[name='all_checked'][type='checkbox']").click(function(){
+						if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+							$("input[name='checkids'][type='checkbox']").prop("checked",true);
+							$(".all_checked_count").prop("checked", false);
+						} else {
+							$("input[name='checkids'][type='checkbox']").prop("checked",false);
+							$(".all_checked_count").prop("checked", false);
+						}
+
+						$('.check_count').text($("input[name='checkids'][type='checkbox']:checked").length);
+					});
+					//子复选框的事件
+					$('input[type="checkbox"][name="checkids"]').click(function(){
+						//当没有选中某个子复选框时，check-all取消选中
+						if (!$(".rolecheck").checked) {
+							$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+							$(".all_checked_count").prop("checked", false);
+						}
+						var chsub = $("input[name='checkids'][type='checkbox']").length; //获取checkids的个数
+						var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+						if (checkedsub == chsub) {
+							$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+							$(".all_checked_count").prop("checked", false);
+						}
+						$('.check_count').text(checkedsub);
+					});
+					$('.all_checked_count').click(function(){
+						if($(this).prop('checked') === true){
+							$.each($('.all_checked_count'),function(index,obj){
+								$(obj).prop("checked",true);
+							});
+							$("input[name='checkids'][type='checkbox']").prop("checked",true);
+							$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+							$('.check_count').text(count);
+						}else{
+							$.each($('.all_checked_count'),function(index,obj){
+								$(obj).prop("checked",false);
+							});
+							$("input[name='checkids'][type='checkbox']").prop("checked",false);
+							$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+							$('.check_count').text(0);
+						}
+					});
+				}else{
+					//Paging.paging(当前页码, 总数量, 每页显示的条数)
+					Paging.paging(1, 0, 10);
+					$("#pegeempty").css("display","block");
+					$("#tablepagelist").find("tr").remove();
+					$("#modalpagebody").find("div").remove();
+					$('.h_page').hide();
+				}
+				// clearInterval(times_interval);
+				$('.l_loadfixed').hide();
+				$('.c_selectstate').click();
+				show_datas_status = true;
+			},
+			error : function() {
+				// clearInterval(times_interval);
+				$('.l_loadfixed').hide();
+				$('.c_selectstate').click();
+				show_datas_status = true;
+			}
+		});
+
+	}
+
+	function searchdata(){
+
+
+		calltask = $("#calltask").val(); //获取呼叫任务
+		scenarios = $("#scenarios").val(); //获取场景话术
+		startDate = $("#startDate").val(); //获取开始选择的日期
+		endTime = $("#endTime").val(); //获取结束选择的日期
+		startNum = $("#startNum").val(); //开始通话时长
+		endNum = $("#endNum").val(); //结束通话时长
+		//获取意向等级
+		levelids = $('input:radio[name="levelcheck"]:checked').val();
+
+		console.log("意向等级"+levelids);
+		//获取通话状态
+		$.each($('.conversation'), function(index, object){
+			if($(object).prop("checked") == true){
+				statusids.push($(object).val());
+			}
+		})
+		// statusids = statusids.join(',');
+		console.log("通话状态"+statusids);
+
+	}
+
+
+	var excel_state = true;
+	var excel_statelist = true;
+	//导出话单
+	function validation8(type){
+		var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+		if(checkedsub <= 0){
+			alert('请选择导出的数据');
+			return false;
+		}else{
+		<?php if($is_verification == 1): ?>
+			$('#tips_model').modal('hide');
+			$('#show_validation1').html(html);
+			$('#export_val').attr('onclick','export_val('+type+')')
+			$('#export-validation').modal('show');
+			msm_send();
+		<?php else: ?>
+			$('#tips_model').modal('hide');
+			exportlistExcel()
+			<?php endif; ?>
+		}
+	}
+	function exportlistExcel(){
+		data = get_data();
+		var arr = new Array();
+		var select_type = $("#click_value").val();
+		$('#import-data').modal('show');
+		data.type = 0;
+		if($('.all_checked_count').is(":checked")){
+			data.type = 1;
+		}
+		if($("input[name='checkids'][type='checkbox']").is(':checked')){
+			$("input[name='checkids'][type='checkbox']").each(function(i){
+				if($(this).context.checked == true){
+					arr[i] = $(this).val();
+				}
+			});
+			data.vals = arr.join();
+		}
+		window.chaos_num = (new Date()).valueOf();
+		$('#tips_model').modal('hide');
+		$(".progress-bar-data").width(0 + '%');
+		$(".Progress_value").html('0.00' + '%');
+		$('.finish').addClass('hidden');
+		$('.import').removeClass('hidden');
+		$('#effectTmp').modal('show');
+		window.import_dingshi = window.setInterval(effectTmp, 1000);
+		data.chaos_num = window.chaos_num ;
+		data.alt = 1 ;
+
+		data.select_type = select_type;
+		$.ajax({
+			type: 'POST',
+			url: '/user/callrecord/import_phone_histor',
+			data: data,
+			success:function(data){
+				window.clearInterval(window.import_dingshi);
+				if(data.code == 0){
+					$("#effectTmp .progress-bar-data").width(100.00 + '%');
+					$("#effectTmp .Progress_value").html('100.00' + '%');
+					if($('#effectTmp .Progress_value').html() == '100.00%'){
+						//延迟1秒在执行 加强体验度
+						setTimeout(function(){
+							$('#effectTmp .import').addClass('hidden');
+							$('#effectTmp .finish').removeClass('hidden');
+							$('#effect-tips-content').html('导出成功');
+						},1000)
+						$('#upload_ok').click(function(){
+							if(data.data){
+								window.location.href = data.data;
+							}
+						})
+					}
+				}
+			},
+			error:function(){
+				window.clearInterval(window.import_dingshi);
+			}
+		})
+	}
+
+	function effectTmp(){
+		var url = "/user/plan/outexcel_degree"
+		$.ajax({
+			type: 'POST',
+			dataType: "json",
+			data: {
+				chaos_num:window.chaos_num
+			},
+			url: url,
+			success: function(result) {
+				$(".progress-bar-data").width((result.data.percentage) + '%');
+				$(".Progress_value").html((result.data.percentage)+ '%');
+			},
+			error: function() {
+			}
+		});
+	}
+
+	function get_data(){
+		data = {};
+		data.type = 0 ;
+		data.task_id = $('#calltask').val();//呼叫任务
+		data.scenarios_id = $('#scenarios').val();//场景话术
+		data.start_call_time = $('#startDate').val();//开始拨打时间
+		data.end_call_time = $('#endTime').val();//结束拨打时间
+		data.phone = $('#h_phone').val();//查询电话
+
+		// data.level = $('input[name="levelcheck"]:checked').val();//意向等级  修改为多选----------------------------------
+		data.level = $("input[name='levelcheck[]']:checked").map(function(){return $(this).val();}).get();
+		data.status=$("input[name='phoneState[]']:checked").map(function(){return $(this).val();}).get();
+		data.semantic_label=$("input[name='semantic-label[]']:checked").map(function(){return $(this).val();}).get();
+		data.flow_labels=$("input[name='flow-label[]']:checked").map(function(){return $(this).val();}).get();
+		data.knowledge_labels=$("input[name='knowledge-label[]']:checked").map(function(){return $(this).val();}).get();
+
+
+		if( $('#startNum').is(':visible')&&( $('#startNum').val() != '' || $('#endNum').val()) )  {
+			data.min_duration = $('#startNum').val();
+			data.max_duration =$('#endNum').val();
+		}else if( $('#second_upper').is(':visible')&& $('#second_upper').val() !==''){
+			data.min_duration = $('#second_upper').val();
+		}else if($('#second_lower').val() !==''){
+			data.max_duration = $('#second_lower').val();
+		}
+
+		data.call_times =($('#call_times').is(':visible'))? $('#call_times').val() :'' ;//客户说话次数
+		data.effective_times = ($('#effective_times').is(':visible'))? $('#effective_times').val():'' ;//有效对话次数
+		data.hit_times = ($('#hit_times').is(':visible'))? $('#hit_times').val():'' ;//触发问题次数
+		data.affirm_times = ($('#affirm_times').is(':visible'))? $('#affirm_times').val():'' ;//肯定次数
+		data.neutral_times = ($('#neutral_times').is(':visible'))? $('#neutral_times').val():'' ;//中性次数
+		data.negative_times = ($('#negative_times').is(':visible'))? $('#negative_times').val():'' ;//否定次数
+		data.invitations = ($('#invitations').is(':visible'))? $('#invitations').val():'' ;//是否邀约成功
+
+		return data;
+	}
+	function validation9(type){
+		var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+		if(checkedsub <= 0){
+			alert('请选择导出的数据');
+			return false;
+		}else{
+		<?php if($is_verification == 1): ?>
+			$('#tips_model').modal('hide');
+			$('#show_validation2').html(html);
+			$('#export_val').attr('onclick','export_val('+type+')')
+			$('#export-validation').modal('show');
+			msm_send();
+		<?php else: ?>
+			$('#tips_model').modal('hide');
+			outexcel();
+		<?php endif; ?>
+		}
+	}
+
+	function outexcel(){
+		data = get_data();
+		//得到 前端是 xlsx 还是txt导出
+		var daochu_type = $("input[name='daochu_type']:checked").val();
+		var select_type = $("#click_value").val();
+		data.daochu_type = daochu_type;
+		var arr = new Array();
+		$('#import-data').modal('show');
+		if($('.all_checked_count').is(":checked")){
+			data.type = 1;
+		}
+		if($("input[name='checkids'][type='checkbox']").is(':checked')){
+			$("input[name='checkids'][type='checkbox']").each(function(i){
+				if($(this).context.checked == true){
+					arr[i] = $(this).val();
+				}
+			});
+			data.vals = arr.join();
+		}
+		window.chaos_num = (new Date()).valueOf();
+		$('#tips_model').modal('hide');
+		$(".progress-bar-data").width(0 + '%');
+		$(".Progress_value").html('0.00' + '%');
+		$('.finish').addClass('hidden');
+		$('.import').removeClass('hidden');
+		$('#effectTmp').modal('show');
+		window.import_dingshi = window.setInterval(effectTmp, 1000);
+		data.chaos_num = window.chaos_num ;
+
+		data.select_type = select_type;
+		$.ajax({
+			type: 'POST',
+			url: '/user/callrecord/import_phone_histor',
+			data: data,
+			success:function(data){
+				window.clearInterval(window.import_dingshi);
+				if(data.code == 0){
+					$("#effectTmp .progress-bar-data").width(100.00 + '%');
+					$("#effectTmp .Progress_value").html('100.00' + '%');
+					if($('#effectTmp .Progress_value').html() == '100.00%'){
+						//延迟1秒在执行 加强体验度
+						setTimeout(function(){
+							$('#effectTmp .import').addClass('hidden');
+							$('#effectTmp .finish').removeClass('hidden');
+							$('#effect-tips-content').html('导出成功');
+						},1000)
+						$('#upload_ok').click(function(){
+							if(data.data){
+								window.location.href = data.data;
+							}
+						})
+					}
+				}
+			},
+			error:function(){
+				window.clearInterval(window.import_dingshi);
+			}
+		})
+	}
+	//重拨
+	function redial(task,mobile){
+
+		$.post("{:url('redial')}",{'task':task,'mobile':mobile},function(res){
+			if(res.code == 0){
+				alert(res.msg);
+			}else{
+				alert(res.msg);
+			}
+		});
+
+	}
+
+	//新建拨打任务
+	function addtask(){
+		if($('.all_checked_count').is(':checked')){
+			showadd(this);
+			task_template_change();
+		}
+		var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+		if(checkedsub > 0){
+			showadd(this);
+			task_template_change();
+		}else{
+			alert('请选择呼叫电话');
+			task_template_change();
+		}
+		var line_id = $('#NewPlan select[name="line_id"]').val();
+		if(line_id == 0){
+			$('#defaultlines').attr("disabled",true);
+			$('.tishi').removeClass('default-line');
+		}else{
+			$('#defaultlines').attr("disabled",false);
+			$('.tishi').addClass('default-line');
+		}
+	}
+
+	//当前时间第二天
+	function addDay(dayNumber, date) {
+		date = date ? date : new Date();
+		var ms = dayNumber * (1000 * 60 * 60 * 24)
+		var newDate = new Date(date.getTime() + ms);
+		return newDate;
+	}
+	function showadd(obj){
+		$('#start_date').val(getFormatDate(10));
+		$('#end_date').val(getFormatDate(10));
+		$('#NewPlan').modal('show');
+	}
+	//多个 crm  添加
+	function joincrm(){
+		get_data();
+		data.type = 0 ;
+		var arr = new Array();
+		var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+		if($('.all_checked_count').is(':checked') || checkedsub > 0){
+			if($('.all_checked_count').is(':checked')){
+				data.type = 1 ;
+			}
+			if($("input[name='checkids'][type='checkbox']").is(':checked')){
+				$("input[name='checkids'][type='checkbox']").each(function(i){
+					if($(this).context.checked == true){
+						arr[i] = $(this).val();
+					}
+				});
+				data.vals = arr.join();
+			}
+			window.chaos_num_j =  (new Date()).valueOf();
+			data.chaos_num =  window.chaos_num_j;
+			data.select_type = $('#click_value').val();
+			window.import_dingshi_j = window.setInterval(effectTmp, 1000);
+			$('#tips_model').modal('hide');
+			$(".progress-bar-data").width(0 + '%');
+			$(".Progress_value").html('0.00' + '%');
+			$('.finish').addClass('hidden');
+			$('.import').removeClass('hidden');
+			$('#join_effectTmp').modal('show');
+			$.ajax({
+				type: 'POST',
+				url: '/user/callrecord/joincrmhistor',
+				data: data,
+				success:function(data){
+					if(data.code == 1){
+						$("#join_effectTmp .progress-bar-data").width(100.00 + '%');
+						$("#join_effectTmp .Progress_value").html('100.00' + '%');
+						if($('#join_effectTmp .Progress_value').html() == '100.00%'){
+							//延迟1秒在执行 加强体验度
+							setTimeout(function(){
+								$('#join_effectTmp .import').addClass('hidden');
+								$('#join_effectTmp .finish').removeClass('hidden');
+								var temp = data.msg;
+								$('#effect-tips-content_j').html(temp);
+							},1000)
+						}
+						$('#upload_ok_j').click(function(){
+							$('#tips_model').modal('hide');
+							var page = $('#Nowpagehidden').val();
+							var limit =$('#Nowlimithidden').val();
+							show_datas(page,limit);
+						})
+						// window.location.href = '';
+					}else{
+						$('#join_effectTmp .import').addClass('hidden');
+						$('#join_effectTmp .finish').removeClass('hidden');
+						var temp = data.msg;
+						$('#effect-tips-content_j').html(temp);
+					}
+					window.clearInterval(window.import_dingshi_j);
+				},
+				error:function(){
+					window.clearInterval(window.import_dingshi_j);
+				}
+			})
+		}else{
+			alert('请选择要加入的数据');
+		}
+	}
+
+	function join_effectTmp(){
+		var url = "/user/member/effecttmp"
+		$.ajax({
+			type: 'POST',
+			dataType: "json",
+			data: {
+				task_id: window.chaos_num_j,
+			},
+			url: url,
+			success: function(result) {
+				$(".progress-bar-data").width((result.data.baifenbi) + '%');
+				$(".Progress_value").html((result.data.baifenbi.toFixed(2)) + '%');
+			},
+			error: function() {
+			}
+		});
+	}
+
+
+
+	$('.sort > i').click(function(){
+		if($(this).hasClass('active-selected') === false){
+			var type = $(this).data('type');
+			var order = $(this).data('value');
+			//把 类型 和order 放入 隐藏的input中
+			$("#order_order").val(order);
+			$("#order_type").val(type);
+			if($(this).hasClass('second') === true){
+				$(this).removeClass('gray-color1').addClass('active-selected');
+			}else{
+				$(this).removeClass('gray-color').addClass('active-selected');
+			}
+			if(type == 'duration'){
+				$('.sort > i[data-type="call_time"].second').addClass('gray-color1').removeClass('active-selected');
+				$('.sort > i[data-type="call_time"].first').addClass('gray-color').removeClass('active-selected');
+			}else{
+				$('.sort > i[data-type="duration"].second').addClass('gray-color1').removeClass('active-selected');
+				$('.sort > i[data-type="duration"].first').addClass('gray-color').removeClass('active-selected');
+			}
+			$(this).siblings('.second').addClass('gray-color1').removeClass('active-selected');
+			$(this).siblings('.first').addClass('gray-color').removeClass('active-selected');
+			show_datas(1, 10,type,order);
+		}
+	});
+	//页面载入之后进行隐藏 并进行数据搜索条件配置
+	$(document).ready(function(){$(".shrink").click();showCondition();});
+
+	$(".screen span").click(function(){
+		$(this).addClass('screenBtn-active').siblings().removeClass('screenBtn-active');
+
+	})
+
+
+	function click_date(object,type){
+		var key = $(object).attr('value');
+		if($("#click_value").val() != key) {
+			$("#startDate").val('');
+			$("#endTime").val('');
+		}
+		//$("#click_value").val(key);
+		$("#click_value").val(key);
+		if(type == 1){
+			$('.query-date').hide();
+		}
+		if(type == 0){
+			//选中状态，先全部清空
+
+			$('.screen span').each(function(){
+				$(this).removeClass('screenBtn-active');
+				if($(this).attr('value') == key){
+					$(this).addClass('screenBtn-active');
+				}
+
+			})
+
+		}
+		show_task();
+		show_datas();
+	}
+
+
+	//$("#calltask options[value='3']").attr("selected", true);
+	//加载任务列表
+	function show_task(){
+		var select_type = $("#click_value").val();
+		var url = "{:url('user/callrecord/get_task_list')}";
+		$('.l_loadfixed').show();
+		$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : {'select_type':select_type},
+			async:false,
+			success: function(result){
+				$('.l_loadfixed').hide();
+				if (result) {
+					option_mub = '<option value="">请选择任务</option>';
+					if(result){
+						$.each(result.data, function(index, object){
+							if(object.task_id == task_id){
+								option_mub += '<option value="'+object.task_id+'" selected>'+object.task_name+'</option>';
+							}else{
+								option_mub += '<option value="'+object.task_id+'" >'+object.task_name+'</option>';
+							}
+						});
+					}
+					$("#calltask").html(option_mub);
+
+				}
+			},
+			error : function() {
+				alert('获取任务列表失败。');
+			}
+		});
+	}
+
+
+</script>
+
+
+<script type="text/javascript" src="__PUBLIC__/js_callrecord/current_record.js"></script>{/block}

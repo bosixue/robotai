@@ -1,0 +1,389 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/new_index.css">
+<!-- 提示模板框 -->
+<div class="modal fade" id="tips_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+<!-- 弹窗模板 -->
+<script type="text/template" id="popTips">
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					{{tipstitle}}
+				</h4>
+			</div>
+			<div class="modal-body">
+				{{tipsdata}}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" class="btn btn-primary"  onclick="{{clickfun}}">
+					确认
+				</button>
+			</div>
+		</div>
+	</div>
+</script>
+<!-- 弹窗展示 -->
+<script type="text/javascript">
+	function popTipswin(obj) {
+		//获取弹窗标题
+		var poptitle = $(obj).attr('data-title');
+		switch (poptitle) {
+			case '批量删除':
+				var title = '操作提示';
+				var note = '确定批量删除选中的数据？'
+				var click = 'delRole(0);';
+				break;
+			case '批量删除模板':
+				var title = '操作提示';
+				var note = '确定批量删除选中的数据？'
+				var click = 'del_template_all();';
+				break;
+			case '删除模板':
+				var title = '操作提示';
+				var note = '确定删除选中记录？'
+				var selid = $(obj).attr('data-id');
+				var click = 'delRole(selid);';
+				break;
+			case '导出文件':
+				var title = '操作提示';
+				var note = '确定导出该数据？'
+				var click = 'n_listdataout();';
+				break;
+			case '开启':    //商家账户中账户状态开启/锁定
+				var title = '操作提示';
+				var note = '确认开启所选账户？';
+				var poptype = $(obj).attr('data-type');
+				var click = 'openstar('+poptype+')';
+				break;
+			case '锁定':  //商家账户中账户状态开启/锁定
+				var title = '操作提示';
+				var note = '确认锁定所选账户？';
+				var poptype = $(obj).attr('data-type');
+				console.log(poptype);
+				var click = 'openstar('+poptype+')';
+				break;
+			case '多个开启':  //商家账户中账户状态开启/锁定   待处理
+				var title = '操作提示';
+				var note = '确认开启所选账户？';
+				var click = 'openstar()';
+				break;
+			case '多个锁定':  //商家账户中账户状态开启/锁定   待处理
+				var title = '操作提示';
+				var note = '确认锁定所选账户？';
+				var click = 'openstar()';
+				break;
+			case '重置密码':    //商家账户中账户重置密码   待处理
+				var title = '操作提示';
+				var note = '确认重置密码？';
+				var click = 'resetpassword()';
+				break;
+			case '删除':    //商家账户中账户删除   待处理
+				var title = '操作提示';
+				var note = '确认删除？';
+				var click = 'del();';
+				break;
+			case '删除多个线路':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除所选中线路？';
+				var click = 'delline();';
+				break;
+			case '删除单个线路':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除当前用户的线路？';
+				var click = 'delline();';
+				break;
+			case '删除用户线路':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除当前用户的线路？';
+				var line_id =  $(obj).attr('data-line-id');
+				var user_id =  $(obj).attr('data-user-id');
+				var click = 'delete_line('+line_id+','+user_id+')';
+				break;
+			case '删除单个ASR':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除当前用户的ASR？';
+				var click = 'delete_asr();';
+				break;
+			case '删除销售账号':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除所选中账户？';
+				var click = '';
+				var type = $(obj).data('type');
+				if(type == 'delete_user'){
+					var id = $(obj).data('id');
+					click = 'delSaleAccount('+id+');';
+				}
+				break;
+			case '删除单个销售账号':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除该账户？';
+				var click = '';
+				break;
+			case '删除公众号':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除公众号？';
+
+				var id = $(obj).attr('data-id');
+				var click = 'wx_delete('+id+')';
+				break;
+			case '启用公众号':
+				var title = '操作提示';
+				var note = '确定停用公众号？';
+				var id = $(obj).attr('data-id');
+				var status = $(obj).attr('data-status');
+				var click = 'setStatus('+id+','+status+')';
+				break;
+			case '停用公众号':
+				var title = '操作提示';
+				var note = '确定启用公众号？';
+				var id = $(obj).attr('data-id');
+				var status = $(obj).attr('data-status');
+				var click = 'setStatus('+id+','+status+')';
+				break;
+			case '停用公众号':    // 待处理
+				var title = '操作提示';
+				var note = '确定启用公众号？';
+				var click = '';
+				break;
+			case '添加公众号':    // 待处理
+				var title = '操作提示';
+				var note = '确定添加该公众号？';
+				var click = 'add_official_accounts()';
+				break;
+			case '编辑公众号':    // 待处理
+				var title = '操作提示';
+				var note = '确定编辑该公众号？';
+				var click = 'add_official_accounts()';
+				break;
+			case '删除坐席分组':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除该组？';
+				var click = 'delgroup();';
+				break;
+			case '删除坐席':    // 待处理
+				var title = '操作提示';
+				var note = '确定删除该坐席？';
+				var click = '';
+				break;
+			case '重置密码':    // 待处理
+				var title = '操作提示';
+				var note = '确认重置密码？';
+				var click = '';
+				break;
+			case '锁定坐席':    // 待处理
+				var title = '操作提示';
+				var note = '确认锁定该坐席？';
+				var click = '';
+				break;
+			case '消费统计导出文件':
+				var title = '操作提示';
+				var note = '确定导出该数据？'
+				var click = 'consum_data();';
+				break;
+			case '提交短信模板审核':
+				var title = '操作提示';
+				var note = '确定将该短信模板进行提交？'
+				var click = 'submit_template();';
+				break;
+			case '删除单个短信模板':
+				var title = '操作提示';
+				var note = '确定删除该短信模板？'
+				var id = $(obj).attr('data-template-id');
+				var click = 'del_template('+id+');';
+				break;
+			case '批量删除签名审核':
+				var title = '操作提示';
+				var note = '确定删除所选数据？'
+				var click = 'del_signature_verification();';
+				break;
+			case '强制回收机器人':
+				var title = '操作提示';
+				var note = '确定强制回收机器人？'
+				var selid = $(obj).attr('data_id');
+				var click = 'mandatory_recovery_robot('+selid+');';
+				break;
+			case '话术确认处理':
+				var title = '操作提示';
+				var note = '确认处理所选话术？'
+				var click = 'machine_surehand();';
+				break;
+			case '话术忽略':
+				var title = '操作提示';
+				var note = '确定忽略所选话术？'
+				var click = 'machine_ignore();';
+				break;
+			case '话术删除':
+				var title = '操作提示';
+				var note = '确定删除所选话术？'
+				var click = 'machine_del();';
+				break;
+			case '删除场景节点':
+				var title = '操作提示';
+				var note = '确定删除该场景节点？'
+				var id = $(obj).attr('data-id');
+				var click = 'scenenode_del('+id+');';
+				break;
+			case '删除单个话术':
+				var title = '操作提示';
+				var note = '确定删除该话术？'
+				var id = $(obj).attr('data-id');
+				var click = 'delScenarios('+id+');';
+				break;
+			case '删除单个语义标签':
+				var title = '操作提示';
+				var note = '确定删除该语义标签？'
+				var click = 'del_semanticLablesingle();';
+				break;
+			case '删除多个语义标签':
+				var title = '操作提示';
+				var note = '确定删除所选中的数据？'
+				var click = 'del_semanticlabelall();';
+				break;
+			case '删除单个等级分类':
+				var title = '操作提示';
+				var note = '确定删除该模板？'
+				var click = 'del_gradesingle();';
+				break;
+			case '删除多个等级分类':
+				var title = '操作提示';
+				var note = '确定删除所选中的数据？'
+				var click = 'del_gradeall();';
+				break;
+			case '删除场景节点':
+				var title = '操作提示';
+				var note = '确定删除该场景节点？'
+				var click = 'scenenode_del();';
+				break;
+			case '启用公众号':
+				var title = '操作提示';
+				var note = '确认停用该公众号？'
+				var click = 'enabling_public_umber();';
+				break;
+			case '停用公众号':
+				var title = '操作提示';
+				var note = '确认启用该公众号？'
+				var click = 'discontinue_public_umber();';
+				break;
+			case '删除录音管理':
+				var title = '操作提示';
+				var note = '确认删除所选录音？'
+				var id = $(obj).attr('data-id');
+				var click = 'record_del('+id+');';
+				break;
+			case '批量删除录音管理':
+				var title = '操作提示';
+				var note = '确认批量删除所选录音？'
+				var click = 'batchvoice_del();';
+				break;
+			case '删除公众号绑定':
+				var title = '操作提示';
+				var note = '确认删除公众号绑定？'
+				var id = $(obj).attr('data-id');
+				var click = 'delete_bangding_wx('+id+');';
+				break;
+			case '删除反馈内容':
+				var title = '操作提示';
+				var note = '确认删除所选内容？'
+				var id = $(obj).attr('data-id');
+				var click = 'feedback_del('+id+');';
+				break;
+			case '批量删除我的消息':
+				var title = '操作提示';
+				var note = '确认删除所选内容？';
+				var click = 'delRole();';
+				break;
+			case '删除记录':
+				var title = '操作提示';
+				var note = '确认删除记录？';
+				var id = $(obj).attr('data-id');
+				var click = 'delRole('+id+');';
+				break;
+			case '话术配置':
+				var title = '话术配置';
+				var note = '确认修改话术配置？';
+				var click = 'save_scenarios_config();';
+				break;
+			case '删除单个服务费率':
+				var title = '操作提示';
+				var note = '确认删除该服务费率？';
+				var click = 'del_service_cost();';
+				break;
+			case '删除多个服务费率':
+				var title = '操作提示';
+				var note = '确认删除选中的数据？';
+				var click = 'del_service_costs();';
+				break;
+			case '删除任务模板':
+				var title = '操作提示';
+				var note = '确认删除选中的任务模板？';
+				var id = $(obj).attr('data-id');
+				var click = 'del_task_template('+id+');';
+				break;
+			case '批量删除任务模板':
+				var title = '操作提示';
+				var note = '确定批量删除选中的模板？';
+				var id = $(obj).attr('data-id');
+				var click = 'del_task_template('+id+');';
+				break;
+			case '删除号码组':
+				var title = '操作提示';
+				var note = '确定删除选中的号码组？';
+				var id = $(obj).attr('data-id');
+				var click = 'del_phone_group('+id+');';
+				break;
+			case '导出号码组':
+				var title = '操作提示';
+				var note = '确定导出选中号码？';
+				var id = $(obj).attr('data-id');
+				var click = 'validation4(4);';
+				break;
+			case '批量删除号码列表':
+				var title = '操作提示';
+				var note = '确定删除所选中的号码列表？';
+				var id = $(obj).attr('data-id');
+				var click = 'del_phone_list('+id+');';
+				break;
+			case '号码列表导出':
+				var title = '操作提示';
+				var note = '确定导出所选中的号码列表？';
+				var id = $(obj).attr('data-id');
+				var click = 'validation5(5);';
+				break;
+			case '删除线路':
+				var title = '操作提示';
+				var note = '确定删除当前线路？';
+				var id = $(obj).data('id');
+				var click = 'delLine('+id+');';
+				break;
+			case '删除变量':
+				var title = '操作提示';
+				var note = '确认删除变量？';
+				var id = $(obj).data('id');
+				var click = 'del_variable('+id+');';
+				break;
+			case '批量删除变量管理':
+					var title = '操作提示';
+					var note = '确认批量删除所选变量？'
+					var click = 'var_del();';
+					break;
+			case '号码模板下载':
+					var title = '操作提示';
+					var note = '确定下载该模板？'
+					var click = 'download_model();';
+					break;
+		}
+		$template = $("#popTips").html();
+		$template = $template.replace("{{tipstitle}}", title);
+		$template = $template.replace("{{tipsdata}}", note);
+		$template = $template.replace("{{clickfun}}", click);
+		//追加
+		$('#tips_model').html($template);
+		$('#tips_model').modal('show');
+	}
+
+</script>

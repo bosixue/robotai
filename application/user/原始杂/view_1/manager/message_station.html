@@ -1,0 +1,270 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/new_index.css" rel="stylesheet" type="text/css">
+<link href="/public/css/systemManage.css" rel="stylesheet" type="text/css">
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header n_head_box n_head_box_b clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><img src="/public/img/pz_xiaoxi.png"/>站内消息</span>
+		  </div>
+			<a class="btn btn-primary pull-right" href="/user/manager/release_station_news">发布消息</a>
+		</header>
+
+
+		<div class="main-box-body clearfix">
+	        <section class="navbar clearfix">
+              <input type="hidden" name="typelevel" id="typelevel" value="" />
+						<div class="pull-left">
+								 <form class="form-inline" method="get" role="form" action="{:url('Message/my')}">
+
+											<div class="form-group">
+													<label class="statusSelect">消息状态：</label>
+													<select style="width:160px;" name="status" id="status" class="form-control c_selectimg resetSel">
+														<option value="" selected="">全部</option>
+														<option value="0">未读</option>
+														<option value="1">已读</option>
+													</select>
+										 </div>&nbsp;
+										 <button class="btn btn-primary" type="submit">搜索</button>
+								</form>
+						</div>
+					</section>
+		    <table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>
+						<th class="text-center">序号</th>
+            <th class="text-center">ID</th>
+						<th class="text-center">标题</th>
+						<th class="text-center">创建时间</th>
+            <th class="text-center">发送时间</th>
+						<th class="text-center">状态</th>
+						<th class="text-center">操作</th>
+					</tr>
+				</thead>
+          <tbody id="tablepagelist">
+					  <tr class=" itemId14002" alt="14002">
+							<td class="text-center"><input type="checkbox" name="roleids" class="rolecheck" value=""/></td>
+							<td class="text-center">1</td>
+						  <td class="text-center">54</td>
+						  <td class="text-center">微信</td>
+						  <td class="text-center">2018-09-02 11:36:02</td>
+              <td class="text-center">2018-09-02 11:36:02</td>
+              <td class="text-center">已发送</td>
+						  <td class="text-center">
+                <a href="javascript:void(0);" onclick="">编辑&nbsp;&nbsp;</a>
+                <a href="javascript:void(0);" onclick="">删除&nbsp;&nbsp;</a>
+							  <a href="javascript:void(0);" onclick="">发送</a>
+						  </td>
+					  </tr>
+
+				</tbody>
+			</table>
+			<div class="row ">
+				<div class="col-sm-3 text-left"><input class="check-all" name='DataCheck_all' type="checkbox"/> 全选（已选择<span id="check_count">0</span>条记录）</div>
+				<div class="col-sm-8 text-right">
+          <div class="pull-right " id="statpage">
+
+          </div>
+        </div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.textwidth{
+		  width:250px;
+	}
+	.add_yuyin{height:.85rem;border-top:1px solid #e5e5e5;margin-left:.28rem;line-height: .85rem;width:100%;;float:left;}
+	.luzhiyy{position:relative;font-size:.3rem;color:#666}
+	.luzhiyy::after{position:absolute;right:.25rem;top:.28rem;width:.3rem;height:.3rem;content:"";background:url("../images/icon.png") no-repeat -5.78rem -3.59rem;background-size:14.57rem 4.86rem;}
+	.luzhiyy s{display: inline-block;width:.48rem;height:.48rem;background:url("../images/icon.png") no-repeat -5.59rem -2.86rem;background-size:14.57rem 4.86rem;vertical-align: middle;margin-right:.24rem;}
+	.tijaobtn{width:90%;height:.8rem;background-color:#f16461;text-align: center;line-height: .8rem;color:#fff;margin:0rem auto;display: block;border-radius: 6px;font-size:.3rem;}
+	.tijaobtn[disabled]{background-color:#f4cac9;}
+	.r_yuyin{color:#999999;height:.4rem;line-height:.4rem;padding:0 .1rem;    background-color: #95ce73;
+	    border: 1px solid #368e42;border-radius: 6px;max-width: 75%;min-width: 18%;position: relative;float:right;}
+	.r_yuyin s{width:.4rem;height:.4rem;position:absolute;right:.2rem;top:.09rem;background:url("../images/icon.png") no-repeat -7.11rem -3.62rem;background-size:14.57rem 4.86rem;}
+	 .deleteicon{width:.55rem;height:.5rem;background:url("../images/icon.png") no-repeat -6.17rem -3.41rem;background-size:14.57rem 4.86rem;margin-top:.12rem;margin-left:.1rem;float:left;}
+
+	.luyin_dialog{position: absolute;z-index: 500;top:0;left:0;bottom:0;right:0;background: url("../images/luyinbg.jpg") no-repeat center center;background-size: cover;display: none;}
+	.r_yuyin i{    float: right;
+	    color: #ffffff;
+	    font-size: 21px;
+	    font-weight: 600;
+		}
+	.header_img {
+	   font-size:30px;
+	}
+	.audio-c{
+	 width: 100%;
+	    background-color: #6b9cb6;
+	    text-align: center;
+		padding-top: 5px;
+
+	}
+	.info{
+		display:block;
+		float:left;
+		width:27%;
+		background-color:#fff;
+		margin-right:7px;
+
+	}
+	.info h4{
+	    font-weight: bold;
+	    background-color: #6b9cb6;
+	    color: #fff;
+	    padding: 5px;
+	    margin-top: 0px;
+		width:100%
+
+	}
+	.item{
+		border-bottom:2px solid #ccc;
+
+		padding:5px;
+
+	}
+
+	.greenactive{
+
+	    background-color: green;
+		color:white;
+	}
+
+	.tip{
+		font-size:12px;
+	}
+	.popover-content{
+		color:#008cee;
+		text-align: right;
+		margin-right: 50px;
+}
+</style>
+
+
+<link href="__STATIC__/css/chat.css" rel="stylesheet" type="text/css">
+<script src="__STATIC__/js/audio.js"></script>
+
+
+<!--  通话详情  -->
+
+<div class="modal fade" id="my-message" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog" style="width:450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel" style="color:#000;">消息详情</h4>
+				 </div>
+				 <div class="modal-body" style="padding: 15px 60px;">
+							<form id="form" method="post" class="form-horizontal" enctype="multipart/form-data" >
+									<div class="form-group">
+										<label class="col-lg-2 control-label">消息标题：</label>
+										<div class="col-lg-9 col-sm-9">
+												<span id="title"></span>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-lg-2 control-label">消息内容：</label>
+										<div class="col-lg-9 col-sm-9" style="padding-top:8px;">
+												<span id="content" style="word-wrap:break-word; word-break:break-all;"></span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-2 control-label">发布时间：</label>
+										<div class="col-lg-9 col-sm-9">
+												<span id="time"></span>
+										</div>
+									</div>
+
+							</form>
+				  <br/>
+				 </div>
+				 <div style="clear:both;"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+
+			</div>
+
+
+</div>
+
+
+<script type="text/javascript">
+
+	$(function(){
+
+	  var mobile = "{$_GET['keyword']|default=''}";
+	  $('#keyword').val(mobile);
+
+	  var status = "{$_GET['status']|default=' '}";
+	  $('#status').val(status);
+
+		var level = "{$_GET['level']|default=' '}";
+
+		$('#typelevel').val(level);
+
+	})
+
+
+	 function searchdata(page,type){
+		 window.location.href = "{:url(\'callrecord\')}/page/"+page+'?level='+type;
+	 }
+	 //当前页全选
+	  $("input[name='all_checked'][type='checkbox']").click(function(){
+	 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+	   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+	   	} else {
+	  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+	  	}
+	    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+	  });
+	 	//子复选框的事件
+	 	$('input[type="checkbox"][name="roleids"]').click(function(){
+	 		//当没有选中某个子复选框时，check-all取消选中
+	 		if (!$(".rolecheck").checked) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+	 		}
+	 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+	 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+	 		if (checkedsub == chsub) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+	 		}
+	    $("#check_count").text(checkedsub);
+	 	});
+	  //全部数据全选 DataCheck
+	  $("input[name='DataCheck_all'][type='checkbox']").click(function(){
+	   if ($("input[name='DataCheck_all'][type='checkbox']").is(":checked")) {
+	      $("input[name='roleids'][type='checkbox']").prop("checked",true);
+	      $("input[name='all_checked'][type='checkbox']").prop("checked",true);
+	    } else {
+	      $("input[name='roleids'][type='checkbox']").prop("checked",false);
+	      $("input[name='all_checked'][type='checkbox']").prop("checked",false);
+	    }
+	    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+	  });
+		//重置
+		function reset_click(){
+			$('input[name="startDate"][type="text"]').val("");//开始日期
+			$('input[name="endTime"][type="text"]').val("");//结束日期
+			$('select[name="status"] option:eq(0)').prop("selected", 'selected');//模板类型
+			$('select[name="shenghe"] option:eq(0)').prop("selected", 'selected');//审核状态
+			$('input[name="keyword"]').val("");//签名内容关键字
+		}
+ </script>
+
+</div>
+
+{/block}

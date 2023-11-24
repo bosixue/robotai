@@ -1,0 +1,296 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/transfer.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+.table tbody>tr>td {
+padding: 12px 8px;
+}
+.table-responsive {
+min-height: .01%;
+overflow-x: hidden;
+}
+
+.messageinfo{
+ text-align:right;
+
+}
+.infotable tr td{
+ padding:5px;
+}
+
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix">
+		<header class="main-box-header n_head_box n_head_box_b clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><i class="icon iconfont icon-zuoxi"></i>座席代表</span>
+		  </div>
+		  <button class="btn btn-primary pull-right" onclick="showModal(0);">添加坐席分组</button>
+		</header>
+
+
+		<div class="main-box-body t_marbott clearfix pz_manping_height">
+
+			<div class="table-responsive">
+
+				<table class="table table-bordered table-hover">
+				<thead>
+						<tr>
+								<th class="text-center"><input class="check-all" onclick="allcheck();" type="checkbox"/></th>
+                <th class="text-center">序号</th>
+								<th class="text-center">分组名称</th>
+								<th class="text-center">坐席人数</th>
+								<th class="text-center">备注</th>
+								<th class="text-center">操作</th>
+						</tr>
+					</thead>
+				<tbody>
+  				{volist  name="list" id="vo"}
+  					<tr>
+  				    <td class="text-center">
+  							<input type="checkbox" name="customerIds" class="customerIds" value="{$vo.id}"/>
+  						</td>
+
+              <td class="text-center">1</td>
+
+  						<td class="text-center">{$vo.name}</td>
+
+  						<td class="text-center">
+  							{$vo.num}
+  						</td>
+
+  						<td class="text-center">
+  							{switch name="$vo.status" }
+  								{case value="1"}
+  										<a href="javascript:void(0);" onclick="setstatus({$vo.id},0);">禁用</a>
+  								{/case}
+  								{default /}
+  										<a href="javascript:void(0);" onclick="setstatus({$vo.id},1);">启用</a>
+
+  							{/switch}
+
+  						</td>
+
+  						<td class="text-center">
+  							  <a href="{:url('Tsr/simpage',['gId'=>$vo.id])}">成员列表&nbsp;&nbsp;</a>
+  								<a href="javascript:void(0);" onclick="showModal('{$vo.id}');">编辑&nbsp;&nbsp;</a>
+  								<a href="javascript:void(0);" onclick="delgroup('{$vo.id}');">删除</a>
+  						</td>
+  					</tr>
+			    {/volist}
+				  </tbody>
+				</table>
+					<div class="row">
+						<div class="col-sm-4 text-left">
+								<div class="pull-left">
+										<input class="check-all" onclick="allcheck();" type="checkbox"/>全选（已选择<span>0</span>个坐席代表）
+										<button class="btn btn-primary" onclick="delgroup(0);" target-form="ids">删 除</button>
+								</div>
+						</div>
+						<div class="col-sm-8 text-right">{$page}</div>
+					</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+
+</div>
+
+ <script type="text/javascript">
+  //设置状态
+  function setstatus(id,status){
+  	 var url = "{:url('setStatus')}";
+  	 $.ajax({
+  	        url : url,
+  	        dataType : "json",
+  	        type : "post",
+  	        data : {'id':id,'status':status},
+  	        success: function(data){
+  	        	if (data.code) {
+ 		    		 alert(data.msg);
+ 		    	}else{
+ 		    		 location.reload();
+ 		    	}
+  	        },
+  	        error : function() {
+  	        	alert('失败。');
+  	        }
+  	  });
+  }
+
+  //全选
+  function allcheck(){
+  	if ($('.check-all').is(":checked")) {
+  		$('.customerIds').prop("checked","checked");
+  	}else{
+  		$('.customerIds').prop("checked",false);
+  	}
+  }
+
+ //删除
+ function delgroup(id){
+
+ 	 var r=confirm('确认删除?');
+     	if (!r)
+           return;
+
+     	 var ids=[];
+    	if(id){
+    		ids.push(id);
+    	}else{
+
+        	 var roleids = document.getElementsByName("customerIds");
+    		 for ( var j = 0; j < roleids.length; j++) {
+    		    if (roleids.item(j).checked == true) {
+    		    	ids.push(roleids.item(j).value);
+    		    }
+    		 }
+    	}
+
+    	if(!ids.length){
+    		alert("至少选择一条。");
+    		 return false;
+    	}
+  		 $.post("{:url('delete')}",{'id':ids},function(data){
+				// if(data.code){
+				// 	alert(data.msg);
+				// }else{
+					window.location.href=window.location.href;
+				// }
+		},'JSON');
+ }
+
+
+ </script>
+
+</div>
+
+<!-- 添加与编辑 -->
+
+<div class="modal fade" id="checkpage" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">添加坐席分组</h4>
+       </div>
+       <div class="modal-body pagelists">
+	        <form id="form" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+					    <div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">分组名称：</label>
+								<div class="col-lg-7 col-sm-7">
+								    <input type="text" class="form-control" id="name" name="name" value="" placeholder="请输入分组名称"/>
+								</div>
+					    </div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">备注：</label>
+								<div class="col-lg-7 col-sm-7">
+									<textarea class="form-control" id="remark" name="remark" placeholder="请输入备注....."></textarea>
+								</div>
+							</div>
+		     </form>
+       </div>
+       <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+           <button class="btn btn-success submit-btn" onclick="checkform();" type="button">确 定</button>
+       </div>
+       <div style="clear:both"></div>
+	 </div>
+
+  </div>
+
+	<script type="text/javascript">
+
+		function showModal(id){
+
+
+			 if(id){
+
+					 var url = "{:url('user/Tsr/getGroupInfo')}";
+					 $.ajax({
+							url : url,
+							dataType : "json",
+							type : "post",
+							data : {'id':id},
+							success: function(data){
+
+								if (data.code == 0) {
+
+									 var data = data.data;
+									 $("#name").val(data.name);
+									 $("#remark").val(data.remark);
+									 $("#groupId").val(data.id);
+                   $('#myModalLabel').html('编辑坐席分组');
+									 $('#checkpage').modal('show');
+
+								}
+
+							},
+							error : function() {
+								alert('审核信息失败。');
+							}
+						});
+
+			 }
+			 else{
+           $("#groupId").val(id);
+           $('#myModalLabel').html('添加坐席分组');
+					 $('#checkpage').modal('show');
+
+			 }
+
+
+		}
+
+
+	 //检查表单的必填项
+		function checkform(){
+
+			 var name = $("#name").val();
+			 if(!name){
+				alert("分组名称不可为空");
+				return false;
+			 }
+
+			 var href = "{:url('user/Tsr/add')}";
+
+			 $.ajax({
+					 type: "POST",
+					 dataType:'json',
+					 url: href,
+					 cache: false,
+					 data: $("#form").serialize(),
+					 success: function(data) {
+						if (data.code == 0) {
+								$('#checkpage').modal('hide');
+							 location.reload();
+						}else{
+							 alert(data.msg);
+
+						}
+
+					 },
+					 error: function(data) {
+						 alert("提交失败");
+					 }
+			 })
+		}
+
+
+
+	</script>
+
+
+</div>
+
+{include file="sms/sms_targer" /}
+
+{/block}

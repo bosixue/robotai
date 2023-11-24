@@ -1,0 +1,157 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+{include file="device/dialog" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="/public/css/line.css" type="text/css">
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img_sj/xiaoshouzhanghaoguanli.png" alt="">线路分配</span>
+		  </div>
+			<div class="form-inline fr l-operationbtn">
+				<div class="form-group">
+					<label class="statusSelect pull-left" >用户名：</label>
+					<input type="text" class="form-control pull-left l-search" id="username" name="keyword" >
+				</div>
+				<div class="form-group">
+					<label class="statusSelect pull-left" >线路名称：</label>
+					<input type="text" class="form-control pull-left l-search" id="linename" name="keyword" >
+				</div>
+				<div class="form-group">
+					<label class="statusSelect pull-left" >状态：</label>
+					<select class="form-control pull-left" name="">
+						<option  value="">请选择线路分配</option>
+						<option  value="">已分配</option>
+						<option  value="">未分配 </option>
+						<option  value="">暂无信息 </option>
+					</select>
+				</div>
+				<div class="form-group operationbtn">
+					<span class="btn btn-primary  pull-left" type="button" onclick="">查询</span>
+					<span class="btn btn-primary  pull-left btnreset" type="button" onclick="">重置</span>
+				</div>
+			</div>
+		</header>
+		<div class="main-box-body clearfix">
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">
+									<input class="check-all" name='all_checked' type="checkbox"/>
+								</th>
+								<th class="text-center">序号</th>
+                <th class="text-center">用户名</th>
+								<th class="text-center">线路名称</th>
+								<th class="text-center">成本价（元/每分）</th>
+								<th class="text-center">状态</th>
+								<th class="text-center">备注</th>
+              	<th class="text-center">操作</th>
+					    </tr>
+				    </thead>
+				    <tbody id="recharge-recored-list">
+            	<tr>
+								<td class="text-center"><input class="rolecheck" type="checkbox" name="roleids"/></td>
+                <td class="text-center">1</td>
+	              <td class="text-center">小明</td>
+	              <td class="text-center">测试线路</td>
+	              <td class="text-center">0.15</td>
+	              <td class="text-center">已分配</td>
+	              <td class="text-center">测试分配线路</td>
+	              <td class="text-center">
+                  <a href="javascript:void(0);" onclick="edit_line();">编辑线路</a>
+                  <a href="javascript:void(0);" data-title="删除单个线路" onclick="popTipswin(this);">删除线路</a>
+                </td>
+							</tr>
+              <tr>
+								<td class="text-center"><input class="rolecheck" type="checkbox" name="roleids"/></td>
+                <td class="text-center">1</td>
+	              <td class="text-center">小红</td>
+	              <td class="text-center"></td>
+	              <td class="text-center"></td>
+	              <td class="text-center">未分配</td>
+	              <td class="text-center"></td>
+	              <td class="text-center">
+                  <a href="javascript:void(0);" onclick="allocation_line();">分配线路</a>
+                  <a href="javascript:void(0);" data-title="删除单个线路" onclick="popTipswin(this);">删除线路</a>
+                </td>
+							</tr>
+				    </tbody>
+				  </table>
+					<div class="row">
+						<footer class="main-box-footer clearfix col-sm-12">
+							<div class="pull-left">已选择1条记录</div>
+							<div class="pull-right " id="modalpagebody">
+								<div class=" pull-right"  id="consumepage">
+									<!--页码-->
+
+								</div>
+								<div class="  text-right pull-right">
+									<p>全部记录：12条</p>
+								</div>
+						</div>
+						</footer>
+					</div>
+			  </div>
+		</div>
+	</div>
+</div>
+</div>
+
+ <script type="text/javascript">
+	 //当前页全选
+	  $("input[name='all_checked'][type='checkbox']").click(function(){
+	 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+	   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+	   	} else {
+	  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+	  	}
+	  });
+	 	//子复选框的事件
+	 	$('input[type="checkbox"][name="roleids"]').click(function(){
+	 		//当没有选中某个子复选框时，check-all取消选中
+	 		if (!$(".rolecheck").checked) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+	 		}
+	 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+	 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+	 		if (checkedsub == chsub) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+	 		}
+	 	});
+
+		//重置
+		function orderChongzhi(){
+			$('#startDate').val("");
+			$('#endTime').val("");
+		}
+  </script>
+
+<script type="text/javascript">
+  function edit_line(){
+    $('#line-edit').modal('show');
+  }
+
+  function allocation_line(){
+    $('#alloction-line').modal('show');
+  }
+
+</script>
+
+
+
+
+
+
+
+{include file="sms/sms_targer" /}
+{/block}

@@ -1,0 +1,2907 @@
+<!--话术配置页面下所有弹框-->
+<script src="http://47.107.112.69:5858/public/plugs/bootstrap-select/dist/js/bootstrap-select.js"></script>
+<!--语义标签页面弹框添加/编辑标签弹框-->
+<div class="modal fade" id="semanticlabel_add_edit" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="semanticlabel_title"><span>添加语义标签</span></h4>
+            </div>
+            <div class="modal-body pagelists">
+                <form id="branchform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">标签名：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input class="form-control" id="semantics-branchName" name="branchName" style="width: 250px;" placeholder="请输入标签名" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">关键词：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <textarea id="semantics-branchkeyword" class="form-control" placeholder="多个关键字之间用英文逗号“,”分隔" style="width: 250px; height: 80px; resize: vertical; margin-top: 0px; margin-bottom: 0px;"></textarea>
+                            <div class="help-block">多个关键字之间用英文逗号“,”分隔</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button class="btn btn-primary submit-btn" onclick="add_SemanticlabelSubmit();" type="button">确 定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--语义标签页面删除弹窗-->
+<div class="modal fade" id="delModal_semanticlabel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+           <span aria-hidden="true">×</span>
+         </button>
+         <h4 class="modal-title" id="mySemanticlabel">
+           操作提示
+         </h4>
+       </div>
+       <div class="modal-body modal-body-tips">
+         确定删除当前选中的语义标签？
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">   取 消		</button>
+         <button type="button" class="btn btn-primary" onclick="delSemanticlabel();">	确 定    </button>
+       </div>
+     </div>
+   </div>
+ </div>
+<!--/语义标签页面弹框-->
+
+<!--流程页面新建/编辑话术弹框-->
+<div class="modal fade" id="speechcraft" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-sm" style="width: 430px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="speechcraft_title"><span>新建话术</span></h4>
+            </div>
+            <div class="modal-body pagelists">
+                <form id="formScenariosform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">话术名称：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" class="form-control" placeholder="请输入话术名称" name="name" id="name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">行业类型：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <select class="form-control" id="tradeType" name="tradeType">
+                                <option value="0">请选择行业</option>
+                                <option value="1">金融</option>
+                                <option value="2">贷款</option>
+                                <option value="3">房产</option>
+                                <option value="4">装修</option>
+                                <option value="5">汽车</option>
+                                <option value="6">教育</option>
+                                <option value="7">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="breakContent">
+                        <label class="col-lg-3 control-label">自动打断：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <select class="form-control" id="break" name="break">
+                                <option value="0">是</option>
+                                <option value="1">否</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="scenariosId" id="scenariosId" value="">
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="formScenarios();" type="button">确 定</button>
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/新建话术弹框-->
+
+<!--流程页面复制话术弹框-->
+<div class="modal fade" id="Replicas" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-sm" style="width: 445px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title">复制话术</h4>
+            </div>
+            <div class="modal-body pagelists l-modal-body">
+                <form id="copyScene" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group" id="breakContent" style="display: block;">
+                        <label class="col-lg-4 control-label">新话术名称：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input class="form-control" id="newSName" name="newSName" placeholder="新话术名字" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">选择要复制的话术：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <select class="form-control" id="targetObj" name="targetObj">
+                                <option value=" ">请选择要复制的话术</option>{volist name="scenarioslist" id="vo" key="k"}
+                                <option value="{$vo.id}">{$vo.name}</option>{/volist}</select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <input type="hidden" name="ThinkTankId" id="ThinkTankId" value="">
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="copySubmit();" type="button">确 定</button>
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+  </div>
+<!--/流程页面复制话术弹框-->
+
+<!--流程页面添加场景节点-->
+<div class="modal fade" id="flownode" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width: 430px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="flownode_ModalLabel"><span>添加场景节点</span></h4>
+            </div>
+            <div class="modal-body pagelists l-modal-body">
+                <form id="flownoteform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-4 control-label">场景节点名称：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <input type="text" class="form-control" placeholder="请输入场景节点名称" name="flowname" id="flowname" />
+                        </div>
+                    </div>
+                    <div class="form-group" id="sctype" style="display: none;">
+                        <label class="col-lg-4 control-label">场景节点类型：</label>
+                        <div class="col-lg-6 col-sm-6">
+                            <select class="form-control" id="scenetype" name="scenetype">
+                                <option value="0">普通场景节点</option>
+                                <option value="1">公共场景节点</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <input type="hidden" name="flowId" id="flowId" value="">
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="formFlow();" type="button">确 定</button>
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/流程页面添加场景节点-->
+
+<!--流程页面备份话术弹框-->
+<div class="modal fade" id="backupscene" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+         <span aria-hidden="true">×</span>
+       </button>
+       <h4 class="modal-title" id="myModalLabel">
+         操作提示
+       </h4>
+     </div>
+     <div class="modal-body modal-body-tips">
+       确定要备份当前话术？
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal">   取 消		</button>
+       <button type="button" class="btn btn-primary" onclick="outexcel();">	确 定    </button>
+     </div>
+   </div>
+ </div>
+</div>
+ <!--/流程页面备份话术-->
+ 
+ <!--流程节点弹框-->
+ <!-- 普通节点 -->
+<div class="modal fade" id="commonNode" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="width: 525px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					 <span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title">流程节点</h4>
+			</div>
+		  <div class="modal-body pagelists pz_innerbox">
+				<form id="commonNodeform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+					<div class="form-group" id="breakContent" style="display: block;">
+						<label class="col-lg-3 control-label">节点名称：</label>
+						<div class="col-lg-9 col-sm-9">
+							<input class="form-control" id="cNodeName" name="cNodeName" style="width: 250px;" placeholder="节点名称" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-lg-3 control-label">流程标签：</label>
+						<div class="col-lg-9 col-sm-9">
+							<input id="nodeLabel" class="form-control" placeholder="请输入流程标签名称" type="text" style="width:250px;" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-lg-3 control-label">AI话术：</label>
+						<div class="col-lg-9 col-sm-9">
+							<input type="hidden" name="tc_id" id="tc_id" value="">
+							<textarea id="AIStechnique" class="form-control pz_innerbox" placeholder="进入该节点后播放的话术" style="width: 250px; height: 80px; resize: vertical; margin-top: 0px; margin-bottom: 0px;"></textarea>
+							<div class="help-block"></div>
+						</div>
+					</div>
+					<div class="form-group">
+							<label class="col-lg-3 control-label">导入录音：</label>
+							<input hidden value="" id="only_voice_id"/>
+							<div class="col-lg-8 col-sm-8 importRecording">
+								<div>
+									<input type="radio" id="nodeuploadLocal" name="choice" value='1' checked="checked"/>本地上传
+								  <input type="radio" id="noderecordingSelection" name="choice"  value='2' />录音选择
+								</div>
+								<div class="recording col-lg-10 col-sm-10 hidden" id="nodeRecordingChioce">
+									<div class="form-group">
+										<label class="col-lg-1  col-sm-1 control-label">选择音频来源：</label>
+										<select class="form-control sellect-width" id="noe_type_chan" onchange ="zget_coice(this);" style="width:120px;">
+											<option value="">请选择</option>
+											<option value="1">全部音频</option>
+											<option value="2">上传音频</option>
+											<option value="3">合成音频</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-1  col-sm-1 control-label">选择录音：</label>
+										<select class="  form-control sellect-width" id="voice_chan" onchange="sure_voice();" style="width:120px;">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+								<div>
+								<input type="file" id="nodeRecordingFile" onchange="formSoundl(this);" accept=".wav," >
+								<audio src="" id="voice_id" preload="preload" controls="controls" style="width:270px;"></audio>
+							</div>
+							</div>
+						</div>
+			<div class="form-group">
+				<label class="col-lg-3 control-label">用户回答：</label>
+				<div class="col-lg-9 col-sm-9">
+					<div class="row" id="fixedList"></div>
+					<br/>
+					<div class="row">
+						<p>自定义回答分支</p>
+						<div id="CustomList">
+						<!--
+								<div class="leftfl">
+									<input id="Sanswer" name="answer" value="肯定" alt="sure" type="checkbox" />
+									<span>肯定</span>
+									<span class="glyphicon glyphicon-pencil showpen" onclick="gotoeditorial('sure');" aria-hidden="true"></span>
+								</div>
+								 -->
+			
+						</div>
+						<div style="clear: both;margin-bottom: 5px;"></div>
+						<button type="button" class="btn btn-primary" onclick="gotoeditorial('custom',0);">
+							<i class="fa fa-plus-circle fa-lg" style="margin-right: 10px;"></i>增加分支
+					  </button>
+					</div>
+				</div>
+			</div>
+
+				<div class="form-group">
+					<label class="col-lg-3 control-label">暂停时间：</label>
+					<div class="col-lg-9 col-sm-9">
+						<input class="form-control pull-left" type="number" id="cpauseTime" name="cpauseTime" style="width: 180px;" placeholder="暂停时间" />
+						<span style="line-height: 40px;margin-left: 5px;">毫秒</span>
+					<!-- 	<div class="help-block">暂停时间，默认3000毫秒</div> -->
+					</div>
+				</div>
+
+			  <div class="form-group">
+			  	<label class="col-lg-3 control-label">其他设置：</label>
+			  	<div class="col-lg-9 col-sm-9 margt">
+			  		<input id="Othersettings" placeholder="请输入流程标签名称" value="1" type="checkbox" />
+			  		<span>不允许用户打断</span>
+						<br/>
+						<input id="unanswered" onclick="checkanswere(this);" value="1" type="checkbox" />
+						<span>指定未回复</span>
+						<br/>
+						<input id="smsInfo" onclick="checksms(this);" value="1" type="checkbox" style='display:none;' />
+						<span style='display:none;'>短信通知</span>
+						<br style='display:none;'/>
+						<input id="agent" onclick="getagent(this);" value="1" type="checkbox" />
+						<span>人工坐席</span>
+
+			  	</div>
+			  </div>
+
+				<div class="form-group" id="answeredlist" style="display: none;">
+					<label class="col-lg-3 control-label"></label>
+					<div class="col-lg-8 col-sm-8" id="">
+					 	<select class="form-control" id="eightList" name="eightList">
+
+					 	</select>
+					</div>
+				</div>
+
+				<div class="form-group" id="smstpl" style="display: none;">
+					<label class="col-lg-3 control-label"></label>
+					<div class="col-lg-8 col-sm-8">
+							<select class="form-control" id="smsList" name="smsList">
+
+							</select>
+					</div>
+				</div>
+				<div class="form-group" id="agentbox" style="display: none;">
+					<label class="col-lg-3 control-label"></label>
+					<div class="col-lg-8 col-sm-8">
+						<select class="form-control" id="agentList" name="agentList">
+							<option value="" selected=""> 选择坐席 </option>
+							{volist name="seats" id="seat" key="sk"}
+								<option value="{$seat.id}">{$seat.username}</option>
+							{/volist}
+						</select>
+					</div>
+				</div>
+		  </form>
+
+		</div>
+		<div style="clear:both"></div>
+		<div class="modal-footer" style="text-align: center;">
+			<input type="hidden" name="commonNodeId" id="commonNodeId" value="">
+			<input type="hidden" name="commonNodeType" id="commonNodeType" value="">
+			<button class="btn btn-primary submit-btn" onclick="commonNodeSubmit();" type="button">确 定</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+		</div>
+ </div>
+</div>
+</div>
+ <!--/流程节点名称-->
+
+<!-- 跳转节点 -->
+<div class="modal fade" id="jumpNote" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+	<div class="modal-dialog"  style="width:500px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					 <span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title">跳转节点</h4>
+			</div>
+
+		  <div class="modal-body pagelists pz_innerbox">
+				<form id="flowjumpform" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+					<div class="form-group">
+						<label class="col-lg-4 col-sm-4 control-label">节点名称：</label>
+						<div class="col-lg-8 col-sm-8">
+							<input class="form-control" id="flowNoteName" name="flowNoteName" style="width: 250px;" placeholder="节点名称" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-lg-4 col-sm-4 control-label">跳转前话术：</label>
+						<div class="col-lg-8 col-sm-8">
+							<input type="hidden" name="fjtc_id" id="fjtc_id" value="" />
+							<textarea id="jfkeyword" class="form-control" placeholder="进入该节点后播放的话术（可以为空）" style="width: 250px; height: 80px; resize: vertical; margin-top: 0px; margin-bottom: 0px;"></textarea>
+							<div class="help-block"></div>
+						</div>
+					</div>
+					
+						<div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label">导入录音：</label>
+							<input hidden value="" id="only_voice_id"/>
+							<div class="col-lg-8 col-sm-8 importRecording">
+								<div class="jumpNoteRecording">
+									<input type="radio" id="jumpNoteuploadLocal" name="jumpNoteChoice" value='1' checked="checked"/>本地上传
+								  <input type="radio" id="jumpNoterecordingSelection" name="jumpNoteChoice"  value='2' />录音选择
+								</div>
+								<div class="recording col-lg-10 col-sm-10 hidden" id="jumpNoteRecordingChioce">
+									<div class="form-group">
+										<label class="col-lg-1  col-sm-1 control-label">选择音频来源：</label>
+										<select class="form-control sellect-width" id="lnoe_type_chan" onchange ="lget_coice(this);" style="width:120px;">
+											<option value="">请选择</option>
+											<option value="1">全部音频</option>
+											<option value="2">上传音频</option>
+											<option value="3">合成音频</option>
+										</select>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-1  col-sm-1 control-label">选择录音：</label>
+										<select class="  form-control sellect-width" id="voice_change" onchange="lsure_voice();" style="width:120px;">
+											<option value="">请选择</option>
+										</select>
+									</div>
+								</div>
+								<div class="jumpNoteRecordingInput">
+								<input type="file" id="jumpNoteRecordingFile" onchange="zformSoundl(this);" accept=".wav," >
+								<audio src="" id="lvoice_id" preload="preload" controls="controls" style="width:250px"></audio>
+							</div>
+							</div>
+						</div>
+						<script>
+							$("input[name='jumpNoteChoice']").click(function(){
+            		var file = $("#jumpNoteRecordingFile") ;
+            		file.after(file.clone().val(""));      
+            		file.remove();  
+            		$('#lnoe_type_chan').val('');
+            		$('#voice_change').val('');
+            		$("#voice_change").find("option").not(":first").remove();
+            		$('#lvoice_id').attr('src',window.lvoice_audio);
+            		if($('#jumpNoterecordingSelection').is(':checked')){
+            			$('#jfkeyword').attr("readonly","readonly");
+            			$('#jfkeyword').val(window.lvoice_content)
+            		}else if($('#jumpNoteuploadLocal').is(':checked')){
+            			$('#jfkeyword').removeAttr("readonly");
+            		}
+            	})
+            	
+            	function zformSoundl(Object){
+            		if(Object.files.length > 0 ){
+            			var excel = document.getElementById("jumpNoteRecordingFile").files[0];
+            			var objUrl = getObjectURL(Object.files[0]);
+            			var filePath = $('#jumpNoteRecordingFile').val().toLowerCase().split(".");
+            			var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+            			if(!(fileType == "wav")){
+                  		alert('文件格式不符合要求！');
+                  		var file = $("#jumpNoteRecordingFile") ;
+            					file.after(file.clone().val(""));      
+            					file.remove();  
+                  		return 
+            	    }else if(excel.size>10485760){
+            	        alert('错误！请上传不超过10M的文件');
+            	        var file = $("#jumpNoteRecordingFile") ;
+            					file.after(file.clone().val(""));      
+            					file.remove();  
+            	        return
+            	    }else{
+            	    		$('#lvoice_id').attr('src',objUrl);
+            	    }
+            		}else{
+            			$('#lvoice_id').attr('src',window.lvoice_audio);
+            			$('#jfkeyword').val(window.lvoice_content);
+            		}
+            	}
+						  function lget_coice(obj){
+						    var data = {};
+            		data.id = $('.active .Idlist').val();
+            		data.type = $(obj).val();
+            		var url ="{:url('get_type_voice')}"
+            		$.ajax({
+            			url : url,
+            			dataType : "json",
+            			type : "post",
+            			data : data,
+            			success: function(data){
+            				console.log(data)
+            				$("#voice_change").find("option").not(":first").remove();
+            				if(data.code == 0){
+            					var list = data.data;
+            					$.each(list,function(index,value){
+            				     var option = $("<option>").val(value.id).text(value.content).attr('title',value.content);
+            						 $("#voice_change").append(option);
+            					});
+            					$("#voice_change").get(0).selectedIndex=0;
+            				}else{
+            					$('#lvoice_id').attr('src',window.lvoice_audio);
+            					$('#jfkeyword').val(window.lvoice_content);
+            				}
+            			},
+            			error : function() {
+            			}
+            		});
+						  }
+						  function lsure_voice(){
+            		var id = $('#voice_change').val();
+            		var url = "{:url('sure_voice')}"
+            		$.ajax({
+            			url : url,
+            			dataType : "json",
+            			type : "post",
+            			data : {id:id},
+            			success: function(data){
+            				console.log(data);
+            				console.log(window.lvoice_audio);
+            				if(data.code == 0){
+            					$('#lvoice_id').attr('src',data.data.audio);
+            					$('#jfkeyword').val(data.data.content);
+            				}else{
+            					$('#lvoice_id').attr('src',window.lvoice_audio);
+            					$('#jfkeyword').val(window.lvoice_content);
+            				}
+            			},
+            			error : function() {
+            			}
+            		});
+            	}
+					</script>
+
+					<div class="form-group">
+						<label class="col-lg-4 col-sm-4 control-label">下一步：</label>
+						<div class="col-lg-8 col-sm-8">
+							<select class="form-control" id="nextflow" name="nextflow" onchange="changeflow(this);" style="width: 250px;">
+								<option value=" ">选择跳转到哪一步</option>
+								<option value="4">挂机</option>
+								<option value="1">下一主动流程</option>
+								<option value="2">指定主动流程</option>
+
+							</select>
+						</div>
+				  </div>
+					<div class="form-group" id="mainflowdiv" style="display: none;">
+						<label class="col-lg-4 col-sm-4 control-label">指定的流程节点：</label>
+						<div class="col-lg-8 col-sm-8">
+							<select class="form-control" id="mainflow" name="mainflow" style="width: 250px;">
+								<option value=" ">选择要跳转到的流程节点</option>
+
+							</select>
+						</div>
+					</div>
+
+	        <div class="form-group">
+	         	<label class="col-lg-4 col-sm-4 control-label">暂停时间：</label>
+	         	<div class="col-lg-8 col-sm-8">
+	         		<input class="form-control" type="number" id="jpauseTime" name="jpauseTime" style="width: 250px;" placeholder="暂停时间" />
+							<div class="help-block">暂停时间，默认3000毫秒</div>
+	         	</div>
+	        </div>
+				 </form>
+			  </div>
+			<div style="clear:both"></div>
+
+			<div class="modal-footer" style="text-align: center;">
+				<input type="hidden" name="fNodeType" id="fNodeType" value="" />
+				<input type="hidden" name="nowEditId" id="nowEditId" value="" />
+				<button class="btn btn-primary submit-btn" onclick="flowSubmit();" type="button">确 定</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+			</div>
+	 </div>
+	</div>
+</div>
+ 
+<!--等级分类中添加模板-->
+<div class="modal fade" id="grade_edit_add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-sm" style="width: 900px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                  <h4 class="grade-title"><sapn id="grade-title">添加模板</sapn></h4>
+            </div>
+            <div class="modal-body pagelists l-modal-body pz_innerbox">
+                <form id="intention-level" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-1 control-label">模板名称：</label>
+                        <div class="col-lg-10 col-sm-10">
+                          <input type="text" class="form-control" name="" value="" id="intention_modelname" placeholder="请输入模板名称">
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label class="col-lg-1 control-label">模板描述：</label>
+                        <div class="col-lg-10 col-sm-10">
+                          <textarea name="name" class="form-control" rows="4" cols="30" id="model_describe" placeholder="请描述模板"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-1 control-label">模板配置：</label>
+                        <div class="col-lg-10 col-sm-10 displayf">
+                            <div class="left-content-temp" >
+                                <div class="title" data-type="isInvitation">
+                                    <span>是否邀约成功</span>
+                                    <img  src="/public/img/tianjia.png" >
+                                </div>
+                                <div class="title" data-type="isInvitation">
+                                    <span>客户最后是否拒绝</span>
+                                    <img src="/public/img/tianjia.png">
+                                </div>
+                               <div class="title" data-type="frequency">
+                                   <span>命中问题次数</span>
+                                   <img src="/public/img/tianjia.png">
+                               </div>
+                               <div class="title" data-type="frequency">
+                                   <span>肯定次数</span>
+                                   <img src="/public/img/tianjia.png">
+                               </div>
+                                <div class="title" data-type="frequency">
+                                    <span>拒绝次数</span>
+                                    <img src="/public/img/tianjia.png">
+                                </div>
+                                <div class="title" data-type="frequency">
+                                    <span>客户讲话次数</span>
+                                    <img src="/public/img/tianjia.png">
+                                </div>
+                                <div class="title" data-type="duration">
+                                    <span>通话时长</span>
+                                    <img src="/public/img/tianjia.png">
+                                </div>
+                                <div class="title" data-type="status">
+                                    <span>通话状态</span>
+                                    <img src="/public/img/tianjia.png">
+                                </div>
+                                <div class="title" data-type="content">
+                                    <span>客户通话内容</span>
+                                    <img src="/public/img/tianjia.png">
+                                </div>
+                            </div>
+                            <div class="right-content-temp">
+                                <div class="gradeType" id="gradeA">
+                                    <div class="gradeTitle">
+                                        <span>A级等级分类</span>
+                                        <i class="gradeOpen"></i>
+                                    </div>
+                                    
+                                </div>
+                                <div class="gradeType" id="gradeB">
+                                    <div class="gradeTitle">
+                                        <span>B级等级分类</span>
+                                        <i class="gradeOpen"></i>
+                                    </div>
+                                </div>
+                                <div class="gradeType" id="gradeC">
+                                    <div class="gradeTitle">
+                                        <span>C级等级分类</span>
+                                        <i class="gradeClose"></i>
+                                    </div>
+                                </div>
+                                <div class="gradeType" id="gradeD">
+                                    <div class="gradeTitle">
+                                        <span>D级等级分类</span>
+                                        <i class="gradeOpen"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div id="level">-->
+                    	
+                    <!--</div>-->
+                    <!--<div class="form-group" >-->
+                    <!--  <label class="col-lg-2 control-label "></label>-->
+                    <!--  <div class="col-lg-9 col-sm-9">-->
+                    <!--    <img src="/public/img_sj/pay_attention.png"/>-->
+                    <!--    <span style="color: #909090;font-size: 12px; margin-bottom:20px;">若以上意向等级均不符合，则该客户意向等级为<span id='default_level'>F</span>级</span>-->
+                    <!--  </div>-->
+                    <!--</div>-->
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+              <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="add_intentionSubmit();" type="button">确 定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--等级分类添加弹框-->
+<div class="modal fade" id="add_type" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width: 500px; margin-top:7%!important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id=""><span>添加</span></h4>
+            </div>
+            <div class="modal-body pagelists l-modal-body">
+                <form id="add_grade" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label nopaddingr">配置：</label>
+                        <div class="col-lg-9 col-sm-9 " id="temp">
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label nopaddingr"><span class="start">*</span>联动关系：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <select class="form-control width270" id="linkageRelationship" name="linkageRelationship">
+                                <option value="">请选择联动关系</option>
+                                <option value="0">无</option>
+                                <option value="1">且</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label nopaddingr"><span class="start">*</span>加入意向：</label>
+                        <div class="col-lg-9 col-sm-9">
+                            <select class="form-control width270" id="intentionLevel" name="intentionLevel">
+                                <option value="">请选择意向等级</option>
+                                <option value="A">A级意向等级</option>
+                                <option value="B">B级意向等级</option>
+                                <option value="C">C级意向等级</option>
+                                <option value="D">D级意向等级</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <input type="hidden" name="flowId" id="flowId" value="">
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="grade_condition();" type="button">确 定</button>
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--意向等级删除弹窗-->
+<div class="modal fade" id="delModal_intention" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+		 <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+			 <div class="modal-content">
+				 <div class="modal-header">
+					 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+						 <span aria-hidden="true">×</span>
+					 </button>
+					 <h4 class="modal-title" id="myintentionLabel">
+						 操作提示
+
+					 </h4>
+				 </div>
+				 <div class="modal-body modal-body-tips">
+					 确定删除所选数据？
+				 </div>
+				 <div class="modal-footer">
+					 <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+					 <button type="button" class="btn btn-primary" onclick="delintention();">	 确定    </button>
+				 </div>
+			 </div><!-- /.modal-content -->
+		 </div><!-- /.modal-dialog -->
+	 </div>
+<!--/等级分类中添加模板-->
+
+<div class="modal fade" id="ThinkTank" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:550px;">
+		<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title">添加知识库</h4>
+				</div>
+			 <div class="modal-body pz_innerbox_lay">
+					<form id="ThinkTankForm" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+						<div class="form-group">
+							<label class="col-lg-3 control-label">标题名称：</label>
+							<div class="col-lg-8 col-sm-8">
+								<input id="ttfname" class="form-control" placeholder="请输入标题名称" type="text" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-3 control-label">知识库标签：</label>
+							<div class="col-lg-8 col-sm-8">
+								<input id="label" class="form-control" placeholder="请输入知识库标签" type="text" />
+							</div>
+						</div>
+
+						<div class="form-group" id="kongknlg">
+							<label class="col-lg-3 control-label">知识库类型：</label>
+							<div class="col-lg-8 col-sm-8">
+								<select class="form-control" id="knlgType" name="knlgType">
+									<option value="0">请选择问答类型</option>
+									<option value="1">普通</option>
+									<option value="8">用户未说话</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-3 control-label">关键字：</label>
+							<div class="col-lg-8 col-sm-8">
+								<textarea id="keyword" class="form-control" placeholder="多个关键字之间用英文逗号“,”分隔" style="height:auto;resize: vertical;"></textarea>
+								<div class="help-block">多个关键字之间用英文逗号“,”分隔</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-3 control-label">机器人回复：</label>
+							<div class="col-lg-8 col-sm-8">
+								<div>
+									 <button type="button" class="btn btn-knowledgebase" onclick="addContent();" style="font-size: 14px;">
+										 <img src="__PUBLIC__/img/tianjia.png" alt="">
+										 <span>添加条件</span>
+									 </button>
+								</div>
+								
+							<div style="clear:both;"></div>
+								
+							<div id="contentlist" class="pz_innerbox">
+
+						  </div>
+						</div>
+					</div>
+						<div class="form-group">
+							<label class="col-lg-3 control-label">动作：</label>
+							<div class="col-lg-8 col-sm-8">
+								<select class="form-control" id="action"  onchange="changeaction(this);"  name="action">
+									<option value="4">挂机</option>
+									<option value="1">下一场景节点</option>
+									<option value="2">指定场景节点</option>
+									<option value="3">返回当前场景节点中的流程</option>
+									<option value="0">等待用户响应</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group" id="mainScenesl" style="display: none;">
+								<label class="col-lg-3 control-label">指定流程节点：</label>
+								<div class="col-lg-8 col-sm-8">
+									<select class="form-control" id="mainSceneFlow" name="mainflow">
+										<option value=" ">选择要跳转到的流程节点</option>
+
+									</select>
+								</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-lg-3 control-label">意向等级：</label>
+							<div class="col-lg-8 col-sm-8">
+								<select class="form-control" id="flowNodeLevel" name="flowNodeLevel">
+									<option value=" " selected=""> 选择意向等级 </option>
+									<option value="6">A级(有明确意向)</option>
+									<option value="5">B级(可能有意向)</option>
+									<option value="4">C级(明确拒绝)</option>
+									<option value="3">D级(用户忙)</option>
+									<option value="2">E级(拨打失败)</option>
+									<option value="1">F级(无效客户)</option>
+								</select>
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<label class="col-lg-3 control-label">暂停时间：</label>
+							<div class="col-lg-8 col-sm-8">
+								<input class="form-control pull-left" type="number" id="ttpauseTime" style="width: 180px;" name="ttpauseTime" placeholder="暂停时间" />
+								<span style="line-height: 40px;margin-left: 5px;">毫秒</span>
+								<!-- <div class="help-block">暂停时间，默认3000毫秒</div> -->
+							</div>
+						</div>
+
+					<div class="form-group">
+						<label class="col-lg-3 control-label">其他设置：</label>
+						<div class="col-lg-8 col-sm-8 margt">
+							<!--<input id="msgInfo" onclick="checkmsg(this);" value="1" type="checkbox" style='display:none;'/>-->
+							<!--<span style='display:none;'>短信通知</span>-->
+							<!--<br style='display:none;'/>-->
+							<input id="kagent" onclick="kgetagent(this);" value="1" type="checkbox"  style="vertical-align:middle;margin:0px;"/>
+							<span>人工坐席</span>
+						</div>
+					</div>
+
+					<div class="form-group" id="msgtpl" style="display: none;">
+							<label class="col-lg-3 control-label"></label>
+							<div class="col-lg-8 col-sm-8" id="">
+									<select class="form-control" id="msgList" name="msgList">
+
+
+									</select>
+							</div>
+					</div>
+
+					<div class="form-group" id="kagentbox" style="display: none;">
+							<label class="col-lg-3 control-label"></label>
+							<div class="col-lg-8 col-sm-8">
+									<select class="form-control" id="kagentList" name="kagentList">
+										<option value="" selected=""> 选择坐席 </option>
+										{volist name="seats" id="seat" key="sk"}
+											<option value="{$seat.id}">{$seat.username}</option>
+										{/volist}
+									</select>
+							</div>
+					</div>
+
+
+				 </form>
+
+			 </div>
+			 <div style="clear:both"></div>
+
+			 <div class="modal-footer">
+					<input type="hidden" name="ThinkTankId" id="ThinkTankId" value="">
+					<button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="cfThinkTank();" type="button">确 定</button>
+					<button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+			 </div>
+
+	 </div>
+
+	</div>
+
+		
+</div>
+
+<div class="modal fade" id="knowledgebase-single-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	 <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips">
+				 确定删除所选数据？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+				 <button type="button" class="btn btn-primary" onclick="delKnowledge(2)">	 确定    </button>
+			 </div>
+		 </div><!-- /.modal-content -->
+	 </div><!-- /.modal-dialog -->
+ </div>
+
+<!--模拟测试对话框-->
+<div class="modal right fade" id="simulationTest" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" >
+    <div class="modal-dialog" >
+        <div class="modal-content simulationTest-content">
+            <div class="modal-header simulationTest-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                <a href="javascript:;"  class="pull-right" onclick="restart()">重新开始</a>
+              	<h4 class="modal-title " id="moni_title"><span>模拟测试</span></h4>
+            </div>
+            <div class="modal-body simulationTest-body pz_innerbox" id ="simulationTestform" style="overflow-y:auto;">
+                
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+            	<div class="col-lg-10 col-sm-10">
+            		 <textarea  class="form-control pz_innerbox msg_send"></textarea>
+            	</div>
+            	<div class="col-lg-2 col-sm-2">
+            		 <button class="btn btn-primary submit-btn "  onclick="send();" type="button">发送</button>
+            	</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑分支 -->
+<div class="modal fade" id="editorial" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="width:450px;">
+		<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title">编辑分支</h4>
+				</div>
+
+			 <div class="modal-body pagelists">
+					<form id="branchform" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+							<div class="form-group">
+								<label class="col-lg-4 control-label">分支名称：</label>
+								<div class="col-lg-8 col-sm-8">
+									<input class="form-control" id="branchName" name="branchName" style="width: 250px;;" placeholder="分支名称" />
+								</div>
+							</div>
+              <div class="form-group">
+								<label class="col-lg-4 control-label">标签：</label>
+								<div class="col-lg-8 col-sm-8">
+									<input class="form-control" id="labelName" name="labelName" style="width: 250px;;" placeholder="标签" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 control-label">关键词：</label>
+								<div class="col-lg-8 col-sm-8">
+									<textarea id="branchkeyword" class="form-control pz_innerbox" placeholder="多个关键字之间用英文逗号“,”分隔" style="width: 250px; height: 80px; resize: vertical; margin-top: 0px; margin-bottom: 0px;"></textarea>
+									<div class="help-block">多个关键字之间用英文逗号“,”分隔</div>
+								</div>
+							</div>
+
+							<div class="form-group" id="globalId">
+								<label class="col-lg-4 control-label">全局关键字：</label>
+								<div class="col-lg-8 col-sm-8">
+									<textarea id="answerMethod" class="form-control pz_innerbox" placeholder="多个全局关键字之间用英文逗号“,”分隔" style="width: 250px; height: 80px; resize: vertical; margin-top: 0px; margin-bottom: 0px;"></textarea>
+									<div class="help-block">多个全局关键字之间用英文逗号“,”分隔</div>
+								</div>
+							</div>
+				 </form>
+			 </div>
+			 <div style="clear:both"></div>
+
+			 <div class="modal-footer" style="text-align: center;">
+				 <input id="nowEditBranch" value="" type="hidden" />
+				 <input id="cstEditBranch" value="" type="hidden" />
+
+				 <button class="btn btn-primary submit-btn" onclick="branchSubmit();" type="button">确 定</button>
+			 	 <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+			 </div>
+
+	 </div>
+
+	</div>
+</div>
+
+<!--导入话术-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog" style="width:430px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					 <span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">选择导入的zip文件</h4>
+		  </div>
+		  <div class="modal-body">
+        <div class="form-group">
+					<label class="col-lg-3 control-label">选择文件：</label>
+					<div class="col-lg-6 col-sm-6">
+           <form id="leadingfileform" action="{:url('user/Scenarios/leadingZip')}" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+              <input type="file" class="" id="excelImportId" accept=".zip" name="excel" />
+           </form>
+					</div>
+				</div>
+        <div class="form-group">
+          <label class="col-lg-12 control-label formattips">此处只支持ZIP格式文件</label>
+        </div>
+       <br/>
+		  </div>
+			<div style="clear:both;"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取  消</button>
+				<button class="btn btn-primary btnokprojectile-frame" onclick="Savechange();" type="button">确  认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/template">
+  
+</script>
+
+
+<script>
+    //发送信息方法--- 回车发送信息
+    $('.msg_send').keyup(function(event){
+      if(event.keyCode ==13){
+         var content = $('.msg_send').val();
+      	 //把发送的信息 放入显示框中 
+      	 var string;
+         string ='<div class="form-group ">';
+         string += '<div class="col-lg-12 col-sm-12 kehu">';
+         string +='<div class="form-group dialogue2 pull-right ">';
+         string +='<div class="chat-content2">';
+         string +='<span>'+content+'</span>';
+         string +='</div><img  class="pull-right" src="/public/img_sj/touxiang1.png">';
+         string +='</div>';
+         string +='</div></div>';
+         $("#simulationTestform").append(string);
+         $('.msg_send').val('');
+         
+         //我要知道 客服最后一句的flow_id
+         var flow_id = $('.kefuMessage:last').attr('flow_id');
+         //然后把内容 发送到
+         show_dialog1(content,flow_id);
+      }
+   });
+  //重新开始
+  function restart(){
+      //每次点击话术场景 都清空话术模拟中的谈话内容
+      $('#simulationTestform').html('');
+      //然后重新开始
+      show_dialog();
+  }
+  //发送信息方法--'发送'按钮的发送
+  function send(){
+  	  var content = $('.msg_send').val();
+      	 //把发送的信息 放入显示框中 
+      	 var string;
+         string ='<div class="form-group ">';
+         string += '<div class="col-lg-12 col-sm-12 kehu">';
+         string +='<div class="form-group dialogue2 pull-right ">';
+         string +='<div class="chat-content2">';
+         string +='<span>'+content+'</span>';
+         string +='</div><img  class="pull-right" src="/public/img_sj/touxiang2.png">';
+         string +='</div>';
+         string +='</div></div>';
+         $("#simulationTestform").append(string);
+         //发送完毕 清空文本框
+         $('.msg_send').val('');
+         
+         //我要知道 客服最后一句的flow_id
+         var flow_id = $('.kefuMessage:last').attr('flow_id');
+         //然后把对话框输入的内容 还有客服的最后一句说的流程id一起 发送到
+         show_dialog1(content,flow_id);
+     
+  }
+  
+  //模拟话术 ----人工与客服对话时候所运行的方法
+	function show_dialog1(content='',flow_id=''){ 
+		if(content){
+			 var content = content;
+		}
+		if(flow_id){
+			var flow_id = flow_id;
+		}
+		$("#simulationTest").modal("show");
+		//话术id
+		var id =$("#nowsceneID").val(); 
+		var url ="{:url('api/Moni1/Index')}"
+		$.ajax({
+			     url : url,
+           dataType : "json",
+           type : "post",
+           data : {'scenarios_id':id,'content':content,'flow_id':flow_id},
+           success: function(data){
+             console.log(data);
+             var keyword =data.keyword; //所命中的关键词
+             var keyword_type = data.keyword_type // keyword_type关键词类型 1自定义流程关键词  2知识库关键词    3默认流程关键词   4知识库全局关键词
+             if(keyword && keyword!=""){
+                if(keyword_type==1 || keyword_type==3 || keyword_type==4){
+               	   //如果关键词不是空 将关键词 插入 客户说的 最后一句话的内容的下面
+               	   var keywordStr;
+               	   keywordStr='<div class="col-lg-12  col-sm-12 keyword-margin ">';
+               	   keywordStr+='<div class="form-group dialogue2 pull-right"><div><span class="keyword">';
+                   keywordStr +='【命中流程关键词：'+keyword+'】</span></div></div>'
+                   $('.kehu:last').append(keywordStr);
+                }
+                if(keyword_type==2){
+               	   //如果关键词不是空 将关键词 插入 客户说的 最后一句话的内容的下面
+               	   var keywordStr;
+               	   keywordStr='<div class="col-lg-12  col-sm-12 keyword-margin ">';
+               	   keywordStr+='<div class="form-group dialogue2 pull-right"><div><span class="keyword">';
+                   keywordStr +='【命中知识库关键词：'+keyword+'】</span></div></div>'
+                   $('.kehu:last').append(keywordStr);
+                }
+                /*
+                if(keyword_type==3){
+               	   //如果关键词不是空 将关键词 插入 客户说的 最后一句话的内容的下面
+               	   var keywordStr;
+               	   keywordStr='<div class="col-lg-12  col-sm-12 keyword-margin ">';
+               	   keywordStr+='<div class="form-group dialogue2 pull-right"><div><span class="keyword">';
+                   keywordStr +='【默认流程关键词：'+keyword+'】</span></div></div>'
+                   $('.kehu:last').append(keywordStr);
+                }
+                if(keyword_type==4){
+               	   //如果关键词不是空 将关键词 插入 客户说的 最后一句话的内容的下面
+               	   var keywordStr;
+               	   keywordStr='<div class="col-lg-12  col-sm-12 keyword-margin ">';
+               	   keywordStr+='<div class="form-group dialogue2 pull-right"><div><span class="keyword">';
+                   keywordStr +='【知识库全局关键词：'+keyword+'】</span></div></div>'
+                   $('.kehu:last').append(keywordStr);
+                }
+                */
+             }
+             var string;
+             string =' <div class="form-group simulationTestForm">';
+             string += '<div class="col-lg-12 col-sm-12 kefu">';
+             string +='<div class="form-group dialogue1">';
+             string +='<img src="/public/img_sj/touxiang1.png">';
+             string +='<div class="chat-content1">';
+             string +='	<span class="kefuMessage" flow_id="'+data.flow_id+'">'+data.content+'</span>';
+             string +='</div></div>';
+             $("#simulationTestform").append(string);
+             
+             //聊天框高度自动下拉
+             $('#simulationTestform').prop({scrollTop: $('#simulationTestform').prop('scrollHeight')} );
+           },
+           error : function() {
+             alert('话术模拟读取失败。');
+           }
+			    
+		});
+		
+	}
+	
+  //模拟话术 显示对话框---第一次点击模拟的方法 --预防不断重复点击 而不断说开场白
+	function show_dialog(){ 
+		$("#simulationTest").modal("show");
+		var flow_id = $('.kefuMessage').attr('flow_id');
+	  //预防频繁点击 对话模拟而不断的 说开场白
+	  if(flow_id){
+	  	 return false;
+	  }
+		//话术id 
+		var id =$("#nowsceneID").val(); 
+		//得到话术的名字 并且加入 模拟测试的标题上
+	  var sceneName = 	$("#nowsceneName").val();
+		$("#moni_title").html("<span>"+sceneName+"--模拟测试</span>")
+
+		var url ="{:url('api/Moni1/Index')}"
+		$.ajax({
+			     url : url,
+           dataType : "json",
+           type : "post",
+           data : {'scenarios_id':id},
+           success: function(data){
+             console.log(data);
+             var string;
+             string =' <div class="form-group simulationTestForm">';
+             string += '<div class="col-lg-12 col-sm-12 kefu">';
+             string +='<div class="form-group dialogue1">';
+             string +='<img src="/public/img_sj/touxiang1.png">';
+             string +='<div class="chat-content1">';
+             string +='	<span class="kefuMessage" flow_id="'+data.flow_id+'">'+data.content+'</span>';
+             string +='</div></div>';
+             $("#simulationTestform").append(string);
+           },
+           error : function() {
+             alert('话术模拟读取失败');
+           }
+		});
+	}
+	
+	
+	//编辑分支
+	function gotoeditorial(type,obj){
+   $("#cstEditBranch").val("");
+		if(type == "custom"){
+			$("#branchName").val("");
+			$("#branchkeyword").val("");
+			$("#answerMethod").val("");
+			$("#labelName").val("");
+			$("#branchName").removeAttr("readonly");
+			$("#answerMethod").removeAttr("readonly");
+			$("#globalId").css("display","none");			}
+		else if(type == "customclass"){
+			var name = $("#" + obj + "Name").val();
+			var keyword = $("#" + obj + "KW").val();
+			var Method = $("#" + obj + "Method").val();
+			var label = $("#" + obj + "label").val();
+			$("#branchName").val(name);
+			$("#branchkeyword").val(keyword !='null'? keyword:'');
+			$("#answerMethod").val(Method);
+			$("#labelName").val(label);
+			$("#branchName").removeAttr("readonly");
+			$("#answerMethod").removeAttr("readonly");
+			$("#cstEditBranch").val(obj);
+			$("#globalId").css("display","none");
+		}
+		else{
+			var name = $("#" + obj + "Name").val();
+			var keyword = $("#" + obj + "KW").val();
+			var Method = $("#" + obj + "Method").val();
+			var label = $("#" + obj + "label").val();
+			$("#branchName").val(name);
+			$("#branchkeyword").val(keyword !='null'? keyword:'');
+			$("#answerMethod").val(Method);
+			$("#labelName").val(label);
+			$("#branchName").attr("readonly","readonly");
+			$("#answerMethod").attr("readonly","readonly");
+      $("#cstEditBranch").val(obj);
+		  $("#globalId").css("display","block");
+		}
+		$("#nowEditBranch").val(type);
+		$('#editorial').modal('show');
+	}
+	
+	//增加分支检查表单的必填项,保存
+	function branchSubmit(){
+    var type = $("#nowEditBranch").val();
+		if(type == "custom"){
+				var name = $("#branchName").val();
+				var keyword =	$("#branchkeyword").val();
+
+				var Method =	$("#answerMethod").val();
+				var label =	$("#labelName").val();
+				var utId = uuid.v1();
+				if(!name){
+					alert("名称不能为空");
+					return false;
+				}
+				if(!keyword){
+					alert("关键词不能为空");
+					return false;
+				}
+
+				var string = '<div class="leftfl">'
+											+'<input class="customAnswer" id="'+utId+'" name="customAnswer" value="'+name+'" alt="'+name+'" type="checkbox" />	'
+											+'<span id="'+utId+'text">'+name+'</span>'
+											+'<span class="glyphicon glyphicon-pencil showpen" onclick="gotoeditorial(\'customclass\',\''+utId+'\');" aria-hidden="true"></span>'
+											+'<span class="glyphicon glyphicon-trash showpen" aria-hidden="true" delId="" onclick="delbranch(this);"></span>'
+											+'<input id="'+utId+'Id" class="branchId" type="hidden" value="" \/>'
+										  +'<input id="'+utId+'Name" class="customName" type="hidden" value="'+name+'" \/>'
+											+'<input id="'+utId+'KW" class="customKW" type="hidden" value="'+keyword+'" \/>'
+											+'<input id="'+utId+'Method" class="customMethod" type="hidden" value="'+Method+'" \/>'
+											+'<input id="'+utId+'label" class="customMethod" type="hidden" value="'+label+'" \/>'
+											+'</div>';
+
+			$('#CustomList').append(string);
+		}
+		else if(type == "customclass"){
+			var name = $("#branchName").val();
+			var keyword = $("#branchkeyword").val();
+      var Method = $("#answerMethod").val();
+      var label = $("#labelName").val();
+			var cid = $("#cstEditBranch").val();
+			if(!name){
+				alert("名称不能为空");
+				return false;
+			}
+			if(!keyword){
+				alert("关键词不能为空");
+				return false;
+			}
+
+
+			$("#" + cid + "Name").val(name);
+			$("#" + cid + "KW").val(keyword);
+			$("#" + cid + "Method").val(Method);
+			$("#" + cid + "label").val(label);
+			$("#" + cid + "text").text(name);
+			$("#" + cid + "").val(name);
+			$("#" + cid + "").attr("alt",name);
+			$("#branchName").removeAttr("readonly");
+			$("#answerMethod").removeAttr("readonly");
+		}
+		else{
+			var fid = $("#cstEditBranch").val();
+			var keyword = $("#branchkeyword").val();
+			var label =  $('#labelName').val();
+	   	$("#" + fid + "KW").val(keyword);
+	   	$("#" + fid + "label").val(label);
+	   
+		}
+		$('#editorial').modal('hide');
+		
+	}
+	var delNode = [];
+	
+	//删除节点
+	function delbranch(obj){
+
+		 $(obj).parent().remove();
+		  var dataid =  $(obj).attr("delId");
+			 if(dataid > 0){
+				 delNode.push(dataid);
+			 }
+
+	}
+	
+	//上传话术
+	function Savechange(){
+
+			var excel = document.getElementById('excelImportId');
+			if(excel.files[0] == undefined){
+				alert('未上传文件！');
+				return false;
+			}
+			var filevalue = excel.value;
+			var index = filevalue.lastIndexOf('.');
+			var ename = filevalue.substring(index);
+			if(ename != ".zip"){
+
+			  	alert('文件格式错误。"*.zip"，请用下载的模板改。');
+				  return false;
+
+			}
+      $("#leadingfileform").submit();
+			$('#exampleModal').modal('hide');
+		}
+	
+	//本地上传和录音选择切换
+	$("input[name='choice']").change(function(){
+			if($("input[name='choice'][value='1']").prop('checked')){
+				$('#nodeRecordingChioce').addClass('hidden');
+					$('#nodeRecordingFile').removeClass('hidden');
+			}else{
+				$('#nodeRecordingFile').addClass('hidden');
+					$('#nodeRecordingChioce').removeClass('hidden');
+			}
+	});
+	
+	//本地上传和录音选择切换
+	$("input[name='jumpNoteChoice']").change(function(){
+			if($("input[name='jumpNoteChoice'][value='1']").prop('checked')){
+				$('#jumpNoteRecordingChioce').addClass('hidden');
+					$('#jumpNoteRecordingFile').removeClass('hidden');
+			}else{
+				$('#jumpNoteRecordingFile').addClass('hidden');
+					$('#jumpNoteRecordingChioce').removeClass('hidden');
+			}
+	});
+	
+	
+
+</script>
+<!--/模拟测试对话框-->
+<!--流程节点 音频回填-->
+<script>
+	$("input[name='choice']").click(function(){
+		var file = $("#nodeRecordingFile") ;
+		file.after(file.clone().val(""));      
+		file.remove();  
+		$('#noe_type_chan').val('');
+		$('#voice_chan').val('');
+		$("#voice_chan").find("option").not(":first").remove();
+		$('#voice_id').attr('src',window.voice_audio);
+		if($('#noderecordingSelection').is(':checked')){
+			$('#AIStechnique').attr("readonly","readonly");
+			$('#AIStechnique').val(window.voice_content)
+		}else if($('#nodeuploadLocal').is(':checked')){
+			$('#AIStechnique').removeAttr("readonly");
+		}
+	})
+	
+	function formSoundl(Object){
+		if(Object.files.length > 0 ){
+			var excel = document.getElementById("nodeRecordingFile").files[0];
+			var objUrl = getObjectURL(Object.files[0]);
+			var filePath = $('#nodeRecordingFile').val().toLowerCase().split(".");
+			var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+			if(!(fileType == "wav")){
+      		alert('文件格式不符合要求！');
+      		var file = $("#nodeRecordingFile") ;
+					file.after(file.clone().val(""));      
+					file.remove();  
+      		return 
+	    }else if(excel.size>10485760){
+	        alert('错误！请上传不超过10M的文件');
+	        var file = $("#nodeRecordingFile") ;
+					file.after(file.clone().val(""));      
+					file.remove();  
+	        return
+	    }else{
+	    		$('#voice_id').attr('src',objUrl);
+	    }
+		}else{
+			$('#voice_id').attr('src',window.voice_audio);
+			$('#AIStechnique').val(window.voice_content);
+		}
+	}
+	function getObjectURL(file) {
+      var url = null;
+      if (window.createObjectURL != undefined) { // basic
+          url = window.createObjectURL(file);
+      } else if (window.URL != undefined) { // mozilla(firefox)
+          url = window.URL.createObjectURL(file);
+      } else if (window.webkitURL != undefined) { // webkit or chrome
+          url = window.webkitURL.createObjectURL(file);
+      }
+      return url;
+  }
+	function zget_coice(obj){
+		var data = {};
+		data.id = $('.active .Idlist').val();
+		data.type = $(obj).val();
+		var url ="{:url('get_type_voice')}"
+		$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : data,
+			success: function(data){
+				console.log(data)
+				$("#voice_chan").find("option").not(":first").remove();
+				if(data.code == 0){
+					var list = data.data;
+					$.each(list,function(index,value){
+				     var option = $("<option>").val(value.id).text(value.content).attr('title',value.content);
+						 $("#voice_chan").append(option);
+					});
+					$("#voice_chan").get(0).selectedIndex=0;
+				}else{
+					$('#voice_id').attr('src',window.voice_audio);
+					$('#AIStechnique').val(window.voice_content);
+				}
+			},
+			error : function() {
+			}
+		});
+	}
+	function sure_voice(){
+		var id = $('#voice_chan').val();
+		var url = "{:url('sure_voice')}"
+		$.ajax({
+			url : url,
+			dataType : "json",
+			type : "post",
+			data : {id:id},
+			success: function(data){
+				console.log(data);
+				console.log(window.voice_audio);
+				if(data.code == 0){
+					$('#voice_id').attr('src',data.data.audio);
+					$('#AIStechnique').val(data.data.content);
+				}else{
+					$('#voice_id').attr('src',window.voice_audio);
+					$('#AIStechnique').val(window.voice_content);
+				}
+			},
+			error : function() {
+			}
+		});
+	}
+</script>
+
+<script type="text/javascript">
+
+			//选择坐席
+			function kgetagent(obj){
+
+				if ($(obj).is(":checked")) {
+					$('#kagentbox').css("display","block");
+				}else{
+					$('#kagentbox').css("display","none");
+				}
+
+			}
+
+
+			//选择指定未回复
+			function checkmsg(obj){
+
+				if ($(obj).is(":checked")) {
+					$('#msgtpl').css("display","block");
+				}else{
+					$('#msgtpl').css("display","none");
+				}
+
+			}
+
+
+			function showThinks(id){
+				$("#msgInfo").prop("checked",false);
+				$('#msgtpl').css("display","none");
+				$("#msgList").val("");
+				$('#kagentbox').css("display","none");
+				$("#kagentList").val("");
+				$('#mainScenesl').css('display', 'none');
+				$("#kagent").prop("checked",false);
+				getsmsTpl('msgList');  //获取短信模板
+				 if(id){
+					  $("#ThinkTankId").val(id);
+						var url = "{:url('user/Scenarios/getKnowledgeInfo')}";
+						$.ajax({
+								url : url,
+								dataType : "json",
+								type : "post",
+								data : {'id':id},
+								success: function(data){
+									console.log(data);
+									var data = data.data;
+									$("#ttfname").val(data.name);
+									if (data.is_default == 0){
+										$('#label').attr("disabled","disabled");
+										$('#kongknlg').css("display","none");
+									}
+									else{
+										$('#label').removeAttr("disabled");
+										$('#kongknlg').css("display","block");
+
+									}
+									$("#label").val(data.label);
+
+									$("#keyword").val(data.keyword);
+									$("#ttpauseTime").val(data.pause_time);
+
+									$('#contentlist').find("div").remove();
+
+									var content = data.content;
+									var leng = content.length;
+									for(var i=0;i<leng;i++){
+										 	// var str = '<div class="answer-input-item">'
+										 	// 					+'<textarea rows="4" dataId="'+content[i]["id"]+'" placeholder="输入该问题的标准答案" maxlength="500" class="form-control ktextarea" >'+content[i]["content"]+'</textarea>'
+										 	// 					+'<img src="/public/img_sj/delContent.png" onclick="delContent(this);" style="display:block;width:19px;"/>'
+									 		// 					+'<img src="/public/img_sj/uploadSoundRecording.png" onclick="uploadSoundRecording(this);" style="width:19px;margin-left:2px;"/>'
+										 	// 					+'</span>'
+										 	// 					+'<audio src="'+content[i]["audio"]+'"  preload="preload" controls="controls" style="margin-top:10px"></audio></div><div style="clear:both;"></div>';
+										 	// 					+'</div><div style="clear:both;"></div>';
+										 						
+										 	var str = '<div class="answer-item" data-content = "'+content[i]["content"]+'" data-audio = "'+content[i]["audio"]+'" >'
+																+'<label class="robot-word">机器人文字:</label>'
+																+'	<textarea rows="4" dataId="'+content[i]["id"]+'" placeholder="输入该问题的标准答案" maxlength="500" class="form-control ktextarea" >'+content[i]["content"]+'</textarea>'
+																+'	<div class="importRecording">'
+																+'		<label class="robot-word importRecordingMargin">导入录音：</label>'
+																+'		<input type="radio" onclick="choices_type1(this);"  name="choices'+ tag +'"  value="0" checked="checked"/><span class="robot-word" >本地上传录音</span>'
+																+'	  <input type="radio" onclick="choices_type2(this);" value="1" name="choices'+ tag +'" /><span class="robot-word">系统录音选择</span>'
+																+'	  <div class="recordingChioce recording_type1">'
+																+'			<input type="file" class="form-control fileInput" name="fileInput" onchange="formSoundzl(this);" accept=".wav," >'
+																+'	  </div>'
+																+'  	<div class="recording  hidden recordingChioce recording_type2" >'
+																+'		<div>'
+																+'			<label class="col-lg-1  col-sm-1 control-label">选择音频来源：</label>'
+																+'			<select class="form-control sellect-width" onchange ="zget_zcoice(this);">'
+																+'				<option value="">请选择</option>'
+																+'				<option value="1">全部音频</option>'
+																+'				<option value="2">上传音频</option>'
+																+'				<option value="3">合成音频</option>'
+																+'			</select>'
+																+'		</div>'
+																+'		<div>'
+																+'			<label class="col-lg-1  col-sm-1 control-label">选择录音：</label>'
+																+'			<select class="form-control sellect-width sure_zvoice"  onchange="sure_zvoice(this);">'
+																+'				<option value="">请选择</option>'
+																+'			</select>'
+																+'		</div>'
+																// +'		<span class="btn btn-primary importbtn">导入</span>'
+															  +'		</div>'
+														    +'			<audio src="'+content[i]["audio"]+'" class="recordingAudio" id="voice_zid" preload="preload" controls="controls"></audio>'
+															  +'	</div><img src="/public/img_sj/delContent.png" class="delImg" onclick="delContent(this);"/></div>';
+										 						
+										 						
+										 $('#contentlist').append(str);
+										 $("input:radio[name='choices"+ tag +"']").change(function(){
+											var val = $(this).prop('value');
+											var data = $(this).siblings('.recordingChioce');
+											data.addClass('hidden');
+											data.eq(val).removeClass('hidden');
+										});
+
+									}
+									if(data.break == "1"){
+										$("#fnbreak").prop("checked",true);
+									}
+									$("#action").val(data.action);
+									var actionId = data.action_id;
+									$("#flowNodeLevel").val(data.intention);
+									$("#knlgType").val(data.type);
+
+
+									if(data.action == '2'){
+										$("#mainScenesl").css("display","block");
+
+											var sceneId = $("#nowsceneID").val();
+											var href = "{:url('user/Scenarios/getNoteList')}";
+
+											$.ajax({
+													type: "POST",
+													dataType:'json',
+													url: href,
+													cache: false,
+													data: {"sceneId":sceneId},
+													success: function(data) {
+
+														// console.log(data);
+															$("#mainSceneFlow").find("option").remove();
+
+															if (data.code == 0) {
+
+																	var data = data.data;
+																	if(data.length > 0){
+																			var string = '<option value=" ">选择要跳转到的流程节点</option>';
+																			for(var i=0;i<data.length;i++){
+																				if(data[i].id == actionId){
+
+																					string += '<option selected value="'+data[i].id+'">'+data[i].name+'</option>';
+
+																				}else{
+																					string += '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+																				}
+
+																			}
+																			$("#mainSceneFlow").append(string);
+																	}
+
+
+															}else{
+
+																console.log(data.msg);
+																//alert(data.msg);
+															}
+
+													},
+													error: function(data) {
+														alert("提交失败");
+													}
+											})
+
+
+									}
+
+									if(data.sms_template_id > 0){
+										$("#msgInfo").prop("checked",true);
+										$('#msgtpl').css("display","block");
+										$("#msgList").val(data.sms_template_id);
+									}
+
+									if(data.bridge > 0){
+
+										$('#kagentbox').css("display","block");
+										$("#kagentList").val(data.bridge);
+										$("#kagent").prop("checked",true);
+
+									}
+
+									$('#ThinkTank').modal('show');
+
+
+								},
+								error : function() {
+									alert('获取信息失败。');
+								}
+							});
+
+				 }
+				 else{
+					$("#ttfname").val("");
+					$("#fnbreak").prop("checked",false);
+					$("#action").val("1");
+					$("#keyword").val("");
+					$("#label").val("");
+					$("#flowNodeLevel").val(" ");
+					$("#ThinkTankId").val("");
+					$('#contentlist').find("div").remove();
+					$("#ttpauseTime").val("3000");
+					$('#ThinkTank').modal('show');
+					$("#knlgType").val(0);
+					$('#label').removeAttr("disabled");
+					$('#kongknlg').css("display","block");
+				 }
+			}
+			function formSoundzl(Object){
+				if(Object.files.length > 0 ){
+					var excel = $(Object).get(0).files[0];//获取到文件列表
+					console.log(excel);
+					var objUrl = getObjectURL(Object.files[0]);
+					console.log(objUrl);
+					var filePath = $(Object).val().toLowerCase().split(".");
+					var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+					if(!(fileType == "wav")){
+		      		alert('文件格式不符合要求！');
+		      		var file = $(Object) ;
+							file.after(file.clone().val(""));      
+							file.remove();  
+		      		return 
+			    }else if(excel.size>10485760){
+			        alert('错误！请上传不超过10M的文件');
+			        var file = $(Object) ;
+							file.after(file.clone().val(""));      
+							file.remove();  
+			        return
+			    }else{
+			    		$(Object).parent().nextAll('audio').attr('src',objUrl);
+			    }
+				}else{
+					var content = $(Object).parent().parent().parent('.answer-item').data('content');
+					var audio  = $(Object).parent().parent().parent('.answer-item').data('audio');
+					$(Object).parent().nextAll('audio').attr('src',audio);
+					$(Object).parent().parent().prevAll('textarea').val(content);
+				}
+			}
+			function choices_type1(obj){
+				var file = $(obj).nextAll('.recording_type1 ').find('input');
+				file.after(file.clone().val(""));      
+				file.remove();  
+				$(obj).nextAll('.recording_type2 ').find('div').first().find('select').val('');
+				$(obj).nextAll('.recording_type2 ').find('div').last().find("select").find("option").not(":first").remove();
+				var content = $(obj).parent().parent().data('content')
+				var audio = $(obj).parent().parent().data('audio')
+				$(obj).parent().prevAll('textarea').val(content);
+				$(obj).nextAll('audio').attr('src',audio);
+			}
+			function choices_type2(obj){
+				var file = $(obj).nextAll('.recording_type1 ').find('input');
+				file.after(file.clone().val(""));      
+				file.remove();  
+				$(obj).nextAll('.recording_type2 ').find('div').first().find('select').val('');
+				$(obj).nextAll('.recording_type2 ').find('div').last().find("select").find("option").not(":first").remove();
+				var content = $(obj).parent().parent().data('content')
+				var audio = $(obj).parent().parent().data('audio')
+				$(obj).parent().prevAll('textarea').val(content);
+				$(obj).nextAll('audio').attr('src',audio);
+			}
+			
+			function zget_zcoice(obj){
+				var data = {};
+				data.id = $('.active .Idlist').val();
+				data.type = $(obj).val();
+				var url ="{:url('get_type_voice')}"
+				$.ajax({
+					url : url,
+					dataType : "json",
+					type : "post",
+					data : data,
+					success: function(data){
+						console.log(data)
+						$(obj).parent().next().find('select').find("option").not(":first").remove();
+						if(data.code == 0){
+							var list = data.data;
+							$.each(list,function(index,value){
+						     var option = $("<option>").val(value.id).text(value.content).attr('title',value.content);
+								 $(obj).parent().next().find('select').append(option);
+							});
+							$(obj).parent().next().find('select').get(0).selectedIndex=0;
+						}else{
+  						var content = $(obj).parent().parent().parent().parent('.answer-item').data('content');
+  						var audio  = $(obj).parent().parent().parent().parent('.answer-item').data('audio');
+							$(obj).parent().parent().next('audio').attr('src',audio);
+							$(obj).parent().parent().parent().prevAll('textarea').val(content);
+						}
+					},
+					error : function() {
+					}
+				});
+			}
+			function sure_zvoice(obj){
+				var id = $(obj).val();
+				var url = "{:url('sure_voice')}"
+				$.ajax({
+					url : url,
+					dataType : "json",
+					type : "post",
+					data : {id:id},
+					success: function(data){
+						console.log(data);
+						console.log(window.voice_audio);
+						if(data.code == 0){
+							$(obj).parent().parent().next('audio').attr('src',data.data.audio);
+							$(obj).parent().parent().parent().prevAll('textarea').val(data.data.content);
+						}else{
+							var content = $(obj).parent().parent().parent().parent('.answer-item').data('content');
+  						var audio  = $(obj).parent().parent().parent().parent('.answer-item').data('audio');
+							$(obj).parent().parent().next('audio').attr('src',audio);
+							$(obj).parent().parent().parent().prevAll('textarea').val(content);
+						}
+					},
+					error : function() {
+					}
+				});
+			}
+
+		 //检查表单的必填项 提交表单
+			function cfThinkTank(){
+			  var formFile = new FormData();
+				var sceneId = $("#nowsceneID").val();
+				var processId = $("#nowProcessId").val();
+				var name = $("#ttfname").val();
+				var label = $("#label").val();
+				var action = $("#action").val();
+				var keyword = $("#keyword").val();
+				var flowNodeLevel = $("#flowNodeLevel").val();
+				var ThinkTankId = $("#ThinkTankId").val();
+				var itemList = $("#contentlist").find(".ktextarea");
+				var audiolist = $("#contentlist").find('.fileInput');
+				var selectlist = $("#contentlist").find('.recording_type2').find('.sure_zvoice');
+				
+				var content = [];
+				console.log(selectlist.length);
+				var voice_idr;
+				
+				$.each(itemList , function(i, n){
+					 var temp = $(n).val();
+					 var item = {};
+					 item.id = $(n).attr("dataId");
+					 item.con = temp;
+					 if(selectlist.eq(i).val()){
+    				  item.voice_idr = selectlist.eq(i).val()
+					 }
+					 formFile.append("filesname_" + i,audiolist.eq(i).get(0).files[0]);
+					 content.push(item);
+				});
+					console.log(content);
+				// 	return false;
+				var actionId = $("#mainSceneFlow").val();
+				var ttpauseTime = $("#ttpauseTime").val();
+				var knlgType = $("#knlgType").val();
+				var tplId = $("#msgList option:selected").val();
+				
+				if ($("#msgInfo").is(":checked")) {
+
+					if(!tplId || tplId ==" "){
+						alert("请选择短信模板");
+						return false;
+					}
+				}
+				else{
+					tplId = 0;
+				}
+ 		
+				var groupId = $("#kagentList option:selected").val();
+				if ($("#kagent").is(":checked")) {
+					if(!groupId || groupId ==" "){
+						alert("请选择坐席分组");
+						return false;
+					}
+				}
+				else{
+					groupId = 0;
+				}
+      
+      content = JSON.stringify(content)
+			formFile.append("sceneId",sceneId);
+			formFile.append("processId",processId);
+			formFile.append("name",name);
+			formFile.append("label",label);
+			formFile.append("action",action);
+			formFile.append("actionId",actionId);
+			formFile.append("keyword",keyword);
+			formFile.append("flowNodeLevel",flowNodeLevel);
+			formFile.append("ThinkTankId",ThinkTankId);
+			formFile.append("content",content);
+			formFile.append("delArr",delArr);
+			formFile.append("pausetime",ttpauseTime);
+			formFile.append("knlgType",knlgType);
+			formFile.append("tplId",tplId);
+			formFile.append("groupId",groupId);
+			
+			var url = "{:url('user/Scenarios/addThinkTank')}";
+			$.ajax({
+					url : url,
+					type : "post",
+					data : formFile,
+					cache: false,
+          contentType: false,    //不可缺
+          processData: false,    //不可缺
+					success: function(data){
+					  console.log(data);
+						// content.splice(0,content.length);
+						// delArr.splice(0,delArr.length);
+
+						if (data.code == 0) {
+
+							$('#ThinkTank').modal('hide');
+							getKnowledgeList($('#knowledgepage .pagination > li.active').text());
+
+						}
+						else{
+							console.log(data.msg);
+						}
+					},
+					error : function() {
+						alert(data);
+					}
+				});
+			}
+
+			//绑定指定场景节点
+			function changeaction(obj){
+
+				var val = $(obj).val();
+
+				if(val == "2"){
+					$("#mainScenesl").css("display","block");
+
+							var sceneId = $("#nowsceneID").val();
+							var href = "{:url('user/Scenarios/getNoteList')}";
+
+							$.ajax({
+									type: "POST",
+									dataType:'json',
+									url: href,
+									cache: false,
+									data: {"sceneId":sceneId},
+									success: function(data) {
+
+										// console.log(data);
+											$("#mainSceneFlow").find("option").remove();
+
+											if (data.code == 0) {
+
+													var data = data.data;
+													if(data.length > 0){
+															var string = '<option value=" ">选择要跳转到的流程节点</option>';
+															for(var i=0;i<data.length;i++){
+																	string += '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+															}
+															$("#mainSceneFlow").append(string);
+													}
+
+
+											}else{
+
+												console.log(data.msg);
+												//alert(data.msg);
+											}
+
+									},
+									error: function(data) {
+										alert("提交失败");
+									}
+							})
+
+
+				}else{
+					 $("#mainScenesl").css("display","none");
+				}
+			}
+
+
+	 //删除元素
+	 var delArr = [];
+	 function delContent(obj){
+		 $(obj).parent().remove();
+		 var dataid =  $(obj).siblings(".ktextarea").attr("dataid");
+		 if(dataid > 0){
+			 delArr.push(dataid);
+		 }
+	 }
+
+</script>
+
+<script type="text/javascript">
+
+		//选择坐席
+		function getagent(obj){
+
+			if ($(obj).is(":checked")) {
+				$('#agentbox').css("display","block");
+			}else{
+				$('#agentbox').css("display","none");
+			}
+
+		}
+
+		//选择指定未回复
+		function checkanswere(obj){
+
+			if ($(obj).is(":checked")) {
+				$('#answeredlist').css("display","block");
+			}else{
+				$('#answeredlist').css("display","none");
+			}
+			// 调用gettype8()获取数据绑定
+		}
+
+		//选择指定未回复
+		function checksms(obj){
+
+			if ($(obj).is(":checked")) {
+				$('#smstpl').css("display","block");
+			}else{
+				$('#smstpl').css("display","none");
+			}
+
+		}
+		function gotocommonNode(obj){
+			var type = $(obj).attr("datatype");
+			$("#commonNodeType").val(type);
+			$('#CustomList').find("div").remove();
+			$("#Othersettings").prop("checked",false);
+
+			$("#nodeLabel").val("");
+			$('#fixedList').find("div").remove();
+
+			$("#smsInfo").prop("checked",false);
+			$('#smstpl').css("display","none");
+			$("#smsList").val("");
+			getsmsTpl('smsList');  //获取短信模板
+			if(type == "new"){
+
+				getdefaultMt("new");  //获取默认答法的
+        
+				$("#cNodeName").val("");
+				$("#AIStechnique").val("");
+				$("#tc_id").val("");
+				$('#voice_id').attr('src', '');
+
+				var pid = $(obj).parent().attr("id");
+				$("#commonNodeId").val(pid);
+				$('#commonNode').modal('show');
+
+				$('#answeredlist').css("display","none");
+				$("#eightList").val("");
+				$("#unanswered").prop("checked",false);
+
+				$('#agentbox').css("display","none");
+				$("#agentList").val("");
+				$("#agent").prop("checked",false);
+
+			}
+			else{
+
+					var dataid = $(obj).attr("dataid");
+					var senid = $('.active .Idlist').val();
+					$("#commonNodeId").val(dataid);
+					var href = "{:url('user/Scenarios/getFnodeInfo')}";
+					$.ajax({
+						url : href,
+						dataType : "json",
+						type : "post",
+						data : {'fId':dataid,'senid':senid},
+						success: function(data){
+							getdefaultMt("edit");  //获取默认答法的
+							console.log(data);
+							var back = data.data;
+							$("#cNodeName").val(back.name);
+							$("#AIStechnique").val(back.content);
+							$("#tc_id").val(back.tc_id);
+							$('#voice_id').attr('src',data.data.audio);
+							window.voice_audio = data.data.audio;
+							window.voice_content = back.content;
+							$('#only_voice_id').val(data.data.id);
+							if(back.break == "1"){
+								$("#Othersettings").prop("checked",true);
+							}else{
+								$("#Othersettings").prop("checked",false);
+							}
+
+							if(back.no_speak_knowledge_id > 0){
+								$("#unanswered").prop("checked",true);
+								$('#answeredlist').css("display","block");
+								$("#eightList").val(back.no_speak_knowledge_id);
+							}
+
+							if(back.sms_template_id > 0){
+								$("#smsInfo").prop("checked",true);
+								$('#smstpl').css("display","block");
+								$("#smsList").val(back.sms_template_id);
+							}
+
+							if(back.bridge > 0){
+								$("#agent").prop("checked",true);
+								$('#agentbox').css("display","block");
+								$("#agentList").val(back.bridge);
+							}
+
+							$("#nodeLabel").val(back.flow_label);
+							$("#cpauseTime").val(back.pause_time);
+
+
+							var returns = back.returns;
+							//console.log(typeof returns);
+							var leng = returns.length;
+              console.log(returns);
+							for(var i=0;i<leng;i++){
+                console.log(returns[i]);
+								if(returns[i]["type"] == 0){
+
+										var name = returns[i]["name"];
+										var keyword =	returns[i]["keyword"];
+										var Method = returns[i]["keyword"];
+										var label =  returns[i]["label"];
+										var utId = returns[i]["id"];
+
+										var is_select = returns[i]["is_select"];
+										var select = "";
+										if(is_select == 1){
+											select = "checked";
+										}
+
+										var string = '<div class="leftfl">'
+											+'<input class="customAnswer" id="'+utId+'" '+select+' name="customAnswer" value="'+name+'" alt="'+name+'" type="checkbox" />	'
+											+'<span id="'+utId+'text">'+name+'</span>'
+											+'<span class="glyphicon glyphicon-pencil showpen" onclick="gotoeditorial(\'customclass\',\''+utId+'\');" aria-hidden="true"></span>'
+											+'<span class="glyphicon glyphicon-trash showpen" delId="'+utId+'" aria-hidden="true" onclick="delbranch(this);"></span>'
+											+'<input id="'+utId+'Id" class="branchId" type="hidden" value="'+utId+'" \/>'
+											+'<input id="'+utId+'Name" class="customName" type="hidden" value="'+name+'" \/>'
+											+'<input id="'+utId+'KW" class="customKW" type="hidden" value="'+keyword+'" \/>'
+											+'<input id="'+utId+'Method" class="customMethod" type="hidden" value="'+Method+'" \/>'
+											+'<input id="'+utId+'label" class="customMethod" type="hidden" value="'+label+'" \/>'
+											+'</div>';
+
+									$('#CustomList').append(string);
+
+								}
+								else{
+
+									// 0 普通 1业务问题 2肯定3 否定 4拒绝 5中性  6 未识别 7重复 8用户未说话 9无法回答 10 无法回答次数
+
+									var name = returns[i]["name"];
+									var keyword =	returns[i]["keyword"];
+									var Method = returns[i]["keyword"];
+									var label =  returns[i]["label"];
+									var utId = returns[i]["id"];
+									var sort = returns[i]["type"];
+									var is_select = returns[i]["is_select"];
+									var select = "";
+									if(is_select == 1){
+										select = "checked";
+									}
+									var string = '<div class="leftfl">'
+										+'<input class="fixedAnswer" oid="'+utId+'" '+select+' id="'+utId+'" name="fixedAnswer" value="'+name+'" alt="'+name+'" type="checkbox" />	'
+										+'<span id="'+utId+'text">'+name+'</span>'
+										+'<span class="glyphicon glyphicon-pencil showpen" onclick="gotoeditorial(\'fixedclass\',\''+utId+'\');" aria-hidden="true"></span>'
+										+'<input id="'+utId+'Id" class="branchId" type="hidden" value="'+utId+'" \/>'
+										+'<input id="'+utId+'Name" class="fixedName" type="hidden" value="'+name+'" \/>'
+										+'<input id="'+utId+'KW" class="fixedKW" type="hidden" value="'+keyword+'" \/>'
+										+'<input id="'+utId+'Method" class="fixedMethod sort'+sort+'" type="hidden" value="'+Method+'" \/>'
+										+'<input id="'+utId+'sort" class="fixedsort" type="hidden" value="'+sort+'" \/>'
+										+'<input id="'+utId+'label" class="customMethod" type="hidden" value="'+label+'" \/>'
+										+'</div>';
+
+									$('#fixedList').append(string);
+
+
+								}
+
+							}
+							$('#commonNode').modal('show');
+
+						},
+						error : function() {
+							alert('获取信息失败。');
+						}
+					});
+			}
+		}
+		//获取默认答法的
+		function getdefaultMt(cate){
+
+			$('#fixedList').find("div").remove();
+
+			var sceneId = $("#nowsceneID").val();
+			var nowProcessId = $("#nowProcessId").val();
+
+			var href = "{:url('user/Scenarios/defaultMt')}";
+
+			$.ajax({
+				url : href,
+				dataType : "json",
+				type : "post",
+				data : {
+					'sceneId':sceneId,
+					'processId':nowProcessId,
+				},
+				success: function(data){
+
+					if(data.code == 0){
+
+						var item = data.data;
+						var leng = item.length;
+						for(var i=0;i<leng;i++){
+								 // 0 普通 1业务问题 2肯定3 否定 4拒绝 5中性  6 未识别 7重复 8用户未说话 9无法回答 10 无法回答次数
+							var name = item[i]["name"];
+							var keyword =	item[i]["keyword"];
+							var Method = item[i]["keyword"];
+							var utId = item[i]["id"];
+							var sort = item[i]["type"];
+							if(cate == 'new'){
+								var string = '<div class="leftfl">'
+										+'<input class="fixedAnswer" id="" oid="'+utId+'" name="fixedAnswer" value="'+name+'" alt="'+name+'" type="checkbox" />	'
+										+'<span id="'+utId+'text">'+name+'</span>'
+										+'<span class="glyphicon glyphicon-pencil showpen" onclick="gotoeditorial(\'fixedclass\',\''+utId+'\');" aria-hidden="true"></span>'
+										+'<input id="'+utId+'Id" class="branchId" type="hidden" value="'+utId+'" \/>'
+										+'<input id="'+utId+'Name" class="fixedName" type="hidden" value="'+name+'" \/>'
+										+'<input id="'+utId+'KW" class="fixedKW" type="hidden" value="" \/>'
+										+'<input id="'+utId+'Method" class="fixedMethod" type="hidden" value="'+Method+'" \/>'
+										+'<input id="'+utId+'sort" class="fixedsort" type="hidden" value="'+sort+'" \/>'
+										+'</div>';
+
+								$('#fixedList').append(string);
+							}else{
+
+								$(".leftfl").find(".sort"+sort).val(Method);
+
+							}
+						}
+
+					}else{
+						console.log(data);
+					}
+					var item = data.data;
+
+				},
+				error : function() {
+					alert('获取信息失败。');
+				}
+			});
+		}
+
+	 //提交表单
+		function commonNodeSubmit(){
+			var formFile = new FormData();
+			//获取音频来源状态
+			var radio_type = $("input[name='choice']:checked").val();
+			if(radio_type == 1){
+				if($("#nodeRecordingFile").prop('files').length > 0){
+					var voicefile = document.getElementById("nodeRecordingFile").files[0];
+				}
+			}else if(radio_type == 2){
+				if(!$("#voice_chan option[value='']").is(":checked")){
+					var voice_idr = $('#voice_chan option:selected').val();
+				}
+			}
+			var cNodeName = $("#cNodeName").val();
+			var AIStechnique = $("#AIStechnique").val();
+			var nodeLabel = $("#nodeLabel").val();
+			if(!cNodeName){
+				cNodeName = "流程节点";
+			}
+			if(!AIStechnique){
+				 alert("AI话术不能为空");
+					return false;
+			}
+			var commonNodeType = $("#commonNodeType").val(); //判断是新建还是编辑的
+			var fixedList = $("#fixedList").find(".leftfl");
+			var fixed = [];
+			var fixedlength = 0;
+			$.each(fixedList , function(i, n){
+				var fixedid = $(n).find('.fixedAnswer').attr("oid");
+				var fixedId = $(n).find("#"+fixedid+"Id").val();
+				var fixedName = $(n).find("#"+fixedid+"Name").val();
+				var fixedKW = $(n).find("#"+fixedid+"KW").val();
+				var label = $(n).find("#"+fixedid+"label").val();
+				var fixedMethod = $(n).find("#"+fixedid+"Method").val();
+				var sort = $(n).find("#"+fixedid+"sort").val();
+				
+				var res = {};
+				res.name = fixedName;
+				res.keyword = fixedKW;
+				res.method = fixedMethod;
+				res.label = label;
+				res.id = fixedid;
+				res.sort = sort;
+				//编辑的时候,要删除一些选项时,加判断
+
+				var fixedAnswer = $(n).find('.fixedAnswer:checked').val();
+
+				if(fixedAnswer)
+				{
+					res.is_select = 1;
+					fixedlength = fixedlength + 1;
+				}
+				else{
+					res.is_select = 0;
+				}
+
+				fixed.push(res);
+
+
+			});
+
+			if(fixedlength == 0){
+					alert("用户回答至少要选择一个");
+					return false;
+			}
+
+			var itemList = $("#CustomList").find(".leftfl");
+			var custnode = [];
+
+			$.each(itemList , function(i, n){
+					var tempid = $(n).find('.customAnswer').attr("id");
+
+					var branchId = $(n).find("#"+tempid+"Id").val();
+					var tempName = $(n).find("#"+tempid+"Name").val();
+					var tempKW = $(n).find("#"+tempid+"KW").val();
+					var label = $(n).find("#"+tempid+"label").val();
+					var tempMethod = $(n).find("#"+tempid+"Method").val();
+
+					var temp = {};
+					temp.branchId = branchId;
+					temp.tempName = tempName;
+					temp.tempKW = tempKW;
+					temp.label = label;
+					temp.tempMethod = tempMethod;
+
+					var customAnswer = $(n).find('.customAnswer:checked').val();
+
+					if(customAnswer)
+					{
+						temp.is_select = 1;
+					}
+					else{
+						temp.is_select = 0;
+					}
+
+					custnode.push(temp);
+
+
+			});
+
+		//	console.log(custnode);
+		//	return false;
+
+			var Othersettings = $("#Othersettings:checked").val();
+			var sceneId = $("#nowsceneID").val();
+			var nowProcessId = $("#nowProcessId").val();
+			var sty = $("#commonNodeId").val();
+		//判断是新建还是编辑,老的要加node-
+			if(commonNodeType == "old"){
+				sty = "node-"+sty;
+			}
+		
+			var topLeft = $("#"+sty).attr("style");
+			var strs= new Array(); //定义一数组
+			strs = topLeft.split(";"); //字符分割
+			var top = "",left = "";
+			for (i=0;i< strs.length;i++ )
+			{
+				if(strs[i]){
+						var temp= new Array(); //定义一数组
+						temp = strs[i].split(":"); //字符分割
+
+						if(temp[1] && i==0){
+							top = temp[1];
+						}else{
+							left = temp[1];
+						}
+				}
+
+			}
+			if(top){
+				var toparr = top.split("px");
+				top = toparr[0];
+			}
+
+			if(left){
+				var leftarr = left.split("px");
+				left = leftarr[0];
+			}
+
+      var eightval = $("#eightList").val();
+      if ($("#unanswered").is(":checked")) {
+
+				if(!eightval || eightval ==" "){
+					alert("请选择用户未说话的话术");
+					return false;
+				}
+			}
+			else{
+				eightval = 0;
+			}
+
+			var tplId = $("#smsList option:selected").val();
+			if ($("#smsInfo").is(":checked")) {
+
+				if(!tplId || tplId ==" "){
+					alert("请选择短信模板");
+					return false;
+				}
+
+			}
+			else{
+				tplId = 0;
+			}
+
+			var groupId = $("#agentList option:selected").val();
+			if ($("#agent").is(":checked")) {
+
+				if(!groupId || groupId ==" "){
+					alert("请选择坐席分组");
+					return false;
+				}
+			}
+			else{
+				groupId = 0;
+			}
+
+			var tc_id = $("#tc_id").val();
+
+			var pauseTime = $("#cpauseTime").val();
+
+			var commonNodeId = $("#commonNodeId").val();
+
+			var url = "{:url('user/Scenarios/editflowNode')}";
+
+			if(commonNodeType == "new"){
+			url = "{:url('user/Scenarios/telflowNode')}";
+			}
+			fixed = JSON.stringify( fixed );
+			custnode = JSON.stringify( custnode );
+			console.log(fixed);
+			formFile.append("top",top);
+			formFile.append("left",left);
+			formFile.append("otherset",Othersettings);
+			formFile.append("fixed",fixed);
+			formFile.append("custnode",custnode);
+			formFile.append("AIStechnique",AIStechnique);
+			formFile.append("cNodeName",cNodeName);
+			formFile.append("sceneId",sceneId);
+			formFile.append("nowProcessId",nowProcessId);
+			formFile.append("type",0);
+			formFile.append("delNode",delNode);
+			formFile.append("tc_id",tc_id);
+			formFile.append("nodeLabel",nodeLabel);
+			formFile.append("pauseTime",pauseTime);
+			formFile.append("nodeId",commonNodeId);
+			formFile.append("eightval",eightval);
+			formFile.append("tplId",tplId);
+			formFile.append("groupId",groupId);
+			formFile.append("voice_idr",voice_idr);
+			formFile.append("voicefile",voicefile);
+			$.ajax({
+							url : url,
+							type : "post",
+							data: formFile,
+							contentType: false,    //不可缺
+        			processData: false,    //不可缺
+							success: function(data){
+								console.log(data);
+								if(data.code == 1){
+									 alert(data.msg);
+								}else{
+									var fnode = data.data.fnode;
+									//刷新单个节点
+									getsingle(commonNodeId,fnode);
+									delNode.splice(0,delNode.length); //清空删除列表
+									$('#commonNode').modal('hide');
+									getNoteList();
+									var file = $("#nodeRecordingFile") ;
+									file.after(file.clone().val(""));      
+									file.remove();  
+									$('#noe_type_chan').val('');
+									$('#voice_chan').val('');
+									$("#voice_chan").find("option").not(":first").remove();
+								}
+							},
+							error : function() {
+								alert(data.msg);
+							}
+				});
+
+
+		}
+
+		//获取类型为8的记录,绑到“指定未回复"
+		function gettype8(){
+
+			var sceneId = $("#nowsceneID").val();
+
+			var href = "{:url('user/Scenarios/getKnlgEight')}";
+
+			$.ajax({
+				url : href,
+				dataType : "json",
+				type : "post",
+				data : {
+					'sceneId':sceneId,
+				},
+				success: function(data){
+					$("#eightList").empty();
+					var string = '';
+					$("#eightList").append("<option value=''>请选择用户未说话的话术</option> ");
+					if(data.code == 0){
+						var item = data.data;
+						var leng = item.length;
+
+						for(var i=0;i<leng;i++){
+							// 0 普通 1业务问题 2肯定3 否定 4拒绝 5中性  6 未识别 7重复 8用户未说话 9无法回答 10 无法回答次数
+							var name = item[i]["name"];
+							var kid = item[i]["id"];
+							string += '<option value="'+kid+'">'+name+'</option>';
+						}
+					}
+					if (string){
+						$('#eightList').append(string);
+					}
+				},
+				error : function() {
+					alert('获取信息失败。');
+				}
+			});
+		}
+
+		//获取短信模板"
+		function getsmsTpl(bindObj){
+			var sceneId = $("#nowsceneID").val();
+			var href = "{:url('user/Scenarios/getSmsTpl')}";
+			$.ajax({
+				url : href,
+				dataType : "json",
+				type : "post",
+				data : {
+					'sceneId':sceneId,
+				},
+				success: function(data){
+					$("#"+bindObj).empty();
+					var string = '';
+					$("#"+bindObj).append("<option value=''>请选择短信模板</option> ");
+					if(data.code == 0){
+						var item = data.data;
+						var leng = item.length;
+
+						for(var i=0;i<leng;i++){
+							var name = item[i]["name"];
+							var kid = item[i]["id"];
+							string += '<option value="'+kid+'">'+name+'</option>';
+						}
+					}
+					if (string){
+						$("#"+bindObj).append(string);
+					}
+				},
+				error : function() {
+					alert('获取信息失败。');
+				}
+			});
+		}
+			function changeflow(obj){
+	  	var val = $(obj).val();
+			if(val == "2"){
+				$("#mainflowdiv").css("display","block");
+						var sceneId = $("#nowsceneID").val();
+						var href = "{:url('user/Scenarios/getNoteList')}";
+						$.ajax({
+								type: "POST",
+								dataType:'json',
+								url: href,
+								cache: false,
+								data: {"sceneId":sceneId},
+								success: function(data) {
+										$("#mainflow").find("option").remove();
+										if (data.code == 0) {
+												var data = data.data;
+												if(data.length > 0){
+														var string = '<option value=" ">选择要跳转到的流程节点</option>';
+														for(var i=0;i<data.length;i++){
+																string += '<option value="'+data[i].id+'">'+data[i].name+'</option>';
+														}
+														$("#mainflow").append(string);
+												}
+										}else{
+											console.log(data.msg);
+										}
+								},
+								error: function(data) {
+									alert("提交失败");
+								}
+						})
+			}else{
+				 $("#mainflowdiv").css("display","none");
+			}
+		}
+		//检查表单的必填项,提交数据
+		function flowSubmit(){
+      var formFile = new FormData();
+			var fnName = $("#flowNoteName").val();
+			var jfkeyword = $("#jfkeyword").val();
+   	  var nextflow = $("#nextflow").val();
+			var mainflow = $("#mainflow").val();
+      var radio_type = $("input[name='jumpNoteChoice']:checked").val();
+			if(radio_type == 1){
+				if($("#jumpNoteRecordingFile").prop('files').length > 0){
+					var voicefile = document.getElementById("jumpNoteRecordingFile").files[0];
+				}
+			}else if(radio_type == 2){
+				if(!$("#voice_change option[value='']").is(":checked")){
+					var voice_idr = $('#voice_change option:selected').val();
+				}
+			}
+	    if(!fnName){
+				 fnName = "跳转节点";
+			}
+			if(nextflow <= 0){
+				alert("下一步必须选择。");
+				return false;
+			}
+
+			var sty = $("#nowEditId").val();
+			var fNodeType = $("#fNodeType").val(); //判断是新建还是编辑的
+			if(fNodeType == "old"){
+				sty = "node-"+sty;
+			}
+
+
+			var topLeft = $("#"+sty).attr("style");
+
+			var strs= new Array(); //定义一数组
+			strs = topLeft.split(";"); //字符分割
+			var top = "",left = "";
+			for (i=0;i< strs.length;i++ )
+			{
+				if(strs[i]){
+						var temp= new Array(); //定义一数组
+						temp = strs[i].split(":"); //字符分割
+
+						if(temp[1] && i==0){
+							top = temp[1];
+						}else{
+							left = temp[1];
+						}
+				}
+
+			}
+			if(top){
+				var toparr = top.split("px");
+				top = toparr[0];
+			}
+
+			if(left){
+				var leftarr = left.split("px");
+				left = leftarr[0];
+			}
+
+		  var sceneId = $("#nowsceneID").val();
+			var nowProcessId = $("#nowProcessId").val();
+
+			var tcId = $("#fjtc_id").val();
+			var pauseTime = $("#jpauseTime").val();
+
+
+			var nowEditId = $("#nowEditId").val();
+
+			var url = "{:url('user/Scenarios/telflowNode')}";
+			if(fNodeType == "old"){
+				url = "{:url('user/Scenarios/editJNode')}";
+			}
+      formFile.append("top",top);
+      formFile.append("left",left);
+      formFile.append("AIStechnique",jfkeyword);
+      formFile.append("cNodeName",fnName);
+      formFile.append("sceneId",sceneId);
+      formFile.append("nowProcessId",nowProcessId);
+      formFile.append("action",nextflow);
+      formFile.append("actionId",mainflow);
+      formFile.append("type",1);
+      formFile.append("tc_id",tcId);
+      formFile.append("pauseTime",pauseTime);
+      formFile.append("nodeId",nowEditId);
+      formFile.append("top",top);
+      formFile.append("voice_idr",voice_idr);
+			formFile.append("voicefile",voicefile);
+			$.ajax({
+					url : url,
+					type : "post",
+					data : formFile,
+					contentType: false,    //不可缺
+          processData: false,    //不可缺
+					success: function(data){
+					  console.log(data);
+						if(data.code == 1){
+							alert(data);
+						}else{
+						  $('#jumpNote').modal('hide');
+
+							var fnode = data.data.fnode;
+							//刷新单个节点
+							getsingle(nowEditId,fnode);
+
+						}
+
+					},
+					error : function() {
+						alert(data);
+					}
+			});
+		}
+		
+		//添加知识库添加元素
+		var tag = 0;
+		function addContent(){
+			tag += 1; 
+			var str = '<div class="answer-item">'
+								+'<label class="robot-word">机器人文字:</label>'
+								+'	<textarea rows="4" dataId="" placeholder="输入该问题的标准答案" maxlength="500" class="form-control ktextarea" ></textarea>'
+								+'	<div class="importRecording">'
+              	+'		<label class="robot-word importRecordingMargin">导入录音：</label>'
+              	+'		<input type="radio" onclick="choices_type1(this);"  name="choices'+ tag +'"  value="0" checked="checked"/><span class="robot-word" >本地上传录音</span>'
+              	+'	  <input type="radio" onclick="choices_type2(this);" value="1" name="choices'+ tag +'" /><span class="robot-word">系统录音选择</span>'
+              	+'	  <div class="recordingChioce recording_type1">'
+              	+'			<input type="file" class="form-control fileInput" name="fileInput" onchange="formSoundzl(this);" accept=".wav," >'
+              	+'	  </div>'
+              	+'  	<div class="recording  hidden recordingChioce recording_type2" >'
+              	+'		<div>'
+              	+'			<label class="col-lg-1  col-sm-1 control-label">选择音频来源：</label>'
+              	+'			<select class="form-control sellect-width" onchange ="zget_zcoice(this);">'
+              	+'				<option value="">请选择</option>'
+              	+'				<option value="1">全部音频</option>'
+              	+'				<option value="2">上传音频</option>'
+              	+'				<option value="3">合成音频</option>'
+              	+'			</select>'
+              	+'		</div>'
+              	+'		<div>'
+              	+'			<label class="col-lg-1  col-sm-1 control-label">选择录音：</label>'
+              	+'			<select class="  form-control sellect-width sure_zvoice" onchange="sure_zvoice(this);">'
+              	+'				<option value="">请选择</option>'
+              	+'			</select>'
+              	+'		</div>'
+              	// +'		<span class="btn btn-primary importbtn">导入</span>'
+                +'		</div>'
+                +'			<audio src="" class="recordingAudio" id="voice_zid" preload="preload" controls="controls"></audio>'
+                +'	</div><img src="/public/img_sj/delContent.png" class="delImg" onclick="delContent(this);"/></div>';
+				$('#contentlist').append(str);
+				
+				
+				
+			$("input:radio[name='choices"+ tag +"']").change(function(){
+				var val = $(this).prop('value');
+				var data = $(this).siblings('.recordingChioce');
+				data.addClass('hidden');
+				data.eq(val).removeClass('hidden');
+			});
+		}
+    
+        //删除单个话术
+    		function delScenarios(id){
+       		 $.post("{:url('delScenarios')}",{'id':id},function(data){
+    					if(data){
+    					  console.log(data);
+    					}else{
+    						window.location.href=window.location.href;
+    					}
+     	    });
+          $('#tips_model').modal('hide');
+        }
+        //删除场景节点
+        function scenenode_del(id){
+          $.post("{:url('user/Scenarios/delflowNote')}",{'id':id},function(data){
+            if(data){
+              console.log(data);
+            }else{
+              getNoteList();
+            }
+          });
+          $('#tips_model').modal('hide');
+        }
+		
+		//添加知识库上传录音弹框显示
+		function uploadSoundRecording(){
+			$('#uploadSoundRecording').modal('show');
+		}
+		
+		//模板添加弹框显示
+    $(".title img").click(function() {
+        $("#linkageRelationship").val('');
+        $("#intentionLevel").val('');
+        
+        title = $(this).prev().text();
+        type = $(this).parent().data('type');
+        $("#add_type").data("type",type);
+        var htmls = '';
+        if(type == 'isInvitation'){
+                    htmls =  '<div class="conf" >'
+                            +'<span id="confTitle">'+title+'</span>'
+                            +'<input type="text" readonly="readonly" id="options" class="form-control" value="=">'
+                            +'<select class="form-control" id="results">'
+                            +'    <option value="1">是</option>'
+                            +'    <option value="0">否</option>'
+                            +'</select>'
+                            +'</div> ';
+                }else if(type == 'frequency'){
+                    htmls = '<div class="conf">'
+                            +'   <span id="confTitle">'+title+'</span>'
+                            +'   <select class="form-control" id="options">'
+                            +'      <option value="<="><=</option>'
+                            +'      <option value=">=">>=</option>'
+                            +'   </select>'
+                            +'  <div class="frequencydiv">'
+                            +'   <input type="number" id="results" min="0"  class="form-control" ><label>次</label>'
+                            +'  </div>'
+                            +'</div>';
+                }else if(type == 'duration'){
+                    htmls = '<div class="conf">'
+                            +'  <span id="confTitle"> '+title+'</span>'
+                            +'  <select class="form-control" id="options">'
+                            +'     <option value="<="><=</option>'
+                            +'     <option value=">=">>=</option>'
+                            +'  </select>'
+                            +'<div class="frequencydiv">'
+                            +'  <input type="number" id="results" min="0"  class="form-control" ><label>秒</label>'
+                            +'</div>'
+                            +'</div>';
+                }else if(type == 'content'){
+                    htmls = '<div class="conf  conf1">'
+                            +'    <span id="confTitle">'+title+'</span>'
+                            +'    <select class="form-control" id="options">'
+                            +'       <option value="0">包含任一</option>'
+                            +'       <option value="1">包含全部</option>'
+                            +'     </select>'
+                            +' <textarea row="1" id="results" placeholder="请填写关键词，多个关键字之间用英文逗号,隔开" class="form-control" ></textarea>'
+                            +' </div>';
+                }else{
+                     htmls = '<div class="conf ldisplay">'
+                            +'    <span id="confTitle">'+title+'</span>'
+                            +'    <input type="text" readonly="readonly" id="options" class="form-control" value="=">'
+                            +'      <select class="form-control selwidth selwidths selectpicker show-tick" id="results" title="请选择"  name="PhoneState" multiple style="width:125px; display:inline-block!important;">'
+                            +'        <option value="3">无人接听</option>'
+                            +'        <option value="4">停机</option>'
+                            +'        <option value="5">空号</option>'
+                            +'        <option value="6">正在通话中</option>'
+                            +'        <option value="7">关机</option>'
+                            +'        <option value="8">用户拒接</option>'
+                            +'        <option value="9">网络忙</option>'
+                            +'        <option value="10">来电提醒</option>'
+                            +'        <option value="11">呼叫转移失败</option>'
+                            +'      </select>'
+                            +' </div>';
+                }
+    
+        $("#temp").html(htmls);
+        $("#add_type").modal('show');
+        $(".conf span").text(title);
+    
+    });
+    
+     $(function() {
+    		$(".selectpicker").selectpicker({
+    			noneSelectedText : '请选择'//默认显示内容
+    		});
+     });
+     
+
+    	
+	</script>

@@ -1,0 +1,162 @@
+{extend name="public/base" /} {block name="body"} 
+{include file="sms/sms_targer" /}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/intention_customer_details.css" rel="stylesheet" type="text/css" />
+
+<style>
+.addpublicnum {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 0px 15px;
+}
+.l-align label {
+    text-align: right;
+    /* vertical-align: middle; */
+    line-height: 32px;
+}
+.l-align {
+    padding-top: 45px;
+}
+.btnok {
+    margin-left: 0px;
+}
+.l-icon {
+    border: 0px;
+}
+.main_Sweep_code{
+	text-align: center;
+}
+.Sweep_codelist{
+		border: solid 1px #eeeeee;
+    min-width: 250px;
+    min-height: 250px;
+    vertical-align: middle;
+    position: relative;
+}
+.dis-inblo{
+	display: inline-block;
+}
+.main_Sweep_code .Sweep_codelist img{
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-55%);
+}
+.Sweep_codelist p{
+		font-size: 14px;
+    color: #404040;
+    margin: 0px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%,-100%);
+    width: 100%;
+    padding: 0px 20px;
+}
+.Sweep_code_centent{
+	padding: 0px 8%;
+}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+    	<!--pz_manping_height-->
+        <div class="main-box clearfix fadeInRight animated " style="padding-bottom: 25px;">
+            <header class="main-box-header n_head_box n_head_box_b clearfix" style="padding:20px 20px 0px !important;">
+                <div class="pull-left"><span class="n_panel_title"><img src="__PUBLIC__/img_sj/bindingwx.png" alt="">绑定微信步骤</span></div>
+            </header>
+            <div class="main-box-body clearfix" style="padding: 20px;">
+            	{if condition="!empty($yunwei_info)"}
+            	<div class="main_Sweep_code">
+            		<div class="Sweep_codelist dis-inblo">
+            			<img id="public_address" src="/{$yunwei_info.qr_code}"/> 
+            			<p>第一步：扫码关注微信公众号 </p>
+            		</div>
+            		
+            		<div class="dis-inblo Sweep_code_centent">
+            			<img src="__PUBLIC__/img/xingzhung854.png"/>
+            		</div>
+            		
+            		<div class="Sweep_codelist dis-inblo">
+            			<img id="sweep_binding" src="{:url('Device/get_bangding_qrcode')}"/>
+            			<p>第二步：扫码绑定当前用户信息</p>
+            		</div>
+            	</div>
+            	{/if}
+            </div>
+        </div>
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box n_head_box_b clearfix" style="padding:20px 20px 0px !important;">
+              <div class="pull-left"><span class="n_panel_title"><img src="__PUBLIC__/img_sj/bindingwx.png" alt="">绑定微信账号列表</span></div>
+            </header>
+            <div class="main-box-body clearfix">
+        			  <div class="table-responsive">
+        				 <table class="table table-bordered table-hover">
+        				   <thead>
+        					    <tr>
+        								<th class="text-center">序号</th>
+                        <th class="text-center">微信昵称</th>
+        								<th class="text-center">微信头像</th>
+        								<th class="text-center">性别</th>
+                        <th class="text-center">创建时间</th>
+                      	<th class="text-center">操作</th>
+        					    </tr>
+        				    </thead>
+        				    {if condition="!empty($userinfo)"}
+        				    <tbody id="bindingwx-list">
+        				    	{volist name="$userinfo" id="vo"}
+                    	<tr>
+                        <td class="text-center">{$key+1}</td>
+        	              <td class="text-center">{$vo.name}</td>
+        	              <td class="text-center"><img src="{$vo.headimgurl}"  width="40px" height="40px"/></td>
+        	              <td class="text-center">{if condition="$vo.sex==1"}男{else/}女{/if}</td>
+                        <td class="text-center">{$vo.create_time|date="Y-m-d H:i:s",###}</td>
+        	              <td class="text-center">
+                          <a href="javascript:void(0);"  data-title="删除公众号绑定" data-id="{$vo.id}" onclick="popTipswin(this);">删除</a>
+                        </td>
+        							</tr>
+        							{/volist}
+        				    </tbody>
+        				    {/if}
+        				  </table>        				
+        			  </div>
+        		</div>
+        </div>
+    </div>
+</div> 
+<script>
+	$(function(){
+		//添加公众号菜单显示
+		$("#sidebar-nav > ul > li.nav-header.hidden-sm.hidden-xs > a > span.pz_letitle[data-name='系统管理']").parents(".nav-header.hidden-sm.hidden-xs").find("ul.submenu li.pz_erMenu:nth-child(1) a span").css("color","#1279d2");
+		$("#sidebar-nav > ul > li.nav-header.hidden-sm.hidden-xs > a > span.pz_letitle[data-name='系统管理']").parents(".nav-header.hidden-sm.hidden-xs").addClass("open");
+		$("#sidebar-nav > ul > li.nav-header.hidden-sm.hidden-xs > a > span.pz_letitle[data-name='系统管理']").parents(".nav-header.hidden-sm.hidden-xs").find("ul.submenu").css("display","block");
+	})
+	//删除绑定微信公众号
+	function delete_bangding_wx(id){
+		 var url='{:url("user/device/delete_bangding_wx")}'
+   	   $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        data: {'id':id},
+        dataType:"json",
+        success : function(data) {
+        	 if(data.code==1){
+        	 	   alert(data.msg);
+        	 	   $('#tips_model').modal('hide');
+        	 	   window.location.href='{:url("user/device/bangdingwx")}';
+        	 	   return false;
+        	 }else{
+              alert(data.msg);
+        	 	  $('#tips_model').modal('hide');
+        	 }
+        },
+
+  	 });
+	}
+</script>
+
+{/block}

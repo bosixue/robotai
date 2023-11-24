@@ -1,0 +1,53 @@
+.clearfix:after, .clearfix:before {
+  display: table;
+  content: ''
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  *zoom: 1;
+}
+a {
+  text-decoration:none;
+}
+a:hover{
+  text-decoration:none;
+}
+.pr {
+  position: relative;
+}
+.fr {
+  float: right;
+}
+.fl {
+  float: left;
+}
+.statusSelect {
+	line-height: 30px;
+}
+.r_inputwidth {
+	width: 100px !important;
+}
+.s_inputwidth {
+	width: 120px !important;
+}
+.form-control {
+	padding: 6px;
+}
+.form-inline .form-group {
+	margin-right: 8px;
+	font-size: 13px;
+}
+.table tr th, .table tr td {
+	text-align: center;
+}
+.r_sendtable tr td:nth-of-type(4),
+.r_sendtable tr td:nth-last-of-type(1){
+	max-width: 250px;
+}
+.r_layout {
+	word-wrap: break-word;
+	word-break: break-all;
+	width: 100%;
+}

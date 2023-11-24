@@ -1,0 +1,254 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<style>
+	.table-bordered>tbody>tr>th{
+		border:none;
+		border-bottom:1px solid #e7ebee;
+	}
+
+	.main-box .main-box-header{
+		padding-bottom: 8px; 
+	}
+
+
+</style>
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img/e_yixiang.png" alt="">充值记录</span>
+		  </div>
+			<div  class="pull-right">
+				<form class="form-inline"  method="get" role="form">
+					<div class="form-group c_seldate clearfix">
+							<!-- 发送时间 -->
+						 <label class="levelSelect statusSelect">充值日期:</label>
+						 <div class="formgroup">
+							 <div class="dis_in c_dateSelbg pr">
+								 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+								 <script>
+										 $('#startDate').fdatepicker({
+											 format: 'yyyy-mm-dd',
+											 // pickTime: true
+										 });
+								 </script>
+							 </div>
+							 <span style="margin:0px 4px;">至</span>
+							 <div class="dis_in c_dateSelbg pr">
+								 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+								 <script>
+									 $('#endTime').fdatepicker({
+										 format: 'yyyy-mm-dd',
+										 // pickTime: true
+									 });
+								 </script>
+							 </div>
+						 </div>
+							 <!-- 查询、重置按钮 -->
+							<div class="dis_in c_marleft">
+								<button class="btn btn-primary" type="button"  onclick="orderGrouping();">查询</button>
+								<button class="btn btn-primary pz_kongxin_anniusty" type="button" onclick="orderChongzhi();">重置</button>
+							</div>
+					</div>
+			 </form>
+		 </div>
+		</header>
+
+		<div class="main-box-body clearfix">
+	     <!-- <section class="navbar  clearfix">
+	         <div  class="pull-right">
+						 <form class="form-inline"  method="get" role="form">
+							 <div class="form-group c_seldate clearfix"> -->
+									 <!-- 发送时间 -->
+	 								<!-- <label class="levelSelect statusSelect">充值日期:</label>
+	 								<div class="formgroup">
+	 									<div class="dis_in c_dateSelbg pr">
+	 										<input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+	 										<script>
+	 												$('#startDate').fdatepicker({
+	 													format: 'yyyy-mm-dd', -->
+	 													<!-- // pickTime: true
+	 												});
+	 										</script> -->
+	 									<!-- </div>
+	 									<span style="margin:0px 4px;">至</span>
+	 									<div class="dis_in c_dateSelbg pr">
+	 										<input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+	 										<script>
+	 											$('#endTime').fdatepicker({
+	 												format: 'yyyy-mm-dd',
+	 												// pickTime: true
+	 											});
+	 										</script>
+	 									</div>
+	 								</div> -->
+
+										<!-- 查询、重置按钮 -->
+									 <!-- <div class="dis_in c_marleft">
+										 <button class="btn btn-primary" type="button"  onclick="orderGrouping();">查询</button>
+										 <button class="btn btn-primary pz_kongxin_anniusty" type="button" onclick="orderChongzhi();">重置</button>
+									 </div>
+							 </div>
+						</form>
+			    </div>
+		   </section> -->
+
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<!-- <th class="text-center">
+									<input class="check-all" name='all_checked' type="checkbox"/>
+								</th> -->
+								<th class="text-center">序号</th>
+                <th class="text-center">当前账号</th>
+								<th class="text-center">充值时间</th>
+								<th class="text-center">充值金额</th>
+								<th class="text-center">充值前余额</th>
+								<th class="text-center">充值后余额</th>
+              	<th class="text-center">充值人</th>
+              	<th class="text-center">备注</th>
+					    </tr>
+				    </thead>
+				    <tbody id="recharge-recored-list">
+				    </tbody>
+				  </table>
+			  </div>
+				<div class="component-page-empty" id="consumeempty">
+  					<div class="empty-tip line">暂无数据</div>
+				</div>
+				<footer class="main-box-footer clearfix">
+          <div class="text-right pull-right">
+          	<div class="paging clearfix"></div>
+          </div>
+				</footer>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script id='recharge_record' type='text/tepmate'>
+	<tr>
+	 <!--<th class="text-center">
+			<input class="check-single" name='roleids' data-id="{%id%}" type="checkbox"/>
+		</th>-->
+		<td>{%sequence%}</td>
+		<td>{%name%}</td>
+		<td>{%recharge_time%}</td>
+		<td>{%recharge_money%}</td>
+		<td>{%recharge_before%}</td>
+		<td>{%recharge_after%}</td>
+		<td>{%recharge_person%}</td>
+		<td>{%note%}</td>
+	</tr>
+</script>
+ <script type="text/javascript">
+
+		var startDate,endTime;
+		//搜索
+		function orderGrouping(){
+			startDate = $('#startDate').val();
+			endTime = $('#endTime').val();
+			//判断开始日期是否比结束日期大，jusge函数待完善
+			// if(judge(startDate,endTime) == false){
+			// 	alert("开始日期不能大于结束日期");
+			// }
+			//调用查询数据
+			show_data(1);
+		}
+		
+		var Paging = new Paging01();
+			Paging.init_args({
+			// url:
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'paging', //放置分页的class
+			callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+		});
+		show_data(1,10,1);
+		//显示充值记录
+		function show_data(page,limit,type){
+			if(type){
+				$('#startDate').val("");
+				$('#endTime').val("");
+			}
+			var url = '{:url("get_recharge_record_api")}';
+			if(page == null || page == ''){
+				page = 1;
+			}
+			if(limit == null || limit == ''){
+				limit = 10;
+			}
+			var data = {};
+			data.page = parseInt(page);
+			data.limit = parseInt(limit);
+			data.start_time = $('#startDate').val();
+			data.end_time = $('#endTime').val();
+			$.ajax({
+				url : url,
+ 				dataType : "json",
+ 				type : "post",
+ 				data : data,
+				success:function(result){
+					console.log(result);
+					if(result.code === 0){
+						if(result.data.list.length == 0){
+							$('#consumeempty').show();
+							$('#recharge-recored-list tr').remove();
+							$('.main-box-footer').hide();
+						}else {
+							$('#consumeempty').hide();
+							$('.main-box-footer').show();
+							var htmls = '';
+							$.each(result.data.list, function(index, object){
+								var html = $('#recharge_record').html();
+										html = html.replace('{%id%}', object.id);
+										html = html.replace('{%sequence%}', object.sequence);
+										html = html.replace('{%name%}', object.member_name);
+										html = html.replace('{%recharge_time%}', object.date);
+										html = html.replace('{%recharge_money%}', object.menoy);
+										html = html.replace('{%recharge_before%}', object.defore_balance);
+										html = html.replace('{%recharge_after%}', object.balance);
+										html = html.replace('{%recharge_person%}', object.recharge_person);
+							 			html = html.replace('{%note%}', object.remak);
+								htmls += html;
+							});
+						}
+						var total = result.data.page;   //总页数
+						var Nowpage = result.data.Nowpage;  //当前页码
+						var count  = result.data.total;  //总条数
+						window.count = count;
+						var Nowpage = parseInt(Nowpage);
+						$('#recharge-recored-list').html(htmls);
+						Paging.paging(Nowpage, count, limit);
+						election();
+					}
+				},
+				error:function(){
+					alert('获取数据失败');
+				}
+			});
+
+		}
+		//重置
+		function orderChongzhi(){
+			$('#startDate').val("");
+			$('#endTime').val("");
+			show_data(1);
+		}
+  </script>
+
+
+</div>
+
+{include file="sms/sms_targer" /}
+
+{/block}

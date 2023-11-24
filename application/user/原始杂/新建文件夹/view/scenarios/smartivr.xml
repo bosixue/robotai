@@ -1,0 +1,120 @@
+<include>
+
+<!--
+用于自动外呼
+-->
+ <extension name="smartivr_autodialeer">
+    <condition field="destination_number" expression="^(89.*)$">
+
+
+	<action application="wait_for_answer_timeout" data="60000"/>
+
+	<!--
+	检测到忙音自动挂断
+	-->
+	<action application="tone_detect" data="busy 450 r 0 hangup 'normal_clearing' 3"/>
+	
+
+
+	<action application="set" data="apiurl=http://120.79.142.199/api/smartivr/IVREntery"/>
+
+	<!--
+	使用自动外呼模块设置flow等于任务ID
+	-->
+	<action application="set" data="flowid=${autodialer_task}"/>
+
+
+        <action application="export" data="RECORD_STEREO=false"/>
+	<action application="set" data="record_file=$${recordings_dir}/${strftime(%Y-%m-%d)}/${caller_id_number}.$1.${uuid}.wav"/>
+	<action application="record_session" data="${record_file}"/>
+        <action application="socket" data="127.0.0.1:8040 async full" />
+    </condition>
+ </extension>
+ <extension name="smartivr_autodialeer">
+    <condition field="destination_number" expression="^(88.*)$">
+
+
+	<action application="wait_for_answer_timeout" data="60000"/>
+
+	<!--
+	检测到忙音自动挂断
+	-->
+	<action application="tone_detect" data="busy 450 r 0 hangup 'normal_clearing' 3"/>
+	
+
+
+	<action application="set" data="apiurl=http://120.79.142.199/api/smartivr/IVREntery"/>
+
+	<!--
+	使用自动外呼模块设置flow等于任务ID
+	-->
+	<action application="set" data="flowid=${autodialer_task}"/>
+
+
+        <action application="export" data="RECORD_STEREO=false"/>
+	<action application="set" data="record_file=$${recordings_dir}/${strftime(%Y-%m-%d)}/${caller_id_number}.$1.${uuid}.wav"/>
+	<action application="record_session" data="${record_file}"/>
+        <action application="socket" data="127.0.0.1:8040 async full" />
+    </condition>
+ </extension>
+
+<!--
+     用于自动外呼
+-->
+ <extension name="smartivr_autodialeer">
+
+    <condition field="destination_number" expression="^(7777.*)$">
+
+
+        <action application="wait_for_answer_timeout" data="60000"/>
+
+        <!--
+                     检测到忙音自动挂断
+        -->
+        <action application="tone_detect" data="busy 450 r 0 hangup 'normal_clearing' 3"/>
+
+
+
+        <action application="set" data="apiurl=http://yy.a5188.cc/api/smartivr/IVREntery"/>
+
+        <!--
+                     使用自动外呼模块设置flow等于任务ID
+        -->
+        <action application="set" data="flowid=${autodialer_task}"/>
+
+
+        <action application="export" data="RECORD_STEREO=false"/>
+        <action application="set" data="record_file=$${recordings_dir}/${strftime(%Y-%m-%d)}/${caller_id_number}.$1.${uuid}.wav"/>
+        <action application="record_session" data="${record_file}"/>
+        <action application="socket" data="127.0.0.1:8040 async full" />
+    </condition>
+ </extension>
+
+
+
+<!--
+用于呼入
+-->
+
+ <extension name="smartivr_calin">
+    <condition field="destination_number" expression="^(9999.*)$">
+        <action application="answer"/>
+
+	<!--
+	检测到忙音自动挂断
+	-->
+	<action application="tone_detect" data="busy 450 r 0 hangup 'normal_clearing' 3"/>
+	
+
+	<action application="set" data="apiurl=http://manage.yun235.net/api/smartivr/IVREntery"/>
+
+	<action application="set" data="flowid=$1"/>
+
+        <action application="export" data="RECORD_STEREO=false"/>
+	<action application="set" data="record_file=$${recordings_dir}/${strftime(%Y-%m-%d)}/${caller_id_number}.$1.${strftime(%H-%M-%S)}.${uuid}.wav"/>
+	<action application="record_session" data="${record_file}"/>
+        <action application="socket" data="127.0.0.1:8040 async full" />
+    </condition>
+ </extension>
+
+</include>

@@ -1,0 +1,1178 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<!-- datepicker statr -->
+<link href="__PUBLIC__/plugs/bsdatepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/bsdatepicker/js/bootstrap-datepicker.js"></script>
+
+<link href="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.js"></script>
+<!-- <script src="__PUBLIC__/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script> -->
+
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.custom.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/webuploader/webuploader.css">
+
+<script type="text/javascript" src="__PUBLIC__/plugs/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/bootstrap-select/dist/css/bootstrap-select.min.css" />
+
+<!-- 时间 -->
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<style type="text/css">
+.textwidth{
+	width:250px;
+	display: inline-block;
+  margin: 2px 10px 10px 0px;
+}
+.nav-tabs {
+    background: #ffffff;
+}
+.nav-tabs {
+   border-bottom: 1px solid #ddd;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+	color: #555;
+	cursor: default;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+}
+.panel-default>.panel-heading {
+	background-color: #FFFFFF;
+	border-color: #FFFFFF;
+	color: #FFFFFF;
+	border-radius: 0;
+	background-clip: padding-box;
+}
+.statusSelect {
+		line-height: 30px;
+		float: left;
+}
+.ivu-form-item-content {
+    position: relative;
+    line-height: 32px;
+    font-size: 12px;
+}
+.mr15 {
+    margin-right: 15px;
+}
+.itemtime {
+    position: relative;
+    line-height: 32px;
+    font-size: 12px;
+}
+.ivu-tag-checked {
+    background: #f1f1f1;
+}
+.mt15 {
+    margin-top: 15px;
+}
+.mb15 {
+    margin-bottom: 15px;
+}
+.ivu-tag {
+    display: inline-block;
+    height: 22px;
+    line-height: 22px;
+    margin: 2px 4px 2px 0;
+    padding: 0 8px;
+    border: 1px solid #e9eaec;
+    border-radius: 3px;
+    background: #f7f7f7;
+    font-size: 12px;
+    vertical-align: middle;
+    opacity: 1;
+    overflow: hidden;
+    cursor: pointer;
+}
+:root .ivu-tag .ivu-icon-ios-close-empty {
+    font-size: 14px;
+}
+.ivu-tag .ivu-icon-ios-close-empty {
+    display: inline-block;
+    font-size: 14px;
+    font-size: 20px\9;
+    transform: scale(1.42857143) rotate(0deg);
+    cursor: pointer;
+    margin-left: 8px;
+    color: #666;
+    opacity: .66;
+    position: relative;
+    top: -1px;
+		width: 7px;
+    height: 14px;
+}
+
+.ivu-icon {
+    display: inline-block;
+    font-family: Ionicons;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.ivu-tag-text {
+    color: #495060;
+}
+
+.dropdown-menu>li>a>span{
+    color: #000;
+}
+
+.btn-group > .btn-default{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #555;
+}
+
+
+ .dropup > .btn-default{
+   background-color: #fff;
+   border: 1px solid #ccc;
+   color: #555;
+}
+
+.dropup > .btn-default:hover, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+ background-color: #fff;
+ border: 1px solid #ccc;
+}
+.bootstrap-select>.dropdown-toggle.bs-placeholder, .bootstrap-select>.dropdown-toggle.bs-placeholder:active, .bootstrap-select>.dropdown-toggle.bs-placeholder:focus, .bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
+    color: #555;
+}
+.dropup > .btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+  color: #555;
+}
+
+.checkbox-wrapper{
+	 margin-right: 20px;
+}
+.word{
+	  line-height: 40px;
+    font-size: 14px;
+}
+.bootstrap-select.form-control:not([class*=col-]) {
+     width: 250px;
+}
+.panel-title{
+	color:#000;
+}
+.panel-title img {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.pz_panel-heading{
+	padding:30px 30px 0px;
+}
+.pz_main-box-header{
+	/* padding:20px 0px 10px; */
+}
+.textTimeWidth{
+	/* width:160px; */
+}
+.pz_tishi{
+	color: #909090;
+	font-size:12px;
+	display: inline-block;
+}
+
+.tishi{
+	color: #909090;
+	font-size:12px;
+	display: inline-block;
+}
+
+.pz_controlSty {
+
+}
+.field-status {
+  float: left;
+	cursor: pointer;
+	padding: 0px 4px 10px 0px;
+}
+.field-status input{
+	cursor: pointer;
+}
+.field-status span{
+	color: #404040;
+	font-size:14px;
+}
+.col-lg-2.control-label{
+	width:16.66666667%;
+}
+
+@media (max-width: 1229px){
+	.col-lg-2.control-label{
+		width:21.66666667%;
+	}
+}
+
+.pz_clear{
+	clear:both;
+}
+.pz_Yixiangdengji,.pz_Duanxinfasong{
+	display: inline-block;
+}
+.pz_Yixiangdengji label,.pz_Duanxinfasong label{
+	padding: 0px 25px 10px 0px;
+}
+.pz_addTimes,.pz_delTimes{
+	line-height: 34px;color: #0e90fe;font-size:14px;cursor: pointer;
+}
+.c_datebgimg {
+	padding: 6px;
+  background: url(/public/img/xuanzeriqi.png) 94% 50% no-repeat;
+}
+.c_timebgimg {
+	padding: 6px;
+  background: url(/public/img/xuanzeshijian.png) 94% 50% no-repeat;
+}
+.c_selectimg {
+  background: url(/public/img_sj/jiantou.png) 94% 50% no-repeat;
+}
+.resetSel {
+  background-clip: padding-box;
+  border-color: #e0e3e4;
+  color: #404040;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.defaultline{
+  vertical-align: sub;
+}
+
+.default-line{
+	color:#000;
+}
+
+.tips p span{
+	color:#909090;
+}
+
+.sms-modal p{
+	font-size: 12px;
+	color: #909090;
+	padding: 15px 15px;
+}
+
+.sms-modal{
+	width: 248px;
+	height: 93px;
+	background-color: #f8f8f8;
+}
+
+.btn-success.active, .btn-success:active, .open>.dropdown-toggle.btn-success,.btn-success:hover{
+	background-color: #0e90fe!important;
+	border-color:#0e90fe!important;
+}
+
+</style>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default fadeInRight animated pz_manping_height">
+
+		    <div class="panel-heading pz_panel-heading">
+					<header class="main-box-header clearfix pz_main-box-header">
+						 <!-- <div class="pull-left">
+							<h1><span>{$current|default=''}</span>页面</h1>
+						 </div> -->
+						 <div class="panel-top">
+		          <span class="panel-title">
+								<img src="/public/img/kuaijiecaozuo.png" style="width:18px;height:19px;">添加任务
+							</span>
+		        </div>
+					</header>
+				</div>
+
+			  <div class="panel-body">
+				 	<form id="form" method="post" class="form-horizontal" enctype="multipart/form-data" method="post">
+				    <div class="tab-content">
+						  <div role="tabpanel" class="tab-pane active" id="home">
+					      <div class="main-box-body clearfix">
+
+									<div class="form-group" style="margin-top:20px;">
+										<input type="hidden" name="call_type" id="call_type" value="1">
+										<label class="col-lg-2 control-label">任务名称:</label>
+										<div class="col-lg-9 col-sm-9">
+											 <input type="text" class="form-control textwidth" placeholder="请输入任务名称" name="task_name" id="name" value="{$list.name|default=''}" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-2 control-label">选择话术:</label>
+										<div class="col-lg-9 col-sm-9">
+											<select name="scenarios_id" id="scenarios_id" class="form-control textwidth resetSel c_selectimg">
+												<option value="">请选择话术</option>
+												{volist name="scenarioslist" id="item"}
+													<option value="{$item['id']}" >  {$item['name']} </option>
+												{/volist}
+											</select>
+											<!--
+												<input type="text" class="form-control textwidth" name="destination_extension" id="destination_extension" autocomplete="false" value="{$list.destination_extension|default=''}">
+												<div class="help-block">越高排序越靠前</div>-->
+										</div>
+									</div>
+
+									<!-- 工作日期 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">工作日期:</label>
+										<div class="col-lg-9 col-sm-9 pz_addTimes_click">
+											<div class="form-group">
+				 							 	<div class="col-lg-9 col-sm-9 ">
+													<!--<input type="hidden" name="start_date" id="STime_data" value="" />-->
+				 							 		<div class="col-lg-3 col-sm-3">
+				 							 			<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择开始日期" class="form-control" id="start_date" name="start_date" value="" readonly="" />
+				 							 		</div>
+				 							 		<script>
+				 							 		$('#start_date').fdatepicker({
+				 							 			format: 'yyyy-mm-dd',
+				 							 			pickTime: false
+				 							 		});
+				 							 		</script>
+													<div style="text-align:center; line-height: 30px;width:5%;" class="col-lg-1 col-sm-1"> 至 </div>
+				 									<div class="col-lg-3 col-sm-3">
+				 										<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择结束日期" id="end_date" name="end_date" value="" readonly="" />
+				 									</div>
+														<script>
+															$('#end_date').fdatepicker({
+																format: 'yyyy-mm-dd',
+																pickTime: false
+															});
+														</script>
+													<div class="col-lg-4 col-sm-4 pz_addTimes" data-addtime="工作日期">
+														<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/tianjia02.png"/>添加多个日期
+													</div>
+				 							 	</div>
+				 							</div>
+
+											<div class="form-group pz_formgroup_moban" style="margin-bottom: 0px;"></div>
+
+										</div>
+									</div>
+									<!-- /工作日期 -->
+									<!-- 工作时间 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">工作时间:</label>
+										<div class="col-lg-9 col-sm-9 pz_addTimes_click">
+											<div class="form-group" >
+												<div class="col-lg-9 col-sm-9">
+													 <input type="hidden" name="morning" id="morning" value="" />
+														<div class="col-lg-3 col-sm-3">
+															<input type="text" class="form-control textTimeWidth c_timebgimg" id="start_time" placeholder="请输入开始时间" name="start_time" value="" readonly="" />
+														</div>
+														<script>
+															$('#start_time').timepicker({  //fdatepicker
+																format: 'hh:ii:ss',
+																defaultTime:false,
+																showMeridian:false
+															});
+														</script>
+														<div style="text-align:center; line-height: 30px;width:5%;" class="col-lg-1 col-sm-1"> 至 </div>
+
+														<div class="col-lg-3 col-sm-3">
+															<input type="text" class="form-control textTimeWidth c_timebgimg" id="end_time" placeholder="请输入结束时间" name="end_time" value="" readonly="" />
+														</div>
+														<script>
+															$('#end_time').timepicker({
+																format: 'hh:ii:ss',
+																defaultTime:false,
+																showMeridian:false
+															});
+														</script>
+														<div class="col-lg-4 col-sm-4 pz_addTimes" data-addtime="工作时间">
+															<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/tianjia02.png"/>添加多个时间
+														</div>
+												</div>
+											</div>
+											<!-- 添加多个工作时间 -->
+											<div class="form-group pz_formgroup_moban" style="margin-bottom: 0px;"></div>
+											<!-- / 添加多个工作时间 -->
+											<div style="color: #909090;font-size:12px;padding:10px 0px;">温馨提示：有效工作的时间范围是08:00-21:30</div>
+										</div>
+											<!--<input type="hidden" name="afternoon" id="afternoon" value="" />-->
+										 <!-- <input type="hidden" name="evening" id="evening" value="" />-->
+									</div>
+
+
+
+									<!--待处理-->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">任务是否自动启动：</label>
+										<div class="col-lg-9 col-sm-9 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="autocallY" name="is_auto" value="1" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status " style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="autocallN" name="is_auto" value="0" title="否" checked="">
+													<span>否</span>
+											</div>
+											<div class="tips-manualoperation" style="color: #909090;font-size:12px;padding:32px 0px 15px 0px;">温馨提示：该任务到达指定时间后将不会自动开启，您需手动开启任务</div>
+											<div class="tips-auto hidden" style="color: #909090;font-size:12px;padding:32px 0px 15px 0px;">温馨提示：该任务到达指定时间后将自动拨打</div>
+										</div>
+							    </div>
+
+									<!-- /工作时间 -->
+									<!-- 排除日期 -->
+									<!-- <div class="form-group">
+										<label class="col-lg-2 control-label">排除日期:</label>
+										<div class="col-lg-9 col-sm-9 pz_addTimes_click">
+											<div class="form-group" >
+				 							 	<div class="col-lg-9 col-sm-9">
+													<input type="hidden" name="morning" id="STime_data" value="" />
+				 							 		<div class="col-lg-3 col-sm-3">
+				 							 			<input type="text" style="form-control textTimeWidth" placeholder="请选择日期" class="form-control c_datebgimg" id="sOvercome_data" name="startdata" value="" readonly="" />
+				 							 		</div>
+				 							 		<script>
+				 							 		$('#sOvercome_data').fdatepicker({
+				 							 			format: 'yyyy-mm-dd',
+				 							 			pickTime: false
+				 							 		});
+				 							 		</script>
+													<div style="text-align:center; line-height: 30px;width:5%;" class="col-lg-1 col-sm-1"> 至 </div>
+				 									<div class="col-lg-3 col-sm-3">
+				 										<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择日期" id="eOvercome_data" name="enddata" value="" readonly="" />
+				 									</div>
+														<script>
+															$('#eOvercome_data').fdatepicker({
+																format: 'yyyy-mm-dd',
+																pickTime: false
+															});
+														</script>
+													<div class="col-lg-4 col-sm-4 pz_addTimes" data-addtime="排除日期">
+														<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/tianjia02.png"/>添加多个日期
+													</div>
+
+				 							 	</div>
+				 							</div>
+											<!-- 添加多个排除日期 -->
+											<!-- <div class="form-group pz_formgroup_moban" style="margin-bottom: 0px;"></div> -->
+											<!-- /添加多个排除日期 -->
+											<!-- <div style="color: #909090;font-size:12px;padding:10px 0px;">温馨提示：排除日期内，机器人不工作</div> -->
+										<!-- </div> -->
+									<!-- </div> -->
+									<!-- /排除日期 -->
+
+									<!-- 机器人数量 -->
+									<div class="form-group" style="margin-top:10px;">
+										<label class="col-lg-2 control-label">机器人数量:</label>
+										<div class="col-lg-9 col-sm-9">
+											 <input type="text" class="form-control textwidth" placeholder="请输入机器人数量" name="robot_count" id="number" value="" />
+											 <div class="pz_tishi" id="usable_robot_count">当前可用机器人数量为<span></span> </div>
+										</div>
+									</div>
+									<!-- /机器人数量 -->
+
+									<!--选择线路 待处理-->
+									<div class="form-group" style="margin-top:10px;">
+										<label class="col-lg-2 control-label">选择线路:</label>
+										<div class="col-lg-9 col-sm-9">
+											<select class="form-control textwidth resetSel c_selectimg" name="line_id">
+												<option value='0'>请选择线路</option>
+												{volist name='line_datas' id='line_data'}
+												<option value="{$line_data['id']}">{$line_data['name']}</option>
+												{/volist}
+											</select>
+											<div class="tishi" id="default-lines">
+												<input type="checkbox" class="defaultline " id="defaultlines" name="is_default_line" onclick="checkline(this);">
+												将此线路设置为默认线路
+											</div>
+
+										</div>
+									</div>
+
+
+									<!--/选择线路-->
+
+									<!--==============待处置=========待处理=============我是万恶的分割线===================================================================================-->
+
+									<!-- 是否开启人工转接 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否开启人工转接：</label>
+										<div class="col-lg-9 col-sm-9 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="YesZhuangjie" name="Zhuangjie" value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="NotZhuangjie" name="Zhuangjie" value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+										</div>
+							    </div>
+									<!-- /是否开启人工转接 -->
+
+									<!-- 人工坐席 -->
+									<div class="form-group pz_rengongzuoxi hide">
+										<label class="col-lg-2 control-label">人工坐席：</label>
+										<div class="col-lg-9 col-sm-9">
+												<select id="phone_id" class="form-control textwidth" name="phone_id">
+													<option value=''>请选择人工座席</option>
+													{volist name="tsr_group_name" id="item_tsr"}
+													<option value="{$item_tsr['id']}">
+														{$item_tsr['name']}
+													</option>
+												{/volist}
+												</select>
+										</div>
+									</div>
+									<!-- /人工坐席 -->
+
+									<!--是否将意向客户加入CRM 待处理-->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否将意向客户加入CRM：</label>
+										<div class="col-lg-9 col-sm-9 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="agree" name="joinCRM"  value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="disagree" name="joinCRM"  value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+
+											<div class="pz_clear hide pz_CRM_dengji" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择加入CRM意向客户的意向等级(可多选)：</p>
+												<div class="pz_Yixiangdengji">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="levelA" name="Yixiangdengji" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="levelB" name="Yixiangdengji" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="levelC" name="Yixiangdengji" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--/是否将意向客户加入CRM-->
+
+
+									<!-- 是否启用微信公众号推送 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否启用公众号推送：</label>
+										<div class="col-lg-9 col-sm-9 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="YesTuisong" name="Tuisong" value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="NotTuisong" name="Tuisong" value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+
+											<div class="pz_clear hide pz_tuisong_dengji" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择要推送的客户意向等级(可多选):</p>
+												<div class="pz_Yixiangdengji">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="level5" name="Yixiangdengji" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="level4" name="Yixiangdengji" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="level3" name="Yixiangdengji" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+										</div>
+							    </div>
+									<!-- /是否启用微信公众号推送 -->
+
+									<!-- 是否触发短信发送 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否触发短信发送:</label>
+										<div class="col-lg-9 col-sm-9 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="YesDuanxinfasong" name="Duanxinfasong" value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="NotDuanxinfasong" name="Duanxinfasong" value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+
+											<div class="pz_clear hide pz_duanxing_fasong" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择要发送的客户意向等级(可多选)：</p>
+												<div class="pz_Duanxinfasong">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="leve6" name="Duanxinfasong" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="leve5" name="Duanxinfasong" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="leve4" name="Duanxinfasong" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+
+										</div>
+							    </div>
+									<!-- /是否触发短信发送 -->
+									<!-- 短信模板 -->
+									<div class="form-group pz_duanxing_fasong hide">
+										<label class="col-lg-2 control-label">短信模板：</label>
+										<div class="col-lg-9 col-sm-9">
+												<select id="sms-template" class="form-control textwidth" name="">
+													<option >请选择短信模板</option>
+													<!-- <option value='模板1'>模板1</option>
+													<option value='模板2'>模板2</option> -->
+													{volist name="sms_template" id="item_sms"}
+													<option value="{$item_sms['id']}">
+														{$item_sms['name']}
+													</option>
+												{/volist}
+												</select>
+												<div class="pz_clear smsmodal hidden  " style="padding-top: 10px;">
+													<p style="color: #000;font-size:14px;padding-bottom:10px;">短信模板内容预览：</p>
+													<div class="sms-modal">
+														<p>
+														【中国移动】尊敬的客户176*****607，9月话费账单已送达您的139邮箱，看账单参与“金秋旅游季”活动赢100元话费！点击查看账单。
+														</p>
+													</div>
+												</div>
+										</div>
+									</div>
+
+									<!-- /短信模板 -->
+									<!-- 备注 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">备注：</label>
+										<div class="col-lg-9 col-sm-9">
+											<textarea name="remark" id="remark" style="width: 40%;min-height: 115px;border: 1px solid #e0e2e4;padding: 6px 11px;font-size: 14px;color: #adadad;" placeholder="请输入备注信息"></textarea>
+										</div>
+									</div>
+									<!-- /备注 -->
+						  <div class="form-group">
+								<div class="col-lg-offset-2 col-lg-10">
+								<!--   target-form="form-horizontal" -->
+									 <input type="hidden" name="taskId" id="taskId" value="{$list.uuid|default=''}" />
+									<input type="hidden" name="groupId" id="groupId" value="{$list.disable_dial_timegroup|default=''}" />
+									<input type="hidden" name="onetime" id="onetime" value="{$list.timerange.0.begin_datetime|default='08:00'}" />
+									<input type="hidden" name="twotime" id="twotime" value="{$list.timerange.0.end_datetime|default='12:00'}" />
+									<input type="hidden" name="threetime" id="threetime" value="{$list.timerange.1.begin_datetime|default='14:00'}" />
+									<input type="hidden" name="fourtime" id="fourtime" value="{$list.timerange.1.end_datetime|default='20:00'}" />
+									<span class="btn btn-success submit-btn" onclick="checkform();">确 定</span>
+									<!-- <button class="btn btn-danger btn-return" onclick="javascript:history.back(-1);return false;">返 回</button> -->
+								</div>
+							</div>
+
+
+					      </div>
+						  </div>
+						</div>
+					</form>
+			  </div>
+		</div>
+
+		<!-- 确定提交 提示框 -->
+		<!-- <style>.pz_modal{background:rgba(0, 0, 0, 0.62);}</style> -->
+		<div class="modal fade in pz_modal" role="dialog" id="l-delnote" style="display: none;">
+			<div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						<span class="pz_clockshan">×</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">操作提示</h4>
+					</div>
+					<div class="modal-body modal-body-tips">确定新建任务？</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" onclick="pz_delFlowNote();">   取消		</button>
+						<button type="button" class="btn btn-primary" onclick="adFlowNote();">	 确定    </button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			//选中默认编辑路线字体颜色变化
+			function checkline(checkbox){
+				if(checkbox.checked == true){
+					$('.tishi').addClass('default-line');
+				}else{
+					$('.tishi').removeClass('default-line');
+				}
+			}
+
+			$('input[name="autocall"]').change(function(){
+				if($('input[name="autocall"][value="1"]').prop("checked")){
+					$(".tips-auto").removeClass('hidden');
+					$(".tips-manualoperation").addClass('hidden');
+				}else{
+					$(".tips-manualoperation").removeClass('hidden');
+					$(".tips-auto").addClass('hidden');
+				}
+			})
+
+			//短信模板显示
+			$('#sms-template').change(function(){
+				if($('#sms-template').val() != '请选择短信模板'){
+					$('.smsmodal').removeClass('hidden');
+				}else{
+					$('.smsmodal').addClass('hidden');
+				}
+			})
+
+
+			// radio事件
+			$(".pz_radio .pz_radioChecked input[type='radio']").click(function(){
+				// 三个字段的radio name的判断 字段内容：”是否开启人工转接 Zhuangjie“，“是否启用公众号推送 Tuisong”，”是否触发短信发送 Duanxinfasong”
+				var radio_name = $(this).attr("name");
+				switch (radio_name) {
+					case 'Zhuangjie':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='Zhuangjie']:checked")) {
+									$(".pz_rengongzuoxi").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='Zhuangjie']:checked")) {
+									$(".pz_rengongzuoxi").addClass("hide");
+								}
+							break;
+						}
+					break;
+					case 'joinCRM':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='joinCRM']:checked")) {
+									$(".pz_CRM_dengji").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='joinCRM']:checked")) {
+									$(".pz_CRM_dengji").addClass("hide");
+								}
+							break;
+						}
+					break;
+					case 'Tuisong':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='Tuisong']:checked")) {
+									$(".pz_tuisong_dengji").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='Tuisong']:checked")) {
+									$(".pz_tuisong_dengji").addClass("hide");
+								}
+							break;
+						}
+					break;
+					case 'Duanxinfasong':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='Duanxinfasong']:checked")) {
+									$(".pz_duanxing_fasong").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='Duanxinfasong']:checked")) {
+									$(".pz_duanxing_fasong").addClass("hide");
+								}
+							break;
+						}
+					break;
+
+				}
+			});
+
+			// 时间
+			var riqi_frequency = 0;//定义工作日期点击次数
+			var shijian_frequency = 0; //定义工作时间点击次数
+			var paichu_frequency = 0; //定义排除日期点击次数
+
+			$(".pz_addTimes_click .form-group .col-lg-9 .pz_addTimes").click(function(){
+				//得到当前点击的日期data-addtime属性，属性值有 "工作日期","工作时间","排除日期"
+				var $time_state = $(this).attr("data-addtime");
+				switch ($time_state) {
+					case '工作日期':
+						riqi_frequency = riqi_frequency + 1;
+						var gongzuoriqi_html = '<div class="col-lg-9 col-sm-9 pz_zhuijiadata" style="margin-top: 10px;margin-bottom: 10px;">';
+						gongzuoriqi_html += '<input type="hidden" name="morning" id="STime_data" value="" />';
+						gongzuoriqi_html += '<div class="col-lg-3 col-sm-3">';
+						gongzuoriqi_html += '<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择开始日期" class="form-control" id="sTime'+riqi_frequency+'" name="sTime'+riqi_frequency+'" value="" readonly="" />';
+						gongzuoriqi_html += '</div><div style="text-align:center; line-height: 30px;width:5%;" class="col-lg-1 col-sm-1"> 至 </div>';
+						gongzuoriqi_html += '<div class="col-lg-3 col-sm-3">';
+						gongzuoriqi_html += '<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择结束日期" id="eTime'+riqi_frequency+'" name="sTime'+riqi_frequency+'" value="" readonly="" />';
+						gongzuoriqi_html += '</div>';
+						gongzuoriqi_html += '<div class="col-lg-1 col-sm-1 pz_delTimes"><img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+						gongzuoriqi_html += '</div>';
+						$(this).parents(".pz_addTimes_click").find(".pz_formgroup_moban").append(gongzuoriqi_html);
+						delTimes();//删除多余的时间
+						// 工作日期
+						$('#sTime'+riqi_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+						$('#eTime'+riqi_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+					break;
+					case '工作时间':
+						shijian_frequency = shijian_frequency + 1;
+						var gongzuoshijian_html = '<div class="col-lg-9 col-sm-9 pz_zhuijiadata" style="margin-top: 10px;margin-bottom: 10px;">';
+								gongzuoshijian_html += '<input type="hidden" name="morning" id="" value="" />';
+								gongzuoshijian_html += '<div class="col-lg-3 col-sm-3">';
+								gongzuoshijian_html += '<input type="text" class="form-control textTimeWidth c_timebgimg" id="sWork_startDate'+shijian_frequency+'" placeholder="请输入开始时间" name="sWork_startDate'+shijian_frequency+'" value="" readonly="" />';
+								gongzuoshijian_html += '</div>';
+								gongzuoshijian_html += '<div style="text-align:center; line-height: 30px;width:5%;" class="col-lg-1 col-sm-1"> 至 </div>';
+								gongzuoshijian_html += '<div class="col-lg-3 col-sm-3">';
+								gongzuoshijian_html += '<input type="text" class="form-control textTimeWidth c_timebgimg" id="eWork_endDate'+shijian_frequency+'"  placeholder="请输入结束时间" name="eWork_endDate1" value="" readonly="" />';
+								gongzuoshijian_html += '</div>';
+								gongzuoshijian_html += '<div class="col-lg-1 col-sm-1 pz_delTimes">';
+								gongzuoshijian_html += '<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+								gongzuoshijian_html += '</div>';
+								gongzuoshijian_html += '</div>';
+
+						$(this).parents(".pz_addTimes_click").find(".pz_formgroup_moban").append(gongzuoshijian_html);
+						delTimes();//删除多余的时间
+						// 工作时间
+						$('#sWork_startDate'+shijian_frequency).timepicker({format: 'hh:ii:ss',pickTime: true,showMeridian:false,	defaultTime:false});
+						$('#eWork_endDate'+shijian_frequency).timepicker({format: 'hh:ii:ss',pickTime: true,showMeridian:false,	defaultTime:false});
+					break;
+					case '排除日期':
+						paichu_frequency = paichu_frequency + 1;
+						var paichuriqi_html = '<div class="col-lg-9 col-sm-9 pz_zhuijiadata" style="margin-top: 10px;margin-bottom: 10px;">';
+								paichuriqi_html += '<input type="hidden" name="morning" id="STime_data" value="" />';
+								paichuriqi_html += '<div class="col-lg-3 col-sm-3">';
+								paichuriqi_html += '<input type="text" style="form-control textTimeWidth" placeholder="请选择日期" class="form-control" id="sOvercome_data'+paichu_frequency+'" name="sOvercome_data'+paichu_frequency+'" value="" readonly="" />';
+								paichuriqi_html += '</div>';
+								paichuriqi_html += '<div style="text-align:center; line-height: 30px;width:5%;" class="col-lg-1 col-sm-1"> 至 </div>';
+								paichuriqi_html += '<div class="col-lg-3 col-sm-3">';
+								paichuriqi_html += '<input type="text" class="form-control textTimeWidth" placeholder="请选择日期" id="eOvercome_data'+paichu_frequency+'" name="eOvercome_data'+paichu_frequency+'" value="" readonly="" />';
+								paichuriqi_html += '</div>';
+								paichuriqi_html += '<div class="col-lg-1 col-sm-1 pz_delTimes">';
+								paichuriqi_html += '<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+								paichuriqi_html += '</div>';
+								paichuriqi_html += '</div>';
+
+						$(this).parents(".pz_addTimes_click").find(".pz_formgroup_moban").append(paichuriqi_html);
+						delTimes();//删除多余的时间
+						// 排除日期
+						$('#sOvercome_data'+paichu_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+						$('#eOvercome_data'+paichu_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+					break;
+				}
+			});
+			function delTimes(){
+				//删除多余的时间
+				$(".pz_delTimes").click(function(){
+					$(this).parents(".pz_zhuijiadata").remove();
+				});
+			}
+
+			// 确定提交 提示框
+		</script>
+		<script type="text/javascript">
+		show_usable_robot_count();
+			//获取可用机器人数
+			function show_usable_robot_count(){
+				var url = '{:url("get_usable_robot_count_api")}';
+				$.ajax({
+					type:'GET',
+					data:{},
+					dataType:'json',
+					url:url,
+					success:function(result){
+						console.log(result);
+						if(result.code === 0){
+							$('#usable_robot_count > span').text(result.data);
+						}
+					},
+					error:function(){
+						console.log('获取机器人数量失败');
+					}
+				});
+			}
+
+
+			function pz_delFlowNote(){
+				//弹窗隐藏
+				$('#l-delnote').modal('hide');
+			}
+			//确定按钮提交 先验证 后显示弹窗提示
+			function checkform(){
+				/**
+				 * 提交规则
+				 * 	1.任务名称不能重复（范围：当前用户）
+				 * 	2.任务名称、话术、机器人数量、线路、工作日期和工作时间不能为空
+				 * 	3.工作时间必须在08:00到21:30范围内
+				*/
+				// var $name = $("#name").val();//任务名称
+				// var $scenarios_id = $("#scenarios_id").val();//场景话术
+				// // var $sTime = $("#sTime").val();//工作日期  开始
+				// // var $eTime = $("#eTime").val();//工作日期  结束
+				// var $sWork_startDate = $("#sWork_startDate").val().split(":");//工作时间  开始
+				// var $eWork_endDate = $("#eWork_endDate").val().split(":");//工作时间  结束
+				// var $daystartDate  = $("#sOvercome_data").val(); //开始排除日期时间
+				// var $enddaystartDate = $("#eOvercome_data").val(); //结束排除日期时间
+				// //选择开始的排除日期不能大于结束的排除日期
+				// var $daystartDate = $.myTime.DateToUnix($daystartDate); //选择开始的排除日期
+				// var $enddaystartDate = $.myTime.DateToUnix($enddaystartDate);//选择结束的排除日期
+				// var $number = $("#number").val();//机器人数量
+				// var $robotCount = parseInt($('#usable_robot_count > span').text());//当前可用机器人数量为6
+				// var re = new RegExp("^[0-9]*[1-9][0-9]*$");//正整数验证
+				// if(!$name){
+				// 	alert("任务名称不能为空");
+				// 	return false;
+				// }
+				// if(!$scenarios_id){
+				// 	alert("话术不能为空");
+				// 	return false;
+				// }
+				
+
+				// if($sWork_startDate[0] < 8){
+				// 	alert("开始工作时间不能小于8点。");
+				// 	return false;
+				// }
+				// if($sWork_startDate[0] >= 22){
+				// 	alert("开始工作时间不能大于等于22点。");
+				// 	return false;
+				// }
+				// if($eWork_endDate[0] <= 8){
+				// 	alert("结束工作时间不能小于等于8点。");
+				// 	return false;
+				// }
+				// if($eWork_endDate[0] > 22){
+				// 	alert("结束工作时间不能大于22点。");
+				// 	return false;
+				// }
+				// if($daystartDate > $enddaystartDate){
+				// 	alert("选择开始的排除日期不能大于结束的排除日期");
+				// 	return false;
+				// }
+				// if(!$number){
+				// 	alert("请输入机器人数量不能为空");
+				// 	return false;
+				// }
+				// if(!re.test($number)){
+				// 	alert("请输入机器人数量标准格式");
+				// 	return false;
+				// }
+
+				// $('#l-delnote').modal('show');
+
+			}
+			//检查表单的必填项  之前的
+			/*
+			function adFlowNote(){
+				var $name = $("#name").val();//任务名称
+				var $scenarios_id = $("#scenarios_id").val();//话术ID
+				var $robot_cnt  = $("#number").val();//机器人数量
+				var $remark = $("#remark").val(); //备注
+				var $onetime = $("#sWork_startDate").val(); //开始工作时间
+				var $twotime  = $("#eWork_endDate").val(); // 结束工作时间
+				var $threetime = $("#eWork_endDate").val(); //结束时间
+				var $fourtime = $("#eWork_endDate").val(); // 结束时间
+				var $daystartDate  = $("#sOvercome_data").val(); //开始排除日期时间
+				var $enddaystartDate = $("#eOvercome_data").val(); //结束排除日期时间
+				//默认状态类型设置 状态 0 暂停 1开启 2人工暂停 3停止 4欠费 -1软删除
+				var $startup = 1 ;
+				//默认呼叫方式设置 1
+				var $call_type = 1 ;
+				// var url = "/user/plan/addPlan";
+				var url = '{:url("addPlan")}';
+				$.ajax({
+            type: 'POST',
+            url: url,
+            data: {"scenarios_id": $scenarios_id,
+            			"name" : $name,
+            			"robot_cnt" : $robot_cnt,
+            			"onetime" : $onetime,
+            			"twotime" : $twotime,
+            			"threetime" : $threetime,
+            			"fourtime" : $fourtime,
+            			"daystartDate" : $daystartDate,
+            			"enddaystartDate" : $enddaystartDate,
+            			"remark" : $remark,
+            			"startup" : $startup,
+            			"call_type" : $call_type,
+            },
+            success: function(data){
+            	window.location.href= '{:url("newindex")}';
+							// alert("111");
+            }
+        })
+		}*/
+		 //鲁健改的  新增任务提交
+     	function adFlowNote(){
+     		var startDate = $("#sWork_startDate").val();
+				var endTime = $("#eWork_endDate").val();
+     		var startDatestr = backDate(startDate,0);
+				var endTimestr = backDate(endTime,1);
+
+
+				$("#onetime").val(startDatestr);
+		    $("#twotime").val(endTimestr);
+				$('#threetime').val(endTimestr);
+				$('#fourtime').val(endTimestr);
+     		 var href = "{:url('User/Plan/addplan')}";
+     		 $.ajax({
+						 type: "POST",
+						 dataType:'json',
+						 url: href,
+						 cache: false,
+						 data: $("#form").serialize(),
+						 success: function(data) {
+								if (data.code == 0) {
+									alert("新增成功");
+									window.location.href= '{:url("newindex")}';
+								}else{
+									  alert(data.msg);
+									  return false;
+								}
+						 },
+						 error: function(data) {
+							 alert("提交失败");
+						 }
+				 })
+
+     	}
+		  //时间的判断
+		  function judge(start,end){
+
+				var date = new Date();
+
+				var Y = date.getFullYear() + '-';
+				var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+				var D = date.getDate() + ' ';
+				var h = date.getHours() + ':';
+				var m = date.getMinutes() + ':';
+				var s = date.getSeconds();
+
+				var startstr = Y + M + D + start;
+				var starttime = Date.parse(new Date(startstr));
+
+				var endstr = Y + M + D + end;
+				var endtime = Date.parse(new Date(endstr));
+
+				console.log(starttime);
+				console.log(endtime);
+
+				if(starttime < endtime){
+					return true;
+				}else{
+					return false;
+				}
+			}
+
+		  //格式化日期
+		  function backDate(time,cate){
+
+		    var date = new Date();
+
+		    var Y = date.getFullYear() + '-';
+		    var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+		    var D = date.getDate() + ' ';
+		    var h = date.getHours() + ':';
+		    var m = date.getMinutes() + ':';
+		    var s = date.getSeconds();
+
+		    var datastr = Y + M + D + time;
+		    //没有时间的签到时间
+				if(cate > 0){
+					var preSign = Date.parse(new Date(datastr)) + 60000;
+				}else{
+					var preSign = Date.parse(new Date(datastr)) - 60000;
+				}
+
+
+			  var date = new Date(parseInt(preSign));
+				var Y = date.getFullYear() + '-';
+				var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+				var D = date.getDate() + ' ';
+				//var h = date.getHours() + ':';
+				var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+				//var m = date.getMinutes() + ':';
+
+				var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+
+				var s = date.getSeconds();
+
+				var datastr = Y + M + D + h + m + "00";
+				var preSign = Date.parse(new Date(datastr))
+		    var backdata = datastr.split(" ");
+		    return backdata[1];
+
+		  }
+
+			// pz 日期对比
+			(function($) {
+			    $.extend({
+			        myTime: {
+			            // 当前时间戳
+			            // @return <int>        unix时间戳(秒)
+			            CurTime: function(){
+			                return Date.parse(new Date())/1000;
+			            },
+			            // 日期 转换为 Unix时间戳
+			            // @param <string> 2014-01-01 20:20:20  日期格式
+			            // @return <int>        unix时间戳(秒)
+			            DateToUnix: function(string) {
+			                var f = string.split(' ', 2);
+			                var d = (f[0] ? f[0] : '').split('-', 3);
+			                var t = (f[1] ? f[1] : '').split(':', 3);
+			                return (new Date(
+			                        parseInt(d[0], 10) || null,
+			                        (parseInt(d[1], 10) || 1) - 1,
+			                        parseInt(d[2], 10) || null,
+			                        parseInt(t[0], 10) || null,
+			                        parseInt(t[1], 10) || null,
+			                        parseInt(t[2], 10) || null
+			                        )).getTime() / 1000;
+			            },
+			            // 时间戳转换日期
+			            // @param <int> unixTime    待时间戳(秒)
+			            // @param <bool> isFull    返回完整时间(Y-m-d 或者 Y-m-d H:i:s)
+			            // @param <int>  timeZone   时区
+			            UnixToDate: function(unixTime, isFull, timeZone) {
+			                if (typeof (timeZone) == 'number')
+			                {
+			                    unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+			                }
+			                var time = new Date(unixTime * 1000);
+			                var ymdhis = "";
+			                ymdhis += time.getUTCFullYear() + "-";
+			                ymdhis += (time.getUTCMonth()+1) + "-";
+			                ymdhis += time.getUTCDate();
+			                if (isFull === true)
+			                {
+			                    ymdhis += " " + time.getUTCHours() + ":";
+			                    ymdhis += time.getUTCMinutes() + ":";
+			                    ymdhis += time.getUTCSeconds();
+			                }
+			                return ymdhis;
+			            }
+			        }
+			    });
+			})(jQuery);
+		</script>
+	</div>
+</div>
+
+{/block}

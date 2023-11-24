@@ -1,0 +1,293 @@
+{extend name="public/base" /} {block name="body"}
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/sms.css">
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header clearfix">
+                <div class="pull-left">	<span class="n_panel_title">
+	                	<img src="__PUBLIC__/img/pz_qianming.png" alt="">模板审核
+	                </span>
+                </div>
+                <a class="btn s_addnew pull-right headbtn" data-title="批量删除签名审核" onclick="popTipswin(this);" target-form="ids">删除</a>
+            </header>
+            <div class="main-box-body clearfix">
+                <section class="navbar clearfix">
+                    <form method="get" role="form">
+                        <div class="form-inline dis_in  c_seldate clearfix group ">
+                            <label class="levelSelect statusSelect l-font-size">用户名:</label>
+                            <div class="dis_in  c_selectset pull-left pz_selectss">
+                                <input type="text" class="form-control inputwidth" id="username" placeholder="请输入用户名">
+                            </div>
+
+                            <div class="form-group">
+                            	<!-- 选择日期 -->
+                            <label class="levelSelect c_marleft statusSelect">创建时间:</label>
+                            <div class="formgroup">
+                                <div class="dis_in c_dateSelbg pr">
+                                    <input type="text" class="form-control c_datebgimg inputwidth" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+                                    <script>
+                                    $('#startDate').fdatepicker({
+                                        format: 'yyyy-mm-dd',
+                                        // pickTime: true
+                                    });
+                                    </script>
+                                </div> <span class="pz_zhi">至</span>
+
+                                <div class="dis_in c_dateSelbg pr">
+                                    <input type="text" class="form-control c_datebgimg inputwidth" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+                                    <script>
+                                    $('#endTime').fdatepicker({
+                                        format: 'yyyy-mm-dd',
+                                        // pickTime: true
+                                    });
+                                    </script>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="form-group">
+                            	<!-- 选择审核状态 -->
+                            <label class="levelSelect c_marleft statusSelect">审核状态:</label>
+                            <div class="dis_in  c_selectset pull-left pz_selectss">
+                                <select style="width:100px;" name="shenghe" id="shenghe" class="form-control resetSel c_selectimg">
+                                    <option value=" " selected="">请选择审核状态</option>
+                                    <option value='1'>待审核</option>
+		                                <option value="3">审核通过</option>
+		                                <option value="2">审核未通过</option>
+                                </select>
+                            </div>
+                            </div>
+
+                            <div class="form-group">
+                            	 <!-- 搜索关键字 -->
+                            <div class="dis_in c_marleft pz_keyMarleft">
+                                <input type="text" class="form-control inputwidth" id="keyword" name="keyword" placeholder="请输入签名内容">
+                            </div>
+                          	</div>
+
+
+                            <!-- 查询、重置按钮 -->
+                            <div class="dis_in c_marleft pz_annius">
+                                <button class="btn btn-primary" type="button" id="data-query">查询</button>
+                                <button class="btn btn-default" onclick="reset_click();" type="button">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <!--<th class="text-center">-->
+                                <!--    <input class="check-all" name='all_checked' type="checkbox" />-->
+                                <!--</th>-->
+                                <th class="text-center">序号</th>
+                                <th class="text-center">用户名</th>
+                                <th class="text-center">通道名称</th>
+                                <th class="text-center">模板ID</th>
+                                <th class="text-center">关联签名</th>
+                                <th class="text-center">文字内容</th>
+                                <th class="text-center">创建时间</th>
+                                <th class="text-center">审核状态</th>
+                                <th class="text-center">审核人</th>
+                                <th class="text-center">操作</th>
+                                <th class="text-center">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id='show_datas'>
+
+                        </tbody>
+                    </table>
+                </div>
+                <footer class=" clearfix">
+                  <div class="pull-left">
+                  		<span id="check_count">0</span>条模板审核
+                      <!--<input class="check-all" name='DataCheck_all' type="checkbox" />全选（已选中）-->
+                  </div>
+                  <div class='paging'></div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<!--运营商中模板审核弹框-->
+<div class="modal fade in " id="template-audit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-sm" style="width: 470px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+
+                </button>
+                	<h4 class="modal-title" id="audit"><span>模板审核</span></h4>
+
+            </div>
+            <div class="modal-body pagelists" style="padding-bottom:15px;">
+                <form id="cus_accountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group ">
+                        <label class="col-lg-4 col-sm-4 control-label">用户名：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control read" readonly="readonly" id="audit-username" value="SCY001">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-lg-4 col-sm-4 control-label">短信通道：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control read" readonly="readonly" id="audit-sms-passageway" value="通道1">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-lg-4 col-sm-4 control-label">关联签名：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control read" readonly="readonly" id="audit-sms-sign" value="机器人">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-lg-4 col-sm-4 control-label">模板内容：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea name="" id="audit-template-content" class="groupwidth form-control" rows="5" readonly="readonly">尊敬的客户</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-lg-4 col-sm-4 control-label">审核状态：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select class="form-control" id="audit-status">
+                                <option value='1'>待审核</option>
+                                <option value="3">审核通过</option>
+                                <option value="2">审核未通过</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-lg-4 col-sm-4 control-label">备注：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea name="" id="audit-note" class="groupwidth form-control" maxlength="30" rows="5" placeholder="请输入备注信息，限定30个字以内"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+            		<input type='hidden' id='sms-template-audit-id' value='' />
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" id="submit-audit" type="button">保 存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--运营商中模板审核记录弹框-->
+<div class="modal fade in " id="audit-record" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-sm" style="width: 550px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+
+                </button>
+                	<h4 class="modal-title" id="record"><span>审核记录</span></h4>
+
+            </div>
+            <div class="modal-body pagelists" style="padding-bottom:15px;">
+                <form id="cus_accountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group ">
+                        <div class="audit-recordtab">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">审核人</th>
+                                        <th class="text-center">审核情况</th>
+                                        <th class="text-center">审核时间</th>
+                                        <th class="text-center">备注</th>
+                                    </tr>
+                                </thead>
+                                <tbody id='show_auditing_record'>
+                                	<tr>
+                                		<td class="text-center">admin</td>
+                                		<td class="text-center">未通过</td>
+                                		<td class="text-center">2018-10-12 14:00:00</td>
+                                		<td class="text-center">存在不良信息</td>
+                                	</tr>
+                              		<tr>
+	                              		<td class="text-center">运营商</td>
+	                              		<td class="text-center">已通过通过</td>
+	                              		<td class="text-center">2018-10-12 14:00:00</td>
+	                              		<td class="text-center">通过</td>
+                              	</tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src='/public/js/paging.js' type='text/javascript'></script>
+<script src='/public/js/template_audit.js' type='text/javascript'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type='text/template' id='template'>
+  <tr>
+      <td class="text-center">{%key%}</td>
+      <td class="text-center">{%username%}</td>
+      <td class="text-center">{%channel_name%}</td>
+      <td class="text-center">{%template_id%}</td>
+      <td class="text-center">【{%sign_name%}】</td>
+      <td class="text-center">{%template_content%}</td>
+      <td class="text-center">{%create_time%}</td>
+      <td class="text-center">{%status%}</td>
+      <td class="text-center">{%auditing_username%}</td>
+      <td class="text-center">
+      	{%operation%}
+      </td>
+      <td class="text-center">{%note%}</td>
+  </tr>
+</script>
+<script type='text/template' id="auditing_record">
+  <tr>
+		<td class="text-center">{%username%}</td>
+		<td class="text-center">{%status_name%}</td>
+		<td class="text-center">{%create_time%}</td>
+		<td class="text-center">{%note%}</td>
+	</tr>
+</script>
+<script type="text/javascript">
+//重置
+
+function reset_click() {
+	  $('#username').val("");
+    $('input[name="startDate"][type="text"]').val(""); //开始日期
+    $('input[name="endTime"][type="text"]').val(""); //结束日期
+    $('select[name="shenghe"] option:eq(0)').prop("selected", 'selected'); //审核状态
+    $('select[name="status"] option:eq(0)').prop("selected", 'selected'); //模板类型
+    $('input[name="keyword"]').val(""); //签名内容关键字
+    get_datas();
+}
+
+//查询
+
+function search() {
+    var startDate = $('#startDate').val();
+    var endTime = $('#endTime').val();
+    var audit_status = $('#shenghe').val();
+    var keyword = $('#keyword').val();
+    alert(startDate + endTime + audit_status + keyword);
+}
+
+function audit(){
+	$('#template-audit').modal('show');
+}
+
+function audit_record(){
+	$('#audit-record').modal('show');
+}
+
+
+</script>
+
+{include file="sms/sms_targer" /}
+
+{/block}

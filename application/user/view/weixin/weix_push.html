@@ -1,0 +1,224 @@
+{extend name="public/base" /} {block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/new_index.css" rel="stylesheet" type="text/css">
+<link href="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.js"></script>
+<style>
+  .form-group input,.form-group select{
+    margin-right: 30px;
+  }
+  
+  .marginr15{
+    margin-right: 15px!important;
+  }  
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box n_head_box_b clearfix">
+                <div class="pull-left"> <span class="n_panel_title">
+                    <img src="/public/img/renwutongji.png">微信推送记录
+                  </span>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <section class="navbar main-box-header clearfix l-padding">
+                        <div class="form-inline bottomfour">
+                            <div class=" form-inline pull-left">
+                                <div class="form-group">
+                                    <label>任务名：</label>
+                                    <input type="text" class="form-control l-input-width marginr15" id="taskName" autocomplete="off" name="taskName" placeholder="请输入任务名称">
+                                </div>
+                                <button class="btn btn-primary" type="button" name="submit" onclick="show_data()">查询</button>
+                                <!--注释掉 暂时用不上-->
+                                <!--<button class="btn btn-primary" type="button" name="submit" onclick="delete_weixin()">删除</button>-->
+                            </div>
+                        </div>
+                </section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover pz_table_contents">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                   <!--全选 并且 储存当前页面 -->
+                                    <input class="all_checked" type="checkbox" name="all_checked"  data-page=""  id="nowpage"  onclick="check_knowledgebase_thing();">
+                                </th>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">任务名</th>
+                                <th class="text-center">推送微信账户</th>
+                                <th class="text-center">推送客户总数</th>
+                                <th class="text-center">A级意向</th>
+                                <th class="text-center">B级意向</th>
+                                <th class="text-center">C级意向</th>
+                                <th class="text-center">推送完成时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sendPhoneList"></tbody>
+                    </table>
+                </div>
+                <div class="component-page-empty" id="consumeempty">
+                    <div class="empty-tip line">
+                      <p><img src="__PUBLIC__/img/none.png" /></p>
+							        <p>暂无数据</p></div>
+                </div>
+                <footer class="main-box-footer clearfix footerB">
+                    <div class="row">
+                        <div class="col-sm-3 text-left">
+                            <input class="check-all all_checked_count" id="checkall" name='DataCheck_all' onclick="checkall_thing()" type="checkbox" />全选（已选中<span id="user_count">0</span>条数据）</div>
+                            <!--储存总数量-->
+                            <input type="hidden" data-total="" id="user_count1">
+                            <!--储存是否全选-->
+                            <input type="hidden" value="" id="hide_check_all">
+                        <div class="col-sm-9 text-right paging"></div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script>
+  function checkall_thing(){ //全选
+	if($('#checkall').is(':checked')){
+		$('.all_checked').prop("checked",true);
+		$('.check_know').prop("checked",true);
+		$('#user_count').text($('#user_count1').attr('data-total'));
+		$('.all_checked').attr('data-page',$('#user_count1').attr('data-total'));
+		//如果全选
+		$('#hide_check_all').val(1);
+	}else{
+		$('.all_checked').prop("checked",false);
+		$('.check_know').prop("checked",false);
+		$('#user_count').text(0);
+		$('.all_checked').attr('data-page',0);
+		//如果不是全选
+		$('#hide_check_all').val(0);
+	}
+}
+function delete_weixin(){
+     var del_ids = [];
+     //批量删除
+  	 $.each($('.check_know:checked'), function(index, object){
+   			del_ids.push($(object).val());
+   	 });
+     var url = "/user/Weixin/del_weixin_info"
+     var data = {};
+     //是否全选
+     data.dele_all =$('#hide_check_all').val();
+     data.del_ids = del_ids;
+     $.ajax({
+  		url:url,
+  		dataType:'json',
+  		type:'post',
+  		data:data,
+  		success:function(result){
+  			 alert(result.msg);
+  			 show_data();
+  		},
+  		error: function(error) {
+  			console.log(error);
+  			alert('数据获取失败！');
+  		}
+  	});
+  }
+
+  function check_knowledgebase_thing(){ //当前页全选
+  	if($('.all_checked').is(':checked')) {
+  		$('.check_know').prop("checked",true);
+  		$('#user_count').text($('.check_know:checked').length);
+  		$('.all_checked').attr('data-page',$('#user_count').attr('data-page'));
+  	}else{
+  		$('#checkall').prop("checked",false);
+  		$('.check_know').prop("checked",false);
+  		$('#user_count').text(0);
+  		$('.all_checked').attr('data-page',0);
+  	}
+  }
+
+
+   //回车搜索事件 ---知识库标签搜索
+    $('#taskName').keyup(function(event){
+      if(event.keyCode ==13){
+         show_data()
+      }
+   });
+  //页面加载事件
+    $(function () {
+        show_data();
+    });
+    
+   /**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	*/
+	var Paging10 = new Paging01();
+	Paging10.init_args({
+	  page: 1, //初始页码
+	  limit: 10, //初始每页显示的数据量
+	  paging_class: 'paging', //放置分页的class
+	  callback: show_data, //回调函数 比如show_datas(页码, 显示条数)
+	  key:10, //分页标识 为了不和其他分页混乱
+	});
+   function show_data(page,limit) {
+    if (!page){
+		  page = 1;
+  	}
+  	if(!limit){
+  		limit = 10;
+  	}
+  	var data = {};
+  	var url = "/user/Weixin/show_weixin_info"
+  	data.taskName =$('#taskName').val();
+  	data.page = page;
+	  data.limit = limit;
+	  $.ajax({
+  		url:url,
+  		dataType:'json',
+  		type:'post',
+  		data:data,
+  		success:function(result){
+  			console.log(result.data.data);
+  			if(result.code === 0){
+  				var htmls = '';
+  				if(result.data.data.length == 0){
+  				   $("#sendPhoneList").html('');
+  					 $('#consumeempty').show();
+  					 Paging10.paging(1, 0, 10);
+  				}else{
+  				  //如果有数据 先清空
+  				  $("#sendPhoneList").html('');
+  					$('#consumeempty').hide();
+  						for (var i = 0; i < result.data.data.length; i++) {
+  						var string = '<tr>' +
+  							'<td> <input type="checkbox" class="check_know" name="son_box" value="'+result.data.data[i].push_id+"_"+result.data.data[i].task_id+'"/></td>' +
+  								'<td>' + ((i+1)+((page-1)*limit)) + '</td>' +
+  							'<td>'+result.data.data[i].tcname+   '</td>' +
+  							'<td>'+result.data.data[i].name+'</td>' +
+  							'<td>' + result.data.data[i].count + '</td>' +
+  							'<td>' + result.data.data[i].a_num + '</td>' +
+  							'<td>' + result.data.data[i].b_num + '</td>' +
+  							'<td>' + result.data.data[i].c_num + '</td>' +
+  							'<td>' + result.data.data[i].create_time + '</td>';
+  						string += '</tr>';
+  						$("#sendPhoneList").append(string);
+					}
+					  $('#nowpage').attr('data-page',page);
+					  $("#user_count1").attr('data-total',result.data.count)
+       			Paging10.paging(result.data.page, result.data.count, result.data.pagesize);
+  				}
+  			}
+  		},
+  		error: function(error) {
+  			console.log(error);
+  			alert('数据获取失败！');
+  		}
+  	});
+  }
+</script>
+{/block}

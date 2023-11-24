@@ -1,0 +1,110 @@
+<!--机器人管理页面 编辑弹窗 -->
+<div class="modal fade in" id="editrobotmanage" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+  <div class="modal-dialog modal-sm" style="width: 500px;">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel"><span style="color:#000;">编辑机器人</span></h4>
+       </div>
+       <div class="modal-body pagelists pz_innerbox_lay" style="">
+          <form id="editendrobotform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+            <div class="form-group">
+              <label class="col-lg-4 col-sm-4 control-label">用户：</label>
+              <div class="col-lg-7 col-sm-7">
+                <label class="control-label l-textleft pz_color4040" id="pz_username"></label>
+              </div>
+            </div>
+            <!--管理员、运营商、代理商-->
+            <div class="form-group">
+              <label class="col-lg-4 col-sm-4 control-label">用户类型：</label>
+              <div class="col-lg-7 col-sm-7">
+                <label class="control-label l-textleft pz_color4040" id="pz_role_name"></label>
+              </div>
+            </div>
+            <!--/ 管理员、运营商、代理商-->
+            <div class="form-group">
+              <label class="col-lg-4 col-sm-4 control-label">当前可用机器人数量：</label>
+              <div class="col-lg-7 col-sm-7">
+                <label class="control-label l-textleft pz_color4040" id="pz_robot_num">00</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-4 col-sm-4 control-label"><span class="l-star">*</span>分配机器人数量：</label>
+              <div class="col-lg-7 col-sm-7">
+                <input type="text" class="form-control" id="spoils_num" name="" value="" style="height: 34px;border-radius: 3px;padding: 0px 10px;" autocomplete="off">
+                <p style="color: #909090;font-size:12px;margin: 10px 0px 0px;">当前<span class="pid_role_name"></span>可用机器人数量为：<span id="pz_robotNumber"></span></p>
+              </div>
+            </div>
+            <!--管理员、运营商、代理商-->
+          	<div class="form-group shijian">
+              <label class="col-lg-4 col-sm-4 control-label">到期时间：</label>
+              <div class="col-lg-7 col-sm-7">
+								<input type="text" class="form-control textwidth c_datebgimg inputdisplay" placeholder="请选择到期日期" id="sdate" name="sdate" value="" readonly="" style="width:100% !important">
+								<script>
+										$('#sdate').fdatepicker({
+											format: 'yyyy-mm-dd',
+											pickTime: false
+										});
+								</script>
+									<p style="color: #909090;font-size:12px;margin: 10px 0px 0px;">当前<span class="pid_role_name"></span>机器人截止时间：<span id="pz_robotEndDate"></span></p>
+              </div>
+            </div>
+            <!--/ 管理员、运营商、代理商-->
+            <!--商家-->
+            <div class="form-group shijian2">
+              <label class="col-lg-4 col-sm-4 control-label">到期时间：</label>
+              <div class="col-lg-7 col-sm-7">
+                <label class="control-label l-textleft pz_color4040" id="pz_DueTime" ></label>
+              </div>
+            </div>
+            <div class="form-group zhujin">
+              <label class="col-lg-4 col-sm-4 control-label">机器人租金：</label>
+              <div class="col-lg-7 col-sm-7">
+                <label class="control-label l-textleft pz_color4040" id="pz_robotrent"><span id="price"></span><span id="company"></span></label>
+              </div>
+            </div>
+            <!--/商家-->
+            <div class="form-group chengben">
+              <label class="col-lg-4 col-sm-4 control-label">机器人成本价：</label>
+              <div class="col-lg-7 col-sm-7">
+                <label class="control-label l-textleft pz_color4040" id="pz_robotcost"></label>
+              </div>
+            </div>
+            <!--运营商、代理商-->
+						<div class="form-group xiaoshou">
+              <label class="col-lg-4 col-sm-4 control-label">机器人销售价：</label>
+								<div class="col-lg-7 col-sm-7 l-rent">
+									<div class="l-display">
+										<input type="radio" name="lprice" class="type_price" id="distribution-dayPrice" value="1" checked="checked">按天计费
+									</div>
+									<div class="l-display">
+										<input type="radio" name="lprice" class="type_price" id="distribution-monthPrice" value="2">按月计费
+									</div>
+									<div class="paricetips">请输入价格：
+										<input type="text" class="form-control rental-priceinput" id="rental-price">
+										<span  id="distributionDayPrice">元 / 天 / 个</span>
+										<span id="distributionMonthPrice" class="hidden">元 / 月 / 个</span>
+									</div>
+								</div>
+              </div>
+
+            <!--/ 运营商、代理商-->
+						<div class="form-group marbottom">
+                <label class="col-lg-4 col-sm-4 control-label">备注：</label>
+                <div class="col-lg-7 col-sm-7 l-radio">
+                  <textarea class="form-control" name="name" rows="5"  id="remark" placeholder="请输入备注信息，限定30个字以内" style="font-size:14px;padding:7px;border-radius:3px;"></textarea>
+                </div>
+              </div>
+
+         </form>
+       </div>
+       <div style="clear:both"></div>
+       <div class="modal-footer">
+           <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+           <button class="btn btn-primary submit-btn btnokprojectile-frame" id="nb_click" data_id =''  onclick="robot_spoils(this)" type="button">保存</button>
+      </div>
+   </div>
+  </div>
+</div>

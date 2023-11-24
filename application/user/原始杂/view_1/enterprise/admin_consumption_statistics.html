@@ -1,0 +1,1169 @@
+{extend name="public/base" /}
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css"/>
+<style>
+	.l-search{
+		width:130px!important;
+	}
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="clearfix fadeInRight animated pz_manping_height">
+		<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+			<li role="presentation" class='active'>
+				<a href="#dailyconsume" aria-controls="dailyconsume" role="tab" data-toggle="tab">日消费统计</a>
+				<i></i>
+			</li>
+			<li role="presentation">
+				<a href="#monthconsume" aria-controls="monthconsume" role="tab" data-toggle="tab">月消费统计</a>
+				<i></i>
+			</li>
+			<li role="presentation">
+				<a href="#yearconsume" aria-controls="yearconsume" role="tab" data-toggle="tab">年消费统计</a>
+				<i></i>
+			</li>
+			<li role="presentation">
+				<a href="#home" aria-controls="home" role="tab" data-toggle="tab">消费明细</a>
+			</li>
+		</ul>
+		<div class="main-box s_padding20 clearfix pz_manping_height">
+			<div class="tab-content">
+				<!--日消费统计-->
+				<div role="tabpanel" class="tab-pane active"  id="dailyconsume">
+					
+					<section class="navbar clearfix">
+	         <div class="pull-left allwidth l-operationbtn">
+						 <form class="form-inline"  method="get" role="form">
+						    {if session('user_auth.role') != '销售人员'}
+						 		<div class="form-group">
+						 			<label class="typeSelect">账号类型：</label>
+									<select style="width:160px;display: inline-block;" name="allType" class="form-control c_selectimg resetSel allType">
+										<!--<option value="全部类型">全部类型</option>-->
+										{volist name="user_type" id="vo"}
+											<option value="{$vo}">{$vo}</option>
+
+					          {/volist}
+									</select>
+						 		</div>
+                <div class="form-group c_marleft">
+                	<label class="statusSelect pull-left">账户名：</label>
+          				<select class="form-control resetSel c_selectimg l-search allNames" name="ri_allName">
+                    <option value="全部账户">全部账户</option>
+
+          				</select>
+                </div>
+                {/if}
+							  <div class="form-group c_seldate clearfix c_marleft">
+									<!-- 通话日期 -->
+	 								<label class="levelSelect statusSelect">通话日期：</label>
+	 								<div class="dis_in">
+	 									<div class="dis_in c_dateSelbg pr">
+	 										<input type="text" class="form-control c_datebgimg l-search" placeholder="选择开始日期" id="ri_startdaily" name="ri_startdaily" value="" readonly="">
+	 										<script>
+	 												$('#ri_startdaily').fdatepicker({
+	 													format: 'yyyy-mm-dd',
+	 													// pickTime: true
+	 												});
+	 										</script>
+	 									</div>
+	 									<span style="margin:0px 4px;">至</span>
+	 									<div class="dis_in c_dateSelbg pr">
+	 										<input type="text" class="form-control c_datebgimg l-search" placeholder="选择结束日期" id="ri_enddaily" name="ri_enddaily" value="" readonly="">
+	 										<script>
+	 											$('#ri_enddaily').fdatepicker({
+	 												format: 'yyyy-mm-dd',
+	 												// pickTime: true
+	 											});
+	 										</script>
+	 									</div>
+	 								</div>
+							</div>
+							<!-- 查询、重置按钮 -->
+							<div class="form-group">
+								<button class="btn btn-primary" type="button" data-type="day" onclick="search_data(this)">查询</button>
+								<button class="btn btn-primary pz_chongzhi_anniuStyle" type="button" onclick="resetClickz();">重置</button>
+							</div>
+							<div class="pull-right">
+			     			<button class="btn btn-primary" type="button" data-title="消费统计导出文件" data-type="day" onclick="importdata(this);">数据导出</button>
+			     		</div>
+						</form>
+			    </div>
+		   		</section>
+		   		
+				  <div class="table-responsive">
+					 <table class="table table-bordered table-hover">
+					    <thead>
+						    <tr>
+									<th class="text-center"><input class="check_pageday" name='all_checked' data-page="0" data-type="day" type="checkbox" onclick="check_page_record(this);"/></th>
+									<th class="text-center">序号</th>
+	                <th class="text-center">账户名</th>
+									<th class="text-center">统计日期</th>
+									<th class="text-center">呼叫次数</th>
+									<th class="text-center">接通次数</th>
+	                <th class="text-center">接通率</th>
+	                <th class="text-center">平均通话时长（秒）</th>
+	                <th class="text-center">计费时长（分钟）</th>
+	                <!-- <th class="text-center">线路</th> -->
+	                <th class="text-center">通话费用（元）</th>
+	              	<th class="text-center">语音识别次数</th>
+	              	<!-- <th class="text-center">ASR</th> -->
+	                <th class="text-center">语音识别费用（元）</th>
+	                <!--<th class="text-center">机器人月租</th>-->
+	                <th class="text-center">机器人月租费用（元）</th>
+	              	<th class="text-center">发送短信数</th>
+	              	<!-- <th class="text-center">短信通道</th> -->
+	                <th class="text-center">短信费用（元）</th>
+	                <th class="text-center">技术服务费（元）</th>
+	                <th class="text-center">合计（元）</th>
+	                <th class="text-center balance">余额 (元)</th>
+						    </tr>
+					    </thead>
+						  <tbody id="daily-recored-list">
+
+						  </tbody>
+					  </table>
+	          <div class="pull-left" style="margin-left:8px"><input type="checkbox" class="check_allday" data-type="day" onclick="check_all_record(this);">全选（已选中<span class="countday">0</span> 条日消费记录）</div>
+						<div class="pull-right">
+	            <!--<div class="pull-left" style="margin:0px 8px;line-height:40px;">全部记录 <span id="all_daily_count">0</span> 条</div>-->
+	            <div id="daily_page" class="pull-right">
+	            </div>
+						</div>
+						<div class="day_paging"></div>
+				  </div>
+				  <div class="table-responsive sumdata">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center">日期</th>
+	                <th class="text-center">呼叫次数</th>
+									<th class="text-center">接通次数</th>
+									<th class="text-center">接通率</th>
+	                <th class="text-center">平均通话时长（秒）</th>
+	                <th class="text-center">计费时长（分钟）</th>
+	                <th class="text-center">通话费用（元）</th>
+	              	<th class="text-center">语音识别次数</th>
+	                <th class="text-center">语音识别费用（元）</th>
+	                <th class="text-center">机器人月租费用（元）</th>
+	              	<th class="text-center">发送短信数</th>
+	                <th class="text-center">短信费用（元）</th>
+	                <th class="text-center">技术服务费（元）</th>
+	                <!--<th class="text-center">子账户消费总额</th>-->
+	                <th class="text-center">消费总额（元）</th>
+						    </tr>
+					    </thead>
+						  <tbody id="today_record">
+						  </tbody>
+					  </table>
+				  </div>
+				</div>
+
+				<!--月消费统计-->
+				<div role="tabpanel" class="tab-pane" data-type="month" id="monthconsume">
+					
+				 	<section class="navbar  clearfix">
+         	<div class="pull-left allwidth l-operationbtn">
+          <form class="form-inline"  method="get" role="form">
+            {if session('user_auth.role') != '销售人员'}
+          	<div class="form-group">
+				 			<label class="typeSelect">账号类型：</label>
+							<select style="width:160px;display: inline-block;" name="allType" class="form-control c_selectimg resetSel allType">
+								<!--<option value="全部类型">全部类型</option>-->
+								{volist name="user_type" id="vo"}
+								<option value="{$vo}">{$vo}</option>
+			          {/volist}
+							</select>
+				 		</div>
+            <div class="form-group c_marleft">
+             <label class="statusSelect pull-left ">账户名：</label>
+             <select class="form-control resetSel c_selectimg l-search allNames" name="all_month_mame">
+                <option value="全部账户">全部账户</option>
+
+             </select>
+            </div>
+						<!--  -->
+  					<div class="form-group">
+							 <button class="btn btn-primary" type="button" data-type="month" onclick="search_data(this)">查询</button>
+							 <button class="btn btn-primary pz_chongzhi_anniuStyle" type="button" onclick="resetClickz();">重置</button>
+  					</div>
+  					{/if}
+  					<div class="pull-right">
+			     		<button class="btn btn-primary" type="button" data-title="消费统计导出文件" data-type="month" onclick="importdata(this);">数据导出</button>
+			     	</div>
+          </form>
+         </div>
+         	</section>
+         	
+				  <div class="table-responsive">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center"><input class="check_pagemonth" name='all_checked' data-page="0" data-type="month" type="checkbox" onclick="check_page_record(this);"/></th>
+									<th class="text-center">序号</th>
+	                <th class="text-center">账户名</th>
+									<th class="text-center">统计月份</th>
+	                <th class="text-center">呼叫次数</th>
+									<th class="text-center">接通次数</th>
+	                <th class="text-center">接通率</th>
+	                <th class="text-center">平均通话时长（秒）</th>
+	                <th class="text-center">计费时长（分钟）</th>
+	                <!-- <th class="text-center">线路</th>-->
+	                <th class="text-center">通话费用（元）</th>
+	              	<th class="text-center">语音识别次数</th>
+	              	<!-- <th class="text-center">ASR</th> -->
+	                <th class="text-center">语音识别费用（元）</th>
+	                <!--<th class="text-center">机器人月租</th>-->
+	                <th class="text-center">机器人月租费用（元）</th>
+	              	<th class="text-center">发送短信数</th>
+	              	<!-- <th class="text-center">短信通道</th> 踩着别人上位的，我不是没见过，-->
+	                <th class="text-center">短信费用（元）</th>
+	                <th class="text-center">技术服务费（元）</th>
+	                <th class="text-center">合计（元）</th>
+						    </tr>
+					    </thead>
+						  <tbody id="month-recored-list">
+
+						  </tbody>
+					  </table>
+	          <div class="pull-left" style="margin-left:8px"><input type="checkbox" class="check_allmonth" data-type="month" onclick="check_all_record(this);">全选（已选中<span class="countmonth">0</span> 条月消费记录）</div>
+						<div class="pull-right">
+	            <!--<div class="pull-left" style="margin:0px 8px;line-height:40px;">全部记录 <span id="all_count">0</span> 条</div>-->
+	            <div id="month_page" class="pull-right"></div>
+						</div>
+						<div class="month_paging"></div>
+				  </div>
+					<div class="table-responsive sumdata">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center">日期</th>
+	                <th class="text-center">呼叫次数</th>
+									<th class="text-center">接通次数</th>
+									<th class="text-center">接通率</th>
+	                <th class="text-center">平均通话时长（秒）</th>
+	                <th class="text-center">计费时长（分钟）</th>
+	                <th class="text-center">通话费用（元）</th>
+	              	<th class="text-center">语音识别次数</th>
+	                <th class="text-center">语音识别费用（元）</th>
+	                <th class="text-center">机器人月租费用（元）</th>
+	              	<th class="text-center">发送短信数</th>
+	                <th class="text-center">短信费用（元）</th>
+	                <!--<th class="text-center">子账户消费总额</th>-->
+	                <th class="text-center">技术服务费（元）</th>
+	                <th class="text-center">消费总额（元）</th>
+						    </tr>
+					    </thead>
+						  <tbody id="month_record">
+						  </tbody>
+					  </table>
+				  </div>
+				</div>
+
+				<!--年消费统计-->
+				<div role="tabpanel" class="tab-pane" data-type="year" id="yearconsume">
+					
+					<section class="navbar clearfix">
+          	<div class="pull-left allwidth l-operationbtn">
+            <form class="form-inline"  method="get" role="form">
+              {if session('user_auth.role') != '销售人员'}
+            	<div class="form-group">
+						 			<label class="typeSelect">账号类型：</label>
+									<select style="width:160px;display: inline-block;" name="allType" class="form-control c_selectimg resetSel allType">
+										<!--<option value="全部类型">全部类型</option>-->
+										{volist name="user_type" id="vo"}
+										<option value="{$vo}">{$vo}</option>
+					          {/volist}
+									</select>
+						 	 </div>
+               <div class="form-group c_marleft">
+                  <label class="statusSelect pull-left">账户名：</label>
+           				<select class="form-control resetSel c_selectimg l-search allNames" name="nian_allName">
+                     <option value="全部账户">全部账户</option>
+
+           				</select>
+               </div>
+              <!-- 查询、重置按钮 -->
+              <div class="form-group">
+                <button class="btn btn-primary" type="button" data-type="year" onclick="search_data(this)">查询</button>
+                <button class="btn btn-primary pz_chongzhi_anniuStyle" type="button" onclick="resetClickz();">重置</button>
+              </div>
+              {/if}
+              <div class="pull-right">
+			     			<button class="btn btn-primary" type="button" data-title="消费统计导出文件" data-type="year" onclick="importdata(this);">数据导出</button>
+			     		</div>
+           </form>
+         </div>
+      		</section>
+					
+				  <div class="table-responsive">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center"><input class="check_pageyear" name='all_checked' data-page="0" data-type="year" type="checkbox" onclick="check_page_record(this);"/></th>
+									<th class="text-center">序号</th>
+	                <th class="text-center">账户名</th>
+									<th class="text-center">统计年份</th>
+	                <th class="text-center">呼叫次数</th>
+	                <th class="text-center">接通次数</th>
+	                <th class="text-center">接通率</th>
+	                <th class="text-center">平均通话时长（秒）</th>
+	                <th class="text-center">计费时长（分钟）</th>
+	                <!-- <th class="text-center">线路</th> -->
+	                <th class="text-center">通话费用（元）</th>
+	                <th class="text-center">语音识别次数</th>
+	                <!-- <th class="text-center">ASR</th> -->
+	                <th class="text-center">语音识别费用（元）</th>
+	                <!--<th class="text-center">机器人月租</th>-->
+	                <th class="text-center">机器人月租费用（元）</th>
+	                <th class="text-center">发送短信数</th>
+	                <!-- <th class="text-center">短信通道</th> -->
+	                <th class="text-center">短信费用（元）</th>
+	                <th class="text-center">技术服务费（元）</th>
+	                <th class="text-center">合计（元）</th>
+						    </tr>
+					   </thead>
+					   <tbody id="year-recored-list">
+
+					   </tbody>
+					  </table>
+	            <div class="pull-left pz-fenye" style="margin-left:8px"><input type="checkbox" class="check_allyear" data-type="year" onclick="check_all_record(this);">全选（已选中<span class="countyear">0</span> 条年消费记录）</div>
+							<div class="pull-right pz-fenye">
+	              <!--<div class="pull-left" style="margin:0px 8px;line-height:40px;">全部记录 <span id="all_count">0</span> 条</div>-->
+	              <div id="year_page" class="pull-right"></div>
+						</div>
+						<div class="year_paging"></div>
+				  </div>
+					<div class="table-responsive sumdata">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center">日期</th>
+	                <th class="text-center">呼叫次数</th>
+									<th class="text-center">接通次数</th>
+									<th class="text-center">接通率</th>
+	                <th class="text-center">平均通话时长（秒）</th>
+	                <th class="text-center">计费时长（分钟）</th>
+	                <th class="text-center">通话费用（元）</th>
+	              	<th class="text-center">语音识别次数</th>
+	                <th class="text-center">语音识别费用（元）</th>
+	                <th class="text-center">机器人月租费用（元）</th>
+	              	<th class="text-center">发送短信数</th>
+	                <th class="text-center">短信费用（元）</th>
+	                <th class="text-center">技术服务费（元）</th>
+	                <!--<th class="text-center">子账户消费总额</th>-->
+	                <th class="text-center">消费总额（元）</th>
+						    </tr>
+					    </thead>
+						  <tbody id="year_record">
+						  </tbody>
+					  </table>
+				  </div>
+				</div>
+
+				<!--消费明细-->
+				<div role="tabpanel" class="tab-pane" id="home">
+					
+					<section class="navbar clearfix">
+	         <div class="pull-left l-operationbtn allwidth">
+						 <form class="form-inline"  method="get" role="form">
+						   {if session('user_auth.role') != '销售人员'}
+						 	<div class="form-group">
+					 			<label class="typeSelect">账号类型：</label>
+								<select style="width:160px;display: inline-block;" name="allType" class="form-control c_selectimg resetSel allType">
+									<!--<option value="全部类型">全部类型</option>-->
+									{volist name="user_type" id="vo"}
+									<option value="{$vo}">{$vo}</option>
+				          {/volist}
+								</select>
+					 		 </div>
+               <div class="form-group c_marleft">
+                 <label class="statusSelect pull-left">账户名：</label>
+                 <select class="form-control resetSel c_selectimg l-search allNames detail_account" name="Detailed_accountuser">
+										<option value="全部账户">全部账户</option>
+									</select>
+               </div>
+               {/if}
+							 <div class="form-group c_marleft">
+                 <label class="statusSelect pull-left">线路：</label>
+                 <select class="form-control resetSel c_selectimg l-search" name="Detailed_line" id="Detailed_line">
+										<option value="">全部线路</option>
+									</select>
+               </div>
+							 <div class="form-group c_marleft">
+                 <label class="statusSelect pull-left">ASR：</label>
+                 <select class="form-control resetSel c_selectimg l-search" name="Detailed_ASR" id="Detailed_ASR">
+										<option value="">全部ASR</option>
+
+									</select>
+               </div>
+							 <div class="form-group c_marleft">
+                 <label class="statusSelect pull-left">通道：</label>
+                 <select class="form-control resetSel c_selectimg l-search" name="Detailed_passageway" id="Detailed_passageway">
+										<option value="">全部通道</option>
+
+									</select>
+               </div>
+
+							 <div class="form-group c_seldate clearfix c_marleft">
+									 <!-- 通话日期  c_marleft-->
+                   <label class="levelSelect statusSelect">通话日期：</label>
+   	 								<div class="dis_in">
+   	 									<div class="dis_in c_dateSelbg pr">
+   	 										<input type="text" class="form-control l-search c_datebgimg" placeholder="选择开始日期" id="Detailed_startDate" name="Detailed_startDate" value="" readonly="">
+   	 										<script>
+   	 												$('#Detailed_startDate').fdatepicker({
+   	 													format: 'yyyy-mm-dd',
+   	 													// pickTime: true
+   	 												});
+   	 										</script>
+   	 									</div>
+   	 									<span style="margin:0px 4px;">至</span>
+   	 									<div class="dis_in c_dateSelbg pr">
+   	 										<input type="text" class="form-control l-search c_datebgimg" placeholder="选择结束日期" id="Detailed_endTime" name="Detailed_endTime" value="" readonly="">
+   	 										<script>
+   	 											$('#Detailed_endTime').fdatepicker({
+   	 												format: 'yyyy-mm-dd',
+   	 												// pickTime: true
+   	 											});
+   	 										</script>
+   	 									</div>
+   	 								</div>
+              		</div>
+
+               <div class="form-group c_marleft">
+                 <label class="statusSelect pull-left">号码：</label>
+                 <input type="text" class="form-control pull-left l-search" id="Detailed_phone" name="Detailed_phone" placeholder="请输入号码查询">
+               </div>
+
+								<!-- 查询、重置按钮 -->
+							 <div class="dis_in c_marleft">
+								 <button class="btn btn-primary" type="button" data-type="details" onclick="search_data(this)">查询</button>
+								 <button class="btn btn-primary pz_chongzhi_anniuStyle" data-type="details" onclick="resetClickz();" type="button">重置</button>
+							 </div>
+							 <div class="pull-right">
+			     			<button class="btn btn-primary" type="button" data-title="消费统计导出文件" data-type="details" onclick="importdata(this);">数据导出</button>
+			     		 </div>
+							</form>
+			    	</div>
+		   		</section>
+		   		
+			    <div class="table-responsive">
+					 	<table class="table table-bordered table-hover">
+						   <thead>
+							    <tr>
+										<th class="text-center">
+		                  <input class="check_pagedetails" name='all_checked' data-page="0" data-type="details" type="checkbox" onclick="check_page_record(this);"/></th>
+										<th class="text-center">序号</th>
+		                <th class="text-center">账户名称</th>
+										<th class="text-center">呼叫号码</th>
+										<th class="text-center">通话时长（秒）</th>
+										<th class="text-center">线路</th>
+										<th class="text-center">通话费用（元）</th>
+										<th class="text-center">语音识别次数</th>
+										<th class="text-center">ASR</th>
+		              	<th class="text-center">语音识别费用（元）</th>
+		              	<th class="text-center">短信条数</th>
+		              	<th class="text-center">通道</th>
+		              	<th class="text-center">短信费用（元）</th>
+		              	<th class="text-center">技术服务费（元）</th>
+		              	<th class="text-center">总费用（元）</th>
+		                <th class="text-center">拨打时间</th>
+							    </tr>
+						   </thead>
+						   <tbody id="recharge-recored-list">
+
+						   </tbody>
+					  </table>
+	          <div class="pull-left" style="margin-left:8px">
+	          	<input type="checkbox" class="check_alldetails" data-type="details" onclick="check_all_record(this);">全选（已选中<span class="countdetails">0</span> 条消费明细）
+	          </div>
+						<div class="pull-right">
+							<!--<div class="pull-left" style="margin:0px 8px;line-height:40px;">全部记录 <span id="all_con_count">0</span> 条</div>-->
+	            <div id="con_page" class="pull-right">
+	            </div>
+						</div>
+						<div class="details_paging"></div>
+			    </div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<!--导出弹窗-->
+<div class="modal fade in" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body contenttips">
+				确定导出该数据？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消			</button>
+				<button type="button" class="btn btn-primary" onclick="export_consumption_statistics();">		确认			</button>
+			</div>
+		</div>
+	</div>
+</div>
+	<!--
+	日，月，年消费统计表格模板
+	daily-recored-list    month-recored-list    year-recored-list
+	-->
+	<script id='recharge_record' type='text/tepmate'>
+		<tr>
+			<td class="text-center">
+				<input class="rolecheck{%type%}" name='roleids' value="{%id%}" type="checkbox" data-type="{%type%}" onclick="check_record(this);"/>
+			</td>
+			<td>{%sequence%}</td>
+			<td>{%name%}</td>
+			<td>{%statistics_data%}</td>
+			<td>{%call_count%}</td>
+	  	<td>{%connect_count%}</td>
+	    <td>{%connection_rate%}</td>
+	    <td>{%average_duration%}</td>
+	    <td>{%charging_duration%}</td>
+	    <td>{%duration_price%}</td>
+	  	<td>{%distinguish_count%}</td>
+	    <td>{%asr_price%}</td>
+			<td>{%robot_cost%}</td>
+	    <td>{%messages_sent_count%}</td>
+	    <td>{%messages_sent%}</td>
+	    <td>{%technology_service_cost%}</td>
+			<td>{%summary_money%}</td>
+			<td class="balance{%type%}">{%balance%}</td>
+		</tr>
+	</script>
+
+	<!-- 消费明细表格模板 -->
+	<script id='Detailed_record' type='text/tepmate'>
+		<tr>
+		 <td class="text-center"><input class="rolecheck{%type%}" name='roleids' value="{%id%}" type="checkbox" data-type="{%type%}" onclick="check_record(this);"/></td>
+		 <td>{%sequence%}</td>
+		 <td>{%username%}</td>
+		 <td>{%mobile%}</td>
+		 <td>{%duration%}</td>
+		 <td>{%linename%}</td>
+		 <td>{%call_money%}</td>
+		 <td>{%asr_cnt%}</td>
+		 <td>{%asr_id%}</td>
+		 <td>{%asr_price%}</td>
+		 <td>{%sms_count%}</td>
+		 <td>{%smsname%}</td>
+		 <td>{%sms_price%}</td>
+		 <td>{%technology_service_cost%}</td>
+		 <td>{%money%}</td>
+		 <td>{%create_time%}</td>
+	 </tr>
+	</script>
+	<!--今日数据-->
+	<script id='present_record' type='text/tepmate'>
+		<tr>
+		 <td class="text-center now{%type%}">今日</td>
+		 <td>{%call_count%}</td>
+		 <td>{%connect_count%}</td>
+		 <td>{%connect_rate%}</td>
+		 <td>{%average_duration%}</td>
+		 <td>{%charging_duration%}</td>
+		 <td>{%connect_cost%}</td>
+		 <td>{%asr_count%}</td>
+		 <td>{%asr_cost%}</td>
+		 <td>{%robot_cost%}</td>
+		 <td>{%sent_sms_count%}</td>
+		 <td>{%sms_cost%}</td>
+		 <td>{%technology_service_cost%}</td>
+		 <td>{%total_cost%}</td>
+	 </tr>
+	</script>
+	<!-- 重置 -->
+	<script type="text/javascript">
+
+		//重置
+		function resetClickz(){
+			$("#ri_startdaily").val("");//开始  通话日期
+			$("#ri_enddaily").val("");//结束  通话日期
+			$("#Detailed_line").val("");//线路
+			$("#Detailed_ASR").val("");//ASR
+			$("#Detailed_passageway").val("");//通道
+			$("#Detailed_startDate").val("");//通话开始日期
+			$("#Detailed_endTime").val("");//通话结束日期
+			$("#Detailed_phone").val("");//号码
+			$(".allType").val("{:session('user_auth.role')}"); //账户类型
+			$('.allType').change(); //账户名
+			show_data(1,10,'day');
+			show_data(1,10,'month');
+			show_data(1,10,'year');
+			show_data(1,10,'details');
+		
+		}
+
+	</script>
+	<!--分页-->
+	<script type="text/javascript" src='/public/js/paging.js'></script>
+	<!-- 查询 -->
+	<script type="text/javascript">
+		//初始化分页器（四个）
+		//分页1
+		var Paging = new Paging01();
+		Paging.init_args({
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'day_paging', //放置分页的class
+			callback: show_data, //回调函数 比如show_datas(页码, 显示条数)
+			key: 1
+		});
+		//分页2
+		var Paging2 = new Paging01();
+		Paging2.init_args({
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'month_paging', //放置分页的class
+			callback: show_data, //回调函数 比如show_datas(页码, 显示条数)
+			key: 2
+		});
+		//分页3
+		var Paging3 = new Paging01();
+		Paging3.init_args({
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'year_paging', //放置分页的class
+			callback: show_data, //回调函数 比如show_datas(页码, 显示条数)
+			key: 3
+		});
+		//分页4
+		var Paging4 = new Paging01();
+		Paging4.init_args({
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'details_paging', //放置分页的class
+			callback: show_data, //回调函数 比如show_datas(页码, 显示条数)
+			key: 4
+		});
+		function search_data(obj){
+			var this_index = $(obj).attr("data-type");
+
+			show_data(1,10,'day');
+			show_data(1,10,'month');
+			show_data(1,10,'year');
+			show_data(1,10,'details');
+			
+		}
+		//第一次加载账户名状态值
+		var i = 0;
+		var o = 0;
+		// 选择类型联动账户名
+	  $('.allType').change(function(){
+
+	    var nowlimit = $(this).val();//选中的账号类型的val
+
+	    $('.allType').val($(this).val());
+	    var numbers = $(this).find("option");
+	    for (var j = 1; j < numbers.length; j++) {
+	    	if ($(numbers[j]).val() == nowlimit) {
+	    		$(numbers[j]).attr("selected", "selected");
+	    	}else {
+	    		$(numbers[j]).attr("selected", false);
+	    	}
+	    }
+	    var option_mub = "";
+	    var url = "{:url('user/Enterprise/get_username_api')}";
+
+	    if(i > 0 && o <= 3 && o >= 1){
+	    	o++;
+	    	return false;
+	    }else{
+	    	o++;
+	    }
+	    console.log(i + '---' + o);
+
+			$.ajax({
+				url : url,
+				dataType : "json",
+				type : "post",
+				data : {'type':nowlimit},
+				async:false,
+				success: function(result){
+					if (result.code == 0) {
+
+						if(result.data.length != 0){
+							if(nowlimit == "{:session('user_auth.role')}"){
+								option_mub = '';
+							}else{
+								option_mub = '<option value="全部账户">全部账户</option>';
+							}
+							$.each(result.data, function(index, object){
+	            	 option_mub += '<option value="'+object.username+'">'+object.username+'</option>';
+	          	});
+						}else{
+							option_mub = '<option value="全部账户">全部账户</option>';
+						}
+
+						$(".allNames").html(option_mub);
+						{if session('check_name') != ''}
+						console.log(i);
+							if(i == 0){
+
+								$.each($(".allNames"), function(index, object){
+									{if session('check_type') == '管理员'}
+										$(object).val("全部账户");
+									{else/}
+										$(object).val("{:session('check_name')}");
+									{/if}
+									
+								// 	$(object).trigger('change');
+								  $(object).change();
+								})
+
+								console.log("{:session('check_name')}");
+								// show_data(1,10,'day');
+								// show_data(1,10,'month');
+								// show_data(1,10,'year');
+								// show_data(1,10,'details');
+							}
+						{/if}
+						account_linkage();
+					}
+				},
+				error : function() {
+					alert('获取账号名失败。');
+				}
+			});
+			i++;
+	  });
+
+		//改变账号名联动线路
+		$('.allNames').change(function() {
+			$('.allNames').val($(this).val());
+			console.log($(this).val());
+			if($(this).hasClass('detail_account')) {
+				account_linkage();	//数据联动
+			}
+		});
+
+		// 线路、ASR、通道联动
+		function account_linkage() {
+			var data = {};
+			data.type = $('.allType').val();;
+			data.username = $('.allNames').val();
+
+			var url = "{:url('get_rate_api')}";
+			$.ajax({
+				url: url,
+				dataType: 'json',
+				type: 'post',
+				data: data,
+				success: function(result) {
+					if (result.code == 0) {
+						var asr = result.data.rate_info.asr_info;
+						var line = result.data.rate_info.line_info;
+						var sms = result.data.rate_info.sms_info;
+
+						var infos = [asr, line, sms];
+						$.each(infos, function(index, data) {
+							var option_mub = '';
+							switch(index) {
+									case 0:
+										option_mub = '<option value="">全部ASR</option>';
+										break;
+									case 1:
+										option_mub = '<option value="">全部线路</option>';
+										break;
+									case 2:
+										option_mub = '<option value="">全部通道</option>';
+										break;
+								}
+							if(data.length != 0){
+								$.each(data, function(index, object){
+		            	 option_mub += '<option value="'+object.name+'">'+object.name+'</option>';
+		          	});
+							}
+							switch(index) {
+								case 0:
+									$("#Detailed_ASR").html(option_mub);
+									break;
+								case 1:
+									$("#Detailed_line").html(option_mub);
+									break;
+								case 2:
+									$("#Detailed_passageway").html(option_mub);
+									break;
+							}
+						});
+					}
+				},
+				error: function(e) {
+					console.log(e);
+					alert('获取线路、ASR、通道数据失败！');
+				}
+			});
+		}
+
+		//刷新页面更改账户类型
+		{if session('check_type') != ''}
+			{if session('check_type') == '管理员'}
+				$('.allType').val("运营商");
+			{else/}
+				$('.allType').val("{:session('check_type')}");
+			{/if}
+			$('.allType').change();
+		{/if}
+
+
+
+
+		//获取消费统计数据
+		function show_data(page,limit,type){
+			if(!page){
+        page = 1;
+      }
+      if(!limit){
+        limit = 10;
+      }
+      var data = {};
+			if("{:session('user_auth.role')}"=='销售人员'){
+		     data.usertype = "销售人员";//账号类型
+		     data.username = "{:session('user_auth.username')}";//账户名
+	    }else{
+		     data.usertype = $(".allType").val();//账号类型
+		     allName = $('.allNames').val();//账户名
+		     if(allName == '' || allName == null){
+		  		 allName = '全部账户';
+		  	 }
+		     data.username = allName;
+	    }
+			data.page = parseInt(page);
+			data.limit = parseInt(limit);
+
+			if(type == 'details') {	//消费明细
+				var	url = "{:url('get_consumption_details_api')}";
+				var lines = $('#Detailed_line').val();	//线路
+				var asr = $('#Detailed_ASR').val();		//ASR
+				var sms = $('#Detailed_passageway').val();	//通道
+				var start_data = $('#Detailed_startDate').val();	//开始通话日期
+				var end_data = $('#Detailed_endTime').val();	//结束通话日期
+				var phone = $('#Detailed_phone').val();	//电话号码
+
+				data.linename = lines;
+				data.asrname = asr;
+				data.smsname = sms;
+				data.start_time = start_data;
+				data.end_time = end_data;
+				data.callNum = phone;
+			} else {		//日、月、年
+				var url = '{:url("get_consumption_api")}';
+				var rikaishitime = $("#ri_startdaily").val();//日消费统计开始  通话日期
+				var rijieshutime = $("#ri_enddaily").val();//日消费统计结束  通话日期
+	      data.start_time = rikaishitime;
+	      data.end_time = rijieshutime;
+	      data.type = type;
+			}
+
+			$.ajax({
+        url : url,
+        dataType : "json",
+        type : "post",
+        data : data,
+        success:function(result){
+					console.log(result);
+					if(result.code === 0){
+						var today_data = result.data.today_data;
+						var data_htmls = '';
+						var now_data_htmls = '';
+						if(result.data.list.length != 0){
+							if(result.data.type == 'details') {		//消费明细
+								$.each(result.data.list, function(index, object) {
+									var html = $('#Detailed_record').html();
+											html = html.replace('{%type%}', result.data.type);
+											html = html.replace('{%id%}', object.id);
+											html = html.replace('{%type%}', result.data.type);
+											html = html.replace('{%sequence%}', object.sequence);
+											html = html.replace('{%username%}', object.username);
+											html = html.replace('{%mobile%}', object.mobile);
+											html = html.replace('{%duration%}', object.duration);
+											html = html.replace('{%linename%}', object.linename ? object.linename : '暂无数据');
+											html = html.replace('{%call_money%}', parseFloat(object.call_money).toFixed(3));
+											html = html.replace('{%asr_cnt%}', object.asr_cnt);
+											html = html.replace('{%asr_id%}', object.asrname ? object.asrname : '暂无数据');
+											html = html.replace('{%asr_price%}', parseFloat(object.asr_money).toFixed(4));
+											html = html.replace('{%sms_count%}', object.sms_count);
+											html = html.replace('{%smsname%}', object.smsname);
+											html = html.replace('{%sms_price%}', parseFloat(object.sms_money).toFixed(3));
+											html = html.replace('{%money%}', parseFloat(object.money).toFixed(2));
+											html = html.replace('{%technology_service_cost%}', object.technology_service_cost ? parseFloat(object.technology_service_cost).toFixed(4) : '0.0000');
+											html = html.replace('{%create_time%}', object.create_time);
+											data_htmls += html;
+								});
+							} else {	// 日、月、年消费统计
+		              $.each(result.data.list, function(index, object){
+		                var html = $('#recharge_record').html();
+		                		html = html.replace('{%type%}', object.type);
+		                    html = html.replace('{%id%}', object.id);
+		                    html = html.replace('{%type%}', object.type);
+		                    html = html.replace('{%sequence%}', object.sequence);
+		                    html = html.replace('{%name%}', object.member_name);
+		                    html = html.replace('{%statistics_data%}', object.date);
+		                    html = html.replace('{%call_count%}', object.call_count);
+		                    html = html.replace('{%connect_count%}', object.connect_count);
+		                    html = html.replace('{%connection_rate%}', object.connect_rate+'%');
+		                    html = html.replace('{%average_duration%}', object.average_duration);
+		                    html = html.replace('{%charging_duration%}', object.charging_duration);
+		                    html = html.replace('{%duration_price%}', parseFloat(object.connect_cost).toFixed(3));
+		                    html = html.replace('{%distinguish_count%}', object.asr_count);
+		                    html = html.replace('{%asr_price%}', parseFloat(object.asr_cost).toFixed(4));
+		                    html = html.replace('{%robot_cost%}', parseFloat(object.robot_cost).toFixed(3)); //机器人月租费用
+		                    html = html.replace('{%messages_sent_count%}', object.send_sms_count);
+		                    html = html.replace('{%messages_sent%}', parseFloat(object.sms_cost).toFixed(3));
+		                    html = html.replace('{%summary_money%}', parseFloat(object.total_cost).toFixed(2));
+		                    html = html.replace('{%type%}', object.type);
+		                    html = html.replace('{%technology_service_cost%}', object.technology_service_cost ? parseFloat(object.technology_service_cost).toFixed(4) : '0.0000');
+		                    html = html.replace('{%balance%}', parseFloat(object.money).toFixed(2));
+		                    data_htmls += html;
+		              });
+							}   
+						}    
+						if(result.data.type != 'details'){
+							//今日，本月，今年数据统计
+	            var now_data = $('#present_record').html();
+	            now_data = now_data.replace('{%type%}', result.data.type);
+	            now_data = now_data.replace('{%call_count%}', result.data.today_data.call_count);
+	            now_data = now_data.replace('{%connect_count%}', result.data.today_data.connect_count ? result.data.today_data.connect_count : 0);
+	            now_data = now_data.replace('{%connect_rate%}', result.data.today_data.connect_rate ? parseInt(result.data.today_data.connect_rate)+'%' : '0%');
+	            now_data = now_data.replace('{%average_duration%}', result.data.today_data.average_duration ? result.data.today_data.average_duration : 0);
+	            now_data = now_data.replace('{%charging_duration%}', result.data.today_data.charging_duration ? result.data.today_data.charging_duration : 0);
+	            now_data = now_data.replace('{%connect_cost%}', result.data.today_data.connect_cost ? parseFloat(result.data.today_data.connect_cost).toFixed(3) : '0.000');
+	            now_data = now_data.replace('{%asr_count%}', result.data.today_data.asr_count ? result.data.today_data.asr_count : 0);
+	            now_data = now_data.replace('{%asr_cost%}', result.data.today_data.asr_cost ? parseFloat(result.data.today_data.asr_cost).toFixed(4) : '0.0000');
+	            now_data = now_data.replace('{%robot_cost%}', result.data.today_data.robot_cost ? parseFloat(result.data.today_data.robot_cost).toFixed(3) : '0.000');
+							now_data = now_data.replace('{%sent_sms_count%}', result.data.today_data.send_sms_count ? result.data.today_data.send_sms_count : 0);
+	            now_data = now_data.replace('{%sms_cost%}', result.data.today_data.sms_cost ? parseFloat(result.data.today_data.sms_cost).toFixed(3) : '0.000');
+	            now_data = now_data.replace('{%technology_service_cost%}', result.data.today_data.technology_service_cost ? parseFloat(result.data.today_data.technology_service_cost).toFixed(4) : '0.0000');
+	            now_data = now_data.replace('{%total_cost%}', result.data.today_data.total_cost ? parseFloat(result.data.today_data.total_cost).toFixed(2) : '0.00');
+	            now_data_htmls += now_data;
+						}
+            if(result.data.type == 'day'){
+            	$('#daily-recored-list').html(data_htmls);
+            	$('#today_record').html(now_data_htmls);
+            	$('.countday').attr('data-page',page);
+            	$('.countday').attr('data-total',result.data.count);
+            	//Paging.paging(当前页码, 总数量, 每页显示的条数)
+							Paging.paging(page, result.data.count, limit, type);
+							$('.check_count').attr('data-total', result.data.count);
+            } else if(result.data.type == 'month'){
+            	$('#month-recored-list').html(data_htmls);
+            	$('#month_record').html(now_data_htmls);
+            	$('.now'+type).text('本月');
+            	$('.balancemonth').hide();
+            	$('.countmonth').attr('data-page',page);
+            	$('.countmonth').attr('data-total',result.data.count);
+            
+            	//Paging.paging(当前页码, 总数量, 每页显示的条数)
+							Paging2.paging(page, result.data.count, limit, type);
+            } else if(result.data.type == 'year'){
+            	$('#year-recored-list').html(data_htmls);
+            	$('#year_record').html(now_data_htmls);
+            	$('.now'+type).text('今年');
+            	$('.balanceyear').hide();
+            	$('.countyear').attr('data-page',page);
+            	$('.countyear').attr('data-total',result.data.count);
+            
+            	//Paging.paging(当前页码, 总数量, 每页显示的条数)
+							Paging3.paging(page, result.data.count, limit, type);
+            } else {
+
+            	$('#recharge-recored-list').html(data_htmls);
+							$('.countdetails').attr('data-page',page);
+            	$('.countdetails').attr('data-total',result.data.count);
+							Paging4.paging(page, result.data.count, limit, type);
+            }
+            //判断是否全选
+            if($('.check_all'+type).is(':checked')){
+							$('.check_page'+type).prop("checked",true);
+							$('.rolecheck'+type).prop("checked",true);
+							$('.count'+type).text($('.count'+type).attr('data-total'));
+							$('.check_page'+type).attr('data-page',$('.count'+type).attr('data-total'));
+						}else{
+							$('.check_page'+type).prop("checked",false);
+							$('.rolecheck'+type).prop("checked",false);
+							$('.count'+type).text(0);
+							$('.check_page'+type).attr('data-page',0);
+						}
+						
+					}
+				},
+				error:function(){
+					console.log('获取消费数据失败');
+				}
+			});
+		}
+
+
+		$(function () {
+			show_data(1,10,'day');
+			show_data(1,10,'month');
+			show_data(1,10,'year');
+			show_data(1,10,'details');
+			if("{:session('user_auth.role')}"=='销售人员'){
+		     account_linkage();
+	    }
+		});
+	</script>
+	<!-- 全选 -->
+	<script type="text/javascript">
+		//所有数据全选
+   function check_all_record(obj){
+   	var type = $(obj).attr('data-type');
+   	if($('.check_all'+type).is(':checked')){
+			$('.check_page'+type).prop("checked",true);
+			$('.rolecheck'+type).prop("checked",true);
+			$('.count'+type).text($('.count'+type).attr('data-total'));
+			$('.check_page'+type).attr('data-page',$('.count'+type).attr('data-total'));
+		}else{
+			$('.check_page'+type).prop("checked",false);
+			$('.rolecheck'+type).prop("checked",false);
+			$('.count'+type).text(0);
+			$('.check_page'+type).attr('data-page',0);
+		}
+   }
+   //本页全选
+   function check_page_record(obj){
+   	var type = $(obj).attr('data-type');
+   	if($('.check_page'+type).is(':checked')) {
+			$('.rolecheck'+type).prop("checked",true);
+      if($('.rolecheck'+type+':checked').length == $('.count'+type).attr('data-total')){
+        $('.check_all'+type).prop("checked",true);
+        $('.check_page'+type).prop("checked",true);
+        $('.check_page'+type).attr('data-page',$('.count'+type).attr('data-total'));
+      }else {
+        $('.check_page'+type).attr('data-page',$('.count'+type).attr('data-page'));
+      }
+      // $('.check_page').attr('data-page',$('#count').attr('data-page'));
+      $('.count'+type).text($('.rolecheck'+type+':checked').length);
+		}else{
+			$('.check_all'+type).prop("checked",false);
+			$('.rolecheck'+type).prop("checked",false);
+			$('.count'+type).text(0);
+			$('.check_page'+type).attr('data-page',0);
+		}
+   }
+   //单个选项框选中事件
+   function check_record(obj){
+   	var type = $(obj).attr('data-type');
+   	if(!$(".rolecheck"+type).checked) {
+			$('.check_page'+type).prop("checked",false);
+			$('.check_all'+type).prop("checked",false);
+			$('.check_page'+type).attr('data-page',0);
+		}
+		var check_pagenum = $('.rolecheck'+type).length;
+		var check_num = $('.rolecheck'+type+':checked').length;
+		if(check_pagenum == check_num){
+			$('.check_page'+type).prop("checked",true);
+			$('.check_page'+type).attr('data-page',$('.count'+type).attr('data-page'));
+		}
+    if(check_num == $('.count'+type).attr('data-total')){
+      $('.check_all'+type).prop("checked",true);
+      $('.check_page'+type).prop("checked",true);
+      $('.check_page'+type).attr('data-page',$('.count'+type).attr('data-total'));
+    }
+		$('.count'+type).text(check_num);
+   }
+	</script>
+
+	<!--导出-->
+	<script type="text/javascript">
+  // 数据导出
+  function importdata(obj){
+  	var type = $(obj).attr('data-type');
+	 	if($('.rolecheck'+type+':checked').length == 0){
+	 		alert("请至少选择一条数据");
+	 	}else{
+	 		console.log($(obj).attr('data-type'));
+	 		$('#import-data').attr('data-type',type);
+	 		$('#import-data').modal('show');
+	 	}
+  }
+
+	var excel_statelist = true;
+  function export_consumption_statistics(){
+  	$('#import-data').modal('hide');
+ 		if(excel_statelist === true){
+ 			//将导出状态值改为false
+ 			excel_statelist = false;
+ 			//定义路径
+ 			var url = "{:url('export_consumption_statistics')}";
+ 			//定义传递的参数
+ 			var data = {};
+  		//获取账户类型 获取账户名
+  		if("{:session('user_auth.role')}"=='销售人员'){
+		     data.usertype = "销售人员";//账号类型
+		     data.username = "{:session('user_auth.username')}";//账户名
+	    }else{
+		     data.usertype = $(".allType").val();//账号类型
+		     allName = $('.allNames').val();//账户名
+		     if(allName == '' || allName == null){
+		  		 allName = '全部账户';
+		  	 }
+		     data.username = allName;
+	    }
+ 			//获取需要导出信息的类型
+ 			var type = $('#import-data').attr('data-type');
+  		data.type = $('#import-data').attr('data-type');
+ 			//判断是否全部选中
+ 			if($('.check_all'+type).is(':checked')){  //导出所有数据
+ 				data.export_type = 1;
+ 			}else{
+ 				data.export_type = 0;
+ 			}
+ 			//获取选中的id
+ 			var usercheck = [];
+			$.each($('.rolecheck'+type+':checked'), function(index, object){
+ 				usercheck.push($(object).val());
+ 			});
+ 			data.usercheck = usercheck;
+ 			console.log(usercheck);
+
+ 			//判断导出类型
+ 			if(type == 'day'){
+ 				data.start_time = $("#ri_startdaily").val();//日消费统计开始  通话日期
+				data.end_time = $("#ri_enddaily").val();//日消费统计结束  通话日期
+ 			}else if(type == 'details'){
+ 				url = "{:url('export_detailed_consumption')}";
+ 				data.linename = $('#Detailed_line').val();	//线路
+				data.asrname = $('#Detailed_ASR').val();		//ASR
+				data.smsname = $('#Detailed_passageway').val();	//通道
+				data.start_time = $('#Detailed_startDate').val();	//开始通话日期
+				data.end_time = $('#Detailed_endTime').val();	//结束通话日期
+				data.callNum = $('#Detailed_phone').val();	//电话号码
+ 			}
+
+ 			$.post(url,data,
+ 			function(result){
+ 				console.log(result);
+ 				if(result.code === 0){
+ 					window.location.href = result.data;
+ 					// alert('导出成功');
+ 				}else{
+ 					alert('导出失败');
+ 				}
+ 				excel_statelist = true;
+
+ 			});
+ 		}
+  }
+
+</script>
+
+
+{include file="sms/sms_targer" /}
+
+{/block}

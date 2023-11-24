@@ -1,0 +1,92 @@
+.task-condition select,
+.task-condition input {
+    width: 160px !important;
+}
+
+.task-condition select {
+    margin-right: 28px;
+}
+
+.task-condition input {
+    margin-right: 12px;
+}
+
+.task-condition button {
+    width: 60px;
+    margin-bottom: 3px;
+}
+
+.height66 {
+    height: 64px !important;
+}
+
+.task-statistics-head {
+    padding: 15px 24px 15px 29px !important;
+}
+
+.statistics-overview {
+    display: flex;
+    display: -webkit-flex; /* Chrome、Safai */
+    display: -moz-flex; /* Firefox */
+    display: -o-flex; /*  */
+    display: -ms-flex; /* IE */
+}
+
+.statistics-overview-box {
+    width: 24%;
+    background-color: #fff;
+    margin-right: 20px;
+}
+
+.statistics-overview div:nth-of-type(4) {
+    margin-right: 0;
+}
+
+.statistics-overview-title {
+    padding: 15px 20px 12px 30px;
+    font-size: 16px;
+    border-bottom: 1px solid #f6f6f6;
+}
+
+
+.statistics-overview-body p {
+    font-size: 36px;
+}
+
+.statistics-overview-body {
+    padding: 25px 20px 20px 30px;
+}
+
+.overview-time span:nth-of-type(1),
+.overview-time span:nth-of-type(2),
+.overview-time span:nth-of-type(3) {
+    font-size: 12px;
+    color: #909090;
+}
+
+.ascend {
+    float: right;
+    font-size: 16px;
+    color: #33bf13;
+}
+.ascend  img,
+.dscend img{
+    vertical-align: text-top;
+}
+
+.dscend {
+    color: #ff0000;
+    font-size: 16px;
+    float: right;
+}
+
+.task-list{
+    background-color: #fff;
+    padding: 24px 30px 45px 30px;
+}
+.task-list-section{
+    margin-bottom: 19px;
+}
+.task-list-section .form-inline .form-group input{
+    width: 160px;
+}

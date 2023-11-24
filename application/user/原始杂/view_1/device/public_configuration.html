@@ -1,0 +1,168 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="/public/css/line.css" type="text/css">
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img_sj/publicnum.png" alt="">公众号配置</span>
+		  </div>
+		  {if condition="$roleName =='运营商'"}
+			<div class="pull-right">
+			   <a class="btn btn-primary addpublicnum" type="btn" name="button" href="../device/add_public" >添加公众号</a>
+		  </div>
+		  {/if}
+		</header>
+		<div class="main-box-body clearfix">
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">序号</th>
+                <th class="text-center">公众号</th>
+								<th class="text-center">当前状态</th>
+								<th class="text-center">创建时间</th>
+              	<th class="text-center">操作</th>
+					    </tr>
+				    </thead>
+				    {if condition="!empty($wx)"}
+				    <tbody id="recharge-recored-list">
+            	<tr>
+                <td class="text-center">1</td>
+	              <td class="text-center">{$wx['name']}</td>
+	              <td class="text-center">
+	            
+								{if condition="$wx['status'] eq 1"}	 
+								   {if condition="$roleName =='运营商'"}<a href="javascript:;" data-title="启用公众号"  data-id="{$wx['id']}" data-status="0" onclick="popTipswin(this);">{/if}启用</a>
+								{elseif condition="$wx['status'] eq 0"/}   
+								   {if condition="$roleName =='运营商'"}<a href="javascript:;" data-title="停用公众号"  data-id="{$wx['id']}" data-status="1" onclick="popTipswin(this);">{/if}停用</a>
+								{/if}
+						  
+	              </td>
+	              <td class="text-center">{$wx['create_time']|date="Y-m-d H:i:s",###}</td>
+	              <td class="text-center">
+	              	{if condition="$roleName =='运营商'"}
+                    <a href='{:url("user/device/add_public")}?id={$wx['id']}' >编辑</a>
+                  {/if}
+                  <!-- {if condition="$wx['status'] eq 1"}	<a href="javascript:void(0);" data-id="{$wx['id']}" data-status="0"  data-title="启用公众号" onclick="popTipswin(this);"> 禁用 </a>
+								  {elseif condition="$wx['status'] eq 0"/}  <a href="javascript:void(0);" data-id="{$wx['id']}" data-status="1"  data-title="禁用公众号" onclick="popTipswin(this);"> 启用 </a>
+								{/if} -->
+									<a href="{:url('user/device/bangdingwx')}" >绑定微信公众号</a>
+									{if condition="$roleName =='运营商'"}
+                    <a href="javascript:void(0);" data-title="删除公众号"  data-id="{$wx['id']}" onclick="popTipswin(this);">删除</a>
+                  {/if}
+
+                </td>
+							</tr>
+				    </tbody>
+				    {/if}
+				  </table>
+					<!-- <div class="row">
+						<footer class="main-box-footer clearfix col-sm-12">
+							<div class="pull-left">已选择1条记录</div>
+							<div class="pull-right " id="modalpagebody">
+								<div class=" pull-right"  id="consumepage"> -->
+									<!--页码-->
+
+								<!-- </div>
+								<div class="  text-right pull-right">
+									<p>全部记录：12条</p>
+								</div>
+						</div>
+						</footer>
+					</div> -->
+			  </div>
+		</div>
+	</div>
+</div>
+</div>
+
+ <script type="text/javascript">
+	 //当前页全选
+	  $("input[name='all_checked'][type='checkbox']").click(function(){
+	 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+	   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+	   	} else {
+	  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+	  	}
+	  });
+	 	//子复选框的事件
+	 	$('input[type="checkbox"][name="roleids"]').click(function(){
+	 		//当没有选中某个子复选框时，check-all取消选中
+	 		if (!$(".rolecheck").checked) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+	 		}
+	 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+	 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+	 		if (checkedsub == chsub) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+	 		}
+	 	});
+
+
+  </script>
+
+<script type="text/javascript">
+   function wx_delete(id){
+   	   var url='{:url("user/wxinfo/delete_wx")}'
+   	   $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        data: {'id':id},
+        dataType:"json",
+        success : function(data) {
+        	 if(data.code==1){
+        	 	   alert(data.msg);
+        	 	   $('#tips_model').modal('hide');
+        	 	   window.location.href='{:url("user/device/public_configuration")}';
+        	 	   return false;
+        	 }else{
+              alert(data.msg);
+        	 	  $('#tips_model').modal('hide');
+        	 }
+        },
+
+  	 });
+   }
+   function setStatus(id,status){
+   	 var url='{:url("user/wxinfo/setStatus")}'
+   	   $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        data: {'id':id,'status':status},
+        dataType:"json",
+        success : function(data) {
+        	 if(data.code==1){
+        	 	   alert(data.msg);
+        	 	   $('#tips_model').modal('hide');
+        	 	   window.location.href='{:url("user/device/public_configuration")}';
+        	 	   return false;
+        	 }else{
+              alert(data.msg);
+        	 	  $('#tips_model').modal('hide');
+        	 }
+        },
+
+  	 });
+   }
+</script>
+
+
+
+
+
+
+
+{include file="sms/sms_targer" /}
+{/block}

@@ -1,0 +1,216 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="enterprise/dialog" /}
+<script src="__PUBLIC__/plugs/echarts/echarts.min.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/financialManage.css">
+<style>
+.row{
+  padding:0px !important;
+}
+.f_surveyright .pz_surveys{
+  padding-left:7px;
+}
+#footer-bar{
+  position:absolute;
+  left: 0;
+  right: 0;
+}
+</style>
+<div class="fadeInRight animated" style="padding:0px 15px;">
+  <div class="c_taskdata">
+		<!--账号概况-->
+    <div class="c_taskleft">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="panel-top">
+	  				<span class="n_panel_title"><img src="__PUBLIC__/img/e_zhanghao.png"/>账号概况</span>
+	  			</div>
+          <!-- 内容展示 -->
+          <div class="f_maindata f_survey dflex" id="pz_maindata">
+            <div class="f_surveyleft">
+            	<input type="file" name="photo" id="head_portrait_file" style="display:none;" />
+              <div class="f_suleftimg pr">
+                <img src="{if $user_data['logo'] == '' || $user_data['logo'] == null}__PUBLIC__/img/e_touxiang.png{else/}__PUBLIC__/../{:$user_data['logo']}{/if}" alt="" style="width:100px;height:100px;border-radius: 100px;" class="show_head_portrait">
+                <img src="__PUBLIC__/img/e_touxiangshangchuan.png" alt="">
+              </div>
+              <div class="f_sulefdata">
+                <p class="f_sulefttype">亲爱的{:session('user_auth.role')}</p>
+                <p class="f_suleftname" style="margin:;">您的账户：<span>{:session('user_auth.username')}</span></p>
+              </div>
+            </div>
+            <div class="f_surveyright">
+              <div class="f_surighttop">
+                <p class="pz_surveys">当前账户余额</p>
+                <p class="pz_surveys">{:$user_data['money']}元</p>
+              </div>
+              <div class="f_surightbot">
+                <p class="pz_surveys">机器人数量</p>
+                <p class="pz_surveys">{:$user_data['robot_cnt']}个</p>
+                <p class="pz_surveys" style="color:#999;font-size:12px;line-height: 20px;">机器人到期时间：{:$user_data['end_time']}</p>
+              </div>
+
+              <!-- <p class="pz_surveys">余额</p> -->
+              <!-- <p>当前账户余额</p> -->
+            </div>
+          </div>
+			  </div>
+		  </div>
+	  </div>
+		<!--费率-->
+		<div class="c_taskright">
+			<div class="panel panel-default">
+        <div class="panel-body">
+          <div class="panel-top">
+	  				<span class="n_panel_title"><img src="__PUBLIC__/img/e_feilv.png">费率</span>
+	  			</div>
+          <!-- 内容展示 -->
+          <div class="f_maindata">
+            <ul class="f_rateul dflex">
+              <li>
+                <img src="__PUBLIC__/img/e_yuyuntonghua.png" alt="">
+                <div class="f_rateuldata">
+                  <p>语音通话费率</p>
+                  <p>{:$user_data['time_price']}元/分钟<a class="pz_zifeixiangqing" style="color:#0e90fe;font-size:14px;margin-left:10px;">更多资费详情</a></p>
+                </div>
+              </li>
+              <li>
+                <img src="__PUBLIC__/img/e_yuezu.png" alt="">
+                <div class="f_rateuldata">
+                  <p>机器人月租</p>
+                  <p>{:$user_data['month_price']}元/月/个</p>
+                </div>
+              </li>
+              <li>
+                <img src="__PUBLIC__/img/e_duanxinfeilv.png" alt="">
+                <div class="f_rateuldata">
+                  <p>短信费率</p>
+                  <!--<p>{:$user_data['sms_price']}元/条</p>  -->
+                  <p>{:$user_data['sms_price']}元/条<a class="pz_zifeixiangqing" style="color:#0e90fe;font-size:14px;margin-left:10px;">更多资费详情</a></p>
+                </div>
+              </li>
+              <li>
+                <img src="__PUBLIC__/img/e_shiubiefeilv.png" alt="">
+                <div class="f_rateuldata">
+                  <p>语音识别费率</p>
+                  <p>{:$user_data['asr_price']}元/次</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+	  	</div>
+    </div>
+  </div>
+  <!-- 数据 -->
+  <div class="" style="margin-bottom:60px;">
+    <div class="panel panel-default pz_manping_height" style="margin-bottom:0px;">
+      <div class="panel-body" >
+        <div class="panel-top">
+          <span class="n_panel_title"><img src="__PUBLIC__/img/e_shuju.png"/>我的数据</span>
+        </div>
+        <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">昨日/今日</th>
+								<th class="text-center">呼叫次数</th>
+								<th class="text-center">接通次数</th>
+								<th class="text-center">接通率</th>
+								<th class="text-center">计费时长(分钟)</th>
+								<th class="text-center">平均通话时长(秒)</th>
+								<th class="text-center">通话费用(元)</th>
+								<th class="text-center">识别费用(元)</th>
+								<th class="text-center">机器人月租(元)</th>
+								<th class="text-center">短信费用(元)</th>
+                <th class="text-center">账户消费总额(元)</th>
+					    </tr>
+				    </thead>
+				   <tbody>
+  						<tr>
+               <th class="text-center">昨日<br/>数据</th>
+  						 <td class="text-center">{:$back_data['call_count']}</td>
+  						 <td class="text-center">{:$back_data['connect_count']}</td>
+  						 <td class="text-center">{:$back_data['connect_rate']}</td>
+  							<td class="text-center">{:$back_data['charging_duration']}</td>
+  							<td class="text-center">{:$back_data['average_duration']}</td>
+  							<td class="text-center">{:$back_data['connect_cost']}</td>
+  							<td class="text-center">{:$back_data['asr_cost']}</td>
+  							<td class="text-center">{:$back_data['robot_cost']}</td>
+  							<td class="text-center">{:$back_data['sms_cost']}</td>
+  							<td class="text-center">{:$back_data['total_cost']}</td>
+  						</tr>
+              <tr>
+               <th class="text-center">今日<br/>数据</th>
+  						 <td class="text-center">{:$today_data['call_count']}</td>
+  						 <td class="text-center">{:$today_data['connect_count']}</td>
+  						 <td class="text-center">{:$today_data['connect_rate']}</td>
+  							<td class="text-center">{:$today_data['charging_duration']}</td>
+  							<td class="text-center">{:$today_data['average_connect_duration']}</td>
+  							<td class="text-center">{:$today_data['connect_cost']}</td>
+  							<td class="text-center">{:$today_data['asr_cost']}</td>
+  							<td class="text-center">{:$today_data['robot_cost']}</td>
+  							<td class="text-center">{:$today_data['sms_cost']}</td>
+  							<td class="text-center">{:$today_data['consump_money']}</td>
+  						</tr>
+				    </tbody>
+				  </table>
+			  </div>
+      </div>
+    </div>
+	</div>
+<div>
+<script type="text/javascript">
+  //更多资费详情
+  $('.f_rateuldata p .pz_zifeixiangqing').click(function(){
+    var zifei_title = $(this).parents('.f_rateuldata').find("p:eq(0)").text();
+    switch (zifei_title) {
+      case '语音通话费率':
+        $('#pz_callRate').modal('show');
+        break;
+      case '短信费率':
+        $('#pz_smsRates').modal('show');
+        break;
+    }
+  });
+
+  $('.f_suleftimg').click(function(){
+    $('#head_portrait_file').click();
+  });
+  //关闭提示窗
+  function hidden_delnote()
+  {
+    $('#pz_smsRates,#pz_callRate').modal('hide');
+  }
+	console.log("{:$user_data['time_price']}");
+  //选择图片后 上传到服务器
+	$('#head_portrait_file').change(function () {
+	  // var imageObject = $(this).prop('files')[0];
+	  var imageObject = document.getElementById("head_portrait_file").files[0];
+	  var formFile = new FormData();
+	  formFile.append("image", imageObject); //加入文件对象
+	  formFile.append("enctype", "multipart/form-data");
+	  var url = "{:url('user/system/edit_headimg')}";
+	  console.log(formFile);
+	  $.ajax({
+	    data: formFile,
+	  	url: url,
+	  	type: "POST",
+	  	dataType: "json",
+	  	cache: false,			//上传文件无需缓存
+	  	processData: false,		//用于对data参数进行序列化处理 这里必须false
+	  	contentType: false, 	//必须
+	  	success: function(result){
+	  	  console.log(result);
+	  		if(result.code == 0){
+	        // console.log(result.datas.filename);
+	  		  // $('#show_head_portrait').attr('src', '/'+result.data.filename);
+	  		  window.location.reload();
+	  		}
+	  	},
+	  	error: function(result){
+	  		alert('上传失败');
+	  	}
+	  });
+	});
+</script>
+{/block}

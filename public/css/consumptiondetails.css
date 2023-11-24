@@ -1,0 +1,113 @@
+.main-box .main-box-header {
+    padding: 13px 20px 10px;
+}
+.detail{
+    width: 60px;
+}
+.navbar{
+    margin-bottom: 5px;
+}
+.content-body > section > .form-inline > .form-group > select{
+    margin-right: 20px;
+    width: 106px;
+}
+.content-body > section > .form-inline > .form-group {
+    margin-bottom: 10px;
+}
+
+#footer-bar{
+    position: static;
+}
+
+.content-body {
+    margin-top: 12px;
+    padding: 20px 25px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+.form-group label{
+    margin-right: 0px;
+}
+
+.phone {
+    margin-right: 20px;
+}
+
+.n_panel_title {
+    display: inline-block;
+    line-height: 30px;
+    font-size: 18px;
+}
+
+.n_panel_title img {
+    width: 20px;
+    height: 22px;
+    vertical-align: sub;
+    margin-right: 8px;
+}
+
+.callrecord-title {
+    /* height: 60px!important; */
+    margin-bottom: -7px;
+}
+
+.screen{
+    margin-right: 5px;
+    line-height: 25px;
+    position: relative;
+}
+
+.screen span:nth-of-type(1) {
+    border-radius: 3px 0px 0px 3px;
+    border-left:1px solid #e5e5e5;
+}
+
+.screen span{
+    margin-left: -4px;
+    font-size: 14px;
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    width: 105px;
+    display: inline-block;
+    line-height: 34px;
+    text-align: center;
+    border-left: 0;
+}
+
+.screen span:nth-last-of-type(1) {
+    border-radius: 0px 3px 3px 0px;
+    border-left: 0;
+}
+
+.screenBtn-active {
+    color: #fff;
+    background: #0e90fe;
+    cursor: pointer;
+    border:1px solid #0e90fe!important;
+}
+.moreDate{
+    width: 105px;
+    position: absolute;
+    top: 0px;
+    border: 0px;
+    background: transparent;
+    color: transparent;
+    line-height: 34px;
+    right: 0;
+    cursor: pointer;
+}
+
+.more-dates{
+    position: relative;
+    display: inline-block;
+}
+
+
+.moreDate:focus {
+    outline:none;
+}
+
+.more-dates{
+    display: inline-block;
+    position: relative;
+}

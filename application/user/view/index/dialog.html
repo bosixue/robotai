@@ -1,0 +1,46 @@
+<!--用户第一次登录后提示框-->
+<style>
+	.loginTips span{
+		color: red;
+	}
+</style>
+<div class="modal fade" id="firstLogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" style="width:465px; top:15%">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header tips-title">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					温馨提示
+				</h4>
+			</div>
+			<div class="modal-body loginTips">
+				<!--<p  style="margin-bottom: 10px;">尊敬的yingfeiw用户您好,目前线路行情价格普遍大幅上涨，加上月底，投诉率高的线路被迫关停，即日起，所有客户均会做不同幅度价格上浮调整，由此带来的不便，还请理解，有任何问题，请及时和接洽人员沟通。</p>
+				<p>鉴于近期部分客户反馈数据存储量大，导致数据加载慢，即日起，所有数据只保存<span>{$show_days}天</span>，超过<span>{$show_days}天</span>的，系统将自动清除，请大家及时保存好数据，由此带来的不便，还请理解，有任何问题，请及时和服务人员沟通，谢谢！</p>-->
+				<p  style="margin-bottom: 10px;">为保证平台健康、稳定运行，所有平台使用方需知悉并确认，一旦平台发现使用方利用平台进行违法行为，平台有权立即停止服务，不退还所有已付款项，并立即向有关机关报警。承诺内容包含但不限于如下：</p>
+				<p  style="margin-bottom: 10px;">一、使用平台外呼服务，遵守国家相关法律，法规和各行政规章制度，不开展任何违法、违规业务。</p>
+				<p  style="margin-bottom: 10px;">二、不利用提供的平台资源从事危害国家安全、泄露国家机密等违法犯罪行为。</p>
+				<p  style="margin-bottom: 10px;">三、不利用平台开展各种形式违反社会公德和商业操守的外呼服务。</p>
+				<p  style="margin-bottom: 10px;">四、不利用平台传播妨碍社会治安和宣传封建迷信、淫秽黄色等信息；窃取、泄露国家机密、情报或者军事机密；煽动名族仇恨，名族歧视，破坏名族团结；组织邪教活动，联络邪教成员破坏国家法律、行政法规实施。</p>
+				<p  style="margin-bottom: 10px;">五、不利用平台进行窃取，诈骗，敲诈勒索。</p>
+				<p  style="margin-bottom: 10px;">六、用户明确拒绝后，不得继续向其发起呼叫。</p>
+				<p  style="margin-bottom: 10px;">七、规范外呼时段，频率行为等。不得对用户正常生活造成影响。</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">
+					确认
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+  $(function(){
+    <?php if($is_eject == 1): ?>
+      $('#firstLogin').modal('hide');
+    <?php else: ?>
+      $('#firstLogin').modal('show');
+    <?php endif; ?>
+	})
+</script>

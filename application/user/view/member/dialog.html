@@ -1,0 +1,552 @@
+<!-- 客户管理页面--客户详情弹框 -->
+<div class="modal fade" id="constomerdetail" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title"><span>客户详情</span></h4>
+            </div>
+            <div class="modal-body pagelists">
+                <form id="formScenariosform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">客户名称：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="form-control" placeholder="请输入客户名称" name="name" id="e_name" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">客户性别：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <select class="form-control" id="e_tradeType" name="tradeType">
+                                <option value="">请选择性别</option>
+                                <option value="0">男</option>
+                                <option value="1">女</option>
+                                <option value="2">未知</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">联系电话：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="form-control readonlyl" id="e_phone" name="" readonly="readonly" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">所属公司：</label>
+                        <div class="col-lg-8 col-sm-8">
+                            <input type="text" class="form-control" name="" id="e_company" placeholder="请输入公司名称" value="">
+                        </div>
+                    </div>
+                    <div hidden>
+                        <input id="e_only_id" hidden/>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="edit_constomerDetail();" type="button">确 定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 通话记录弹框 -->
+<div class="modal fade" id="callrecord" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width: 855px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title"><span>通话详情</span></h4>
+            </div>
+            <div hidden>
+                <input id="callDetails_id">
+                <input id="callDetails_phone">
+            </div>
+            <div class="modal-body pagelists" style="height:555px;">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">序号</th>
+                            <th class="text-center">电话号码</th>
+                            <th class="text-center">通话状态</th>
+                            <th class="text-center">意向等级</th>
+                            <th class="text-center">通话时长(s)</th>
+                            <th class="text-center">通话时间</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablepagelist"></tbody>
+                </table>
+                <div class="component-page-empty" id="consumeempty1">
+                    <div class="empty-tip line">暂无数据</div>
+                </div>
+                <div class="paginga"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary submit-btn btnokprojectile-frame" data-dismiss="modal" type="button">确 定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加客户弹窗-->
+<div class="modal fade" id="customer-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:450px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">
+					添加客户
+				</h4>
+            </div>
+            <div class="modal-body l-modal-body" style="padding: 20px 20px 3px;">
+                <form id="addblacklist-number" method="post" id="addForm" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>客户名称：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="name" id="customer-name" placeholder="请输入姓名" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">性别：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="sex" id="sex" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>联系电话：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="phone" placeholder="请输入联系电话" id="phone" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">公司名称：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="compay_name" placeholder="请输入公司名称" id="corporate-name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">客户意愿：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select class="form-control" name="crm_cate" id="crm_cate">
+                                <option value="">请选择意愿</option>
+                                <option value="0">有意向</option>
+                                <option value="1">沟通中</option>
+                                <option value="2">试用中</option>
+                                <option value="3">已成交</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">备注：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea style="padding:9px;" id="blacklist-remark1" name="note" rows="2" cols="29" maxlength="30" placeholder="请输入备注信息，限定30个字以内"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="users_add" onclick="checkform()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--导出提示-->
+<div class="modal fade" id="export-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:340px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">
+
+					操作提示
+
+				</h4>
+            </div>
+            <div class="modal-body modal-body-tips l-modal-body">确定要导出所选数据？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="sel_excel">确定</button>
+            </div>
+        </div>
+    </div>></div>
+<!--单个删除提示-->
+<div class="modal fade" id="customer-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:340px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">
+
+					操作提示
+
+				</h4>
+            </div>
+            <div class="modal-body modal-body-tips l-modal-body">确定要删除所选数据？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="delete_command" onclick="delete_one();">确定</button>
+            </div>
+        </div>
+    </div>></div>
+<!--批量删除提示-->
+<div class="modal fade" id="customer-delete-all" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:340px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">
+
+					操作提示
+
+				</h4>
+            </div>
+            <div class="modal-body modal-body-tips l-modal-body">确定要批量删除所选数据？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="delete_command" onclick="delete_all()">确定</button>
+            </div>
+        </div>
+    </div>></div>
+<!-- 确定提交 提示框 -->
+<div class="modal fade in pz_modal" role="dialog" id="l-delnotex" style="display: none;">
+    <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">	<span class="pz_clockshan">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">操作提示</h4>
+            </div>
+            <div class="modal-body modal-body-tips">确定新建客户？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="add_intentional_member();">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--分配坐席弹框-->
+<div class="modal fade" id="allocationOfSeats" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm" style="width:450px; ">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"> <span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myAllocationLabel">
+					分配坐席
+				</h4>
+			</div>
+			<div class="modal-body modal-body-tips seat-body">
+				<div class="form-group clearfix">
+					<label class="chioceSeat">请选择坐席：</label>
+  					<div class="col-lg-9 col-sm-9 marginT7">
+						<!-- <select class="form-control" name="" id='distribution_seat_id'>
+							<option value="">请选择坐席</option>{volist name="seats" id="seat"}
+							<option value="{$seat.id}">{$seat.username}</option>{/volist}
+						</select> -->
+						<div id='distribution_seat_id'>
+  						{volist name="seats" id="seat"}
+  						<div class="seatName">
+  							<input type="checkbox" value="{$seat.id}"/><span>{$seat.username}</span>
+  						</div>
+  						{/volist}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" onclick="distribution_crm();" id="distribution_crm">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--导入弹框-->
+<div class="modal fade" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" style="width:430px;">
+        <div class="modal-content n_modalcontent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">选择excel文件</h4>
+            </div>
+            <div class="modal-body">
+                <form id="fileform" action="{:url('user/member/importExcelCallMember')}" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <input type="file" class="" id="excelId" name="excel"  accept=".xlsx,"  />
+                    <!-- 当前任务的ID -->
+                    <input type="hidden" name="taskID" id="taskexampletaskID" value="" />
+                    <input type="hidden" name="chaos_num" id="chaos_num" value="">
+                </form>
+                <br />	<a href="__STATIC__/Merbertemplate.xlsx">模板下载</a>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="Savechange()" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加拨打弹窗-->
+<div class="modal fade" id="add_call_window" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:450px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="myModalLabel">
+
+					加入呼叫
+
+				</h4>
+            </div>
+            <div class="modal-body l-modal-body" style="padding: 20px 20px 3px;">
+                <form id="addblacklist-number" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">号码：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="add_call_phone" id="add_call_phone" value="" readonly />
+                        </div>
+                    </div>
+                    <p></p>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>线路组：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="line_id" id="add_call_line_group_id" class="form-control">
+                                <option value="">请选择</option>
+                                {php}foreach($line_datas as $key=>$value):{/php}
+                                <option value="{$value['id']}">{$value['name']}</option>
+                                {php}endforeach;{/php}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>话术：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="scenarios_id_join_shout" id="add_call_scenarios_id" class="form-control">
+                                <option value="">请选择</option>
+                                {php}foreach($scenarioslist as $key=>$value):{/php}
+                                <option value="{$value['id']}">{$value['name']}</option>
+                                {php}endforeach;{/php}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>ASR：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="asr_id" id="add_call_asr_id" class="form-control">
+                                <option value="">请选择</option>
+                                {php}foreach($asr_list as $key=>$value):{/php}
+                                <option value="{$value['id']}">{$value['name']}</option>
+                                {php}endforeach;{/php}
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="Nowpagehidden" value="">
+                <input type="hidden" id="Nowlimithidden" value="">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="users_add" onclick="submit_add_call()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--跟进记录 -->
+<div class="modal fade" id="followUpRecord" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" style="width:496px;">
+        <div class="modal-content n_modalcontent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="">跟进记录</h4>
+            </div>
+            <div class="modal-body record-body pz_innerbox">
+                <form id="" action="" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <button type="button" class="btn btn-primary btn-add" name="button" onclick="add_record();">
+                        <img class="btnImg" src="__PUBLIC__/img/add.png" />新增记录</button>
+                    <div id="recordtimeshow" class="pz_innerbox">
+                        <div id="recordshow"></div>
+                        <div id="loading"></div>
+                    </div>
+
+                </form>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <!--<button type="button" onclick="" class="btn btn-primary">保存</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 成交订单 -->
+<div class="modal fade" id="addOrder" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+    <div class="modal-dialog" style="width:720px;">
+        <div class="modal-content n_modalcontent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">	<span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title" id="">成交订单</h4>
+            </div>
+            <input id="only_crm_order_id" hidden>
+            <div class="modal-body add-body">
+                <form id="" action="" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="main-contents">
+                        <div class="left-contents">
+                            <button type="button" class="btn btn-primary" name="button" onclick="addOrder();">
+                                <img class="btnImg" src="__PUBLIC__/img/add.png" />新增订单</button>
+                            <div id="list_order" class="pz_innerbox">
+
+                                <!--<div class="order marginT20 orderActive" onclick="orderSel(this);">-->
+                                <!--    <p>第一次订单</p>-->
+                                <!--    <p>2019-02-16</p> <i></i>-->
+                                <!--</div>-->
+                                <!--<div class="order " onclick="orderSel(this);">-->
+                                <!--    <p>第一次订单</p>-->
+                                <!--    <p>2019-02-16</p> <i></i>-->
+                                <!--</div>-->
+                            </div>
+
+                        </div>
+                        <div class="right-contents">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label"><span class="asterisk">*</span>订单名称：</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" id="orderName" name="" value="" placeholder="请输入订单名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">成交日期：</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control c_datebgimg" readonly="readonly"  id="transaction_date" name="" value="" placeholder="请选择日期" style="padding: 6px 6px 6px 11px;">
+                                    <script>
+                                    $('#transaction_date').fdatepicker({
+                                        format: 'yyyy-mm-dd hh:ii',
+                                        pickTime: true
+                                    });
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">产品名称：</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" id='product_name' name="" value="" placeholder="请输入产品名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">产品数量：</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control"  id="number"name="" value="" placeholder="请输入产品数量">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">成交金额：</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control width187" id="money" name="" value="" placeholder="请输入成交金额"> <span class="l-yuan">元</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="pull-left" style="text-align: right;  margin-top: 7px; margin-left: 5px;">所属业务员：</label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" name="" id="salesman" value="" placeholder="请输入业务员名称">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">备注：</label>
+                                <div class="col-lg-8">
+                                    <textarea name="name" rows="3" cols="26"   id="remarks"  class="form-control" placeholder="请输入备注信息"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label"></label>
+                                <input id="only_transaction_order_id" hidden>
+                                <div class="col-lg-8">
+                                    <button type="button" class="btn btn-primary btn-save"  id="add_transaction_order" onclick="" name="button">保存</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 跟进记录添加 -->
+<div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width: 430px;">
+        <div class="modal-content" style="margin-top:95px;border: 1px solid rgba(0, 0, 0, 0);">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title"><span>新建记录</span></h4>
+            </div>
+            <div hidden>
+                <input id="only_record_id">
+            </div>
+            <div class="modal-body pagelists">
+                <form id="formScenariosform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">客户意愿：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select class="form-control" id="record_resire" name="tradeType" style="padding-left: 8px;">
+                                <option value="">请选择客户意愿</option>
+                                <option value="0">未分类</option>
+                                <option value="1">意向客户</option>
+                                <option value="2">潜在客户</option>
+                                <option value="3">试用客户</option>
+                                <option value="4">成交客户</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span style="color: red;margin-right: 5px;">*</span>跟进内容：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea name="name" id="record_content" class="form-control" rows="3" cols="28" maxlength="30" placeholder="请输入备注信息，限定30个字以内"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+                <button class="btn btn-primary submit-btn btnokprojectile-frame"  id="set_note_click" type="button">确 定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除订单弹框-->
+<div class="modal fade" id="del_order" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+           <span aria-hidden="true">×</span>
+         </button>
+         <h4 class="modal-title" id="mySemanticlabel">
+           操作提示
+         </h4>
+       </div>
+       <div class="modal-body modal-body-tips">
+         确定删除当前订单？
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">   取 消		</button>
+         <button type="button" class="btn btn-primary" id="confirmDelOrder" data-id = "" onclick="confirmDelOrder(this);">	确 定    </button>
+       </div>
+     </div>
+   </div>
+ </div>

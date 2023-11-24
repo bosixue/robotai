@@ -1,0 +1,136 @@
+
+.pz_zhi{
+	margin: 0px 8px;
+}
+.table tbody>tr>td{
+	padding: 12px 8px!important;
+}
+
+.rechargebtn{
+	border: 1px solid;
+	padding: 4px 12px;
+	border-radius: 3px;
+}
+
+.l-rechargedate{
+	margin-left: 30px;
+}
+
+.l-word{
+	padding: 6px 10px 6px 10px;
+}
+
+.l-search{
+	width: 140px!important;
+}
+
+label{
+	margin-bottom: 0px;
+}
+
+.l-group{
+	padding: 0px 30px;
+}
+
+.navbar{
+	margin-bottom: 6px;
+}
+
+.operationbtn{
+	margin-left: 15px;
+}
+
+.l-textarea{
+	width:100%;
+	border-radius: 3px;
+	border: solid 1px #cfdadd;
+}
+
+.account{
+	margin-right: 10px;
+}
+
+.account  select{
+	width: 180px!important;
+}
+
+.c_datebgimg {
+  background: url(../img/xuanzeriqi.png) 94% 50% no-repeat;
+}
+
+@media (max-width:1155px){
+	.account select{
+		width:160px!important;
+	}
+	.c_datebgimg{
+		width: 160px!important;
+
+	}
+}
+
+@media (max-width:1100px){
+	.account select{
+		width:140px!important;
+	}
+	.c_datebgimg{
+		width: 140px!important;
+	}
+}
+
+@media (max-width:1040px){
+	.account select{
+		width:120px!important;
+	}
+	.c_datebgimg{
+		width: 120px!important;
+	}
+}
+
+@media (max-width:1370px){
+	.l-search{
+		width:140px!important;
+	}
+}
+
+@media (max-width:1375px){
+	.l-search{
+		width:140px!important;
+	}
+
+	.l-group{
+	padding: 0px 20px;
+	}
+
+	.operationbtn{
+		margin-left: 20px;
+	}
+}
+
+@media (max-width:1270px){
+	.l-group{
+	padding: 0px 15px;
+	}
+
+	.operationbtn{
+		margin-left: 15px;
+	}
+}
+
+@media (max-width:1250px){
+	.l-group{
+	padding: 0px 15px;
+	}
+
+	.operationbtn{
+		margin-left: 0px;
+		padding: 5px 0px;
+	}
+}
+
+@media (max-width: 768px){
+	.form-inline .form-group {
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+}

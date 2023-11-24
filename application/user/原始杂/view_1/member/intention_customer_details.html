@@ -1,0 +1,1185 @@
+{extend name="public/base" /}
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/intention_customer_details.css" rel="stylesheet" type="text/css" />
+<style>
+#sidebar-nav > ul > li:nth-child(6) > ul > li:nth-child(1) > a.pz_colorf > span {
+    color: #1279d2;
+}
+.dflex {
+    display: flex; 
+    display: -webkit-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+}
+.pr {
+    position: relative;
+}
+.l-height {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+.l-dateSelbg{
+	width: 100%;
+}
+.form-group .pz_marBottom{
+  margin-bottom: 25px;
+  height: 34px;
+  line-height: 34px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.pz_marBottom span{
+  cursor: auto;
+}
+.pz_marBottom span input{
+  width:65% !important;
+  font-size:14px;
+  border-radius: 3px;
+	border: solid 1px #e0e2e4;
+
+  padding:6px 12px;
+}
+.pz_marBottom span select{
+  padding:6px 12px;
+}
+.form-control{
+  height:32px;
+}
+
+.pz_marBottom span input.pz_bornone,
+.pz_marBottom span input.pz_bornone:hover,
+.pz_marBottom span input.pz_bornone:focus,
+.pz_marBottom span select.pz_bornone,
+.pz_marBottom span select.pz_bornone:hover,
+.pz_marBottom span select.pz_bornone:focus{
+  border:none !important;
+  outline: 0;
+  box-shadow: none;
+  cursor: auto;
+  padding:0px !important;
+}
+
+.pz_bianjiInfo,
+.pz_baocunInfo{
+  margin-top:0px;
+}
+
+.resetSel {
+    background-clip: padding-box;
+    border-color: #e0e3e4;
+    color: #404040;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.c_selectimg {
+    background: url(/public/img_sj/jiantou.png) 94% 50% no-repeat;
+}
+.pull-left.form-inline.col-lg-12.col-sm-12 > div.form-group.col-lg-5.col-sm-5 > div.pz_khlxship{
+  width:64%;
+}
+@media screen and (max-width:1378px) {
+  .pull-left.form-inline.col-lg-12.col-sm-12 > div.form-group.col-lg-5.col-sm-5 > div.pz_khlxship{
+    width:46%;
+  }
+}
+@media screen and (max-width:1200px) {
+  .customer-details {
+    padding: 6px 7px 12px 14px;
+  }
+  .pz_marBottom span input{
+    width: 49% !important;
+  }
+}
+</style>
+<div class="row">
+    <div class="col-lg-12 hide" style="padding:0px;">
+        <div class="main-box clearfix fadeInRight animated">
+            <header class="main-box-header clearfix">
+                <header class="main-box-header n_head_box n_head_box_b clearfix">
+                    <div class="pull-left">
+                        <a class="details_title" href="javascript:history.back(1);"><img src="/public/img/pz_fanhui.png">返回上一级</a>
+                    </div>
+                </header>
+            </header>
+        </div>
+    </div>
+    <div class="l-height">
+        <div class="left-robot-list col-xs-5 col-md-5 fadeInRight animated">
+            <header class="main-box-header n_head_box_b clearfix customer-details-title" style="padding-top:18px;">
+              <div class="pull-left"> <span class="n_panel_title"><img src="/public/img/yxkh_kehuxiangqing.png">客户详情</span></div>
+              <div class="pull-right edit hide">
+                <a class="editcustomer" href="javascript:void(0);" onclick="customer_edit1({$id});">
+                  <img src="/public/img/pz_bianji.png" style="width: 13px;">编辑客户
+                </a>
+              </div>
+            </header>
+            <div class="pull-left col-lg-12 col-sm-12 customer-details">
+                <div class="form-group col-lg-6 col-sm-6">
+                    <p class="pz_marBottom">客户姓名： <span class="form-inline">
+                    	<input disabled="true" class="form-control pz_bornone" type="text" name="name" value="{$info.name}" id="name"></span></p>
+                    <p class="pz_marBottom">联系电话： <span id="id_phone">{$info.phone}</span></p>
+                    <input type='hidden' id='crm_id' value="{$info.id}">
+                    <p class="pz_marBottom">创建时间： <span>{$info.create_time|date='Y-m-d H:i',###}</span></p>
+                    <p class='hide'>意向等级:
+                      <span>{switch name="info.crm_cate"}
+        						    {case value="0"}未分类{/case}
+        						    {case value="1"}意向客户{/case}
+        						    {case value="2"}潜在客户{/case}
+        						    {case value="3"}试用客户{/case}
+        						    {case value="4"}成交客户{/case}
+        						    {default /}default
+        						  {/switch}</span>
+                    </p>
+                </div>
+                <div class="form-group col-lg-6 col-sm-6">
+                    <p class="pz_marBottom">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
+                      <span class="form-inline">
+                      	<select disabled="true" name="crm_cate" class="form-control pz_bornone resetSel" style="width: 70px;" id="sex">
+                          <option value="男" {if condition="$info.sex=='男'" } selected="selected" {/if}> 男</option>
+                          <option value="女" {if condition="$info.sex=='女'" } selected="selected" {/if}>女</option>
+                          <option value="未知" {if condition="$info.sex=='未知'" } selected="selected" {/if}>未知</option>
+                        </select>
+                      </span>
+                    </p>
+                    <p class="pz_marBottom">公司名称： <span class="form-inline">
+                    	<input disabled="true" class="form-control pz_bornone" type="text" name="" value="{$info.compay_name}" id="corporate-name"></span></p>
+                    <p class="pz_marBottom">最后跟进时间： <span>{if $end_up_time eq ''}暂无更新{else}{$end_up_time|date='Y-m-d H:i',###}{/if}</span></p>
+                </div>
+                <div class="form-group col-lg-12 col-sm-12 btn-style pz_bianjiInfo">
+                    <button class="btn btn-primary" type="button" name="button"  style="padding: 4px 20px;" >编辑</button>
+                </div>
+                <div class="form-group col-lg-12 col-sm-12 btn-style pz_baocunInfo hide">
+                    <button class="btn btn-primary" type="button" name="button"  style="padding: 4px 20px;" onclick="customer_edit2({$id})">保存</button>
+                </div>
+                <div hidden="true" id="noly_id">{$id}</div>
+            </div>
+        </div>
+        <div class="right-robot-list col-xs-5 col-md-5 fadeInRight animated">
+            <header class="main-box-header n_head_box_b clearfix customer-details-title" style="padding-top:18px;">
+                <div class="pull-left"> <span class="n_panel_title"><img src="/public/img/pz_genjin.png" alt="">客户跟进</span></div>
+            </header>
+            <div class="pull-left col-lg-12 col-sm-12 customer-details">
+                <div class="form-group col-lg-12 col-sm-12">
+                    <div class="pull-left form-inline col-lg-12 col-sm-12 " style="padding-left:2px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+
+                        <div class="form-group col-lg-5 col-sm-5" style="padding:0px;">
+                            <label class="pull-left l-date" style="line-height: 34px;height:34px;">客户类型：</label>
+                            <div class="pull-left pz_khlxship">
+                                <select name="crm_cate" id="crm_catex" class="form-control c_selectimg resetSel" style="height: 34px;width:100%;border-radius: 3px;">
+                                    <option value="0" {if condition="$info.crm_cate==0" } selected="selected" {/if}>未分类</option>
+                                    <option value="1" {if condition="$info.crm_cate==1" } selected="selected" {/if}>意向客户</option>
+                                    <option value="2" {if condition="$info.crm_cate==2" } selected="selected" {/if}>潜在客户</option>
+                                    <option value="3" {if condition="$info.crm_cate==3" } selected="selected" {/if}>试用客户</option>
+                                    <option value="4" {if condition="$info.crm_cate==4" } selected="selected" {/if}>成交客户</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="pull-left l-date l-left" style="line-height: 34px;padding-left:20px;">上次跟进时间：</label>
+                            <div class="pull-left">
+                                <span id="shangci_time" style="line-height: 34px;height:34px;color:#404040;font-size:14px;">{if empty($end_up_time)}{$info.create_time|date='Y-m-d H:i',###}{else}{$end_up_time|date='Y-m-d H:i',###}{/if}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pull-left form-group col-lg-12 col-sm-12 " style="padding-left:2px;margin-top:15px;margin-bottom:;">
+                        <p style="margin-bottom:13px;">请输入跟进情况：</p>
+                        <textarea id="details-followup" row='20' ols="90" style="padding: 7px;min-height: 100px;"></textarea>
+                    </div>
+                    <div class="form-group col-lg-12 col-sm-12 btn-style" style="margin-bottom:0px;">
+                        <button class="btn btn-primary" type="button" name="submit" onclick="set_note({$id});" style="padding: 4px 20px;">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="recorddetails col-xs-12 col-md-12 fadeInRight animated pz_manping_height" style="margin-bottom: 20px;">
+        <div class=" spin-container" id="spinContainer">
+            <ul class="nav nav-tabs tabul" role="tablist" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"> <a href="#recordshow" aria-controls="recordshow" role="tab" data-toggle="tab" id="genjin">客户跟进记录</a></li>
+                <li role="presentation"> <a href="#callrecord" aria-controls="callrecord" role="tab" data-toggle="tab" id="tonghua">客户通话记录</a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <!--客户跟进记录-->
+            <div class="record tab-pane active" id="recordshow">
+                <!-- <div style="overflow-x:scroll;height: 201px;-->
+                <!--width: 50%;" role="tabpanel" id="recordshow2">-->
+                <!-- </div>-->
+                <!--<div class="recordshow">-->
+                <!-- <i class="circle"></i>-->
+                <!-- <span class="time">2018-11-11</span>-->
+                <!-- <p class="recordinfo">这里是2018年这里是2018年这里是2018年这里是2018年这里-->
+                <!-- 是2018年这里是2018年这里是2018年这里是2018年这里是2018年-->
+                <!-- 这里是2018年这里是2018年这里是2018年这里是2018年这里是-->
+                <!-- 2018年这里是2018年</p>-->
+                <!--</div>-->
+            </div>
+            <!-- 加载更多 -->
+            <div id="loading">点击加载更多</div>
+            <!--客户通话记录-->
+            <div class="callrecord tab-pane " role="tabpanel" id="callrecord">
+                <div class="main-box-body clearfix">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <!--<th class="text-center">-->
+                                        <!--<input class="check-all flow-label" name='all_checked' type="checkbox" onclick="checkAll()" />-->
+                                    <!--</th>-->
+                                    <th class="text-center">序号</th>
+                                    <th class="text-center">号码</th>
+                                    <th class="text-center">通话时间</th>
+                                    <th class="text-center">通话状态</th>
+                                    <th class="text-center">通话时长</th>
+                                    <!--<th class="text-center">备注</th>-->
+                                    <th class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="call_list">
+                                <!--<tr>-->
+                                <!-- <td class="text-center">-->
+                                <!-- <input type='checkbox' name='all_checked' onclick="all_check()" class='flow-label' />-->
+                                <!-- </td>-->
+                                <!-- <td class="text-center">1</td>-->
+                                <!-- <td class="text-center">15236983695</td>-->
+                                <!-- <td class="text-center">2018-11-11</td>-->
+                                <!-- <td class="text-center">已接通</td>-->
+                                <!-- <td class="text-center">20分钟</td>-->
+                                <!-- <td class="text-center">有意向在犹豫</td>-->
+                                <!-- <td class="text-center">-->
+                                <!-- <a href="javascript:void(0);" onclick="">播放记录</a>-->
+                                <!-- <a href="javascript:void(0);" onclick="customer_delete();">删除</a>-->
+                                <!-- </td>-->
+                                <!--</tr>-->
+                            </tbody>
+                        </table>
+                        <!--<div class="row">-->
+                        <!-- <div class="col-sm-4 text-left"></div>-->
+                        <!-- <div class="col-sm-8 text-right"></div>-->
+                        <!--</div>-->
+                        <footer id="modalpagebody" class="main-box-footer clearfix">
+                            <!--<div class="pull-left">-->
+                            <!-- <input class="check-all" onclick="allcheck();" type="checkbox"/>选择全部记录(已选择0条记录)-->
+                            <!-- <button class="btn btn-batchdelet" target-form="ids" onclick="customer_delete();">-->
+                            <!-- <img src="/public/img/piliangshanchu.png" alt="">-->
+                            <!-- 批量删除-->
+                            <!-- </button>-->
+                            <!--</div>-->
+                            <!--<div class="pull-right" id="modalpagebody">-->
+                            <!-- <span>全部数据0条</span>-->
+                            <!--</div>-->
+                        </footer>
+                        <div class="pull-right h_page" style="margin-left:8px">
+                            <!--<input type="checkbox" class="member_check rolecheck all_checked_count" name="checkedAll" onclick="checkAll1()">全 选</div>-->
+                        <div class="paging"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑客户弹窗-->
+<!--
+<div class="modal fade" id="customer-add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:450px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> <span aria-hidden="true">×</span>
+
+                </button>
+                 <h4 class="modal-title" id="myCustomerAddLabel">
+        编辑客户
+        </h4>
+
+            </div>
+            <div class="modal-body l-modal-body">
+                <form id="addblacklist-number" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>客户名称：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="name" id="name" placeholder="请输入姓名" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">性别：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select name="sex" id="sexxx" class="form-control">
+                                <option value="">请选择</option>
+                                <option value="未知">未知</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label"><span class="asterisk">*</span>联系电话：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="phone" placeholder="请输入联系电话" id="phone" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">公司名称：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <input type="text" class="form-control" name="compay_name" placeholder="请输入公司名称" id="corporate-name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">客户分类：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <select class="form-control" name="crm_cate" id="crm_cate">
+                                <option value="0">未分类</option>
+                                <option value="1">意向客户</option>
+                                <option value="2">潜在客户</option>
+                                <option value="3">试用客户</option>
+                                <option value="4">成交客户</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">备注：</label>
+                        <div class="col-lg-7 col-sm-7">
+                            <textarea id="blacklist-remark1" name="note" rows="2" cols="32" maxlength="30" placeholder="请输入备注信息，限定30个字以内"></textarea>
+                             <span id="text-count" value="">0</span>/30
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="users_add" onclick="customer_edit2({$id})">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+-->
+<!--导出提示-->
+<div class="modal fade" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:340px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> <span aria-hidden="true">×</span>
+
+                </button>
+                 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+				 </h4>
+
+            </div>
+            <div class="modal-body modal-body-tips l-modal-body">确定要导出所选数据？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="delRole(0);">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--批量删除提示-->
+<div class="modal fade" id="customer-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" style="width:340px; ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> <span aria-hidden="true">×</span>
+
+                </button>
+                 <h4 class="modal-title" id="myModalLabel">
+					 操作提示
+				 </h4>
+
+            </div>
+            <div class="modal-body modal-body-tips l-modal-body">确定要删除所选数据？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="delete_call" onclick="delete_one()">确定</button>
+            </div>
+        </div>
+    </div>></div>
+<script>
+$("#genjin").click(function () {
+    $("#loading").show();
+});
+$("#tonghua").click(function () {
+    $("#loading").hide();
+});
+
+// 客户详情  编辑
+$('.pz_bianjiInfo button').click(function(){
+  $('.pz_bianjiInfo').addClass('hide');
+  $('.pz_baocunInfo').removeClass('hide');
+  $('.pz_marBottom span input').removeClass('pz_bornone');
+  $('.pz_marBottom span select').removeClass('pz_bornone');
+  $('#sex').addClass('c_selectimg');
+  $('.pz_marBottom span input').attr('disabled',false);
+  $('.pz_marBottom span select').attr('disabled',false);
+
+});
+
+// 客户详情编辑之后  保存
+$('.pz_baocunInfo button').click(function(){
+  $('.pz_baocunInfo').addClass('hide');
+  $('.pz_bianjiInfo').removeClass('hide');
+  $('#sex').removeClass('c_selectimg');
+  $('.pz_marBottom span input').addClass('pz_bornone');
+  $('.pz_marBottom span select').addClass('pz_bornone');
+  $('.pz_marBottom span input').attr('disabled',true);
+  $('.pz_marBottom span select').attr('disabled',true);
+
+});
+
+
+//提交跟进
+
+function set_note(id) {
+    var content = $('#details-followup').val();
+    if (!content) {
+        alert('请填写跟进记录');
+        return false;
+    }
+    var startDate = $('#startDate').val(); //跟进日期
+    var crm_cate = $('#crm_catex').val();
+    $.ajax({
+        type: 'POST',
+        url: '/user/Member/followup_add',
+        data: {
+            'content': content,
+            'id': id,
+            'crm_cate': crm_cate,
+            'startDate': startDate
+        },
+        success: function (data) {
+            //1成功 0失败  成功后 清空
+            if (data.code == 1) {
+                alert(data.msg);
+                //成功后刷新
+                window.location.reload()
+            } else {
+                alert(data.msg);
+
+            }
+        }
+    })
+}
+
+function timestampToTime(timestamp) {
+    var date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    var Y = date.getFullYear();
+    var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+    var D = date.getDate();
+    if (D < 10) {
+        D = '0' + D;
+    }
+    var h = date.getHours();
+    if (h < 10) {
+        h = '0' + h;
+    }
+    var m = date.getMinutes();
+    if (m < 10) {
+        m = '0' + m;
+    }
+    var s = date.getSeconds();
+    if (s < 10) {
+        s = '0' + s;
+    }
+    return Y + '-' + M + '-' + D + '  ' + h + ':' + m + ':' + s;
+}
+//客户跟进记录
+$(function () {
+    //var
+    var $id = $('#noly_id').text();
+    console.log($id);
+    //渲染数据集合dom
+    var list = $("#recordshow");
+    //加载更多dom
+    var loadingBtn = $("#loading");
+    //是否需要加载
+    var isLoad = true;
+    //当前查询第几页
+    var currentPage = 1;
+    //没有更多数据
+    var nomore_Text = '<div class="recordshow" style="border-left: 1px solid #e0e0e0;min-height: calc(15vh);"><i class="circle"></i><p class="recordinfo">没有更多数据</p></div>';
+
+    var url = '/user/Member/ajax_uplist'
+
+        function loadData() {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    'currentPage': currentPage,
+                    'id': $id
+                },
+                success: sucessCallback,
+                error: function (e) {}
+            });
+        }
+
+        function sucessCallback(data) {
+            var crm_cate = data.data.crm_cate; //客户意向等级
+            console.log(data);
+            var pageCount = data.data.pageCount;
+            var pageNo = data.data.pageNo;
+            var data = data.data.list;
+
+            if(data.length <= 0){
+              loadingBtn.html(nomore_Text);
+            } else {
+              //当前页自增
+              currentPage++;
+              //
+              var html = '',
+                  result = data,
+                  len = result.length,
+                  i = 0;
+              //循环数据
+              for (; i < len; i++) {
+                  var rs = result[i];
+                  var time = rs.create_time; //客户跟进的时间
+                  var id = rs.id; //客户跟进的id  crm表中的id
+                  var note = rs.note; //客户跟进的内容
+
+                  html += '<div class="recordshow">' + '<i class="circle"></i>' +
+                      '<span class="time"><b style="font-weight:600;">客户类型：</b>' + crm_cate +
+                      '</span><span class="time" style="color: #909090;">' + timestampToTime(time) + '</span>' +
+                      '<p class="recordinfo">' + note + '</p>' + '</div>';
+              }
+              //渲染数据
+              list.append(html);
+              //接口是否查询完毕
+              if (pageCount == pageNo || currentPage > pageCount) {
+                  //数据全部加载完毕
+                  isLoad = false;
+                  //
+                  // loadingBtn.html(nomore_Text);
+              }
+            }
+        }
+        /*
+        判断是否要加载接口
+    */
+        function isScrollLoad() {
+            //加载更多距离
+            var btn_top = loadingBtn.offset().top;
+            //窗体高度
+            var window_height = $(window).height();
+            //滚动距离
+            var scroll_Top = $(window).scrollTop();
+            //加载更多高度
+            var loading_height = loadingBtn.height();
+            //是否需要加载(底部距离是否小于窗口高度+滚动的距离)
+            return btn_top < scroll_Top + window_height - (loading_height - 5) ? true : false;
+        }
+        /*
+        滚动事件监听
+    */
+        $(window).scroll(function () {
+            //是否滚动到底部
+            var _needload = isScrollLoad();
+            //
+            if (_needload && isLoad) {
+                //加载数据
+                loadData();
+            }
+        });
+
+    /*
+        页面加载完毕执行一次查询
+    */
+    window.onload = function () {
+        //加载数据
+        loadData();
+    };
+
+    /*
+        点击加载更多
+    */
+    loadingBtn.click(function () {
+        //是否加载数据
+        if (isLoad)
+            loadData();
+    });
+    ajax_call_list(1);
+    // loadData();
+})
+
+function ajax_call_list(page) {
+    var id_phone = $('#id_phone').text(); //使用电话 查询表tel_call_record 的通话记录
+    var crm_id=$('#crm_id').val();
+    var limit = $('.limit').val(); //自定义 分页限制
+    $.ajax({
+        type: 'POST',
+        url: '/user/Member/ajax_call_list',
+        data: {
+            'id_phone': id_phone,
+            'crm_id':crm_id,
+            'page': page,
+            'limit': limit
+        },
+        success: function (data) {
+            console.log(data);
+            var total = data.data.total; //总条数
+            var Nowpage = data.data.Nowpage; //当前页码
+            var page = data.data.page; //总页数
+            window.totalPage = page; //总页数给全局
+            var dataList = data.data.list; //分页后的数据
+            var limit = data.data.limit; //每页的分页条数
+            var Sring = '';
+            var len = dataList.length;
+            //循环数据
+            for (var i =0; i < len; i++) {
+                var rs = dataList[i];
+                //<td class="text-center"><input type="checkbox" class="member_check rolecheck" value="' +
+                    // rs.id + '" name="checkids" /> </td>
+                Sring += ' <tr>' + '<td class="text-center">' + rs.id + '</td>' +
+                    '<td class="text-center">' + rs.mobile + '</td>' + '<td class="text-center">' + timestampToTime(rs.last_dial_time) +
+                    '</td>' + '<td class="text-center">' + getStatusName(rs.status) + '</td>' +
+                    '<td class="text-center">' + rs.duration + '</td>-->' + '<td class="text-center">' +
+                    '<a href="javascript:void(0);" onclick="gotoDetail(' + rs.mobile + ',' + rs.task_id + ',' + rs.id +
+                    ',\'record\');">通话详情</a>&nbsp;&nbsp;' + '</td>' + '</tr>';
+                    //'<a href="javascript:void(0);" onclick="customer_delete(' +
+                    // rs.id + ');">删除</a>' + 
+            }
+            //渲染数据
+            $('#call_list').html(Sring);
+            //Nowpage  当前页
+            //total    数据总条数
+            //page    总共页数
+            //limit    分页数量
+            paging(Nowpage, total, page, limit);
+        },
+        error: function (e) {}
+    });
+}
+//会员状态，0 未分配 1已分配 2已接通  3无人接听 4停机 5空号 6正在通话中 7 关机  8用户拒接  9网络忙 10 来电提醒   11 呼叫转移失败
+
+function getStatusName(status) {
+    var statusName = '';
+    switch (status) {
+    case 0:
+        statusName = "未分配";
+        break;
+    case 1:
+        statusName = "已分配";
+        break;
+    case 2:
+        statusName = "已接通";
+        break;
+    case 3:
+        statusName = "无人接听";
+        break;
+    case 4:
+        statusName = "停机";
+        break;
+    case 5:
+        statusName = "空号";
+        break;
+    case 6:
+        statusName = "正在通话中";
+        break;
+    case 7:
+        statusName = "关机";
+        break;
+    case 8:
+        statusName = "用户拒接";
+        break;
+    case 9:
+        statusName = "网络忙";
+        break;
+    case 10:
+        statusName = "来电提醒";
+        break;
+    case 11:
+        statusName = "呼叫转移失败";
+        break;
+    }
+    return statusName;
+}
+
+function pages(total, page, Nowpage) {
+    var prepage = Number(Nowpage) - 1;
+    if (prepage == 0) {
+        prepage = 1;
+    }
+    var nextpage = Number(Nowpage) + 1;
+    var str = '<div class="row">' +
+        '<div class="pull-left" style="margin-left:8px">已选中 <span id="check_count">0</span> 条客户通话记录</div>' +
+        '<div class="col-sm-7 text-right pull-right">' + '<p>全部记录：' + total + '条</p>' + '<ul class="pagination">';
+
+    if (Nowpage == 1) {
+        str += '<li id="prevbtn" class="disabled"><span>«</span></li> ';
+    } else {
+        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + prepage + ');"><span>«</span></a></li> ';
+    }
+
+    if (page > 10) {
+
+        if (Nowpage < 7) {
+            for (var i = 0; i < page; i++) {
+                var nownum = i + 1;
+                if (nownum < 9) {
+                    if (nownum == Nowpage) {
+                        str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum +
+                            ');">' + nownum + ' </a></li> ';
+                    } else {
+                        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                            ' </a></li> ';
+                    }
+                }
+
+                if (nownum == 9 && nownum != Nowpage) {
+                    str += '<li class="disabled"><span>...</span></li>';
+                } else if (nownum == 9) {
+                    str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' +
+                        nownum + '</a></li> ';
+                }
+
+                if (nownum > (page - 2)) {
+                    if (nownum == Nowpage) {
+                        str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum +
+                            ');">' + nownum + ' </a></li> ';
+                    } else {
+                        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                            ' </a></li> ';
+                    }
+                }
+
+            }
+        } else if (Nowpage > 6 && Nowpage < (page - 6)) {
+            for (var i = 0; i < page; i++) {
+                var nownum = i + 1;
+                var Nowpage = parseInt(Nowpage);
+                if (nownum < 3) {
+                    str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                        ' </a></li> ';
+                }
+
+                if ((nownum > Nowpage - 5) && (nownum < Nowpage + 5)) {
+
+                    if (nownum == (Nowpage - 4)) {
+                        str += '<li class="disabled"><span>...</span></li>';
+                    }
+
+                    if (nownum > (Nowpage - 4) && nownum < Nowpage) {
+                        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                            '</a></li>';
+                    }
+
+                    if (nownum == Nowpage) {
+                        str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum +
+                            ');">' + nownum + '</a></li>';
+                    }
+
+                    if (nownum < (Nowpage + 4) && nownum > Nowpage) {
+                        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                            '</a></li>';
+                    }
+
+                    if (nownum == (Nowpage + 4)) {
+
+                        str += '<li class="disabled"><span>...</span></li>';
+                    }
+                }
+
+                if (nownum > (page - 2)) {
+                    var Nowpage = parseInt(Nowpage);
+                    if (nownum == Nowpage) {
+                        str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum +
+                            ');">' + nownum + '</a></li>';
+                    } else {
+                        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                            '</a></li> ';
+                    }
+
+                }
+
+            }
+        } else {
+            for (var i = 0; i < page; i++) {
+                var nownum = i + 1;
+                if (nownum < 3) {
+                    str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                        ' </a></li>';
+                }
+                if (nownum == (page - 10) && nownum != Nowpage) {
+                    str += '<li class="disabled"><span>...</span></li>';
+                } else if (nownum == (page - 10) && nownum == Nowpage) {
+                    str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' +
+                        nownum + '</a></li>';
+                }
+
+                if (nownum > (page - 10)) {
+                    if (nownum == Nowpage) {
+                        str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum +
+                            ');">' + nownum + '</a></li> ';
+                    } else {
+                        str += '<li ><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                            '</a></li>';
+                    }
+                }
+            }
+        }
+    } else {
+        for (var i = 0; i < page; i++) {
+            var nownum = i + 1;
+            if (nownum == Nowpage) {
+                str += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' +
+                    nownum + ' </a></li> ';
+            } else {
+                str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nownum + ');">' + nownum +
+                    ' </a></li> ';
+            }
+        }
+    }
+
+    if (Nowpage == page) {
+        str += '<li id="prevbtn" class="disabled"><span>»</span></li> ';
+    } else {
+        str += '<li><a href="javascript:void(0);" onclick="ajax_call_list(' + nextpage + ');"><span>»</span></a></li>';
+    }
+
+    str += '</ul>' + '</div>' + '</div>'
+
+    $("#modalpagebody").find("div").remove();
+    $("#modalpagebody").append(str);
+}
+
+function checkAll() {
+    if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+        $("input[name='checkids'][type='checkbox']").prop("checked", true);
+    } else {
+        $("input[name='checkids'][type='checkbox']").prop("checked", false);
+    }
+}
+
+function checkAll1() {
+    if ($("input[name='checkedAll'][type='checkbox']").is(":checked")) {
+        $("input[name='checkids'][type='checkbox']").prop("checked", true);
+    } else {
+        $("input[name='checkids'][type='checkbox']").prop("checked", false);
+    }
+}
+//new 编辑客户之 显示数据
+
+function customer_edit1(id) {
+    //用ajax读取编辑客户的信息
+    var url = "{:url('Member/get_data_by_id')}";
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+            'id': id,
+        },
+        success: function (data) {
+            console.log(data);
+            if (data.code == 0) {
+                alert(data.msg)
+                return false;
+            } else {
+                var obj = data.data;
+                $('#customer-add').modal('show');
+                //$('#name').val(obj.name); 编辑时候不能修改姓名
+                //性别
+                if (obj.sex === '未知') {
+                    $('#sex option:eq(1)').prop("selected", true);
+
+                }
+                if (obj.sex === '男') {
+                    $('#sex option:eq(2)').prop("selected", true);
+                }
+                if (obj.sex == '女') {
+                    $('#sex option:eq(3)').prop("selected", true);
+                }
+                //$('#phone').val(obj.phone); 编辑时候不能修改电话
+                $('#corporate-name').val(obj.compay_name);
+                //客户意向  crm_cate   客户分类  0：未分类  1：意向客户   2：潜在客户   3：试用客户   4：成交客户
+                if (obj.crm_cate == 0) {
+                    $('#crm_cate option:eq(0)').prop("selected", true);
+                }
+                if (obj.crm_cate == 1) {
+                    $('#crm_cate option:eq(1)').prop("selected", true);
+                }
+                if (obj.crm_cate == 2) {
+                    $('#crm_cate option:eq(2)').prop("selected", true);
+                }
+                if (obj.crm_cate == 3) {
+                    $('#crm_cate option:eq(3)').prop("selected", true);
+                }
+                if (obj.crm_cate == 4) {
+                    $('#crm_cate option:eq(4)').prop("selected", true);
+                }
+
+                $('#blacklist-remark1').val(obj.note);
+
+            }
+        }
+    });
+
+
+}
+//new  编辑客户  之后台逻辑
+
+function customer_edit2(id) {
+    var url = '{:url("Member/add_intentional_member")}';
+    var name = $("#name").val(); //客户名称
+    var sex = $('#sex').val(); //性别
+
+   // var phone = $("#phone").val(); //电话
+   //var crm_cate = $('#crm_cate').val(); //客户分类
+    var compay_name = $('#corporate-name').val(); //公司名称
+    //var note = $('#blacklist-remark1').val(); //备注
+
+    /* 修改不能修改电话姓名
+    if (!name) {
+        alert("客户名称不能为空");
+        return false;
+    }
+
+    if (!phone) {
+        alert("电话不能为空");
+        return false;
+    }
+    if (!isPhoneNo(phone)) {
+        alert("电话不正确");
+        return false;
+    }*/
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: {
+            'id': id,
+            'sex': sex,
+            'name':name,
+            'compay_name': compay_name,
+        },
+        success: function (data) {
+            //0是失败
+            if (data.code == 0) {
+                $('#customer-add').modal('hide');
+                alert(data.msg);
+
+            } else {
+                $('#customer-add').modal('hide');
+                alert(data.msg);
+                //编辑成功刷新页面
+                window.location.reload()
+            }
+        }
+
+    });
+}
+// 验证手机号
+
+function isPhoneNo(phone) {
+    var pattern = /^1[34578]\d{9}$/;
+    return pattern.test(phone);
+}
+//old 编辑客户
+
+function customer_edit() {
+    $('#customer-add').modal('show');
+    $('#users_add').unbind('click'); //释放点击事件
+    $('#users_add').on('click', function (e) {
+        var name = $('#customer-name').val(); //客户名称
+        var sex = $('#scenarios_id1 option:selected').val(); //性别
+        var phone = $('#phone').val(); //电话
+        var compay_name = $('#corporate-name').val(); //公司名称
+        var note = $('#blacklist-remark1').val(); //备注信息
+        if (name == '' || phone == '') {
+            alert('客户名称或联系电话不能为空');
+            return false;
+        } else if (isPhoneNo(phone) == false) {
+            alert('联系电话格式不正确');
+            return false;
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: '/user/Member/customer_edit',
+                data: {
+                    'name': name,
+                    'sex': sex,
+                    'phone': phone,
+                    'compay_name': compay_name,
+                    'note': note,
+                    'type': type
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.code == 1) {
+                        alert(data.msg);
+                        $('#customer-add').modal('hide');
+                        ajax_member(1);
+                        return false;
+                    } else if (data.code == 0) {
+                        alert(data.msg);
+                        $('#customer-add').modal('hide');
+                        ajax_member(1);
+                    }
+                }
+            })
+        }
+    })
+}
+
+//导出数据
+
+function import_data() {
+    $('#import-data').modal('show');
+}
+
+//删除显示弹框
+
+function customer_delete(id) {
+    $('#customer-delete').modal('show');
+    window.delete_id = id;
+}
+//删除 逻辑执行
+
+function delete_one() {
+    $.ajax({
+        type: 'POST',
+        url: '/user/Member/delete_call',
+        data: {
+            'id': delete_id
+        },
+        success: function (data) {
+            console.log(data);
+            //codel=1 为删除成功 刷新页面
+            if (data.code == 1) {
+                alert(data.msg);
+                ajax_call_list(1)
+                $('#customer-delete').modal('hide');
+            } else {
+                alert(data.msg);
+                $('#customer-delete').modal('hide');
+            }
+        }
+    })
+
+}
+//跳转
+
+function go_up(page, limit) {
+    paging(page, window.total, window.totalPage, limit);
+    ajax_call_list(page);
+}
+//Nowpage  当前页
+//count    数据总条数
+//total    总共页数
+//limit    分页数量
+//分页
+
+function paging(page, count, show_count, limit) {
+    page = parseInt(page);
+
+    limit = parseInt(limit);
+    var page_count = Math.ceil(count / limit);
+    // debugger;
+    var html = '';
+    //偶数
+    if (show_count % 2) {
+        // cha =
+        //奇数
+    } else {
+
+    }
+    window.limit = limit;
+    console.log(limit);
+    var start = page - 2;
+    var end = page + 2;
+    if (start < 1) {
+        end = end - start;
+        start = 1;
+
+    }
+    if (end > page_count) {
+        end = page_count;
+    }
+    var limits = [
+    10,
+    30,
+    50,
+    100
+    ];
+    html += '<div>';
+    html += '<ul class="pagination">';
+    html += '<div style="font-size: 12px;display: inline-block;">';
+    html +=
+        '<select class="limit" onchange="limitSet(this);" style="width: 80px;margin: 0px 8px;height:32px;background:#fff;border:1px solid #ddd;">';
+    for (var i = 0; i < limits.length; i++) {
+        if (limits[i] == limit) {
+            html += '<option value="' + limits[i] + '" selected="selected">' + limits[i] + '条/页</option>';
+        } else {
+            html += '<option value="' + limits[i] + '">' + limits[i] + '条/页</option>';
+        }
+    }
+    html += '</select>';
+    html += '</div>';
+    html += '<div style="font-size: 12px;margin: 0px;display: inline-block;">跳至';
+    html +=
+        '<input class="Nowpage" type="number" style="width: 50px;height:32px; margin: 1px 8px;border:1px solid #ddd;border-radius: 5px;text-align: center;" value="' +
+        page + '" max="' + page_count + '" min="1">页</div>';
+    html += '<button class="btn btn-primary go_up" type="button" data-toggle="modal">确定</button>';
+    if (page === 1) {
+        html += '<li id="prevbtn" class="disabled"><span>«</span>';
+    } else {
+        html += '<li id="prevbtn" class=""><a href="javascript:void(0);" onclick="ajax_call_list(' + (page - 1) +
+            ');"><span>«</span></a>';
+    }
+    html += '</li>';
+    for (start; start <= end; start++) {
+        if (start == page) {
+            html += '<li class="active"><a href="javascript:void(0);" onclick="ajax_call_list(' + start + ')">' + start +
+                ' </a>';
+            html += '</li>';
+        } else {
+            html += '<li class=""><a href="javascript:void(0);" onclick="ajax_call_list(' + start + ')">' + start +
+                ' </a>';
+            html += '</li>';
+        }
+
+    }
+    if (page == page_count) {
+        html += '<li id="prevbtn" class="disabled"><span>»</span>';
+    } else {
+        html += '<li ><a href="javascript:void(0);" onclick="ajax_call_list(' + (page + 1) + ');"><span>»</span></a>';
+    }
+
+    html += '</li>';
+    html += '</ul>';
+    html += '<div style="font-size: 12px;float: right;margin: 14px 9px 0px 0px;display: inline-block;">';
+    html += '<span style="font-size: 12px;">总页数：<span id="all_page">' + show_count + '页</span></span>';
+    html += '</div>';
+    html += '</div>';
+
+    $('.paging').html(html);
+    $('.go_up').click(function () {
+        var index = $(this).index();
+        var limit = $(this).siblings('div').find('.limit').val();
+        var page = $(this).siblings('div').find('.Nowpage').val();
+        index = index;
+        go_up(page, limit);
+    })
+}
+
+function limitSet(obj) {
+    //页码类型换了 之后 自动跳转第一页  因为预防页码过多  比如一共300条数据 10条每页的时候翻页到30页 我弄30条每页 如果还处于30页 会出现bug 跳转第一页 可以避免这样的情况
+    paging(1, window.total, window.totalPage, $(obj).val());
+    ajax_call_list(1);
+}
+</script>
+{include file="member/crm_calldetail" /} 
+{/block}
+</div>

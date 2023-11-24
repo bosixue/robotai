@@ -1,0 +1,200 @@
+<section class="navbar navbar-default main-box-header main-head clearfix l-navbar">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="pull-left form-inline ">
+			  <label class="control-lable label-font">标签名称：</label>
+			  <input type="text" class="form-control" placeholder="请输入标签名称" id="processName">
+			  <label class="control-lable label-font marginleft">文字内容：</label>
+			  <input type="text" class="form-control" placeholder="请输入文字内容" id="process_content">
+			  <button class="btn btn-primary" onclick="show_processlabel_data();">查询</button>
+			  <button class="btn btn-primary" onclick="reset_processlabel_data();">重置</button>
+			</div>
+		</div>
+	</div>
+</section>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th class="text-center">序号</th>
+      <th class="text-center">场景节点</th>
+      <th class="text-center">流程节点</th>
+      <th class="text-center">流程标签</th>
+      <th class="text-center table-width" >文字内容</th>
+      <th class="text-center">文字类型</th>
+      <th class="text-center">标签精准查询<i class="hint" data-toggle="tooltip" title="" data-placement="top" data-original-title="通过标签进行精确筛选通话记录">?</i></th>
+    </tr>
+  </thead>
+  <tbody id="processtag_list">
+  	<!--<tr>-->
+  	<!--	<td>001</td>-->
+  	<!--	<td>开场白</td>-->
+  	<!--	<td>流程1</td>-->
+  	<!--	<td>您好</td>-->
+  	<!--	<td>录音和文字</td>-->
+  	<!--	<td><input type="checkbox" name="protag_query" class=""></td>-->
+  	<!--</tr>-->
+  	<!--<tr>-->
+  	<!--	<td>002</td>-->
+  	<!--	<td>开场白</td>-->
+  	<!--	<td>流程1</td>-->
+  	<!--	<td>您对我们的服务有什么看法</td>-->
+  	<!--	<td>文字</td>-->
+  	<!--	<td><input type="checkbox" name="protag_query" class=""></td>-->
+  	<!--</tr>-->
+  </tbody>
+</table>
+<div class="row">
+	<footer class="main-box-footer clearfix col-sm-12 process_footer">
+		<div class="pull-left">全部数据：<span id="process_label_count">2</span></div>
+		<!--<div class="pull-right " id="modalpagebody">-->
+		<!--	<div class=" pull-right"  id="prolabel_page">-->
+		<!--	</div>-->
+		<!--	<div class="text-right pull-right">-->
+		<!--		<p>总页数：1页</p>-->
+		<!--	</div>-->
+		<!--</div>-->
+		<div class="process_label_paging"></div>
+	</footer>
+</div>
+<div class="datatips datatips_know process_label_data">
+	<span>暂无相关内容</span>
+</div>
+<!--<div id="processlabel_page"></div>-->
+
+<!--鼠标移至标签精准查询时显示内容事件-->
+<script>
+  $(function() {
+	  $("[data-toggle='tooltip']").tooltip();
+	});
+</script>
+
+<!--流程标签数据显示与处理-->
+<script>
+	/**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	*/
+	var process_label_paging = new Paging01();
+	process_label_paging.init_args({
+	  page: 1, //初始页码
+	  limit: 10, //初始每页显示的数据量
+	  paging_class: 'process_label_paging', //放置分页的class
+	  callback: show_processlabel_data, //回调函数 比如show_datas(页码, 显示条数)
+	  key:2,
+	});
+	
+	//页面加载事件
+	$(function () {
+		show_processlabel_data();
+	});
+	
+	//重置操作
+	function reset_processlabel_data(){
+	  $('#processName').val('');
+	  $('#process_content').val('');
+	  show_processlabel_data();
+	}
+	
+	//获取流程标签数据
+	function show_processlabel_data(page,pagesize) {
+		var url = '{:url("get_flowlabel_list")}';
+		//获取话术id
+		var data = {};
+		if(page == '' || page == null){
+			data.page = 1;
+		}else{
+			data.page = page;
+		}
+		
+		if(pagesize == '' || pagesize == null){
+			data.pagesize = 10;
+		}else{
+			data.pagesize = pagesize;
+		}
+		data.sceneId = $('.active .Idlist').val();
+		//标签名称
+		data.processName = $('#processName').val();
+		//文字内容
+		data.process_content = $('#process_content').val();
+		console.log(data);
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			type: 'post',
+			data:data,
+			success: function(result) {
+				
+				var htmls = '';
+				$("#processtag_list").find("tr").remove();
+				$('.process_footer').hide();
+				$('.process_label_data').show();
+				if(result.code == 0) {
+					$('.process_footer').show();
+					$('.process_label_data').hide();
+					
+					for(var i = 0; i < result.data.data.length; i++){
+						var key = result.data.data[i].key;
+						var name = result.data.data[i].name;
+						var flow_label = result.data.data[i].flow_label ? result.data.data[i].flow_label : '暂无标签名';
+						var content = result.data.data[i].content ? result.data.data[i].content :'暂无相关内容';
+						var content_type = result.data.data[i].content_type ? result.data.data[i].content_type:'暂无类型';
+						var id = result.data.data[i].id;
+						var corpus_id = result.data.data[i].corpus_id;
+						var label_status = result.data.data[i].label_status;
+						var state = result.data.data[i].state;
+						var scenarios_node_name = result.data.data[i].scenarios_node_name;
+						var string = '<tr>'
+						+ '<td>'+key+'</td>'
+						+ '<td>'+scenarios_node_name+'</td>'
+						+	'<td>'+name+'</td>'
+						+	'<td>'+flow_label+'</td>'
+						+	'<td>'+content+'</td>'
+					  +	'<td>'+content_type+'</td>';
+					  if(state == '' || state == null){
+					  	string += '<td><input type="checkbox" name="protag_query" data-state="'+label_status+'" data-id="'+corpus_id+'" class="precision_query" onclick="change_state(this);"></td>';
+					  }else{
+					  	string += '<td><input type="checkbox" name="protag_query" data-state="'+label_status+'" data-id="'+corpus_id+'" checked="'+state+'" class="precision_query" onclick="change_state(this);"></td>';
+					  }
+						string += '</tr>';
+						$("#processtag_list").append(string);
+					}
+					
+					$('#process_label_count').text(result.data.count);
+  				//显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+  				process_label_paging.paging(result.data.page, result.data.count, result.data.pagesize);
+				}else if(result.code == 3){
+				  console.log('参数传递错误，话术id为空,获取流程标签失败');
+				}
+
+			},
+			error: function(e) {
+				alert('获取流程标签失败');
+			}
+		});
+	}
+	
+	// 流程标签选中事件
+	function change_state(obi){
+		var corpus_id = $(obi).attr('data-id');
+		var state = $(obi).attr('data-state');
+		if(state == 1){
+			state = 0;
+		}else{
+			state = 1;
+		}
+		$.post("{:url('change_flowlabel_state')}",{'corpus_id':corpus_id,'state':state},function(data){
+			if(data.code === 0){
+				alert('更新成功');
+			}else{
+				alert('更新失败');
+			}
+			show_processlabel_data();
+		});
+	}
+</script>
+

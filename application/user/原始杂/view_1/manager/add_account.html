@@ -1,0 +1,615 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<style>
+	.addpublicnum {
+	    background-color: #ffffff;
+	    width: 100%;
+	    padding: 0px 15px;
+	}
+
+	.l-align label {
+	    text-align: right;
+	    /* vertical-align: middle; */
+	    /* line-height: 32px; */
+	}
+
+	.btnok {
+	    margin-left: 0px;
+	}
+
+	.l-icon {
+	    border: 0px;
+	}
+
+	.textareawith {
+	    width: 360px;
+	}
+
+	.form-group {
+		margin-bottom: 12px;
+	}
+
+	.inputdisplay{
+		display: inline-block;
+	}
+
+	.tips{
+		font-size: 12px;
+		color: #909090;
+		margin-left: 15px;
+		display: inline-block;
+	}
+
+	.l-veralign{
+		line-height: 32px;
+		vertical-align: middle;
+	}
+
+	.l-align img{
+		margin-left: 15px;
+	}
+
+	.l-align img{
+		margin-left: 15px;
+	}
+
+	.l-tips{
+		margin-left: 2px;
+	}
+
+	.l-foot{
+		padding: 30px 0px;
+	}
+
+	.l-yuan,.l-ge{
+		position: relative;
+	}
+
+	.l-yuan::after{
+    content: '元';
+		position: absolute;
+		top: 23%;
+		right: 5%;
+	}
+
+	.l-ge::after{
+    content: '个';
+		position: absolute;
+		top: 23%;
+		right: 5%;
+	}
+
+	.l-lineheight{
+		line-height: 35px;
+	}
+
+	@media (max-width:767px){
+		.l-align {
+			    padding-top: 0px;
+			}
+		.l-foot {
+			    padding: 0px 0px;
+			}
+	}
+	.n_unit {
+		position: absolute;
+		right: 5%;
+		top: 16px;
+	}
+	.set_price label, .set_price input {
+		margin-top: 8px;
+	}
+	.set_price {
+		margin-bottom: 10px;
+	}
+	.l-star {
+    font-size: 14px;
+    color: #ff0000;
+    margin-right: 5px;
+	}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box n_head_box_b clearfix">
+                <div class="pull-left"> <span class="n_panel_title"><img src="__PUBLIC__/img_sj/add_account.png" alt="">添加账户</span>
+                </div>
+            </header>
+            <form class="form-horizontal"  method="post">
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>用户名：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input id="z_username" type="text" class="form-control textwidth" placeholder="请输入用户名"  value="">
+                    </div>
+                </div>
+                {if in_array($role_id, [12,18]) }
+								<div class="form-group  l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">用户类型：</label>
+                    <div class="col-lg-10 col-sm-10">
+                    		{if $role_id eq 12} <label id="z_usertype" class="l-lineheight" data_value='16' > 运营商</label>
+                    		{elseif $role_id eq 18 /} <label id="z_usertype" class="l-lineheight"  data_value='19'>销售人员</label>
+                        {/if}
+                    </div>
+                </div>
+                {else/}
+                 <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">用户类型：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <select class="form-control textwidth inputdisplay" id="z_usertype">
+                            <option data_value="">请选择用户类型</option>
+                            {volist name='role_list' id="vo"}
+                            	<option data_value="{$vo.id}">{$vo.name}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+                {/if}
+
+
+                <div class="form-group l-align ">
+                    <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>手机号码：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input id="z_phone" type="text" class="form-control textwidth" placeholder="请输入手机号码"   value="">
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">备用手机号码：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input id="z_sparePhone" type="text" class="form-control textwidth" placeholder="请输入备用手机号码" value="">
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>登录密码：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input id="z_password" type="password" class="form-control textwidth" laceholder="请输入登录密码"  value="">
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>确认密码：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <input id="z_confirmPassword" type="password" class="form-control textwidth" laceholder="再次确认登录密码" value="">
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">账户充值：</label>
+                    <div class="col-lg-10 col-sm-10 recharge">
+                        <div class="l-yuan inputdisplay">
+                        	 <input id="z_accountRecharge" type="text" class="form-control textwidth " >
+                        </div>
+                        {if $role_id eq 18 || $role_id eq 19}
+                        <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                        <span class="tips l-tips msg_mum">注：当前<span>{$info['role_name']}</span>可用余额：<span>{$info['money'],2|reserved_decimal}</span></span>{/if}
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">机器人个数：</label>
+                    <div class="col-lg-10 col-sm-10">
+                    	  <div class="l-ge inputdisplay">
+                        	<input id="z_robotNumber" type="text" class="form-control textwidth inputdisplay" >
+                        </div>
+                        {if $role_id neq 12}
+                        <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                        <span class="tips l-tips msg_mum">注：当前<span>{$info['role_name']}</span>可增加机器人数：<span>{$info['usable_robot_cnt']}</span></span>{/if}
+                    </div>
+                </div>
+                <div class="form-group l-align price_type_div">
+                    <label class="col-lg-2  col-sm-2 control-label">机器人价格：</label>
+                    <div class="col-lg-10 col-sm-10 " style="margin-top: 6px;">
+                      <div class=" inputdisplay">
+                      	<input type="radio" class="inputdisplay"  name="price_type" value="1" checked>按天计费 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      	<input type="radio" class="inputdisplay"  name="price_type" value="2">按月计费
+                      </div>
+                    </div>
+                </div>
+                <div class="form-group l-align price_type_div">
+                    <label class="col-lg-2  col-sm-2 control-label"></label>
+                    <div class="col-lg-10 col-sm-10">
+                    		<!--<span class=" l-tips">请输入价格：</span>-->
+                    	  <div class="inputdisplay">
+                        	<input id="month_price" type="text" class="form-control textwidth inputdisplay" >
+                        </div>
+                        <span class="tips l-tips" id="enterDayPrice">元&nbsp;/&nbsp;天&nbsp;/&nbsp;个</span>
+                        <span class="tips l-tips hidden" id="enterMonthPrice">元&nbsp;/&nbsp;月&nbsp;/&nbsp;个</span>
+                        <!--{if $role_id eq 18}-->
+                        <!--<img src="__PUBLIC__/img_sj/pay_attention.png"/>-->
+                        <!--<span class="tips l-tips msg_price">注：当前<span>{$info['role_name']}</span>成本价格：<span>{$info['month_price']}</span>元/天/个</span>{/if}-->
+                    </div>
+                </div>
+                {if $role_id eq 18}
+                <div class="form-group  l-align">
+                  <label class="col-lg-2  col-sm-2 control-label">机器人价格：</label>
+                  <div class="col-lg-10 col-sm-10">
+                  		<label id="z_robot_price" class="l-lineheight">{$info.month_price,3|reserved_decimal}</label><span id="unit" data_id = "{$info.type_price}" >{if $info.type_price == 1}元 / 天 / 个{else/}元 / 月 / 个{/if}</span>
+                  </div>
+                </div>
+
+                <div class="form-group  l-align">
+                  <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>到期时间：</label>
+                  <div class="col-lg-10 col-sm-10">
+                  		<label id="z_robot_date" class="l-lineheight">{if $info.robot_date eq ''}无期限{else/}{$info.robot_date|date='Y-m-d',###}{/if}</label>
+                  </div>
+                </div>
+                {else/}
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>到期时间：</label>
+											<div class="col-lg-10 col-sm-10 inputdisplay">
+												<input type="text" class="form-control textwidth c_datebgimg inputdisplay" placeholder="请选择到期日期" id="start_date" name="start_date" value="" readonly="">
+												<script>
+														$('#start_date').fdatepicker({
+															format: 'yyyy-mm-dd ',
+															pickTime: false
+														});
+												</script>
+												{if $role_id neq 12}
+												<img src="__PUBLIC__/img_sj/pay_attention.png"/>
+												<span class="tips l-tips msg_date">注：当前<span>{$info['role_name']}</span>机器人截止时间：<span>{if $info.robot_date eq ''}无期限{else/}{$info.robot_date|date='Y-m-d ',###}{/if}</span></span>
+												{else/}
+												 <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                				 <span class="tips l-tips">注：到期日期必须大于今日日期</span>
+												{/if}
+											</div>
+                </div>
+                <div class="  form-group l-align ">
+                    <label class="col-lg-2  col-sm-2 control-label"><span class="l-star">*</span>技术服务费：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <div class="dis_in pr">
+	                    		<input id="service_price" type="text" class="form-control textwidth inputdisplay" placeholder="请输入服务费">
+	                      <span class="n_unit" style="top:8px;">元/分钟</span>
+	                    	</div>
+	                    	 <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                        <span class="tips l-tips">注：当前<span>{$info.role_name}</span>服务成本价：{$info.technology_service_price}元/分钟</span>
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">选择线路：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <select class="form-control textwidth inputdisplay" id="z_line">
+                            <option value="">请选择线路</option>
+                            {volist name="line_list" id="vo"}
+                            <option value="{$vo.id}"> {$vo.name}——价格：{$vo.sales_price,3|reserved_decimal}</option>
+                            {/volist}
+                        </select>
+                        <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                        <span class="tips l-tips">注：若未添加线路则不能正常打电话</span>
+                    </div>
+                    <div class="set_price dis_no clearfix">
+	                    <label class="col-lg-2   col-sm-2 control-label"></label>
+	                    <div class="col-lg-10 col-sm-10">
+	                    	<div class="dis_in pr">
+	                    		<input id="line_price" type="text" class="form-control textwidth inputdisplay" placeholder="请设置线路单价">
+	                      <span class="n_unit">元/分钟</span>
+	                    	</div>
+                    </div>
+                	</div>
+                </div>
+
+                <div class="form-group l-align">
+                    <label class="col-lg-2 col-sm-2 control-label">选择ASR：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <select class="form-control textwidth inputdisplay" id="z_asr">
+                            <option value="">请选择ASR</option>
+                            {volist name="asr_list" id="vo"}
+                            	<option value="{$vo.id}">{$vo.name}——价格：{$vo.sale_price,4|reserved_decimal}</option>
+                            {/volist}
+                        </select>
+                        <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                        <span class="tips l-tips">注：若未添加ASR则不能正常打电话</span>
+                    </div>
+                    <div class="set_price dis_no clearfix">
+	                    <label class="col-lg-2   col-sm-2 control-label"></label>
+	                    <div class="col-lg-10 col-sm-10">
+	                    	<div class="dis_in pr">
+	                    		<input id="asr_price" type="text" class="form-control textwidth inputdisplay" placeholder="请设置ASR单价">
+	                      <span class="n_unit">元/次</span>
+	                    	</div>
+	                    </div>
+                	</div>
+                </div>
+
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">选择短信通道：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <select class="form-control textwidth inputdisplay" id="z_message">
+                            <option value="">请选择短信通道</option>
+                            {volist name="sms_list" id="vo"}
+                            	<option value="{$vo.id}">{$vo.name}——价格：{$vo.price,3|reserved_decimal}</option>
+                            {/volist}
+                        </select>
+                        <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                        <span class="tips l-tips">注：若未添加短信通道则不能正常发短信</span>
+                    </div>
+                    <div class="set_price dis_no clearfix">
+	                    <label class="col-lg-2   col-sm-2 control-label"></label>
+	                    <div class="col-lg-10 col-sm-10">
+	                    	<div class="dis_in pr">
+	                    		<input id="sms_price" type="text" class="form-control textwidth inputdisplay" placeholder="请设置短信通道单价">
+	                      <span class="n_unit">元/条</span>
+	                    	</div>
+                    </div>
+                </div>
+                </div>
+
+								<div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">可透支额度：</label>
+                    <div class="col-lg-10 col-sm-10 ">
+                      <div class="l-yuan inputdisplay">
+                        <input type="text" class="form-control textwidth" id="z_overdraft" name="" value="">
+                      </div>
+                      <img src="__PUBLIC__/img_sj/pay_attention.png"/>
+                      <span class="tips l-tips">注：默认不输入透支金额为0</span>
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2  col-sm-2 control-label">备注：</label>
+                    <div class="col-lg-10 col-sm-10">
+                        <textarea class="form-control textareawith" rows="10" placeholder="请输入备注信息" id="z_remark"></textarea>
+                    </div>
+                </div>
+                <div class="form-group l-align">
+                    <label class="col-lg-2 col-sm-2 control-label"></label>
+                    <div class="col-lg-10 col-sm-10 l-foot">
+                        <button class="btn btn-primary" type="button" onclick="add();">确定</button>
+                        <button class="btn btn-primary" type="button" onclick="resetClickz();">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 添加用户确认弹框  -->
+<div class="modal fade in" id="add-tips" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:350px; top:15%">
+		<div class="modal-content modal-contenttips">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="myLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body">
+				确认新建该账户？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary" onclick="edit_accounts()">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script>
+	onmyTime();
+	$(function(){
+		price_hish();
+	})
+	//设置线路单价、ASR单价、短信通道单价
+	{if $role_id !=18}
+		$('select#z_line, select#z_asr, select#z_message').change(function() {
+			if($(this).val() != '') {
+					$(this).parent().siblings('.set_price').show();
+				  $(this).parent().next('.set_price').find('.col-lg-10').find('.dis_in').find('input').focus();
+			} else {
+				$(this).parent().siblings('.set_price').hide();
+			}
+		});
+	{/if}
+	$('input[name="price_type"]').change(function(){
+		if($('input[name="price_type"][value="1"]').prop('checked')){
+			$('#enterMonthPrice').addClass('hidden');
+			$('#enterDayPrice'). removeClass('hidden');
+		}else{
+			$('#enterMonthPrice').removeClass('hidden');
+			$('#enterDayPrice').addClass('hidden');
+		}
+	});
+	// 验证手机号
+  function isPhoneNo(phone) {
+	   var pattern = /^1[34578]\d{9}$/;
+	   return pattern.test(phone);
+  }
+
+	//jq设置成本价格显示与隐藏
+	function price_hish(){
+		var u_role_id = {$role_id};//获取当前角色
+		$('.price_type_div').hide();
+		if(u_role_id !=12 || u_role_id != 18){
+			$("#z_usertype").change(function(){
+	      var role_id = $('#z_usertype').find("option:selected").attr("data_value");//用户类型
+	      if(role_id == 18 || role_id == 19){
+					$('.price_type_div').show();
+				}else{
+					$('.price_type_div').hide();
+				}
+	  	});
+		}
+	}
+	//接收用户输入
+	function join(){
+		var current_role_id = {$role_id};
+		var u_role_id = {$role_id};
+		var role_id = $('#z_usertype').find("option:selected").attr("data_value");//用户类型
+		var data = {};
+		data.username = $('#z_username').val();//用户名
+		data.role_id = $('#z_usertype').attr("data_value");//用户类型
+		if(u_role_id ==12 || u_role_id == 18){
+			data.role_id = $('#z_usertype').attr("data_value");//用户类型
+		}else{
+		  data.role_id = $('#z_usertype').find("option:selected").attr("data_value");//用户类型
+		}
+		// data.price_type = $("input[type='radio']:checked").val();//价格类型
+		if({$role_id} == 18){
+			data.month_price = $('#z_robot_price').text();//机器人价格
+			data.robot_date = $('#z_robot_date').text();//到期时间
+			data.price_type = $("#unit").attr('data_id');//价格类型
+		}else{
+			data.month_price = $('#month_price').val();//机器人价格
+			data.robot_date = $('#start_date').val();//到期时间
+			data.price_type = $("input[type='radio']:checked").val();//价格类型
+		}
+		data.mobile = $('#z_phone').val();//手机号码
+		data.spare_mobile = $('#z_sparePhone').val();//备用手机号码
+		data.password = $('#z_password').val();//登录密码
+		var password = $('#z_confirmPassword').val();//确认密码
+		data.money = $('#z_accountRecharge').val();//账户充值
+		data.robot_cnt = $('#z_robotNumber').val();//机器人个数
+
+    data.service_price = $('#service_price').val();//技术服务费
+
+		data.line = $('#z_line').find("option:selected").val();//选择线路
+		data.line_price = $('#line_price').val();
+		data.asr= $('#z_asr').find("option:selected").val();//选择ASR
+		data.asr_price = $('#asr_price').val();
+		data.message = $('#z_message').find("option:selected").val();//选择短信通道
+		data.sms_price = $('#sms_price').val();
+
+		data.credit_line = $('#z_overdraft').val();//可透支额度
+		data.remark = $('#z_remark').val();//备注
+
+		var currentdate = getFormatDate(10);
+		var role_name = '{$role_name}';
+		//判断条件
+		var res = [];
+		res['str'] = true;
+		if(data.username ==''){
+			res['msg'] = '用户名不能为空';
+			res['str'] = false;
+		}else
+		if(data.role_id ==''){
+			res['msg'] = '请选择用户类型';
+			res['str'] = false;
+		}else
+		if(data.mobile ==''){
+			res['msg'] = '请输入手机号码';
+			res['str'] = false;
+		}else
+		if(!isPhoneNo(data.mobile)){
+			res['msg'] = '手机号码格式不正确';
+			res['str'] = false;
+		}
+		//else if(!isPhoneNo(data.spare_mobile)){
+		// 	res['msg'] = '备用手机号码格式不正确';
+		// 	res['str'] = false;
+		// }else
+		else if(data.password ==''){
+			res['msg'] = '请输入登录密码';
+			res['str'] = false;
+		}else
+		if(data.password != password){
+			res['msg'] = '两次输入的密码不一致';
+			res['str'] = false;
+		}else
+		if($('.price_type_div').is(':visible')){
+			if(data.month_price == ''){
+				res['msg'] = '请输入机器人单价';
+				res['str'] = false;
+			}
+		}else
+		if(data.money !=''){
+			{if $role_id ==18}
+				// 角色
+				if(data.money > {$info['money']}){
+					res['msg'] = '充值金额不能大于当前可用余额';
+					res['str'] = false;
+				}
+			{/if}
+		}
+		if(data.robot_date == ""){
+			res['msg'] = '请输入到期日期';
+			res['str'] = false;
+		}else
+		if(Contrastdate(data.robot_date,timestampToTime({$info.robot_date})) == true){
+			{if  $role_id != 12 && $role_id != 18}
+				res['msg'] = '到期日期必须小于限定日期';
+				res['str'] = false;
+			{/if}
+		}else
+		if(!Contrastdate(data.robot_date,currentdate)){
+			{if  $role_id != 12 && $role_id != 18}
+				res['msg'] = '到期日期必须大于当前日期';
+				res['str'] = false;
+			{/if}
+		}else
+		if(data.service_price == ''){
+		  res['msg'] = '技术服务费不能为空';
+			res['str'] = false;
+		}else
+		if(data.service_price !=''){
+		  if(0 - data.service_price > 0){
+		    res['msg'] = '技术服务费不能小于0';
+			  res['str'] = false;
+		  }
+		}
+		//选择ASR：选择线路 选择短信通道：备注： *** 没有强制输入
+		res['data'] = data;
+		return res;
+	}
+	//确定添加
+	function add() {
+		var data = join();
+		if(data.str == true){
+			 $('#add-tips').modal('show');
+		}else{
+			alert(data.msg);
+		}
+	}
+
+	function edit_accounts(){
+		var data = join();
+		var data = data.data;
+		console.log(data);
+		var url = "{:url('manager/add_account')}";
+		$.ajax({
+  		type:'POST',
+  		data: data,
+  		dataType:'json',
+  		url:url,
+  		success:function(data){
+  			console.log(data);
+  			$('#add-tips').modal('hide');
+  			if(data.code === 0) {
+  				alert(data.msg);
+  				window.location.href = '{:url("user/manager/account_management")}';
+  				resetClickz();//添加成功后重置内容
+  			}else{
+  				alert(data.msg);
+  			}
+  		},
+  		error:function(e){
+  		}
+  	})
+	}
+	//重置
+	function resetClickz(){
+		$("#z_username").val("");//用户名
+		$("#z_phone").val("");//手机号码
+		$("#z_sparePhone").val("");//备用手机号码
+		$("#z_password").val("");//登录密码
+		$("#z_confirmPassword").val("");//确认密码
+		$("#z_accountRecharge").val("");//账户充值
+		$("#z_robotNumber").val("");//机器人个数
+		$("#service_price").val("");//技术服务
+		$("#month_price").val("");//机器人价格
+		
+		$("#start_date").val("");//到期时间
+		//选择线路
+		$("#z_line").val("");
+		$("#line_price").val("");
+		//选择ASR
+		$("#z_asr").val("");
+		$("#asr_price").val("");
+		//选择短信通道
+		$("#z_message").val("");
+		$("#sms_price").val("");
+		$("#z_overdraft").val("");//可透支额度
+		$("#z_remark").val("");
+	}
+</script>
+{/block}

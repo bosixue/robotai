@@ -1,0 +1,621 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+
+
+<style>
+  .contenttips{
+    overflow-y: hidden!important;
+    }
+  .btn-header{
+    padding: 4px 35px;
+  }
+  .pz_timeMiao{
+    width:70px !important;
+  }
+  .statusSelect{
+    margin-right:0px;
+  }
+  @media (max-width: 1430px){
+    .pz_lwithdsz{
+      width:140px !important;
+    }
+  }
+  @media (max-width: 1456px){
+    .pz_lwithdsz{
+      width:130px !important;
+    }
+  }
+  @media (max-width: 1326px){
+    .c_marleft {
+      margin-left: 9px;
+    }
+  }
+  @media (max-width: 1303px){
+    .c_marleft {
+        margin-left: 30px;
+    }
+    .pz_lwithdsz {
+        width: 160px !important;
+    }
+    .pz_timeMiao {
+        width: 90px !important;
+    }
+    .form-group.c_seldate.beijiaohaomapz{
+      margin-top:10px;
+    }
+    .dis_in.c_marleft{
+      margin-top:10px;
+    }
+  }
+  @media (max-width: 1061px){
+    .pz_lwithdsz {
+        width: 140px !important;
+    }
+  }
+  @media (max-width: 1020px){
+    .pz_lwithdsz {
+        width: 130px !important;
+    }
+    .pz_timeMiao {
+        width: 80px !important;
+    }
+  }
+
+</style>
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img/e_liebiao.png" alt="">通话明细</span>
+		  </div>
+      <div class="pull-right">
+        <button class="btn btn-primary btn-header"  type="button" onclick="refresh();">刷新</button>
+        <button class="btn btn-primary btn-header" data-title="导出通话统计" onclick="importdata();">导出</button>
+		  </div>
+		</header>
+
+		<div class="main-box-body clearfix">
+	     <section class="navbar  clearfix">
+	         <div  class="pull-left">
+						 <form class="form-inline"  method="get" role="form">
+
+							 <div class="form-group c_seldate clearfix">
+									 <!-- 通话日期  c_marleft-->
+
+                     <label class="levelSelect statusSelect">通话日期：</label>
+   	 								<div class="formgroup">
+   	 									<div class="dis_in c_dateSelbg pr">
+   	 										<input type="text" class="form-control pz_lwithdsz c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+   	 										<script>
+   	 												$('#startDate').fdatepicker({
+   	 													format: 'yyyy-mm-dd',
+   	 													// pickTime: true
+   	 												});
+   	 										</script>
+   	 									</div>
+   	 									<span style="margin:0px 4px;">至</span>
+   	 									<div class="dis_in c_dateSelbg pr">
+   	 										<input type="text" class="form-control pz_lwithdsz c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+   	 										<script>
+   	 											$('#endTime').fdatepicker({
+   	 												format: 'yyyy-mm-dd',
+   	 												// pickTime: true
+   	 											});
+   	 										</script>
+   	 									</div>
+   	 								</div>
+
+
+                  <div class="form-group c_marleft c_seldate clearfix ">
+                    <label class="levelSelect statusSelect">通话时长：</label>
+                    <div class="formgroup">
+												<input type="number" name="startNum" id="startNum" min="0" class="form-control pz_timeMiao">
+												<span style="margin:0px 4px;">至</span>
+												<input type="number" name="endNum" id="endNum" min="0" class="form-control pz_timeMiao">
+												<span class="suffix">秒</span>
+										</div>
+                  </div>
+
+                  <div class="form-group c_seldate clearfix beijiaohaomapz">
+                    <label class="levelSelect statusSelect">呼叫号码</label>
+                    <div class="formgroup">
+												<input type="text" name="callNum" id="callNum"  class="form-control pz_lwithdsz" placeholder="请输入呼叫号码" >
+										</div>
+                  </div>
+
+
+										<!-- 查询、重置按钮 -->
+									 <div class="dis_in c_marleft">
+										 <button class="btn btn-primary" type="button" onclick="searchdata()">查询</button>
+										 <button class="btn btn-primary pz_kongxin_anniusty" onclick="reset_click();" type="button">重置</button>
+									 </div>
+
+							 </div>
+						</form>
+			    </div>
+		   </section>
+
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">
+                  <input class="check-all check_page" data-page="0" name='all_checked' type="checkbox" onclick="check_pagecall();"/></th>
+								<th class="text-center">序号</th>
+                <!-- <th class="text-center">账户名</th> -->
+								<th class="text-center">呼叫号码</th>
+								<th class="text-center">通话时长（秒）</th>
+								<th class="text-center">通话费用（元）</th>
+								<th class="text-center">语音识别次数</th>
+              	<th class="text-center">语音识别费用（元）</th>
+              	<th class="text-center">总费用（元）</th>
+                <th class="text-center">拨打时间</th>
+					    </tr>
+				    </thead>
+				   <tbody id="recharge-recored-list">
+             <!-- <tr>
+               <td class="text-center"><input type="checkbox" name="roleids" class="rolecheck"/></td>
+               <td class="text-center">1</td>
+               <td class="text-center">xiaoshou</td>
+               <td class="text-center">167XXXXXXXX</td>
+               <td class="text-center">10</td>
+               <td class="text-center">0.1</td>
+               <td class="text-center">10</td>
+               <td class="text-center">0.05</td>
+               <td class="text-center">2</td>
+               <td class="text-center">2018.11.13 11:09</td>
+             </tr> -->
+
+				    </tbody>
+            <tbody id="call-statistics-list">
+
+
+           </tbody>
+				  </table>
+
+			  </div>
+
+				<div class="component-page-empty" id="consumeempty">
+					<div class="empty-tip line">暂无数据</div>
+				</div>
+        <footer class="main-box-footer clearfix pz-fenye">
+					<div class="pull-left" style="line-height: 47px;">
+						<input class="check-all check_all" name="DataCheck_all" type="checkbox" onclick="check_allcall();">全选（已选中<span id="count">0</span>条通话记录）
+					</div>
+
+					<div id="statpage" class="pull-right">
+
+          </div>
+          <div style="font-size: 12px;float: right;margin: 14px 9px 0px 0px;display: inline-block;" class="pull-right">
+        		<span style="font-size: 12px;">总页数：
+        			<span id="all_page">13889 </span>&nbsp;&nbsp;页
+        		</span>
+        	</div>
+
+				</footer>
+
+		</div>
+	</div>
+</div>
+
+<div class="modal fade in" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body contenttips">
+				确定导出该数据？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消			</button>
+				<button type="button" class="btn btn-primary" onclick="export_callstatistics_Excel()">		确认			</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script id='recharge_record' type='text/tepmate'>
+	<tr>
+		<td class="text-center">
+			<input class="rolecheck" name='roleids' value="{%id%}" type="checkbox" onclick="check_call();"/>
+		</td>
+		<td>{%sequence%}</td>
+		<td>{%mobile%}</td>
+		<td>{%connect_duration%}</td>
+		<td>{%connect_rate%}</td>
+		<td>{%asr_count%}</td>
+		<td>{%asr_price%}</td>
+		<td>{%summary_money%}</td>
+    <td>{%dial_time%}</td>
+	</tr>
+</script>
+ <script type="text/javascript">
+   var startDate,endTime,startNum,endNum,callNum;
+
+  function importdata(){
+  	if($('.rolecheck:checked').length == 0){
+ 			alert("请至少选择一条数据");
+	 	}else{
+	 		$('#import-data').modal('show');
+	 	}
+    
+  }
+
+  //check_allcall
+  //全部数据全选
+  function check_allcall(){
+  if($('.check_all').is(':checked')){
+    $('.check_page').prop("checked",true);
+    $('.rolecheck').prop("checked",true);
+    $('#count').text($('#count').attr('data-total'));
+    $('.check_page').attr('data-page',$('#count').attr('data-total'));
+    // var usercheck = [];
+    // type = 'day';
+    // var data = {};
+    // data.label_name = $('#label_name').val();
+    // var url = "{:url('labelinfo')}";
+    // $.ajax({
+    //   url : url,
+    //   dataType : "json",
+    //   type : "post",
+    //   data : data,
+    //   success:function(result){
+    //     if(result.code === 0){
+    //         $.each(result.data, function(index, object){
+    //           usercheck.push(object.id);
+    //         });
+    //         usercheck = usercheck.join(',');
+    //         $('.check_all').attr('data-id',usercheck);
+    //         //console.log(usercheck);
+    //     }
+    //   },
+    //   error:function(){
+    //     console.log('获取全选数据失败');
+    //   }
+    // });
+  }else{
+    $('.check_page').prop("checked",false);
+    $('.rolecheck').prop("checked",false);
+    $('#count').text(0);
+    $('.check_page').attr('data-page',0);
+  }
+ }
+  //本页全选
+  function check_pagecall(){
+    if($('.check_page').is(':checked')) {
+      $('.rolecheck').prop("checked",true);
+      if($('.rolecheck:checked').length == $('#count').attr('data-total')){
+        $('.check_all').prop("checked",true);
+        $('.check_page').prop("checked",true);
+        $('.check_page').attr('data-page',$('#count').attr('data-total'));
+      }else {
+        $('.check_page').attr('data-page',$('#count').attr('data-page'));
+      }
+      // $('.check_page').attr('data-page',$('#count').attr('data-page'));
+			$('#count').text($('.rolecheck:checked').length);
+    }else{
+      $('.check_all').prop("checked",false);
+      $('.rolecheck').prop("checked",false);
+      $('#count').text(0);
+      $('.check_page').attr('data-page',0);
+    }
+   }
+  //单个选项框选中事件
+  function check_call(){
+    if(!$(".rolecheck").checked) {
+      $('.check_all').prop("checked",false);
+      $('.check_page').prop("checked",false);
+      $('.check_page').attr('data-page',0);
+    }
+    var check_pagenum = $('.rolecheck').length;
+    var check_num = $('.rolecheck:checked').length;
+    if(check_pagenum == check_num){
+      $('.check_page').prop("checked",true);
+      $('.check_page').attr('data-page',$('#count').attr('data-page'));
+    }
+    if(check_num == $('#count').attr('data-total')){
+      $('.check_all').prop("checked",true);
+      $('.check_page').prop("checked",true);
+      $('.check_page').attr('data-page',$('#count').attr('data-total'));
+    }
+    $('#count').text(check_num);
+   }
+
+  //重置
+  function reset_click(){
+    $('input[name="startDate"][type="text"]').val("");//开始日期
+    $('input[name="endTime"][type="text"]').val("");//结束日期
+    $('input[name="startNum"][type="number"]').val("");//通话时长 开始
+    $('input[name="endNum"][type="number"]').val("");//通话时长 结束
+    $('input[name="callNum"][type="text"]').val("");//呼叫号码
+    $('.check_all').prop("checked",false); //清除全选数据
+    $('.check_page').prop("checked",false); //清除当页选中数据
+    $('.rolecheck').prop("checked",false); //清除单个选中数据
+    show_data(1);
+  }
+
+  //刷新
+  function refresh(){
+    window.location.href = "";
+  }
+
+  //搜索
+  function searchdata(){
+    startDate = $('input[name="startDate"][type="text"]').val();
+    endTime = $('input[name="endTime"][type="text"]').val();
+    startNum = $('input[name="startNum"][type="number"]').val();
+    endNum = $('input[name="endNum"][type="number"]').val();
+    callNum = $('input[name="callNum"][type="text"]').val();
+    show_data(1);
+  }
+
+  //分页显示
+  function fenye(total_page,now_page,limit,show=5){
+   if(show > total_page){
+     show = total_page;
+   }
+   now_page = parseInt(now_page);
+   var star = now_page - 2;
+   var end = now_page + 2;
+
+   if(star < 1){
+     end = end - star;
+     star = 1;
+
+   }
+   if(end > total_page){
+     end = total_page;
+   }
+
+   var limits = [10,30,50,100];
+   var fenye_html = "";
+   fenye_html = '<ul class="pagination">';
+
+   fenye_html += '<div style="font-size: 12px;display: inline-block;"><select class="limit" style="width: 80px;margin: 0px 8px;height:32px;background:#fff;border:1px solid #ddd;">';
+   for(var i = 0; i < limits.length; i++){
+     if(limits[i] == limit){
+       fenye_html += '<option value="'+limits[i]+'" selected>'+limits[i]+'条/页</option>';
+     }else{
+       fenye_html += '<option value="'+limits[i]+'">'+limits[i]+'条/页</option>';
+     }
+   }
+   fenye_html += '</select></div>';
+
+   fenye_html +=  '<div style="font-size: 12px;margin: 0px;display: inline-block;">跳至'
+                +	'<input class="Nowpage" type="number" style="width: 50px;height:32px; margin: 1px 8px;border:1px solid #ddd;border-radius: 5px;text-align: center;"value="" max="13889" min="1">页'
+                +  '</div><button class="btn btn-primary go_up lp_tz" type="button" >确定</button>';
+   if(total_page > 1){
+
+
+    if(now_page == 1){
+      fenye_html += '<li id="prevbtn" class="disabled"><span>«</span></li>';
+    }
+
+    if(now_page > 1){
+      fenye_html += '<li data-page="'+(now_page - 1)+'" title="'+(now_page - 1)+'"><a href="javascript:void(0);"> « </a></li>';
+    }
+    for(star; star <= end; star++ ){
+      if(star == now_page){
+        fenye_html += '<li class="active" title="'+star+'"><a href="javascript:void(0);">'+star+'</a></li>';
+      }else{
+        fenye_html += '<li data-page="'+star+'" title="'+star+'"><a href="javascript:void(0);">'+star+'</a></li>';
+      }
+    }
+    if(now_page < total_page){
+      fenye_html += '<li data-page="'+(now_page + 1)+'" title="'+(now_page + 1)+'"><a href="javascript:void(0);"> » </a></li>';
+    }else if(now_page == total_page){
+      fenye_html += '<li  class="disabled"><span> » </span></li>';
+    }
+    fenye_html += '</ul>';
+  }else{
+
+    fenye_html += '<li id="prevbtn" class="disabled"><span>«</span></li>';
+    fenye_html += '<li class="active" title="1"><a href="javascript:void(0);">1</a></li>';
+    fenye_html += '<li  class="disabled"><span> » </span></li>'
+    fenye_html += '</ul>';
+  }
+
+   $('#statpage').html(fenye_html);
+   $('.Nowpage').val(now_page);
+   //获取选中框隐藏的选中状态
+   var check_state = $('.check_page').attr('data-page');
+   if(check_state == now_page){
+     $('.check_page').prop("checked",true);
+     $('.rolecheck').prop("checked",true);
+     $('#count').text($('.rolecheck:checked').length);
+     $('.check_page').attr('data-page',$('#count').attr('data-page'));
+     // $('.check_page').click();
+   }else if(check_state == $('#count').attr('data-total')){
+     $('.check_all').prop("checked",true);
+     $('.check_page').prop("checked",true);
+     $('.rolecheck').prop("checked",true);
+     $('#count').text($('#count').attr('data-total'));
+     $('.check_page').attr('data-page',$('#count').attr('data-total'));
+     // $('.check_all').click();
+   }else{
+     console.log(check_state);
+     // $('#count').text(0);
+     $('.check_page').prop("checked",false);
+     $('.check_all').prop("checked",false);
+   }
+
+
+   //分页页码点击事件
+   $('.pagination>li[data-page]').unbind('click');
+   $('.pagination>li[data-page]').click(function(){
+     var page = $(this).data('page');
+     $(this).siblings('li').removeClass('active');
+     $(this).addClass('active');
+     show_data(page,limit);
+   });
+   //分页输入内容变化事件
+   $('.Nowpage').change(function(){
+    if($('.Nowpage').val() > total_page){
+      alert("输入的页数不能大于总页数");
+      $('.Nowpage').val("");
+    }
+   });
+   //分页输入内容跳转事件
+   $('.lp_tz').unbind('click');
+   $('.lp_tz').click(function(){
+    var page = $('.Nowpage').val();
+    console.log("跳转页"+page);
+    var nowlimit = $('.limit').val();
+    show_data(page,nowlimit);
+   });
+   //分页选项框跳转事件
+   $('.limit').change(function(){
+    var nowlimit = $('.limit').val();
+    var numbers = $(".limit").find("option");
+    for (var j = 1; j < numbers.length; j++) {
+      if ($(numbers[j]).val() == nowlimit) {
+        $(numbers[j]).attr("selected", "selected");
+      }else {
+        $(numbers[j]).attr("selected", false);
+      }
+    }
+    show_data(1,nowlimit);
+   });
+
+ }
+  show_data(1,10,1);
+  //显示数据
+  function show_data(page,limit,type){
+    if(type){
+      $('input[name="startDate"][type="text"]').val("");//开始日期
+      $('input[name="endTime"][type="text"]').val("");//结束日期
+      $('input[name="startNum"][type="number"]').val("");//通话时长 开始
+      $('input[name="endNum"][type="number"]').val("");//通话时长 结束
+      $('input[name="callNum"][type="text"]').val("");//关键字查询
+    }
+    var url = '{:url("get_consumption_statistics_api")}';
+    if(!page){
+      page = 1;
+    }
+    if(!limit){
+      limit = 10;
+    }
+    var data = {};
+    data.page = parseInt(page);
+    data.limit = parseInt(limit);
+    data.start_time = $('#startDate').val();
+    data.end_time = $('#endTime').val();
+    data.startNum = $('#startNum').val();
+    data.endNum = $('#endNum').val();
+    data.callNum = $('#callNum').val();
+    $.ajax({
+      url : url,
+      dataType : "json",
+      type : "post",
+      data : data,
+      success:function(result){
+        console.log(result);
+        if(result.code === 0){
+          if(result.data.list.length == 0){
+            $('#consumeempty').show();
+            $('#recharge-recored-list tr').remove();
+            $('.pz-fenye').addClass('hide');
+            $('#record_count').text(0);
+            $('#count').text(0);
+          }else {
+            $('#consumeempty').hide();
+            $('.pz-fenye').removeClass('hide');
+            var htmls = '';
+            $.each(result.data.list, function(index, object){
+              var html = $('#recharge_record').html();
+                  html = html.replace('{%id%}', object.id);
+                  html = html.replace('{%sequence%}', object.sequence);
+                  // html = html.replace('{%name%}', object.ausername);
+                  html = html.replace('{%mobile%}', object.mobile);
+                  html = html.replace('{%connect_duration%}', object.duration);
+                  html = html.replace('{%connect_rate%}', object.connect_cost);
+                  html = html.replace('{%asr_count%}', object.asr_cnt);
+                  html = html.replace('{%asr_price%}', object.asr_cost);
+                  html = html.replace('{%summary_money%}', object.money);
+                  html = html.replace('{%dial_time%}', object.create_time);
+              htmls += html;
+            });
+
+            $('#recharge-recored-list').html(htmls);
+            $('#count').attr('data-page',page);
+            $('#count').attr('data-total',result.data.count);
+            var total_page = Math.ceil(result.data.count/limit);
+            $('#all_page').text(total_page);
+
+            // console.log(total_page);
+            fenye(total_page,page,limit);
+
+          }
+        }
+      },
+      error:function(){
+        alert('获取数据失败');
+      }
+    });
+
+  }
+
+  //导出数据
+  var excel_statelist = true;
+  function export_callstatistics_Excel(){
+    $('#import-data').modal('hide');
+		if(excel_statelist === true){
+			excel_statelist = false;
+			//获取选中的id
+			var usercheck = [];
+			//判断是否全部选中
+			if($('.check_all').is(':checked')){  //导出所有数据
+ 				var type = 1;
+ 			}else{
+ 				var type = 0;
+ 			}
+			$.each($('input[name="roleids"]:checked'), function(index, object){
+				usercheck.push($(object).val());
+			});
+			console.log(usercheck);
+			$.post("{:url('export_callstatistics')}",
+			{
+				'type':type,
+				'start_time':$('#startDate').val(),
+			  'end_time':$('#endTime').val(),
+				'startNum':$('#startNum').val(),
+				'endNum':$('#endNum').val(),
+			  'callNum':$('#callNum').val(),
+				'usercheck':usercheck
+			},
+			function(data){
+				console.log(data);
+				if(data.code === 0){
+					window.location.href = data.data;
+					// alert('导出成功');
+				}else{
+					alert('导出失败');
+				}
+				excel_statelist = true;
+
+			});
+		}
+  }
+
+</script>
+
+
+
+</div>
+
+{include file="sms/sms_targer" /}
+
+{/block}

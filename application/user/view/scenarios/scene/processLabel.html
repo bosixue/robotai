@@ -1,0 +1,442 @@
+<ul class="nav nav-tabs processlabeldata " role="tablist">
+	<li role="presentation" class="active presentation labels" data-type='flow_node_label'>
+		<a href="#mainProcess" aria-controls="blacklist" role="tab" data-toggle="tab">主流程标签</a>
+	</li>
+	<li role="presentation" class="presentation labels" data-type='flow_branch_label' id='flow_branch_label'>
+		<a href="#branchingProcess" aria-controls="rule-setting" role="tab" data-toggle="tab">分支流程标签</a>
+	</li>
+</ul>
+
+<div class="tab-content process">
+	<!--主流程页面-->
+	<div role="tabpanel" class="tab-pane active" id="mainProcess">
+		<section class="navbar navbar-default main-box-header main-head clearfix l-navbar">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="pull-left form-inline ">
+						<label class="control-lable label-font">标签名称：</label>
+						<input type="text" class="form-control" placeholder="请输入标签名称" id="processName">
+						<label class="control-lable label-font marginleft">文字内容：</label>
+						<input type="text" class="form-control" placeholder="请输入文字内容" id="process_content">
+						<button class="btn btn-primary" onclick="show_processlabel_data()">查询</button>
+						<button class="btn btn-primary" onclick="reset_processlabel_data()">重置</button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="text-center">序号</th>
+					<th class="text-center">场景节点</th>
+					<th class="text-center">流程节点</th>
+					<th class="text-center">流程标签</th>
+					<th class="text-center table-width">文字内容</th>
+					<th class="text-center">文字类型</th>
+					<th class="text-center">标签精准查询<i class="hint" data-toggle="tooltip" title="" data-placement="top"
+						 data-original-title="通过标签进行精确筛选通话记录">?</i></th>
+				</tr>
+			</thead>
+			<tbody id="processtag_list">
+
+			</tbody>
+		</table>
+		<div class="datatips datatips_know process_label_data">
+			<p><img src="__PUBLIC__/img/none.png" /></p>
+			<p>暂无数据</p>
+		</div>
+		<div class="row">
+			<footer class="main-box-footer clearfix col-sm-12 process_footer">
+				<div class="pull-left">全部数据：
+					<span id="process_label_count"></span>
+				</div>
+				<div class="process_label_paging"></div>
+			</footer>
+		</div>
+
+	</div>
+	<!--分支流程页面-->
+	<div role="tabpanel" class="tab-pane " id="branchingProcess">
+		<section class="navbar navbar-default main-box-header main-head clearfix l-navbar">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="pull-left form-inline ">
+						<label class="control-lable label-font">分支标签名称：</label>
+						<input type="text" class="form-control" placeholder="请输入标签名称" id="branch_processName">
+						<label class="control-lable label-font marginleft">关键字：</label>
+						<input type="text" class="form-control" placeholder="请输入文字内容" id="branch_process_content">
+						<button class="btn btn-primary" onclick="get_flow_branch_labels()">查询</button>
+						<button class="btn btn-primary" onclick="reset_processlabel_data_fenzhi()">重置</button>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="text-center">序号</th>
+					<th class="text-center">场景节点</th>
+					<th class="text-center">流程节点</th>
+					<th class="text-center">分支类型</th>
+					<th class="text-center">分支标签名称</th>
+					<th class="text-center" style="width: 50%;">关键字</th>
+					<th class="text-center">标签精准查询<i class="hint" data-toggle="tooltip" title="" data-placement="top"
+						 data-original-title="通过标签进行精确筛选通话记录">?</i></th>
+				</tr>
+			</thead>
+			<tbody id="branch_processtag_list">
+
+			</tbody>
+		</table>
+		<div class="row">
+			<footer class="main-box-footer clearfix col-sm-12 process_footer">
+				<div class="pull-left">全部数据：<span id="branch_process_label_count">0</span></div>
+
+				<div class="flow_branch_label"></div>
+			</footer>
+		</div>
+		<div class="datatips datatips_know process_label_data">
+			<p><img src="__PUBLIC__/img/none.png" /></p>
+			<p>暂无数据</p>
+		</div>
+	</div>
+</div>
+
+
+
+<!--鼠标移至标签精准查询时显示内容事件-->
+<script>
+	$(function() {
+		$("[data-toggle='tooltip']").tooltip();
+	});
+</script>
+<script type='text/template' id='tel_flow_branch_template'>
+  <tr>
+  // 序号	场景节点	流程节点	分支类型	流程标签	关键字	标签精准查询
+    <td>{%key%}</td>
+    <td>{%scenarios_node_name%}</td>
+    <td>{%flow_node_name%}</td>
+    <td>{%flow_branch_name%}</td>
+    <td>{%flow_branch_label%}</td>
+    <td>{%keyword%}</td>
+    <td>
+    <input type="checkbox" name="flow_branch_label_status" data-status="{%label_status%}" data-id="{%id%}" {%show_label_status%} class="flow_branch_label_status">
+    </td>
+  </tr>
+</script>
+<!--流程标签数据显示与处理-->
+<script>
+    //回车搜索事件 ---主流程标签搜索
+    $('#processName').keyup(function(event){
+      if(event.keyCode ==13){
+         show_processlabel_data();
+      }
+   });
+   //回车搜索事件
+   $('#process_content').keyup(function(event){
+      if(event.keyCode ==13){
+          show_processlabel_data();
+      }
+   });
+   
+   //回车搜索事件--分支流程标签搜索
+    $('#branch_processName').keyup(function(event){
+      if(event.keyCode ==13){
+         get_flow_branch_labels();
+      }
+   });
+   //回车搜索事件
+   $('#branch_process_content').keyup(function(event){
+      if(event.keyCode ==13){
+          get_flow_branch_labels();
+      }
+   });
+	/**
+	 * 配置分页
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	 */
+	var process_label_paging = new Paging01();
+	process_label_paging.init_args({
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'process_label_paging', //放置分页的class
+		callback: show_processlabel_data, //回调函数 比如show_datas(页码, 显示条数)
+		key: 2,
+	});
+
+	//分支重置操作
+	function reset_processlabel_data_fenzhi() {
+		$('#branch_processName').val('');
+		$('#branch_process_content').val('');
+		get_flow_branch_labels();
+	}
+	//重置操作
+	function reset_processlabel_data() {
+		$('#processName').val('');
+		$('#process_content').val('');
+		show_processlabel_data();
+	}
+	//获取流程标签数据
+	function show_processlabel_data(page, pagesize) {
+	    get_flow_branch_labels();//每次点击流程标签 刷新分支标签
+		$("#fullScreen").removeClass("fadeInRight animated");
+		var url = '{:url("get_flowlabel_list")}';
+		//获取话术id
+		var data = {};
+		if (page == '' || page == null) {
+			data.page = 1;
+		} else {
+			data.page = page;
+		}
+		if (pagesize == '' || pagesize == null) {
+			data.pagesize = 10;
+		} else {
+			data.pagesize = pagesize;
+		}
+		data.sceneId = $('.active .Idlist').val();
+		//标签名称
+		data.processName = $('#processName').val();
+		//文字内容
+		data.process_content = $('#process_content').val();
+		console.log(data);
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			type: 'post',
+			data: data,
+			success: function(result) {
+				var htmls = '';
+				$("#processtag_list").find("tr").remove();
+				$('.process_footer').hide();
+				$('.process_label_data').show();
+				if (result.code == 0) {
+					$('.process_footer').show();
+					$('.process_label_data').hide();
+					for (var i = 0; i < result.data.data.length; i++) {
+						var key = result.data.data[i].key;
+						var name = result.data.data[i].name;
+						var flow_label = result.data.data[i].flow_label ? result.data.data[i].flow_label : '暂无标签名';
+						var content = result.data.data[i].content ? result.data.data[i].content : '暂无相关内容';
+						var content_type = result.data.data[i].content_type ? result.data.data[i].content_type : '暂无类型';
+						var id = result.data.data[i].id;
+						var corpus_id = result.data.data[i].corpus_id;
+						var label_status = result.data.data[i].label_status;
+						var state = result.data.data[i].state;
+						var scenarios_node_name = result.data.data[i].scenarios_node_name;
+						var string = '<tr>' +
+							'<td>' + key + '</td>' +
+							'<td>' + scenarios_node_name + '</td>' +
+							'<td>' + name + '</td>' +
+							'<td>' + flow_label + '</td>' +
+							'<td>' + content + '</td>' +
+							'<td>' + content_type + '</td>';
+						if (state == '' || state == null) {
+							string += '<td><input type="checkbox" name="protag_query" data-state="' + label_status + '" data-id="' +
+								corpus_id + '" class="precision_query" onclick="change_state(this);"></td>';
+						} else {
+							string += '<td><input type="checkbox" name="protag_query" data-state="' + label_status + '" data-id="' +
+								corpus_id + '" checked="' + state + '" class="precision_query" onclick="change_state(this);"></td>';
+						}
+						string += '</tr>';
+						$("#processtag_list").append(string);
+					}
+					$('#process_label_count').text(result.data.count);
+					//显示分页(当前页码, 总数, 每页显示的条数, 自定义参数)
+					process_label_paging.paging(result.data.page, result.data.count, result.data.pagesize);
+				} else if (result.code == 3) {
+					console.log('参数传递错误，话术id为空,获取流程标签失败');
+				}
+				if (window.change_type == 1) {
+					$("#fullScreen").addClass("fadeInRight animated");
+					window.change_type = 0;
+				}
+			},
+			error: function(e) {
+				alert('获取流程标签失败');
+			}
+		});
+	}
+	// 流程标签选中事件
+	function change_state(obi) {
+		var corpus_id = $(obi).attr('data-id');
+		var state = $(obi).attr('data-state');
+		if (state == 1) {
+			state = 0;
+		} else {
+			state = 1;
+		}
+		$.post("{:url('change_flowlabel_state')}", {
+			'corpus_id': corpus_id,
+			'state': state
+		}, function(data) {
+			if (data.code === 0) {
+				alert('更新成功');
+			} else {
+				alert('更新失败');
+			}
+			show_processlabel_data();
+		});
+	}
+	var flow_branch_label_page = new Paging01();
+	flow_branch_label_page.init_args({
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'flow_branch_label', //放置分页的class
+		callback: get_flow_branch_labels, //回调函数 比如show_datas(页码, 显示条数)
+		key: 3,
+	});
+	//记录上一次查询流程分支标签的话术ID
+	var query_flow_breacn_label_scenarios_id = null;
+	$('#flow_branch_label').click(function(){
+	  //查询当前选中的话术的ID
+	  var scenarios_id = $('.scene-status-abnormal.active').attr('scene-id');
+	  if(query_flow_breacn_label_scenarios_id != scenarios_id){
+	    //查询数据并显示
+	    get_flow_branch_labels(1, 10);
+	  }
+	});
+	//获取流程分支标签
+	function get_flow_branch_labels(page, limit)
+	{
+	  //获取搜索条件
+	  var branch_processName = $('#branch_processName').val();  //分支标签名称
+	  var branch_process_content = $('#branch_process_content').val();  //关键字
+	  //给参数设置默认值
+	  var page = arguments[0]?arguments[0]:1;
+	  var limit = arguments[1]?arguments[1]:10;
+	  //获取话术id
+	  //robot-item scene-status-normal active
+	  var scenarios_id = $('.robot-list > .robot-item.active').attr('scene-id');
+	  //接口URL
+	  var url = '{:url("user/scenarios/get_flow_branch")}';
+	  //参数
+	  var data = {
+	    scenarios_id: scenarios_id,
+	    branch_processName:branch_processName,
+	    branch_process_content:branch_process_content,
+	    page: page,
+	    limit, limit
+	  };
+	  //调用
+	  $.ajax({
+	    type:'post',
+	    data:data,
+	    dataType:'json',
+	    url:url,
+	    success:function(result){
+	      console.log('--------------sdfdfsdfs')
+	      console.log(result);
+	      //有数据
+	      if(result.code == 0 && result.data.datas.length){
+	        query_flow_breacn_label_scenarios_id = scenarios_id;
+	        //显示总条数
+	        $('#branch_process_label_count').text(result.data.count);
+	        //定义容器
+	        var htmls = '';
+	        //遍历数组(key, value)
+	        $.each(result.data.datas, function(index, object){
+	          //获取显示的模板的html
+	          var html = $('#tel_flow_branch_template').html();
+	              //填充数据
+	              html = html.replace('{%id%}', object.id);
+	              html = html.replace('{%key%}', object.key);
+	              html = html.replace('{%scenarios_node_name%}', object.scenarios_node_name);
+	              html = html.replace('{%flow_node_name%}', object.flow_node_name);
+	              html = html.replace('{%flow_branch_name%}', object.flow_branch_name);
+	               if(!object.flow_branch_label || object.flow_branch_label =='' || object.flow_branch_label =='null'){
+	                html = html.replace('{%flow_branch_label%}', '暂无');
+	              }else{
+	                html = html.replace('{%flow_branch_label%}', object.flow_branch_label);
+	              }
+	              html = html.replace('{%keyword%}', object.keyword);
+	              html = html.replace('{%label_status%}', object.label_status);
+	              if(object.label_status == 1){
+	                html = html.replace('{%show_label_status%}', 'checked="checked"');
+	              }else{
+	                html = html.replace('{%show_label_status%}', '');
+	              }
+	           //收集
+	           htmls += html;
+	        });
+	        $('#branch_processtag_list').html(htmls);
+	        //显示分页
+	        flow_branch_label_page.paging(page, result.data.count, limit);
+	        //绑定点击更新状态事件
+	        change_flow_branch_label_status();
+	      //没有数据
+	      }else{
+	        //显示总条数
+	        $('#branch_process_label_count').text(0);
+	        //显示分页
+	        flow_branch_label_page.paging(page, 0, limit);
+	        //没有数据 就清空模板数据
+	        $('#branch_processtag_list').html('');
+	      }
+	    },
+	    error:function(){
+	      console.log('调用失败');
+	    }
+	  });
+	}
+	function change_flow_branch_label_status()
+  {
+    $('.flow_branch_label_status').unbind('change');
+    $('.flow_branch_label_status').change(function(){
+      var label_status = $(this).data('status');
+      var id = $(this).data('id');
+      var data = {
+        'label_status':label_status,
+        'id':id
+      };
+
+      var url = '{:url("user/scenarios/update_flow_branch_label_status")}';
+      $.ajax({
+        type:'get',
+        data:data,
+        url:url,
+        dataType:'json',
+        success:function(result){
+          console.log(result);
+          if(result.code == 0){
+            alert('更新成功');
+          }else{
+            alert('更新失败');
+          }
+        },
+        error:function(){
+          console.log('更新失败');
+        }
+      });
+    });
+  }
+	//更新流程分支标签状态
+  function update_flow_branch_label_status(id, label_status)
+  {
+    var url = '{:url("user/scenarios/update_flow_branch_label_status")}';
+    var data = {
+      'id':id,
+      'label_status':label_status
+    };
+    $.ajax({
+      type:"get",
+      data:data,
+      dataType:'json',
+      url:url,
+      success:function(result){
+        console.log(result);
+      },
+      error:function(){
+        console.log('更新失败, 调用接口失败');
+      }
+    });
+  }
+	//页面加载事件
+	$(function() {
+		show_processlabel_data();
+	});
+</script>

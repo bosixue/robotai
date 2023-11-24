@@ -1,0 +1,884 @@
+<!--销售管理弹框-->
+<style>
+	@media screen and (max-width: 1370px){
+		.modal-body.pagelists.pz_innerbox_lay{
+			overflow-y: scroll;
+
+		}
+	}
+	.form-group label{
+		/*min-width:120px;*/
+		text-align: right;
+	}
+	@media screen and (max-width:767px){
+		.form-horizontal .control-label {
+	    float: left;
+		}
+	}
+	.marbottom {
+		margin-bottom: 8px !important;
+	}
+</style>
+
+
+
+<!--资料修改确认-->
+<div class="modal fade in" id="modify-data" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="false">
+   <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+           <span aria-hidden="true">×</span>
+         </button>
+         <h4 class="modal-title" id="myLabel">
+           操作提示
+         </h4>
+       </div>
+       <div class="modal-body">
+       	<span>确认修改该账户资料？</span>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">   取 消		</button>
+         <button type="button" class="btn btn-primary" onclick="">	确 定    </button>
+       </div>
+     </div>
+   </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	//切换登录密码重置
+	$('#resetPwd').click(function(){
+		if($('#resetPwd').hasClass('reset')){
+			$('#resetPwd').text("取消重置登录密码");
+			$('.showpwd').removeClass('hidden');
+			$('#resetPwd').removeClass('reset');
+		}else{
+			$('#resetPwd').text("重置登录密码");
+			$('.showpwd').addClass('hidden');
+			$('#resetPwd').addClass('reset');
+
+		}
+	});
+
+
+	//确认保存修改资料
+	function save(){
+		$('#modify-data').modal('show');
+	}
+</script>
+
+
+
+<!--充值弹框-->
+<div class="modal fade in" id="rechargedialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="recharge"><span>充值</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="rechargeform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								<div class="form-group">
+									<label class="col-lg-4 control-label">金额：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" placeholder="请输入金额"  id="rechargemoney">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">备注：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+                    <textarea class="l-textarea" name="name" rows="5" maxlength="30" placeholder="备注充值信息，限定30个字以内"></textarea>
+									</div>
+								</div>
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+<!--分配机器人弹框-->
+<div class="modal fade in" id="distribution-robot" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="distribution"><span>编辑机器人</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="distributionform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								 <div class="form-group account ">
+									<label class="col-lg-4 control-label">用户：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <select class="form-control  " id="user">
+										  <option value="">请选择用户名</option>
+                      <option value="">用户1</option>
+                      <option value="">用户2</option>
+                      <option value="">用户3</option>
+                    </select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 control-label">分配数量：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" placeholder="剩余可分配机器人100个"  id="distributionnum">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">开通时长：</label>
+                  <div class="col-lg-6 col-sm-6">
+                    <select class="form-control  "  id="time">
+										  <option value="">请选择开通时长</option>
+                      <option value="">1星期</option>
+                      <option value="">1个月</option>
+                      <option value="">1年</option>
+                    </select>
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">备注：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+                    <textarea class="l-textarea" name="name" rows="5"  placeholder="请输入备注信息"></textarea>
+									</div>
+								</div>
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+<!--绑定微信弹框-->
+<div class="modal fade in" id="bindingwechat" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 390px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>绑定微信</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<div class="wechattips">
+							打开微信扫描下方二维码绑定微信，获取意向客户实时推送？
+						</div>
+						<div class="wechatimg">
+							<img src="__PUBLIC__/img_sj/wechat.png" alt="">
+						</div>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">关闭</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+
+
+<!--回收机器人弹框-->
+<div class="modal fade in" id="recoveryrobot" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	<div class="modal-dialog modal-sm" style="width: 470px;">
+		<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel"><span>回收机器人</span></h4>
+			 </div>
+			 <div class="modal-body pagelists">
+					<form id="recoveryrobotform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+							 <div class="form-group  ">
+									<label class="col-lg-4 control-label">用户：</label>
+									<div class="col-lg-6 col-sm-6">
+									<label class="col-lg-4 control-label l-textleft">小明</label>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-lg-4 control-label">机器人数量：</label>
+								<div class="col-lg-6 col-sm-6">
+									<label class="col-lg-4 control-label l-textleft">100</label>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-lg-4 control-label">回收数量：</label>
+								<div class="col-lg-6 col-sm-6">
+										<input type="text" class="form-control"  id="recoveryrobotnum">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="col-lg-4 control-label">备注：</label>
+								<div class="col-lg-6 col-sm-6 l-radio">
+									<textarea class="l-textarea" name="name" rows="5"  placeholder="请输入备注信息"></textarea>
+								</div>
+							</div>
+
+				 </form>
+			 </div>
+			 <div style="clear:both"></div>
+			 <div class="modal-footer">
+					 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+					 <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+			</div>
+	 </div>
+	</div>
+	</div>
+
+<!--编辑和添加私有通道-->
+	<div class="modal fade in" id="add_privateChannelDialog" tabindex="-1" role="dialog" aria-labelledby="myLprivateChannelLabel" aria-hidden="false" >
+		  <div class="modal-dialog modal-sm" style="width: 530px;">
+				<div class="modal-content">
+						<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									 <span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="addprivateChannel"><span>添加私有通道</span></h4>
+					 </div>
+					 <div class="modal-body l-overflow pz_innerbox">
+							<form id="addprivateChannelform" method="post" class="form-horizontal margintop" >
+									 <div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">通道名称：</label>
+										<div class="col-lg-6 col-sm-6">
+											 <input type="text" class="form-control l-width" placeholder="请输入通道名称"  name="name" id="privateChannel">
+										</div>
+									</div>
+									<div class="form-group">
+									 <label class="col-lg-3 col-sm-3 control-label">短信运营商：</label>
+									 <div class="col-lg-6 col-sm-6">
+										 <select class="form-control l-width" name="" >
+											 <option value="">请选择短信运营商</option>
+										   <option value="">中国移动</option>
+											 <option value="">中国电信</option>
+											 <option value="">中国联通</option>
+										 </select>
+									 </div>
+								 </div>
+									<div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">接口地址：</label>
+										<div class="col-lg-6 col-sm-6">
+	                    <input type="text" class="form-control l-width" placeholder="请输入接口地址" id="infAddress">
+										</div>
+									</div>
+	                <div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">短信ID：</label>
+										<div class="col-lg-6 col-sm-6">
+	                    <input type="text" class="form-control l-width"  placeholder="请输入短信ID" id="smsID">
+										</div>
+									</div>
+	                <div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">短信账号：</label>
+										<div class="col-lg-6 col-sm-6">
+	                    <input type="text" class="form-control l-width" placeholder="请输入短信账号"  id="smsAccount">
+										</div>
+									</div>
+	                <div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">短信密码：</label>
+										<div class="col-lg-6 col-sm-6">
+	                    <input type="password" class="form-control l-width" placeholder="请输入短信密码" id="smsPwd">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label ">短信单价：</label>
+										<div class="col-lg-6 col-sm-6 l-smsprice">
+	                    <input type="text" class="form-control l-width " placeholder="请输入短信单价" id="smsPrice">
+											<img src="/public/img_sj/pay_attention.png" alt="">
+											<span class="smstips"> 短信通道单价为营销类单价</span>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">短信数量：</label>
+										<div class="col-lg-6 col-sm-6">
+	                    <input type="text" class="form-control l-width" placeholder="请输入短信数量" id="smsNum">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-sm-3 control-label">备注：</label>
+										<div class="col-lg-6 col-sm-6">
+	                    <textarea name="name" id="privateChannelremarks" class="l-width" rows="3"  maxlength="30" placeholder="请输入备注信息，限定30个字以内"></textarea>
+										</div>
+									</div>
+
+						 </form>
+					 </div>
+					 <div style="clear:both"></div>
+					 <div class="modal-footer">
+							 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+	             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">保存</button>
+					</div>
+			 </div>
+	    </div>
+		</div>
+
+		<!--短信通道中查看用户名单-->
+		<div class="modal fade in" id="user_list" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+		  <div class="modal-dialog modal-sm" style="width: 550px;">
+			 <div class="modal-content">
+				 <div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel"><span>查看用户名单</span></h4>
+				 </div>
+				<div class="modal-body pagelists clearfix l-overflow pz_innerbox">
+					<form id="allotlineform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+						<div class="form-group">
+							<div class="col-lg-10 col-sm-10">
+		            <label class="control-label" style="margin-left:16px;">通道名称：测试通道01</label>
+							</div>
+						</div>
+		        <div class="form-group">
+		          <table class="table table-bordered table-hover l_listtable">
+							   <thead>
+								    <tr>
+			                <th class="text-center">用户名称</th>
+											<th class="text-center">用户类型</th>
+											<th class="text-center">销售价格</th>
+											<th class="text-center">短信条数</th>
+											<th class="text-center">分配时间</th>
+											<th class="text-center">操作</th>
+								    </tr>
+							    </thead>
+							    <tbody id="userListShow">
+			            	<tr>
+				              <td class="text-center">scy000</td>
+											<td class="text-center">商家</td>
+											<td class="text-center">0.02</td>
+											<td class="text-center">50</td>
+				              <td class="text-center">2018.11.02</td>
+											<td class="text-center">
+												<a href="javascript:;" class="lrecharge" onclick="recharge_sms();">分配条数</a>
+											</td>
+										</tr>
+										<tr>
+											<td class="text-center">scy001</td>
+											<td class="text-center">商家</td>
+											<td class="text-center">0.02</td>
+											<td class="text-center">60</td>
+											<td class="text-center">2018.11.02</td>
+											<td class="text-center">
+												<a href="javascript:;" class="lrecharge" onclick="recharge_sms();">分配条数</a>
+											</td>
+										</tr>
+							    </tbody>
+						  	</table>
+		        </div>
+					</form>
+					<button type="button" class="btn btn-default pull-right l_colsebot" data-dismiss="modal">关闭</button>
+				</div>
+			 </div>
+		  </div>
+		</div>
+
+		<!--短信条数充值弹框-->
+		<div class="modal fade in" id="recharge-sms" tabindex="-1" role="dialog" aria-labelledby="myalloctionLabel" aria-hidden="false">
+			<div class="modal-dialog modal-sm" style="width: 425px; top:7%;">
+			 <div class="modal-content">
+			 <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						 <span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myalloctionLabel"><span>分配短信条数</span></h4>
+			 </div>
+			 <div class="modal-body pagelists l-overflow pz_innerbox">
+					<form id="rechargesmsform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+							<div class="form-group">
+								<label class="col-lg-4 col-sm-4 control-label">分配短信条数：</label>
+								<div class="col-lg-6 col-sm-6">
+								<input type="text" class="form-control" id="smsNmber" placeholder="请输入短信条数" name="" value="">
+								<img src="/public/img_sj/pay_attention.png" alt="">
+								<span class="smstips"> 当前通道可用条数<span id="sumSmsNum">100</span></span>
+								</div>
+							</div>
+					</form>
+			 </div>
+			 <div style="clear:both"></div>
+			 <div class="modal-footer">
+							 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+							 <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="rechargesms();" type="button">确 定</button>
+						</div>
+			 </div>
+			</div>
+		</div>
+
+
+
+<!--通道分配-->
+		<div class="modal fade in" id="alloction-passageway" tabindex="-1" role="dialog" aria-labelledby="myalloctionLabel" aria-hidden="false">
+		  <div class="modal-dialog modal-sm" style="width: 530px;">
+			 <div class="modal-content">
+			 <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						 <span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" id="myalloctionLabel"><span>分配短信通道</span></h4>
+			 </div>
+			 <div class="modal-body pagelists l-overflow pz_innerbox">
+					<form id="userlistform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+						<div class="form-group" style="padding-top:9px">
+							<label class="col-lg-4 col-sm-4 control-label">用户名称：</label>
+							<div class="col-lg-6 col-sm-6">
+									<label class="checkbox-wrapper">yunyingshang01</label>
+							</div>
+						</div>
+						<div class="form-group">
+								<label class="col-lg-4 col-sm-4 control-label">选择通道：</label>
+								<div class="col-lg-6 col-sm-6 l_selectline">
+									<select class="form-control resetSel c_selectimg" name="">
+										<option value="">请选择通道</option>
+										<option value="">通道1</option>
+										<option value="">通道2</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 col-sm-4 control-label">通道成本价：</label>
+								<div class="col-lg-6 col-sm-6">
+		              <label class="control-label">0.02元/条</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 col-sm-4 control-label">通道销售价：</label>
+								<div class="col-lg-6 col-sm-6 l-yuantiao">
+									<input type="text" name="" class="form-control" placeholder="请输入通道销售价格" value="">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-4 col-sm-4 control-label">短信条数：</label>
+								<div class="col-lg-6 col-sm-6">
+		             <input type="text" class="form-control" name="" value="" placeholder="请输入短信条数">
+								 <!-- <img src="/public/img_sj/pay_attention.png" alt=""> -->
+								 <span class="smstips">当前可用短信条数<span>100</span></span>
+								</div>
+							</div>
+		          <div class="form-group">
+		            <label class="col-lg-4 col-sm-4 control-label">备注：</label>
+		            <div class="col-lg-6 col-sm-6">
+		              <textarea class="textarea-len form-control" name="name" rows="8" maxlength="30" id="notes" placeholder="请输入备注信息，限定30个字以内" style="width:290px;"></textarea>
+		            </div>
+		          </div>
+				 </form>
+			 </div>
+			 <div style="clear:both"></div>
+			 <div class="modal-footer">
+							 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+		           <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+						</div>
+			 </div>
+		  </div>
+		</div>
+
+
+
+		<!--资费查看弹框-->
+		<div class="modal fade in" id="tariffViewDialog" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-sm" style="width: 600px;">
+					<div class="modal-content">
+							<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										 <span aria-hidden="true">×</span>
+									</button>
+									<h4 class="modal-title" id="tariffView"><span>资费查看</span></h4>
+						 </div>
+						 <div class="modal-body pagelists l-overflow pz_innerbox" style="max-height:500px;">
+								<form id="tariffViewForm" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+										 <div class="form-group robot_rate">
+										 	<p class="l-title">机器人月租费率</p>
+										 	<div class="l-content">
+										 		<div class="n_showdata">
+										 			<p>机器人月租</p>
+										 			<p>成本价：
+										 				<span id="c_price"></span>
+										 				<span id="c_type"></span>
+										 			</p>
+										 			<p id="x_price_fji">销售价：
+										 				<span id="input_x"><input type="text" name="" class="form-control" value="" id="x_price" ></span>
+										 				<span id="x_type"></span></p>
+										 		</div>
+
+										 		<!--	<div >-->
+													<!--	<span>成本价：<span id="c_price">0.02</span><span id="c_type">元/天/个</span></span>-->
+													<!--	<span class="l-salePrice saleprice">销售价：-->
+													<!--		<input type="text" class="form-control hidden " name="" value="">-->
+													<!--		<span id="x_price">0.05</span><span id="x_type">元/天/个</span>-->
+													<!--	</span>-->
+													<!--</div>-->
+										 	</div>
+										</div>
+										<div class="form-group">
+										 	<p class="l-title">技术服务费用</p>
+										 	<div class="l-content">
+										 		<div class="n_showdata">
+										 			<p>技术服务费用</p>
+										 			<p>成本价：
+										 				<span id="c_service_price"></span>
+										 				<span>元/分钟</span>
+										 			</p>
+										 			<p>销售价：
+										 				<span id="x_service_price"><input type="text" name="" class="form-control" value="" id="service_price" ></span>
+										 				<span>元/分钟</span>
+										 			</p>
+										 		</div>
+
+										 		<!--	<div >-->
+													<!--	<span>成本价：<span id="c_price">0.02</span><span id="c_type">元/天/个</span></span>-->
+													<!--	<span class="l-salePrice saleprice">销售价：-->
+													<!--		<input type="text" class="form-control hidden " name="" value="">-->
+													<!--		<span id="x_price">0.05</span><span id="x_type">元/天/个</span>-->
+													<!--	</span>-->
+													<!--</div>-->
+										 	</div>
+										</div>
+										<div class="form-group">
+										 	<p class="l-title">ASR费率</p>
+										 	<div class="l-content" id="asr_data">
+										 		<!--	<div>-->
+										 		<!--	<span>ASR名称：测试1</span>-->
+									 			<!--	<span>成本价：0.02元/次</span>-->
+													<!--<span class="saleprice">销售价：-->
+													<!--	<input type="text" class="form-control hidden " name="" value="">-->
+													<!--	<span>0.05</span>	元/次</span>-->
+									 			<!--</div>-->
+
+										 	</div>
+										</div>
+										<div class="form-group">
+										 	<p class="l-title">线路费率</p>
+										 	<div class="l-content" id="line_data">
+										 	 <!-- <div>-->
+										 		<!--	<span>线路名称：线路3</span>-->
+									 			<!--	<span>成本价：0.02元/条</span>-->
+													<!--<span class="saleprice">销售价：-->
+													<!--	<input type="text" class="form-control hidden" name="" value="">-->
+													<!--	<span>0.05</span>元/条-->
+													<!--</span>-->
+										 	 <!-- </div>-->
+										 	</div>
+										</div>
+										<div class="form-group">
+										 	<p class="l-title">短信通道</p>
+										 	<div class="l-content" >
+										 		<div id="msm_data">
+										 		</div>
+										 		<div style="margin-top: 5px;" id="msm_data_t">
+													<img src="/public/img_sj/pay_attention.png" alt="">
+													<span class="smstips">短信通道单价为营销类单价</span>
+												</div>
+										 		<!--<div>-->
+										 		<!--	<span>通道名称：通道1</span>-->
+									 			<!--	<span>成本价：0.02元/条</span>-->
+													<!--<span class="saleprice">销售价：-->
+													<!--	<input type="text" class="form-control  hidden" name="" value="">-->
+													<!--	<span>0.05</span>元/条-->
+													<!--</span>-->
+										 		<!--</div>-->
+										 	</div>
+
+										</div>
+										<div class="form-group">
+										 	<p class="l-title">备注</p>
+										 	<div class="l-remark">
+										 		<textarea name="name" rows="5" cols="50"  style="width:520px;" id="note"></textarea>
+										 	</div>
+										</div>
+										<input hidden id="onlyid" value=""/>
+							 </form>
+						 </div>
+						 <div style="clear:both"></div>
+						 <div class="modal-footer">
+								 <button type="button" class="btn btn-default " data-dismiss="modal">关闭</button>
+								 <button type="button" class="btn btn-primary editbtn" onclick="tariff_edit()">保存</button>
+						</div>
+				 </div>
+		    </div>
+			</div>
+
+
+		<!--修改记录弹框-->
+		<div class="modal fade in" id="modificationRecord" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			  <div class="modal-dialog modal-sm" style="width: 530px;">
+					<div class="modal-content">
+							<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										 <span aria-hidden="true">×</span>
+									</button>
+									<h4 class="modal-title" id="add"><span>修改记录</span></h4>
+						 </div>
+						 <div class="modal-body pagelists l-overflow pz_innerbox">
+								<form id="modificationRecordForm" method="post" class="form-horizontal" enctype="multipart/form-data">
+										 <div class="form-group l-recored">
+										 	<span >用户名：</span>
+											<span id="re_username">SCY001</span>
+											<span >用户类型：</span>
+											<span id="re_role_name">运营商</span>
+										</div>
+								<table class="table table-hover l-listtable">
+							   <thead>
+								    <tr>
+			                <th class="text-center">模块</th>
+			                <th class="text-center">修改前</th>
+			                <th class="text-center">修改后</th>
+											<th class="text-center">修改时间</th>
+								    </tr>
+							    </thead>
+							    <tbody id="recordListShow">
+			       <!--     	<tr>-->
+				      <!--        <td class="text-center">机器人月租</td>-->
+				      <!--        <td class="text-center">0.02</td>-->
+				      <!--        <td class="text-center">0.03</td>-->
+				      <!--        <td class="text-center">2018.11.02</td>-->
+										<!--</tr>-->
+							    </tbody>
+						  	</table>
+						  	<div class="component-page-empty" id="record_ts">
+								</div>
+							 </form>
+						 </div>
+						 <div class="modal-footer">
+								 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">关闭</button>
+						</div>
+				 </div>
+		    </div>
+			</div>
+
+
+<!--运营商、管理员编辑账号管理弹框-->
+<div class="modal fade in " id="agent-account-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" >
+  <div class="modal-dialog modal-sm" style="width: 720px;">
+		<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title" id="edit"><span>编辑账号</span></h4>
+			 </div>
+			 <div class="modal-body pagelists l-overflow pz_innerbox" style="padding-bottom:5px;">
+					<form id="agent_accountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+							 <div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">用户名：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control textwidth inputdisplay l-readonly disable-mouse"  name="name" id="agent_username" readonly="">
+									 <a href="javascript:;" class="l-loginPwd inputdisplay reset" id="resetPwd">重置登录密码</a>
+								</div>
+							</div>
+							<div class="form-group hidden showpwd">
+								<label class="col-lg-3 col-sm-3 control-label"></label>
+								<div class="col-lg-7 col-sm-7">
+                  <input type="password" class="form-control textwidth " placeholder="请输入新登录密码" id="agent_pwd">
+								</div>
+							</div>
+							<div class="form-group hidden showpwd">
+								<label class="col-lg-3 col-sm-3 control-label"></label>
+								<div class="col-lg-7 col-sm-7">
+                  <input type="password" class="form-control textwidth" placeholder="确认新的登录密码"  id="confirmPwd">
+								</div>
+							</div>
+							<div class="form-group">
+							 <label class="col-lg-3 col-sm-3 control-label">用户类型：</label>
+							 <div class="col-lg-7 col-sm-7 ">
+							 	<input type="text" class="form-control textwidth l-readonly disable-mouse"  name="name" id="user_type" readonly="readonly" value="">
+									<!--<select class="form-control textwidth" name="" id="user_type" readonly="">-->
+									<!--	<option value="18">商家</option>-->
+									<!--	<option value="19">销售</option>-->
+									<!--</select>-->
+							 </div>
+						 </div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">手机号码：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control textwidth"  name="name" id="phoneNumber">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">备用手机号码：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control textwidth"  name="name" id="alternateCellPhone">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">账户余额：</label>
+								<div class="col-lg-7 col-sm-7">
+									<div class="l-yuan inputdisplay">
+									 <input type="text" class="form-control textwidth l-readonly disable-mouse"  name="name" id="accountBalance" readonly="readonly">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">机器人个数：</label>
+								<div class="col-lg-9 col-sm-9 l-ge">
+									<input type="text" class="form-control textwidth l-readonly disable-mouse"  name="name" id="robotNum" readonly="readonly" value="200">
+									<!--<div class="l-ge inputdisplay">-->
+									<!--	<input type="text" class="form-control textwidth inputdisplay"  name="name" id="robotNum" >-->
+									<!--</div>-->
+									<!-- <span class="tips">当前商家可增加机器人数：<span>500</span></span>-->
+								</div>
+							</div>
+							<div class="form-group riqi">
+								<label class="col-lg-3 col-sm-3 control-label">到期时间：</label>
+								<div class="col-lg-9 col-sm-9">
+									<!--商家-->
+									<span class="textwidth l-veralign" id="sj_robot_date"></span>
+									<!--/商家-->
+									<!--管理员、运营商、代理商-->
+									<input type="text" class="form-control c_datebgimg inputdisplay disable-mouse l-readonly" placeholder="请选择到期日期" id="z_start_date" name="start_date" value="" readonly="" style="width:250px !important" disabled="disabled">
+									<script>
+											$('#z_start_date').fdatepicker({
+												format: 'yyyy-mm-dd',
+												pickTime: false
+											});
+									</script>
+									<!--/ 管理员、运营商、代理商-->
+									<span class="tips chengbe">当前<span id="z_role_name"></span>机器人截止时间：<span id="d_robot_date"></span></span>
+								</div>
+							</div>
+							<!--商家-->
+							<div class="form-group riqi2">
+								<label class="col-lg-3 col-sm-3 control-label">到期时间：</label>
+								<div class="col-lg-7 col-sm-7">
+									<span class="textwidth l-veralign" id="robot_date"></span>
+								</div>
+							</div>
+							<div class="form-group shijian2">
+								<label class="col-lg-3 col-sm-3 control-label">机器人租金：</label>
+								<div class="col-lg-7 col-sm-7">
+									<span class="textwidth l-veralign" id="robot_rent"><span class="num">0.02</span><span id="type_price">元 / 天 / 个</span></span>
+								</div>
+							</div>
+							<!--/商家-->
+
+							<!--运营商、代理商-->
+							<div class="form-group zujin2">
+								<label class="col-lg-3 col-sm-3 control-label">机器人租金：</label>
+								<div class="col-lg-9 col-sm-9 l-rent">
+									<div class="l-display">
+										<input type="radio" name="price_type" id="dayPrice" value="1" checked="checked">按天计费
+									</div>
+									<div class="l-display">
+										<input type="radio" name="price_type" id="monthPrice" value="2">按月计费
+										<!--<span class="tips tipsprice" id="nowDayPrice">当前代理商机器日租成本价：<span><span class="num"> 0.02</span>元 / 天 / 个</span></span>-->
+										<!--<span class="tips tipsprice hidden" id="nowMonthPrice">当前代理商机器月租成本价：<span >20元 / 月 / 个</span></span>-->
+									</div>
+									<div class="paricetips" >请输入价格：
+										<input type="text" class="form-control rental-priceinput" id="robotprice" name="" value="">
+										<span id="enterDayPrice">元 / 天 / 个</span>
+										<span id="enterMonthPrice" class="hidden">元 / 月 / 个</span>
+										</div>
+								</div>
+							</div>
+							<!--/运营商、代理商-->
+
+							<!--管理员-->
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">使用线路：</label>
+									<div class="col-lg-9 col-sm-9 pz_innerbox" id="account-line-list">
+										<!--<div class="l-marginright">-->
+										<!--	<span>线路1</span>-->
+										<!--	<span>成本价：0.01元/分钟</span>-->
+										<!--	<span>销售价：0.02元/分钟</span>-->
+										<!--</div>-->
+									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">使用ASR：</label>
+									<div class="col-lg-9 col-sm-9 pz_innerbox" id="account-asr-list">
+											<!--<a href="{:url('/user/asr/list')}" class="l-veralign">去分配</a>-->
+									<!--	<div class="l-marginright">-->
+									<!--		<span>名称：ASR1</span>-->
+									<!--		<span>成本价：0.01元/次</span>-->
+									<!--		<span>销售价：0.02元/次</span>-->
+									<!--	</div>-->
+									<!--	<div class="l-marginright">-->
+									<!--		<span>名称：ASR2</span>-->
+									<!--		<span>成本价：0.01元/次</span>-->
+									<!--		<span>销售价：0.02元/次</span>-->
+									<!--	</div>-->
+									</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label">短信通道：</label>
+									<div class="col-lg-9 col-sm-9 pz_innerbox" id="account-msm-list">
+										<!--<div class="l-marginright">-->
+										<!--	<span>名称：短信通道1</span>-->
+										<!--	<span>成本价：0.01元/条</span>-->
+										<!--	<span>销售价：0.02元/条</span>-->
+										<!--</div>-->
+										<!--<div class="l-marginright">-->
+										<!--	<span>名称：短信通道2</span>-->
+										<!--	<span>成本价：0.01元/条</span>-->
+										<!--	<span>销售价：0.02元/条</span>-->
+										<!--</div>-->
+									</div>
+							</div>
+							<!--/管理员-->
+
+
+							<!--运营商、代理商-->
+							<!--<div class="form-group">-->
+							<!--	<label class="col-lg-3 col-sm-3 control-label">选择ASR：</label>-->
+							<!--		<div class="col-lg-9 col-sm-9">-->
+	      <!--            <select class="form-control textwidth inputdisplay ">-->
+	      <!--            		<option>张伟-机器人话术</option>-->
+	      <!--            		<option>张伟-机器人话术</option>-->
+	      <!--            		<option>张伟-机器人话术</option>-->
+	      <!--            </select>-->
+	      <!--             <img class="l-imgmargin" src="__PUBLIC__/img_sj/pay_attention.png"/>-->
+      <!--               <span class="tips l-tips">注：若未添加ASR则不能正常打电话</span>-->
+							<!--		</div>-->
+							<!--</div>-->
+							<!--<div class="form-group">-->
+							<!--	<label class="col-lg-3 col-sm-3 control-label ">选择线路：</label>-->
+							<!--		<div class="col-lg-9 col-sm-9">-->
+	      <!--            <select class="form-control textwidth inputdisplay" id="lines">-->
+	      <!--            		<option>线路1</option>-->
+	      <!--            		<option>线路2</option>-->
+	      <!--            		<option>线路3</option>-->
+	      <!--            </select>-->
+	      <!--             <img class="l-imgmargin" src="__PUBLIC__/img_sj/pay_attention.png"/>-->
+      <!--                <span class="tips l-tips">注：若未添加线路则不能正常打电话</span>-->
+							<!--		</div>-->
+							<!--</div>-->
+							<!--<div class="form-group">-->
+							<!--	<label class="col-lg-3 col-sm-3 control-label ">选择短信通道：</label>-->
+							<!--		<div class="col-lg-9 col-sm-9">-->
+	      <!--            <select class="form-control textwidth inputdisplay">-->
+	      <!--            		<option>中国移动</option>-->
+	      <!--            		<option>中国联通</option>-->
+	      <!--            		<option>中国电信</option>-->
+	      <!--            </select>-->
+	      <!--             <img class="l-imgmargin" src="__PUBLIC__/img_sj/pay_attention.png"/>-->
+      <!--                <span class="tips l-tips">注：若未添加短信通道则不能正常发短信</span>-->
+							<!--		</div>-->
+							<!--</div>-->
+							<!--/运营商、代理商-->
+							<div class="form-group">
+								<label class="col-lg-3 col-sm-3 control-label ">备注：</label>
+									<div class="col-lg-9 col-sm-9">
+										<textarea class="form-control textareawith" id="agent_remark">暂无备注</textarea>
+									</div>
+							</div>
+				 </form>
+			 </div>
+			 <div style="clear:both"></div>
+			 <div class="modal-footer">
+					 <button class="btn btn-default"  data-dismiss="modal">取消</button>
+           <button class="btn btn-primary" id="eixd_click" data_id =''  onclick="save();" >保存</button>
+			</div>
+	 </div>
+  </div>
+</div>
+

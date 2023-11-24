@@ -1,0 +1,357 @@
+<section class="navbar navbar-default main-box-header main-head clearfix l-navbar">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="pull-left form-inline knowledge">
+                <div class="form-group" >
+                    <label class="control-lable">知识库类型：</label>
+                    <select class="form-control" id="knowledge_type_search">
+                        <option value="0">全部</option>
+                        <option value="1">普通</option>
+                        <option value="8">用户未说话</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-lable">关键字：</label>
+                    <input type="text" class="form-control" name="contactNumber" id="contactNumber" placeholder="请输入关键字"
+                           style="height:34px;">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary"  onclick="getkeyword();">搜索</button>
+                </div>
+                <!--<div class="input-group">-->
+                    <!--<input type="text" class="form-control" name="contactNumber" id="contactNumber" placeholder="请输入关键字"-->
+                           <!--style="height:34px;">-->
+                    <!--<span class="input-group-btn">-->
+					<!--<button class="btn btn-primary" type="button" onclick="getkeyword();">-->
+                        <!--<img src="__PUBLIC__/img/sousuo.png" alt="">-->
+                        <!--搜索-->
+                    <!--</button>-->
+				  <!--</span>-->
+                <!--</div>-->
+                <button class="btn btn-knowledgebase" onclick="showThinks(0);" type="button" name="button">
+                    <img src="__PUBLIC__/img/tianjia.png" alt="">
+                    添加知识库
+                </button>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-knowledgebase cancelkn" data-toggle="modal"
+                        data-target="#knowledge-batch-delete" onclick="delKnowledgeall()">
+                    <img src="__PUBLIC__/img/piliangshanchu.png" alt="">
+                    批量删除
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-6">
+
+        </div>
+    </div>
+</section>
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th class="text-center">
+            <input type="checkbox" name="mobiles" class="check_knowledgebase" data-page="0"
+                   onclick="check_knowledgebase_thing();">
+        </th>
+        <th class="text-center">序号</th>
+        <th class="text-center">标题</th>
+        <th class="text-center table-width">问法</th>
+        <th class="text-center">优先排序<i class="hint" data-toggle="tooltip" title="" data-placement="top"
+                                       data-original-title="数字越大越优先进行识别">?</i></th>
+        <th class="text-center">关键词</th>
+        <th class="text-center">知识库标签</th>
+        <th class="text-center">更新时间</th>
+        <th class="text-center" style="width: 85px;">操作</th>
+    </tr>
+    </thead>
+    <tbody id="knowledgelist">
+
+    </tbody>
+</table>
+<div class="datatips datatips_know">
+    <p><img src="__PUBLIC__/img/none.png"/></p>
+    <p>暂无数据</p>
+</div>
+<div id="knowledgepage">
+</div>
+
+<script type="text/javascript">
+    //回车搜索事件 ---知识库关键词搜索
+    $('#contactNumber').keyup(function (event) {
+        if (event.keyCode == 13) {
+            getkeyword()
+        }
+    });
+
+    //修改知识库排序
+    function order(obj) {
+        var order = $(obj).val();
+        if (isNaN(order)) {
+            alert('order排序必须是数字');
+            return false;
+        }
+        var id = $(obj).attr('id');
+        //得到id  order 之后修改之
+        $.post("{:url('updateOrder')}", {'order': order, 'id': id}, function (data) {
+            if (data.code == 1) {
+                //修改排序成功 刷新当前页面
+                getKnowledgeList(1,)
+            } else {
+                alert(data.msg);
+            }
+        });
+
+
+    }
+
+
+    //获取知识库列表
+    function getKnowledgeList(page) {
+	    var knowledgekw = $('#contactNumber').val();
+        $("#fullScreen").removeClass("fadeInRight animated");
+		 var knowledge_type_search = $('#knowledge_type_search').val();
+        var sceneId = $("#nowsceneID").val();
+        var nowProcessId = $("#nowProcessId").val();
+        var serial_number = page;
+        var url = "{:url('getKnowledgeList')}";
+        $.ajax({
+            url: url,
+            dataType: "json",
+            type: "post",
+            data: {'page': page, 'sceneId': sceneId, "processId": nowProcessId, "keyword": knowledgekw,"knowledge_type_search":knowledge_type_search},
+            success: function (data) {
+                console.log(data);
+                if (data.code == 0) {
+                    var total = data.data.total;
+                    var Nowpage = data.data.Nowpage;
+                    var page = data.data.page;
+                    var Nowpage = parseInt(Nowpage);
+                    var data = data.data.list;
+                    console.log(data);
+                    // var usercheck = [];
+                    // $.each(data.data.knowledge_allid, function(index, object){
+                    //        usercheck.push(object.id);
+                    //     });
+                    //     usercheck = usercheck.join(',');
+                    //     $('.cancelkn').attr('data-id',usercheck);
+                    //
+                    if (data.length > 0) {
+                        $('.datatips_know').hide();
+                        $("#knowledgelist").find("tr").remove();
+
+                        for (var i = 0; i < data.length; i++) {
+                            var id = data[i].id;
+                            var sequence = data[i].sequence;
+                            var name = data[i].name ? data[i].name : '暂无标题';
+                            var keyword = data[i].keyword;
+                            //没有录音为空色
+                            var color = data[i].color;
+                            if (!keyword) {
+                                var keyword = '无'
+                            }
+                            var breaks = data[i].break;
+                            var type = data[i].type;
+                            var action = data[i].action;
+                            var action_id = data[i].action_id;
+                            var intention = data[i].intention;
+                            var label = data[i].label ? data[i].label : '暂无标签名称';
+                            var update_time = data[i].update_time;
+                            var knum = data[i].knum;
+                            var content = data[i].content;
+                            var is_default = data[i].is_default;
+                            var order = data[i].order_by; //话术排序
+                            var string = '<tr class="itemId' + id + '" alt="' + id + '">';
+                            if (is_default == 0) {
+                                string += '<td class="text-center"><input type="checkbox" name="knowcheck" value="' + id + '" disabled="disabled"></td>'
+                            } else {
+                                string += '<td class="text-center"><input type="checkbox" name="knowcheck" value="' + id + '" class="check_know" onclick="check_knowthing();"></td>';
+
+                            }
+                            string += '<td class="text-center">' + ((serial_number - 1) * 10 + (i + 1)) + '</td>'
+                            if (color == 'red') {
+                                string += '<td class="text-center" style="color:red" >' + name + '</td>'
+                            } else {
+                                string += '<td class="text-center">' + name + '</td>'
+                            }
+                            string += '<td class="text-center">' + keyword + '</td>'
+                            string += '<td class="text-center"> <input onchange="order(this)"  id=' + id + ' name="order" value=' + order + '  style="text-align:center;width:25%"/>  </td>'
+                            string += '<td class="text-center">' + knum + '</td>'
+                            string += '<td class="text-center">' + label + '</td>'
+                            string += '<td class="text-center">' + update_time + '</td>'
+                            string += '<td class="text-center">';
+                            string += '<a href="javascript:void(0);" onclick="showThinks(' + id + ');">编辑</a>&nbsp;&nbsp;';
+                            if (is_default == 0) {
+
+                                // if (type <8){
+                                // 	string += '<a href="javascript:void(0);"  style="color:gray;cursor: no-drop;">录音</a>&nbsp;&nbsp;';
+                                // }else{
+                                // 	string += '<a href="javascript:void(0);" onclick="showSound('+id+');">录音</a>&nbsp;&nbsp;';
+                                // }
+                                string += '<a href="javascript:void(0);" style="color:gray;cursor: no-drop;">删除</a>&nbsp;&nbsp;';
+                            } else {
+                                //已处理 knowledgebase-single-delete弹框在thinktank.html文件中
+
+                                // onclick="delKnowledge('+id+','+is_default+');"
+                                // string += '<a href="javascript:void(0);" onclick="showSound('+id+');">录音</a>&nbsp;&nbsp;';
+                                string += '<a style="cursor: pointer;" data-toggle="modal"  data-target="#knowledgebase-single-delete" onclick="delKnowledgesinger(' + id + ');">删除</a>&nbsp;&nbsp;';
+                            }
+                            string += '</td>';
+                            string += '</tr>';
+                            $("#knowledgelist").append(string);
+                        }
+
+                        var prepage = Nowpage - 1;
+                        var nextpage = Nowpage + 1;
+                        var str = '<div class="row">'
+                            + '<div class="col-sm-4 text-left">'
+
+                            // +'<table class="table table-bordered table-hover" style="margin-bottom: 0px; ">'
+                            // +'<tbody><tr>'
+                            // +'<td class=" l-totaltext"  colspan="3">知识库总数量：'
+                            // +' <span class="l-total">'+total+'</span></td>'
+                            // +'<td class="text-center l-total">'
+                            // +'</td>'
+                            // +'</tr> '
+                            // +'</tbody></table>'
+
+                            + '<input type="checkbox" id="checkall" onclick="checkall_thing();">全选（已选中<span id="checkall_num" data-page="' + serial_number + '" data-total="' + total + '">0</span>条知识库）'
+                            // +'知识库总数量：<span class="l-total">'+total+'</span>'
+                            + '</div>'
+                            + '<div class="col-sm-7 l-text-right">'
+                            + '<ul class="pagination">';
+                        if (Nowpage == 1) {
+                            str += '<li id="prevbtn" class="disabled"><span>«</span></li> ';
+                        } else {
+                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + prepage + ');"><span>«</span></a></li> ';
+                        }
+                        if (page > 10) {
+                            if (Nowpage < 7) {
+                                for (var i = 0; i < page; i++) {
+                                    var nownum = i + 1;
+                                    if (nownum < 9) {
+                                        if (nownum == Nowpage) {
+                                            str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                        } else {
+                                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                        }
+                                    }
+                                    if (nownum == 9 && nownum != Nowpage) {
+                                        str += '<li class="disabled"><span>...</span></li>';
+                                    } else if (nownum == 9) {
+                                        str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li> ';
+                                    }
+                                    if (nownum > (page - 2)) {
+                                        if (nownum == Nowpage) {
+                                            str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                        } else {
+                                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                        }
+                                    }
+                                }
+                            } else if (Nowpage > 6 && Nowpage < (page - 6)) {
+                                for (var i = 0; i < page; i++) {
+                                    var nownum = i + 1;
+                                    var Nowpage = parseInt(Nowpage);
+                                    if (nownum < 3) {
+                                        str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                    }
+                                    if ((nownum > Nowpage - 5) && (nownum < Nowpage + 5)) {
+                                        if (nownum == (Nowpage - 4)) {
+                                            str += '<li class="disabled"><span>...</span></li>';
+                                        }
+                                        if (nownum > (Nowpage - 4) && nownum < Nowpage) {
+                                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li>';
+                                        }
+                                        if (nownum == Nowpage) {
+                                            str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li>';
+                                        }
+                                        if (nownum < (Nowpage + 4) && nownum > Nowpage) {
+                                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li>';
+                                        }
+                                        if (nownum == (Nowpage + 4)) {
+                                            str += '<li class="disabled"><span>...</span></li>';
+                                        }
+                                    }
+                                    if (nownum > (page - 2)) {
+                                        var Nowpage = parseInt(Nowpage);
+                                        if (nownum == Nowpage) {
+                                            str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li>';
+                                        } else {
+                                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li> ';
+                                        }
+                                    }
+                                }
+                            } else {
+                                for (var i = 0; i < page; i++) {
+                                    var nownum = i + 1;
+                                    if (nownum < 3) {
+                                        str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li>';
+                                    }
+                                    if (nownum == (page - 10) && nownum != Nowpage) {
+                                        str += '<li class="disabled"><span>...</span></li>';
+                                    } else if (nownum == (page - 10) && nownum == Nowpage) {
+                                        str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li>';
+                                    }
+                                    if (nownum > (page - 10)) {
+                                        if (nownum == Nowpage) {
+                                            str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li> ';
+                                        } else {
+                                            str += '<li ><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + '</a></li>';
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            for (var i = 0; i < page; i++) {
+                                var nownum = i + 1;
+                                if (nownum == Nowpage) {
+                                    str += '<li class="active"><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                } else {
+                                    str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nownum + ');">' + nownum + ' </a></li> ';
+                                }
+                            }
+                        }
+
+                        if (Nowpage == page) {
+                            str += '<li id="prevbtn" class="disabled"><span>»</span></li> ';
+                        } else {
+                            str += '<li><a href="javascript:void(0);" onclick="getKnowledgeList(' + nextpage + ');"><span>»</span></a></li>';
+                        }
+                        str += '</ul>'
+                            + '</div>'
+                            + '</div>'
+                        $("#knowledgepage").find("div").remove();
+                        $("#knowledgepage").html(str);
+
+                        //获取选中框隐藏的选中状态
+                        var check_state = $('.check_knowledgebase').attr('data-page');
+                        if (check_state == page) {
+                            $('.check_knowledgebase').click();
+                        } else {
+                            $('.check_knowledgebase').prop("checked", false);
+                        }
+                        if (check_state == total) {
+                            $('#checkall').click();
+                        }
+                    } else {
+                        $("#knowledgepage").find("div").remove();
+                        $("#knowledgelist").find("tr").remove();
+                        // 	alert('没有数据。');
+                    }
+                }
+				if(data.code==1){
+                    $("#knowledgepage").find("div").remove();
+                    $("#knowledgelist").find("tr").remove();
+                }
+                if (window.change_type == 1) {
+                    $("#fullScreen").addClass("fadeInRight animated");
+                    window.change_type = 0;
+                }
+            },
+            error: function () {
+                $('.datatips_know').show();
+                //alert('获取页面列表失败。');
+            }
+        });
+    }
+</script>

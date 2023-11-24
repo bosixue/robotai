@@ -1,0 +1,307 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+
+<style>
+	.table tbody>tr>td{
+		padding: 12px 8px;
+	}
+	.l-margin{
+		margin-left: 15px;
+	}
+
+	.l-resetBtn{
+		color: #333;
+		background-color: #fff;
+    border-color: #dedede;
+	}
+	.l-resetBtn:active,
+	.l-resetBtn:focus,
+	.l-resetBtn:hover,
+	.l-resetBtn:active:focus,
+	.l-resetBtn:active:hover{
+   	background-color: #fff;
+    border-color: #0e90fe;
+    color: #0e90fe!important;
+	}
+	.l-operationbtn label{
+		font-size:14px;
+	}
+	.main-box .main-box-body{
+		padding: 0 20px 0px 20px;
+	}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header clearfix">
+                <div class="pull-left">
+                	<span class="n_panel_title"><img src="__PUBLIC__/img_sj/czjl.png" alt="">操作记录</span>
+                </div>
+            </header>
+						<div class="main-box-body clearfix">
+            	<section class="navbar clearfix">
+								<div class="pull-left">
+                	<div class="form-inline  l-operationbtn">
+                        <label class="statusSelect pull-left">用户名:</label>
+                        <input type="text" class="form-control pull-left l-search" id="username" autocomplete="off">
+
+												<!-- <label class="statusSelect pull-left l-margin" > 用户类型:</label>
+												<select class="form-control pull-left" id="usertype" name="usertype">
+													<option >请选择用户类型</option>
+													<option value="1" >充值管理</option>
+													<option value="2" >机器人管理</option>
+													<option value="3" >线路管理</option>
+													<option value="4" >短信管理</option>
+													<option value="5" >编辑管理</option>
+													<option value="6" >强制回收</option>
+													<option value="7" >资费管理</option>
+												</select> -->
+
+                        <label class="statusSelect pull-left l-margin" > 操作模块:</label>
+                        <select class="form-control pull-left resetSel c_selectimg l-search" id="operation" name="operation">
+													<option value="0">全部类型</option>
+													<option value="1" >充值管理</option>
+													<option value="2" >机器人管理</option>
+													<option value="3" >线路管理</option>
+													<option value="4" >短信管理</option>
+													<option value="5" >账号管理</option>
+													<option value="6" >强制回收</option>
+													<option value="7" >资费管理</option>
+													<option value="8" >ASR管理</option>
+													<option value="9" >开启锁定管理</option>
+                        </select>
+
+                        <span class="btn btn-primary  pull-left" type="button" onclick="show_data();">查询</span>
+												<span class="btn btn-primary l-resetBtn" type="button" onclick="operation_reset();">重置</span>
+                    </div>
+
+                </div>
+
+							</section>
+						</div>
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">用户名</th>
+                                <th class="text-center">操作模块</th>
+                                <th class="text-center">操作功能</th>
+                                <th class="text-center">操作内容</th>
+                                <th class="text-center">操作时间</th>
+                                <th class="text-center">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="operation-recored-list">
+                            <!-- <tr>
+                                <td class="text-center">1</td>
+                                <td class="text-center">测试</td>
+                                <td class="text-center">机器人管理</td>
+                                <td class="text-center">分配机器人</td>
+                                <td class="text-center">增加了200个机器人</td>
+                                <td class="text-center">2018-11-08 17:00:00</td>
+                                <td class="text-center"> 暂无备注</td>
+                            </tr>-->
+                        </tbody>
+                    </table>
+										<div class="component-page-empty" id="consumeempty">
+											<div class="empty-tip line">
+												<p><img src="__PUBLIC__/img/none.png" /></p>
+											  <p>暂无数据</p>
+											</div>
+										</div>
+										<div class="row">
+											<footer class="clearfix col-sm-12 foots">
+												<div class="pull-left margintop">
+													全部数据：<span id="totalData"></span>
+													</div>
+												<div class="text-right pull-right">
+													<div class="paging clearfix">
+													</div>
+												</div>
+											</footer>
+										</div>
+									</div>
+								</div>
+		  	</div>
+    </div>
+</div>
+
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<!--数据展示-->
+<script id="operation-data" type="text/template">
+	<tr>
+			<td class="text-center">{%sequence%}</td>
+			<td class="text-center">{%username%}</td>
+			<td class="text-center">{%operation_module%}</td>
+			<td class="text-center">{%operation_function%}</td>
+			<td class="text-center">{%operation_content%}</td>
+			<td class="text-center">{%date%}</td>
+			<td class="text-center">{%remark%}</td>
+	</tr>
+</script>
+
+<script type="text/javascript">
+	show_data();
+	onmyTime();
+//当前页全选
+$("input[name='all_checked'][type='checkbox']").click(function () {
+    if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+        $("input[name='roleids'][type='checkbox']").prop("checked", true);
+    } else {
+        $("input[name='roleids'][type='checkbox']").prop("checked", false);
+    }
+});
+//子复选框的事件
+$('input[type="checkbox"][name="roleids"]').click(function () {
+    //当没有选中某个子复选框时，check-all取消选中
+    if (!$(".rolecheck").checked) {
+        $("input[name='all_checked'][type='checkbox']").prop("checked", false);
+    }
+    var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+    var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+    if (checkedsub == chsub) {
+        $("input[name='all_checked'][type='checkbox']").prop("checked", true);
+    }
+});
+
+	/**
+	* 配置分页
+	*
+	* @param int args.page 页码 页码参数统一"page"
+	* @param int args.limit 每页显示的数量 参数统一"limit"
+	* @param string args.paging_class 放置分页的class
+	* @param function args.callback 回调函数
+	*/
+	var Paging = new Paging01();
+		Paging.init_args({
+		// url:
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+
+	show_data();
+//显示数据
+function show_data(page,limit) {
+	if (!page) {
+		page = 1;
+	}
+	if (!limit) {
+		limit = 10;
+	}
+	var data = {};
+	var url = "{:url('ajax_operation_record')}";
+	data.name = $("#username").val();
+	data.type = $("#operation").val();
+	data.page = page;
+	data.limit = limit;
+	$.ajax({
+		url:url,
+		dataType:'json',
+		type:'post',
+		data:data,
+		success:function(result){
+			// console.log(result);
+			if(result.code === 0){
+				var htmls = '';
+				if(result.data.list.length == 0){
+					$('#consumeempty').show();
+					$(".foots").hide();
+				}else{
+					$('#consumeempty').hide();
+					$(".foots").show();
+					var total = result.data.page;   //总页数
+					var Nowpage = result.data.Nowpage;  //当前页码
+					var count  = result.data.total;  //总条数
+					var Nowpage = parseInt(Nowpage);
+					var i = (Nowpage - 1) * limit + 1;
+					$.each(result.data.list,function(index,object){
+						var type = '';
+						switch (object.operation_type) {
+							case 1:
+									type = '充值管理';
+									break;
+							case 2:
+									type = '机器人管理';
+									break;
+							case 3:
+									type = '线路管理';
+									break;
+							case 4:
+									type = '短信管理';
+									break;
+							case 5:
+									type = '账号管理';
+								break;
+							case 6:
+									type = '强制回收';
+									break;
+							case 7:
+									type = '资费管理';
+									break;
+							case 8:
+							    type = 'ASR管理';
+							    break;
+							case 9:
+							    type = '开启锁定管理';
+							    break;
+						}
+						if(object.username == null || !object.username){
+						  object.username = '【账号异常】'
+						}
+						data.i = i;
+						var html = $('#operation-data').html();
+						html = html.replace('{%id%}',object.id);
+						html = html.replace('{%sequence%}',i);
+						html = html.replace('{%username%}',object.username);
+						html = html.replace('{%operation_module%}',type);
+						html = html.replace('{%operation_function%}',object.operation_fu);
+						html = html.replace('{%operation_content%}',object.record_content);
+						html = html.replace('{%date%}',object.operation_date);
+						html = html.replace('{%remark%}',object.remark);
+						htmls += html;
+						i++;
+					});
+
+					$('#totalData').text(result.data.total);
+					//Nowpage  当前页
+					//count    数据总条数
+					//total    总共页数
+					//limit    分页数量
+					//Paging.paging(当前页码, 总数量, 每页显示的条数)
+     			Paging.paging(Nowpage, count, limit);
+				}
+				$('#operation-recored-list').html(htmls);
+			}
+		},
+		error: function(error) {
+			console.log(error);
+			alert('数据获取失败！');
+		}
+	});
+}
+
+//重置
+function operation_reset(){
+	$("#username").val('');
+	$("select[name=operation] option:eq(0)").prop('selected','selected');
+		show_data();
+}
+
+</script>
+
+{include file="sms/sms_targer" /}
+{include file="manager/dialog" /}
+
+{/block}

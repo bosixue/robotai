@@ -1,0 +1,231 @@
+.pz_input_width {
+    margin: 0px 12px;
+}
+
+.table tbody>tr>td{
+	padding: 10px 8px;
+}
+
+.btn-del {
+    padding: 6px 26px;
+}
+.l-satebtn span {
+    padding: 6px 25px;
+}
+.l-satebtn span:nth-of-type(1) {
+    margin-left: 0px;
+}
+.l-operationbtn span:nth-of-type(1), .l-operationbtn span:nth-of-type(2) {
+    padding: 6px 15px;
+}
+.l-operationbtn span:nth-of-type(3) {
+    padding: 6px 7px;
+}
+.l-radio {
+    margin-top:7px;
+}
+.l-textarea {
+    width:210px
+}
+.modal-title {
+    font-size:16px;
+    color: #000;
+}
+.btnreset {
+    background-color: #fff;
+    color: #0e90fe;
+}
+.wechatimg {
+    text-align: center;
+}
+.wechattips {
+    padding: 0px 50px 10px;
+}
+.account {
+    display: none;
+}
+.l-textleft {
+    text-align: left !important;
+}
+.l-resetpwd {
+    color: #0e90fe;
+}
+.tips {
+    font-size: 12px;
+    color: #909090;
+    margin-left: 15px;
+    display: inline-block;
+}
+.inputdisplay {
+    display: inline-block;
+}
+.l-veralign {
+    line-height: 32px;
+    vertical-align: middle;
+}
+.l-tips{
+		margin-left: 2px;
+	}
+
+.l-overflow{
+	overflow-y: auto;
+	max-height: 450px;
+}
+
+.textareawith{
+	width: 360px;
+	height: 155px!important;
+}
+
+.l-loginPwd{
+	margin-left: 5px;
+	font-size: 14px;
+	color: #0e90fe;
+}
+
+.l-imgmargin{
+	margin-left: 15px;
+}
+
+.textwidth{
+	width: 220px;
+}
+
+.state{
+	/*font-size:12px!important;*/
+	padding: 6px 20px;
+}
+
+.l-readonly{
+	background-color: #f6f6f6!important;
+}
+
+.l-yuan,.l-ge{
+	position: relative;
+
+}
+
+.l-yuan::after{
+  content: '元';
+	position: absolute;
+	top: 23%;
+	right: 5%;
+}
+
+.l-ge::after{
+  content: '个';
+	position: absolute;
+	top: 23%;
+	right: 5%;
+}
+
+.tariff-view{
+	font-size: 12px;
+	color: #0e90fe;
+	border: 1px solid #0e90fe;
+	padding: 5px 10px!important;
+}
+
+.l-title{
+	padding: 0px 25px;
+	margin-bottom: 6px;
+}
+
+.l-content{
+	background-color: #f3f3f3;
+	padding:10px 15px;
+	border-radius: 3px;
+	margin-left: 25px;
+	margin-right: 40px;
+}
+
+.saleprice>input{
+  width:45px;
+  height: 26px;
+  display: inline-block;
+  margin-right: 5px;
+  padding: 3px 3px;
+}
+
+.l-salePrice{
+  float: right;
+  margin-right: 30px!important;
+}
+
+/*.l-content div span:nth-of-type(2){*/
+/*	margin-left: 25px;*/
+/*  margin-right: 25px;*/
+/*}*/
+.e_headmargin {
+	margin-left: 20px;
+}
+.l-display{
+  display: inline-block;
+}
+.rental-priceinput{
+  width: 88px;
+  height: 25px;
+  display: inline-block;
+}
+.l-rent{
+  vertical-align: middle;
+  line-height: 36px;
+}
+.paricetips{
+  font-size: 12px;
+  color: #909090;
+}
+.tipsprice{
+  margin-left: 94px;
+}
+.l-marginleft{
+  margin-left: 15px;
+}
+#monthPrice {
+    margin-left: 20px;
+}
+.l-remark{
+    /* padding: 8px 14px 8px 15px; */
+    border-radius: 3px;
+    width: 91%;
+    margin: 0 auto;
+}
+.margintop {
+	margin-top: 12px;
+}
+.n_showdata {
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	align-items: center;
+	-webkit-align-items: center;
+	margin-bottom: 5px;
+}
+.l-content .n_showdata:nth-last-of-type(1) {
+	margin-bottom: 0px;
+}
+.n_showdata p {
+	flex: 1;
+	margin-bottom: 0px;
+}
+.n_showdata p:nth-of-type(1) {
+	max-width: 25%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	cursor: pointer;
+}
+.n_showdata p span {
+	margin-right: 5px;
+}
+.n_showdata p span:nth-of-type(2) {
+	margin-right: 0px;
+}
+.n_showdata p span input {
+	width: 55px;
+	height: 24px;
+	display: inline-block;
+	padding: 2px 3px;
+	text-align: center;
+}

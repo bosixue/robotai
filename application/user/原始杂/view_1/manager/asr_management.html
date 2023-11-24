@@ -1,0 +1,261 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="device/dialog" /}
+{include file="enterprise/dialog" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link  href="/public/css/line.css" type="text/css" rel="stylesheet">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css"/>
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="clearfix fadeInRight animated pz_manping_height">
+		<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+			<li role="presentation" class='active'>
+				<a href="#home" aria-controls="home" role="tab" data-toggle="tab">ASR列表</a>
+				<i></i>
+			</li>
+			<li role="presentation">
+				<a href="#Consumption" aria-controls="Consumption" role="tab" data-toggle="tab">ASR统计计费</a>
+			</li>
+		</ul>
+
+		<div class="main-box s_padding20 clearfix pz_manping_height">
+			<div class="tab-content">
+				<!--ASR列表-->
+				<div role="tabpanel" class="tab-pane active" id="home">
+					<section class="navbar clearfix">
+						<div class="form-inline pull-left">
+							<div class="form-group">
+								<label class="statusSelect pull-left" >ASR名称：</label>
+								<input type="text" class="form-control pull-left l-search" id="username_list" name="keyword" >
+							</div>
+							<div class="form-group">
+								<span class="btn btn-primary  pull-left" type="button" onclick="">查询</span>
+								<span class="btn btn-primary  pull-left ant-btn btn-default" type="button" onclick="">重置</span>
+							</div>
+						</div>
+						<div class="form-inline pull-right">
+							<span class="btn btn-primary" type="button" onclick="addASR(0);">添加私有ASR</span>
+							<span class="btn btn-primary" type="button" onclick="allocation_ASR();">ASR分配</span>
+						</div>
+					</section>
+					<div class="table-responsive">
+						 <table class="table table-bordered table-hover">
+						   <thead>
+							    <tr>
+										<th class="text-center">序号</th>
+		                <th class="text-center">ASR名称</th>
+		                <th class="text-center">价格(元/次)</th>
+		                <th class="text-center">来源</th>
+		              	<th class="text-center">操作</th>
+		              	<th class="text-center">备注</th>
+							    </tr>
+						    </thead>
+						    <tbody id="recharge-recored-list">
+		            	<tr>
+		                <td class="text-center">1</td>
+			              <td class="text-center">测试</td>
+			              <td class="text-center">0.02</td>
+			              <td class="text-center">自有ASR</td>
+			              <td class="text-center">
+			              	<a href="javascript:void(0);"  onclick="displayUser();">查看用户名单&nbsp;&nbsp;&nbsp;</a>
+		                  <a href="javascript:void(0);"  onclick="addASR(1);">编辑&nbsp;&nbsp;&nbsp;</a>
+		                  <a href="javascript:void(0);"  data-title="删除单个线路" onclick="popTipswin(this);">删除</a>
+		                </td>
+			              <td class="text-center">测试用线路</td>
+									</tr>
+									<tr>
+		                <td class="text-center">1</td>
+			              <td class="text-center">测试1</td>
+			              <td class="text-center">0.02</td>
+			              <td class="text-center">【运营商】scy001分配</td>
+			              <td class="text-center">
+			              	<a href="javascript:void(0);"  onclick="displayUser();">查看用户名单&nbsp;&nbsp;&nbsp;</a>
+		                  <span class="e_notedit">编辑&nbsp;&nbsp;&nbsp;</span>
+		                  <span class="e_notedit">删除</span>
+		                </td>
+			              <td class="text-center">测试用线路</td>
+									</tr>
+						    </tbody>
+					  	</table>
+							<div class="row">
+								<footer class="main-box-footer clearfix col-sm-12">
+									<div class="pull-left">
+										全部数据：2
+									</div>
+									<div class="pull-right " id="modalpagebody">
+										<div class=" pull-right"  id="consumepage">
+	
+										</div>
+										<div class="text-right pull-right">
+											<p>总页数：1页</p>
+										</div>
+									</div>
+								</footer>
+							</div>
+				  	</div>
+				</div>
+				<!--ASR统计计费-->
+				<div role="tabpanel" class="tab-pane" id="Consumption">
+					<section class="navbar clearfix">
+						<div class="form-inline pull-left">
+							<div class="form-group">
+								<label class="statusSelect pull-left">ASR名称：</label>
+								<select name="lineName" id="lineName" class="form-control resetSel c_selectimg l-search">
+									<option value="0">全部线路</option>
+								</select>
+							</div>
+							<div class="form-group e_headmargin">
+								<label class="statusSelect pull-left">用户名：</label>
+								<input type="text" class="form-control pull-left l-search" id="username_details" name="keyword" >
+							</div>
+							<div class="form-group">
+								<span class="btn btn-primary  pull-left" type="button" onclick="">查询</span>
+								<span class="btn btn-primary  pull-left ant-btn btn-default" type="button" onclick="">重置</span>
+							</div>
+					</div>
+					<div class="form-inline pull-right " >
+						<span class="btn btn-primary" type="button" data-title="删除多个线路" onclick="popTipswin(this)">批量删除</span>
+					</div>
+				</section>
+					<div class="table-responsive">
+					 <table class="table table-bordered table-hover">
+					   <thead>
+						    <tr>
+									<th class="text-center">
+										<input class="check-all" name='all_checked' type="checkbox"/>
+									</th>
+									<th class="text-center">序号</th>
+	                <th class="text-center">ASR名称</th>
+	                <th class="text-center">用户名称</th>
+	                <th class="text-center">用户类型</th>
+	                <th class="text-center">语音识别次数</th>
+	                <th class="text-center">成本价</th>
+	                <th class="text-center">成本总额</th>
+									<th class="text-center">销售价</th>
+									<th class="text-center">销售总额</th>
+	              	<th class="text-center">利润</th>
+	              	<th class="text-center">计费时间</th>
+	              	<th class="text-center">ASR来源</th>
+						    </tr>
+					    </thead>
+					    <tbody id="recharge-recored-list">
+	            	<tr>
+									<td class="text-center"><input class="rolecheck" type="checkbox" name="roleids"/></td>
+	                <td class="text-center">1</td>
+		              <td class="text-center">ASR1</td>
+		              <td class="text-center">scy000</td>
+		              <td class="text-center">商家</td>
+		              <td class="text-center">5000</td>
+		              <td class="text-center">0.02</td>
+		              <td class="text-center">500</td>
+		              <td class="text-center">0.03</td>
+		              <td class="text-center">1000</td>
+		              <td class="text-center">500</td>
+		              <td class="text-center">2017.10.18</td>
+		              <td class="text-center">admin分配</td>
+								</tr>
+					    </tbody>
+				  	</table>
+						<div class="row">
+							<footer class="main-box-footer clearfix col-sm-12">
+								<div class="pull-left">
+									<input class="rolecheck" type="checkbox" name="roleids"/>全选（已选中0条记录）
+								</div>
+								<div class="pull-right " id="modalpagebody">
+									<div class=" pull-right"  id="consumepage">
+
+									</div>
+									<div class="text-right pull-right">
+										<p>总页数：1页</p>
+									</div>
+								</div>
+							</footer>
+						</div>
+						<div class="row">
+							<footer class="clearfix col-sm-12">
+								<table class="table table-bordered table-hover sumdata">
+									<thead>
+										<tr>
+											<th class="text-center" >合计：</th>
+											<th >总使用条数：<label>15000条</label></th>
+											<th>成本总额：<label>1800元</label></th>
+											<th>销售总额：<label>3000元</label></th>
+											<th>总利润：<label>1200元</label></th>
+										</tr>
+									</thead>
+								</table>
+							</footer>
+						</div>
+			  	</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+ <script type="text/javascript">
+	 //当前页全选
+	  $("input[name='all_checked'][type='checkbox']").click(function(){
+	 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+	   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+	   	} else {
+	  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+	  	}
+	  });
+	 	//子复选框的事件
+	 	$('input[type="checkbox"][name="roleids"]').click(function(){
+	 		//当没有选中某个子复选框时，check-all取消选中
+	 		if (!$(".rolecheck").checked) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+	 		}
+	 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+	 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+	 		if (checkedsub == chsub) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+	 		}
+	 	});
+
+		//重置
+		function orderChongzhi(){
+			$('#startDate').val("");
+			$('#endTime').val("");
+		}
+  </script>
+
+
+<script type="text/javascript">
+	//添加、编辑ASR
+	function addASR(num){
+		if(num) {
+			$('#add_editASR').html('编辑私有ASR');
+			$('#asr-add .submit-btn').html('保存');
+		} else {
+			$('#add_editASR').html('添加私有ASR');
+			$('#asr-add .submit-btn').html('确定');
+		}
+		$("#asr-add").modal('show');
+	}
+
+	function allocation_ASR(){
+  	$('#alloction-ASR').modal('show');
+	}
+
+	function displayUser() {
+		$('#user_list').modal('show');
+	}
+
+
+</script>
+
+
+{include file="sms/sms_targer" /}
+{/block}

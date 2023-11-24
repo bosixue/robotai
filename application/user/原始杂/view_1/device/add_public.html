@@ -1,0 +1,289 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/intention_customer_details.css" rel="stylesheet" type="text/css"/>
+
+<style>
+.addpublicnum{
+  background-color: #ffffff;
+  width: 100%;
+  padding: 0px 15px;
+}
+
+.l-align label{
+  text-align: right;
+   /* vertical-align: middle; */
+  line-height: 32px;
+}
+
+
+.l-align{
+  padding-top: 45px;
+}
+
+.btnok{
+  margin-left: 0px;
+}
+
+.l-icon{
+  border: 0px;
+}
+
+</style>
+
+<div class="row">
+
+  <div class="col-lg-12">
+  	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+      <header class="main-box-header n_head_box n_head_box_b clearfix" style="padding:20px 20px 0px !important;">
+  		  <div class="pull-left">
+  		  	{if condition="empty($wx['id'])"}
+  			  <span class="n_panel_title"><img src="__PUBLIC__/img_sj/addpublicnum.png" alt="">添加公众号</span>
+  			  {else /}
+  			  <span class="n_panel_title"><img src="__PUBLIC__/img_sj/addpublicnum.png" alt="">编辑公众号</span>
+  			  {/if}
+  		   </div>
+		  </header>
+
+        <form  id ="uploadFrom" class="" action='{:url("user/Image/upload")}' enctype="multipart/form-data" method="post">
+          <div class="form-group l-align">
+    				<label class="col-lg-2 col-sm-2 control-label">公众号名称：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="Public_name" id="Public_name" value='{if condition="!empty($wx)"}{$wx['name']}{/if}'>
+    				</div>
+			    </div>
+          <!--
+          <div class="form-group l-align">
+    				<label class="col-lg-2 control-label">公众号原始ID：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="wxname" id="Public_id" value="">
+    				</div>
+			    </div>
+        
+          <div class="form-group l-align">
+    				<label class="col-lg-2 control-label">关注引导地址：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="wxname" id="Public_address" value="">
+    				</div>
+			    </div>
+			   
+          <div class="form-group l-align">
+    				<label class="col-lg-2 control-label">微信号：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="Public_wechat" id="Public_wechat" value="">
+    				</div>
+			    </div>
+			     -->
+			    <!--
+          <div class="form-group l-align">
+    				<label class="col-lg-2 control-label">头像地址：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="file" class="form-control l-icon textwidth" name="wxname" id="Public_topAddress" value="">
+    				</div>
+			    </div>
+			    -->
+			    <div class="form-group l-align">
+    				<label class="col-lg-2 col-sm-2 control-label">模板id：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="template_id" id="template_id" value='{if condition="!empty($wx)"}{$wx['template_id']}{/if}'>
+    				</div>
+			    </div>
+          <div class="form-group l-align">
+    				<label class="col-lg-2 col-sm-2 control-label">AppID：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="Public_appId" id="Public_appId" value='{if condition="!empty($wx)"}{$wx['app_id']}{/if}'>
+    				</div>
+			    </div>
+          <div class="form-group l-align">
+    				<label class="col-lg-2 col-sm-2 control-label">AppSecret：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="text" class="form-control textwidth" name="Public_appSecret" id="Public_appSecret" value='{if condition="!empty($wx)"}{$wx['app_secret']}{/if}'>
+    				</div>
+			    </div>
+          <div class="form-group l-align">
+    				<label class="col-lg-2 col-sm-2 control-label">公众号二维码：</label>
+    				<div class="col-lg-10 col-sm-10">
+    					<input type="file" class="form-control l-icon textwidth" name="image" id="Public_wechatMa" data-src='{if condition="!empty($wx)"}{$wx['qr_code']} {/if}' value="">
+    				</div>
+    				{if condition="!empty($wx)"} 
+    				   <img id='hideImg' src="/{$wx['qr_code']}"  width="70px" height="70px">
+    				{/if}
+    				 <img id='hideImg' src="" style="display:none;" width="70px" height="70px">
+    				
+			    </div>
+			      
+          <div class="form-group l-align">
+    				<label class="col-lg-2 col-sm-2 control-label">微信号类型：</label>
+    				<div class="col-lg-10 col-sm-10 ">
+    					<select class="form-control textwidth" name="type" id="weixintype">
+                <option value="">请选择类型</option>
+                <option value="1" {if condition="!empty($wx) and $wx['type'] eq 1"} selected="selected" {/if}>订阅号</option>
+                <option value="2"  {if condition="!empty($wx) and $wx['type'] eq 2"} selected="selected" {/if}>服务号</option>
+              </select>
+    				</div>
+			    </div>
+			    <input type="hidden" id="editId" value="{if condition='!empty($wx)'}{$wx['id']}{/if}">
+			    <!--
+          <div class="form-group l-align">
+    				<label class="col-lg-2 control-label">是否默认公众号：</label>
+            <div class="col-lg-10 col-sm-10 " id="Public_moren" style="height: 32px;line-height: 32px;">
+              <input type="radio" name="moren" value="">是
+              <input type="radio" name="moren" value="" class="morenfou" checked="checked" style="margin-left:10px;">否
+            </div>
+			    </div>
+			    -->
+        </form>
+        <div class="form-group l-align">
+          <label class="col-lg-2 col-sm-2 control-label"></label>
+          <div class="col-lg-10 col-sm-10 ">
+          	{if condition="!empty($wx['id'])"} 
+            <button class="btn btn-primary btnok" type="button" name="button"  data-title="编辑公众号" onclick="popTipswin(this);">确定</button>
+            {else /}
+            <button class="btn btn-primary btnok" type="button" name="button"  data-title="添加公众号" onclick="popTipswin(this);">确定</button>
+            {/if}
+            <a class="btn btn-default" type="button" name="button" style="margin-left: 20px;" onclick="Reset_checkform();">重置</a>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+ <script>
+
+   //全选
+    function allcheck(){
+    	if ($('.check-all').is(":checked")) {
+    		$('.rolecheck').prop("checked","checked");
+    	}else{
+    		$('.rolecheck').prop("checked",false);
+    	}
+
+    }
+
+  function showtips(){
+    $('#tips').modal(show);
+  }
+  //当Public_wechatMa变动时候上传图片
+  $("#Public_wechatMa").on("change", function(){
+    $.ajax({
+        url: '{:url("user/Image/upload")}',
+        type: 'POST',
+        cache: false,
+        data: new FormData($('#uploadFrom')[0]),
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        success : function(data) {
+        	 console.log(data.data);
+            if(data.code == 1) {
+                $("#Public_wechatMa").attr('data-src',data.data);
+                $("#hideImg").attr('src','/'+data.data);
+                $("#hideImg").show();
+            } else {
+                $("#Public_wechatMa").attr('data-src','');
+            }
+        }
+    });
+});
+  function add_official_accounts(){
+  	 //编辑公众号id
+  	 var editId= $('#editId').val();
+  	 var Public_name = $('#Public_name').val();
+  	 var Public_appId = $('#Public_appId').val();
+  	 var template_id=$('#template_id').val();
+  	 var Public_appSecret = $('#Public_appSecret').val();
+  	 var Public_wechatMa = $('#Public_wechatMa').attr('data-src');
+  	 var weixintype =$("#weixintype").val();
+  	 if(!weixintype){
+  	 	  alert('公众号类型必须选择');
+  	 	  $('#tips_model').modal('hide');
+  	 	  return false;
+  	 }
+  	 if(!Public_name){
+  	 	  alert('公众号名称不能为空');
+  	 	  $('#tips_model').modal('hide');
+  	 	  return false;
+  	 } 
+
+  	 if(!Public_appId){
+  	 	  alert('appid不能为空');
+  	 	  $('#tips_model').modal('hide');
+  	 	  return false;
+  	 }
+  	 if(!template_id){
+  	 	  alert('模板id不能为空');
+  	 	  $('#tips_model').modal('hide');
+  	 	  return false;
+  	 }
+  	 if(!Public_appSecret){
+  	 	  alert('appSecret不能为空');
+  	 	  $('#tips_model').modal('hide');
+  	 	  return false;
+  	 }
+  	 if(!Public_wechatMa){
+  	 	  alert('微信二维码不能为空');
+  	 	  $('#tips_model').modal('hide');
+  	 	  return false;
+  	 }
+  	 var url ='{:url("user/Wxinfo/addWx")}';
+  	 var data={
+  	 	  'name':Public_name,
+  	 	  'app_id':Public_appId,
+  	 	  'template_id':template_id,
+  	 	  'app_secret':Public_appSecret,
+  	 	  'qr_code':Public_wechatMa,
+  	 	  'type':weixintype,
+  	 	  'id':editId,
+  	 };
+  	 $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        data: data,
+        dataType:"json",
+        success : function(data) {
+        	 if(data.code==1){
+        	 	 	 alert(data.msg);
+        	 	   $('#tips_model').modal('hide');
+        	 	   window.location.href='{:url("user/device/public_configuration")}';
+        	 	   return false;
+        	 }else{
+        	  alert(data.msg);
+        	 	 $('#tips_model').modal('hide');
+        	 }
+        },
+  	 	
+  	 });
+  }
+	//重置
+	function Reset_checkform(){
+		$("#Public_name").val("");//公众号名称
+		$("#Public_id").val("");//公众号原始ID
+		$("#Public_address").val("");//关注引导地址
+		$("#Public_wechat").val("");//微信号
+		// $("#").val("");//头像地址
+		$("#Public_appId").val("");//AppID
+		$("#Public_appSecret").val("");//AppSecret
+		$("#Public_wechatMa").val("");//公众号二维码 
+		$("#Public_wechatTyle").val("");//微信号类型
+		$("#Public_moren input.morenfou").click();   //是否默认公众号
+	}
+	
+	$(function(){
+		//添加公众号菜单显示
+		$("#sidebar-nav > ul > li.nav-header.hidden-sm.hidden-xs > a > span.pz_letitle[data-name='系统管理']").parents(".nav-header.hidden-sm.hidden-xs").find("ul.submenu li.pz_erMenu:nth-child(1) a span").css("color","#1279d2");
+		$("#sidebar-nav > ul > li.nav-header.hidden-sm.hidden-xs > a > span.pz_letitle[data-name='系统管理']").parents(".nav-header.hidden-sm.hidden-xs").addClass("open");
+		$("#sidebar-nav > ul > li.nav-header.hidden-sm.hidden-xs > a > span.pz_letitle[data-name='系统管理']").parents(".nav-header.hidden-sm.hidden-xs").find("ul.submenu").css("display","block");
+	});
+ </script>
+
+{/block}

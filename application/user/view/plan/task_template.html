@@ -1,0 +1,200 @@
+{extend name="public/base" /} 
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/new_index.css" rel="stylesheet" type="text/css">
+<link href="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.js"></script>
+<style type="text/css">
+.btn-primary.focus, .btn-primary:focus {
+    color: #fff;
+    background-color: #03a9f4;
+    border-color: #03a9f4;
+}
+.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+    color: #03a9f4;
+    background-color: initial;
+    border-color: #03a9f4;
+}
+.btn-default.focus, .btn-default:focus {
+    color: #03a9f4;
+    background-color: initial;
+    border-color: #03a9f4;
+}
+.btn-default:hover {
+    color: #03a9f4;
+    background-color: initial;
+    border-color: #03a9f4;
+}
+.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #03a9f4;
+    border-color: #03a9f4;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #03a9f4;
+    border-color: #03a9f4;
+}
+.table tbody>tr>td {
+    padding: 9px 8px;
+}
+.table-responsive {
+    min-height: .01%;
+    overflow-x: hidden;
+}
+.table-responsive>table>thead>tr>th {
+    background-color: #f2f7fd;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-style: normal;
+}
+#newModal > .modal-dialog {
+    width: 450px;
+    margin: 30px auto;
+}
+.textwidth {
+    width:250px;
+}
+.n_panel_title img {
+    margin-right:8px;
+    vertical-align:sub;
+}
+.l-margin {
+    margin-left:13px;
+}
+.modal-title {
+    font-size: 16px;
+    color: #000;
+    /* padding: 0px 15px; */
+}
+.modal-body-tips {
+    padding:35px;
+}
+.navbar {
+    margin-bottom:0px;
+    margin-top: 7px;
+}
+.btnState {
+    width: 90px;
+}
+.l-input-width {
+    display: inline-block;
+}
+.date-margin label, .date-margin span {
+    margin-top:6px;
+}
+.pull-left label {
+    font-size:14px;
+}
+.l-dateSelbg {
+    position:relative;
+}
+.c_datebgimg {
+    background: url(/public/img/xuanzeriqi.png) 93% 50% no-repeat;
+}
+.c_selectimg {
+    background: url(/public/img_sj/jiantou.png) 94% 50% no-repeat;
+}
+.l-padding {
+    padding:0px 0px!important;
+}
+.pz_shijianzhi {
+    margin:6px 15px 0px;
+}
+.n_panel_title {
+    display: inline-block;
+    line-height: 30px;
+}
+.resetSel {
+    background-clip: padding-box;
+    border-color: #e0e3e4;
+    color: #404040;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+.form-control {
+    padding: 6px;
+}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box n_head_box_b clearfix">
+                <div class="pull-left"> <span class="n_panel_title">
+                    <img src="/public/img/renwutongji.png">任务模板
+                  </span>
+
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <section class="navbar main-box-header clearfix l-padding">
+                    <form method="get" role="form">
+                        <div class="form-inline bottomfour">
+                            <div class="pull-left">
+                                <label>任务名称：</label>
+                                <input type="text" class="form-control l-input-width" id="keyword" name="keyword" placeholder="请输入任务名称">
+                                <button class="btn btn-primary" type="button" name="submit" onclick="show_data()">查询</button>
+                                <button class="btn pz_kongxin_anniusty" type="button" name="reset" onclick="no_query()">重置</button>
+                            </div>
+                            <div class="pull-right">
+                                <button class="btn btn-primary btnState" type="button" name="submit" onclick="add_edit_temp(0);">添加模板</button>
+                                <button class="btn btn-primary btnState"  data-title="批量删除任务模板" data-id='0' type="button" name="reset" onclick="popTipswin(this);">批量删除</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover pz_table_contents">
+                        <thead>
+                            <tr>
+                                 <th class="text-center">
+                                    <input class=" check-all" type="checkbox" name="all_checked">
+                                </th>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">模板名称</th>
+                                <th class="text-center">操作</th>
+                                <th class="text-center">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="taskTemplateList"></tbody>
+                    </table>
+                </div>
+                <div class="component-page-empty" id="consumeempty">
+                    <div class="empty-tip line">暂无数据</div>
+                </div>
+                <footer class="main-box-footer clearfix footerB">
+					<div class="row">
+						<div class="col-sm-3 text-left"><input class="check-all all_checked_count" name='DataCheck_all' type="checkbox"/>全选（已选中<span id="user_count">0</span>条模板）</div>
+						<div class="col-sm-9 text-right paging"></div>
+					</div>
+				</footer>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="plan/dialog" /}
+{include file="sms/sms_targer" /}
+<script id='data_task_template' type="text/template">
+    <tr>
+        <td class="text-center">
+			<input class="rolecheck" name='checkids' value="{%id%}" type="checkbox"/>
+		</td>
+		<td class="text-center">{%sequence%}</td>
+		<td class="text-center">{%templateName%}</td>
+		<td class="text-center">
+	    	<a href="javascript:void(0);" onclick="add_edit_temp({%id%});">编辑</a>&nbsp;&nbsp;
+			<a href="javascript:void(0);" class="{%only_sale%}" data-title="删除任务模板" data-id='{%id%}' data-type='delete_user' onclick="popTipswin(this);">删除</a>&nbsp;&nbsp;
+	    </td>
+		<td class="text-center">{%remarks%}</td>
+    </tr>
+</script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script src="__PUBLIC__/js_plan/task_template.js"></script>
+
+{/block}

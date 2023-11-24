@@ -1,0 +1,257 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+{include file="sms/dialog" /}
+<style type="text/css">
+    .table tbody > tr > td {
+        padding: 9px 8px;
+    }
+
+    .table-responsive {
+        min-height: .01%;
+        overflow-x: hidden;
+    }
+
+    #newModal > .modal-dialog {
+        width: 450px;
+        margin: 30px auto;
+    }
+
+    .textwidth {
+        width: 250px;
+    }
+
+    .n_panel_title img {
+        margin-right: 8px;
+        vertical-align: sub;
+    }
+
+    @media (max-width: 1312px) {
+        .pz_input_width {
+            width: 157px !important;
+        }
+
+        .l-input-width {
+            width: 120px !important;
+        }
+    }
+
+    @media (max-width: 1300px) {
+        .pz_butanniu {
+            margin-top: 0px !important;
+        }
+    }
+
+    @media (max-width: 1241px) {
+        .pz_butanniu {
+            margin-top: 15px !important;
+        }
+
+        .btn.pz_kongxin_anniusty {
+            margin-top: 15px !important;
+        }
+
+        .l-input-width {
+            width: 150px !important;
+        }
+
+        .pz_keywords .form-control.pz_input_width {
+            width: 200px !important;
+            /* margin-top: 15px; */
+        }
+
+        .form-group.pz_keywords {
+            margin-top: 15px;
+        }
+    }
+
+    @media (max-width: 1055px) {
+        .l-input-width {
+            width: 135px !important;
+        }
+    }
+
+    .c_dateSelbg::after {
+        /* content: ''; */
+        width: 15px;
+        height: 15px;
+        background: url(/public/img/xuanzeriqi.png) 100% 100% no-repeat;
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+    }
+
+    .c_datebgimg {
+        background: url(/public/img/xuanzeriqi.png) 94% 50% no-repeat;
+    }
+
+    .c_selectimg {
+        background: url(/public/img_sj/jiantou.png) 94% 50% no-repeat;
+    }
+
+    .resetSel {
+        background-clip: padding-box;
+        border-color: #e0e3e4;
+        color: #404040;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .navbar {
+        margin-bottom: 8px;
+    }
+</style>
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box clearfix">
+                <div class="pull-left">
+                    <span class="n_panel_title" style="line-height: 34px;"><img
+                            src="/public/img/renwutongji.png">短信发送</span>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <section class="navbar main-box-header clearfix" style="padding: 7px 0px 9px;">
+                    <div class="clearfix">
+                        <div class="form-inline pull-left pz_formGroup" method="get" role="form">
+                            <div class="form-group">
+                                <label class="statusSelect" style="float:left;padding-top: 8px;">创建时间:</label>
+                                <div class="col-lg-8 col-sm-8">
+                                    <div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+                                        <input type="text" AUTOCOMPLETE="off"
+                                               class="form-control l-input-width c_datebgimg" placeholder="选择开始日期"
+                                               id="start_create_time" name="startDate" value="">
+                                    </div>
+                                    <script>$('#start_create_time').fdatepicker({
+                                        format: 'yyyy-mm-dd',
+                                    });
+                                    </script>
+                                </div>
+                            </div>
+                            至
+                            <div class="form-group">
+                                <div class="col-lg-11 col-sm-11">
+                                    <div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+                                        <input type="text" AUTOCOMPLETE="off"
+                                               class="form-control l-margin l-input-width c_datebgimg"
+                                               placeholder="选择结束日期" id="end_create_time" name="endTime" value=""
+                                               style="width:130px;">
+                                    </div>
+                                    <script>
+                                        $('#end_create_time').fdatepicker({
+                                            format: 'yyyy-mm-dd',
+                                            // pickTime: true
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                            <span class="btn btn-primary pz_butanniu" type="button" onclick="query();">查询</span>
+                            <span class="btn btn-primary pz_kongxin_anniusty" type="button" onclick="reset_click();">重置</span>
+                        </div>
+                        <button class="btn btn-primary pull-right" type="button" onclick="sendSms();">发送短信</button>
+                    </div>
+                </section>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">序号</th>
+                            <th class="text-center">通道名称</th>
+                            <th class="text-center">模板名称</th>
+                            <th class="text-center">导入号码数量</th>
+                            <th class="text-center">创建时间</th>
+                            <th class="text-center">完成时间</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id='show_datas'>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="component-page-empty" id="consumeempty">
+                    <div class="empty-tip line">
+                        <p><img src="__PUBLIC__/img/none.png"/></p>
+                        <p>暂无数据</p>
+                    </div>
+                </div>
+                <footer class="main-box-footer clearfix">
+                    <div class="text-right pull-right">
+                        <div class="paging clearfix">
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script type="text/template" id='sign_template'>
+        <tr>
+            <td class="text-center">{%sequence%}</td>
+            <td class="text-center">{%channel_name%}</td>
+            <td class="text-center">{%template_name%}</td>
+            <td class="text-center">{%import_num%}</td>
+            <td class="text-center">{%create_time%}</td>
+            <td class="text-center">{%finish_time%}</td>
+            <td class="text-center">
+                <a href="javascript:void(0);" onclick="look_smsdetail({%id%})">查看详情</a>
+            </td>
+        </tr>
+    </script>
+    <script type="text/javascript" src='/public/js/paging.js'></script>
+    <script type="text/javascript" src="/public/js_sms/smssend.js"></script>
+</div>
+<div class="modal fade effect" id="effectTmp" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"   >
+  <div class="modal-dialog" style="width:365px;">
+      <div class="modal-content effect-content import">
+          <div class="modal-header effect-header">
+              <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>-->
+              <!--</button>-->
+              	<h4 class="modal-title effect-title" id="singleTel"><span>发送短信</span></h4>
+          </div>
+         <div class="modal-body ">
+      			<div class="form-group">
+      				<div class="effect-1">
+      					<span >正在发送短信，请稍后...</span>
+      					<span class="pull-right color90 Progress_value">0%</span>
+      				</div>
+      			</div>
+      			<div class="form-group">
+      				<div class="progress">
+      					<div class="progress-bar progress-bar-data" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+      						<span class="sr-only">0%完成</span>
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+          <div class="modal-footer effect-footer">
+  					<div>取 消</div>
+  				</div>
+      </div>
+      <div class="modal-content effect-content hidden finish">
+				<div class="modal-header effect-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title effect-title">发送短信</h4>
+				</div>
+				<div class="modal-body effect-body">
+					<div class="form-group effect-flex">
+						<i class="effect-success"></i>
+						<div class="effect-success-tip" id="effect-tips-content"></div>
+					</div>
+				</div>
+				<div class="modal-footer effect-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" id="upload_ok">确定</button>
+				</div>
+			</div>
+  </div>
+</div>
+{/block}

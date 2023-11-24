@@ -1,0 +1,804 @@
+<!--人机训练 处理-->
+<div class="modal fade " id="machine_hand" tabindex="1" data-backdrop="static" data-keyboard="false" aria-hidden="true" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title">处理</h4>
+            </div>
+            <div class="modal-body pz_innerbox_lay">
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right control-label">待学习内容：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <label class="control-label" id="learning_content">你真的好了吗？</label>
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">标题名称：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="title_name" class="form-control ttfw" placeholder="请输入标题名称" type="text" />
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">知识库标签：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="knowledge_name" class="form-control ttfw" placeholder="请输入问答标签" type="text" />
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">知识库类型：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <select class="form-control ttfw" id="knowledge_type" name="knowledge_type">
+                            <option value="">请选择问答类型</option>
+														<option value="1">普通</option>
+														<option value="8">用户未说话</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">关键字：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <textarea id="handle_keyword" class="form-control ttfw" style="height:auto;resize: vertical;" placeholder="请描述关键字,多个关键字自己用逗号“，”分割"></textarea>
+                    </div>
+                </div>
+                <div id="m_problem">
+                    <form method="post" class="form-horizontal margintop sform" enctype="multipart/form-data">
+                        <div class="form-group mgb10" style="margin-right:0px;margin-left:0px;">
+                            <label class="col-lg-3 col-sm-3 text-right">机器人回复：</label>
+                            <div class="col-lg-9 col-sm-9">
+                                <textarea id="machine_reply" class="form-control ttfw" style="height:auto;resize: vertical;" placeholder="请描述关键字,多个关键字自己用逗号“，”分割"></textarea>
+                                <div class="marginTop">
+                                    <input type="hidden" name="sid" value="1" />
+                                    <input type="file"  id="sound_path_learning"   data-src=""   class="form-control ttfw"  accept=".wav," name="update-audio-file" />
+                                </div>
+                               
+                                    <audio src="" id="voice_zid111" preload="preload" controls="controls"></audio>
+                               
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">动作：</label>
+                    <div class="col-lg-8 col-sm-8">
+											<select class="form-control" id="knowledge_action"  onchange="changeaction(this);"  name="action">
+												<option value="4">挂机</option>
+												<option value="1">下一场景节点</option>
+												<option value="2">指定场景节点</option>
+												<option value="3">返回当前场景节点中的流程</option>
+												<option value="0">等待用户响应</option>
+											</select>
+										</div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">意向等级：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <select class="form-control ttfw" id="order_level" name="order_level">
+                            <option value="" selected=""> 选择意向等级 </option>
+														<option value="6">A级(有明确意向)</option>
+														<option value="5">B级(可能有意向)</option>
+														<option value="4">C级(明确拒绝)</option>
+														<option value="3">D级(用户忙)</option>
+														<option value="2">E级(拨打失败)</option>
+									          <option value="1">F级(无效客户)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 text-right">暂停时间：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="pause_time" class="form-control t_pause" placeholder="请输入标题名称" type="text" />
+                        <label>毫秒</label>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" value="" id="learning_file_size">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="learning_handle();">确定</button>
+            </div>
+            <div style="clear:both"></div>
+            
+        </div>
+    </div>
+</div>
+
+<!--录音管理 合成录音-->
+<div class="modal fade " id="record_compose" tabindex="1" data-backdrop="static" data-keyboard="false" aria-hidden="true" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;">
+    <div class="modal-dialog" style="width:890px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title">合成录音</h4>
+            </div>
+            <div class="modal-body" style="max-height: 510px !important;">
+                <div class="showtop">
+                    <div class="com_title">音频配置</div>
+                    <div class="showtopdata composedata">
+                        <div class="flex">
+                            <div class="composedata">
+                                <label class="text-right control-label">发音场景：</label>
+                                <div class="col-lg-9 col-sm-9">
+                                    <select class="form-control ttfw" name="pro_scene" id="voice">
+                                        <option value="xiaoyun">小云，标准女声，通用场景</option>
+                                        <option value="sijia">思佳，标准女声，通用场景</option>
+                                        <option value="xiaomeng">小梦，标准女声，通用场景</option>
+                                        <option value="ruoxi">若兮，温柔女声，通用场景</option>
+                                        <option value="siqi">思琪，温柔女声，通用场景</option>
+                                        <option value="xiaogang">小刚，标准男声，通用场景</option>
+                                        <option value="xiaowei">小威，标准男声，通用场景</option>
+                                        <option value="amei">阿美，甜美女声，客服场景</option>
+                                        <option value="xiaoxue">小雪，温柔女声，客服场景</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="composedata margintop20">
+                                <label class="text-right control-label">音量：</label>
+                                <div class="col-lg-9 col-sm-9">
+                                    <div class="new-slider">
+                                        <label>0</label>
+                                        <div id="slider-range-min">
+                                            <label id="amount" class="ui-text"></label>
+                                        </div>
+                                        <label>100</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="composedata margintop20">
+                                <label class="text-right control-label">语速：</label>
+                                <div class="col-lg-9 col-sm-9">
+                                    <div class="new-slider">
+                                        <label>-500</label>
+                                        <div id="slider-range-rate">
+                                            <label id="amount-rate" class="ui-text"></label>
+                                        </div>
+                                        <label>500</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="composedata">
+                                <label class="text-right control-label">音频采样率：</label>
+                                <div class="col-lg-9 col-sm-9">
+                                    <select class="form-control ttfw" name="pro_scene" id="sampleRate">
+                                        <option value="16000">16000HZ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="composedata margintop20">
+                                <label class="text-right control-label">语调：</label>
+                                <div class="col-lg-9 col-sm-9">
+                                    <div class="new-slider">
+                                        <label>-500</label>
+                                        <div id="slider-range-tone">
+                                            <label id="amount-tone" class="ui-text"></label>
+                                        </div>
+                                        <label>500</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="composedata margintop20">
+                                <label class="text-right control-label">编码格式：</label>
+                                <div class="col-lg-9 col-sm-9">
+                                    <label class="control-label" id="format">MAV</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showbottom composedata align-items">
+                    <div class="showbtleft">
+                        <div class="com_title">
+                        	文字内容 
+                        	<a class="pull-right n_inputfile" onclick="content_input();"><img src="__PUBLIC__/img_sj/xiazai_2.png" alt="" />批量导入</a>
+                        </div>
+                        <div class="showtopdata contents pz_innerbox">
+                            <div class="showbtleftdata">
+                                <textarea class="form-control ttfw" id="one_text" style="height:auto;resize: none;" name="text" placeholder="请输入文本"></textarea>
+                                <a href="javascript:;" onclick="add_word();">
+                                    <img src="__PUBLIC__/img_sj/tianjia.png" alt="" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="showbtcenter">
+                        <img src="__PUBLIC__/img_sj/jiantou_record.png" alt="" />
+                        <p>
+                            <button type="button" class="btn btn-primary" onclick="start_compose(this);">开始合成</button>
+                        </p>
+                    </div>
+                    <div class="showbtright pz_innerbox_lay">
+                        <div class="com_title">生成列表</div>
+                        <div class="showtopdata progressdata pz_innerbox">
+                            <div class="showbtrightdata clearfix" id="voice_volist">
+                                <!-- <p>文本内容</p>-->
+                                <!-- <div class="progress clearfix">-->
+                                <!-- <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">0%</div>-->
+                                <!--</div>-->
+                                <!--<div class="composedata align-items">-->
+                                <!-- <audio src="/uploads/audio/20181217/20181128031028.wav" preload="preload" controls="controls"></audio>-->
+                                <!-- <a href="javascript:;" onclick="audio_del(this);"><img src="__PUBLIC__/img_sj/shanchu.png" alt="" /></a>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="record_save(0);">保存</button>
+            </div>
+        </div>
+        <!--录音文字正在合成中弹窗-->
+        <div class="l_loadfixed">
+            <div class="l_loaddata">
+                <p>
+                    <img src="__PUBLIC__/img_sj/reload.gif" alt="">文本合成中...</p>
+                <p>文本正在合成中，请不要关闭页面。</p>
+            </div>
+        </div>
+        <!--/录音文字正在合成中弹窗-->
+    </div>
+    <script id="voice-list" type="text/template">
+     <div> 
+       <p> {%voice_name%} </p>
+			<div class="composedata align-items">
+				<audio src="/{%voice_url%}" preload="preload " controls="controls "></audio>
+				<a href="javascript:;" onclick="audio_del(this);"><img src="__PUBLIC__/img_sj/shanchu.png" alt="" /></a>
+			</div>
+		</div>
+    </script>
+    <script>
+    // $(function () {
+    //       $('#slider1').slider(function (per) {
+    //           $('#sliderValue').text(per+'kg');
+    //           $('#slider1 .handler').text(per)
+    //       });
+    //   });
+    $(function () {
+        $("#slider-range-min").slider({
+            range: "min",
+            value: 50,
+            min: 0,
+            max: 100,
+            slide: function (event, ui) {
+                $("#amount").text(ui.value);
+                $("#amount").css('left', $('#slider-range-min').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#slider-range-rate").slider({
+            range: "min",
+            value: 0,
+            min: -500,
+            max: 500,
+            slide: function (event, ui) {
+                $("#amount-rate").text(ui.value);
+                $("#amount-rate").css('left', $('#slider-range-rate').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#slider-range-tone").slider({
+            range: "min",
+            value: 0,
+            min: -500,
+            max: 500,
+            slide: function (event, ui) {
+                $("#amount-tone").text(ui.value);
+                $("#amount-tone").css('left', $('#slider-range-tone').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#amount").text($("#slider-range-min").slider("value"));
+        $("#amount").css('left', $('#slider-range-min').children('.ui-slider-range').css('width'));
+
+        $("#amount-rate").text($("#slider-range-rate").slider("value"));
+        $("#amount-rate").css('left', $('#slider-range-rate').children('.ui-slider-range').css('width'));
+
+        $("#amount-tone").text($("#slider-range-tone").slider("value"));
+        $("#amount-tone").css('left', $('#slider-range-tone').children('.ui-slider-range').css('width'));
+    });
+    //新增文本输入框
+    function add_word() {
+        // 左侧文本域
+        var texts = '<div class="showbtleftdata">' +
+            '<textarea class="form-control ttfw" style="height:auto;resize: none;" name="text"  placeholder="请输入文本"></textarea>' +
+            '<a href="javascript:;" onclick="add_word();"><img src="__PUBLIC__/img_sj/tianjia.png" alt="" /></a>' +
+            '<a href="javascript:;" onclick="content_del(this);"><img src="__PUBLIC__/img_sj/shanchu.png" alt="" /></a>' +
+            '</div>';
+        $('.contents').append(texts);
+        // 右侧合成进度条
+        // var progress = '<div class="showbtrightdata clearfix">'
+        // 							 +'<p>待合成</p>'
+        // 							 +'<div class="progress clearfix">'
+        // 						   +'<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>'
+        // 							 +'</div>'
+        // 							 +'<a href="javascript:;"><img src="__PUBLIC__/img_sj/bofang.png" alt="" /></a>'
+        // 							 +'</div>';
+        // var audios = '<div class="showbtrightdata clearfix">
+        // 						+'<p>文本内容</p>'
+        // 						+'<div class="composedata align-items">'
+        // 						+'<audio src="" preload="preload" controls="controls"></audio>'
+        // 						+'<a href="javascript:;"><img src="__PUBLIC__/img_sj/shanchu.png" alt="" /></a>'
+        // 						+'</div>'
+        // 						+'</div>';
+        // $('.progressdata').append(audios);
+    }
+    //删除文本输入框
+    function content_del(obj) {
+        var index = $('.contents .showbtleftdata').index($(obj));
+        $(obj).parent('.showbtleftdata').remove();
+    }
+    function record_save() {
+			var uid = $('.active .Idlist').val();
+			var url = "{:url('Scenarios/saveVoice')}"
+      $.ajax({
+          type: 'POST',
+          data: {id: uid},
+          dataType: 'json',
+          url: url,
+          success: function (data) {
+            if (data.code == 1) {
+            	alert(data.msg);
+            	$('#record_compose').modal('hide');
+            	show_voicedata();
+        			show_voicemanage();
+            }
+          },
+          error: function (e) {}
+      })
+    }
+    //删除录音
+    function audio_del(obj) {
+        $(obj).parent().parent().remove();
+        var src = $(obj).prev('audio').attr('src'); 
+        var url = "{:url('Scenarios/delete_voice')}"
+        $.ajax({
+            type: 'POST',
+            data: {src: src},
+            dataType: 'json',
+            url: url,
+            success: function (data) {
+            	console.log(data);
+                if (data.code == 1) {
+                	alert(data.msg);
+                }
+            },
+            error: function (e) {}
+        })
+    }
+    window.uid = 0;
+    function start_compose(obj) {
+        //获取杂项
+        var data = {};
+        data.voice = $("#voice  option:selected").val();
+        data.volume = $('#amount').text();
+        data.speech_rate = $("#amount-rate").text();
+        data.pitch_rate = $('#amount-tone').text();
+        data.format = 'wav';
+        // $('#format').text();
+        data.sampleRate = $('#sampleRate option:selected').val();
+        var text = [];
+        $("textarea[name ='text']").each(function () {
+            if ($(this).val() != '') {
+                text.push($(this).val());
+            }
+        })
+        if (text.length != 0) {
+            $(obj).text('合成中');
+            $('.l_loadfixed').show();
+            data.text = text;
+            console.log(data);
+            var url = "{:url('Scenarios/synthesisVoice')}"
+            $.ajax({
+                url: url,
+                dataType: "json",
+                type: "post",
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                    $(obj).text('开始合成');
+                    if (data.code == 1) {
+                        alert(data.msg);
+                        $('.l_loadfixed').hide();
+                        var jsonVoice = $.cookie(data.data)
+                        var person = eval("(" + jsonVoice + ")");
+                        console.log(person);
+                        var htmls = '';
+                        $.each(person, function (index, object) {
+                            var html = $('#voice-list').html();
+                            html = html.replace('{%voice_name%}', object.text);
+                            html = html.replace('{%voice_url%}', object.audioSaveFile);
+                            htmls += html;
+                        })
+                        $('#voice_volist').html(htmls);
+                        window.uid = data.data
+                    }
+                },
+                error: function () {
+                    alert('参数错误');
+                    $('.l_loadfixed').hide();
+                }
+            });
+        } else {
+            alert('文本内容不能为空')
+        }
+    }
+    
+    function content_input() {
+    	$('#recording_upload').modal('show');
+    }
+    </script>
+</div>
+
+<!--录音管理 批量导入录音文件-->
+<div class="modal fade" id="recording_upload" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" style="width:350px;">
+        <div class="modal-content n_modalcontent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                </button>
+                	<h4 class="modal-title">选择excel文件</h4>
+            </div>
+            <div class="modal-body">
+                    <input class="" name="files"  onchange="formSoundz(this);" accept=".xls,.xlsx" id="textvioce" type="file">
+                <br/>
+                <a style="cursor:pointer;" href="/application/user/static/voice_text.xlsx">下载模板</a>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="recordfile_save();" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--录音管理 批量导入录音文件-->
+<div class="modal fade" id="recording_upload_zip" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" style="width:350px;">
+        <div class="modal-content n_modalcontent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                </button>
+                	<h4 class="modal-title">选择ZIP文件</h4>
+            </div>
+            <div class="modal-body">
+                    <input class="" name="files"  onchange="formSoundp(this);" accept=".zip" id="zipvioce" type="file">
+                <br/>
+                <a style="cursor:pointer;" href="/application/user/static/voice_bag.zip">下载模板</a>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" onclick="recordfile_save_zip();" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--录音管理 试听-->
+<div class="modal fade" id="recording_audition" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" style="width:350px;">
+        <div class="modal-content n_modalcontent">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span>
+                </button>
+                	<h4 class="modal-title">试听</h4>
+            </div>
+            <div class="modal-body">
+                <div class="composedata align-items">
+                    <audio src="" preload="preload" id="voice_url_only" controls="controls"></audio>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--录音管理 录音编辑-->
+<div class="modal fade " id="recording_edit" tabindex="1" data-backdrop="static" data-keyboard="false" aria-hidden="true" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+                </button>
+                	<h4 class="modal-title">编辑录音</h4>
+            </div>
+            <div class="modal-body pz_innerbox_lay form-horizontal">
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 control-label">录音名称：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="record_name" class="form-control ttfw" placeholder="请输入录音名称" type="text" />
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 control-label">文字内容：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <textarea id="record_content" class="form-control ttfw" style="height:auto;" placeholder="请输入文字内容"></textarea>
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 control-label">录音来源：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="record_sourced" disabled="disabled" class="form-control ttfw disabled" value="" type="text" />
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 control-label">录音用途：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="record_use" disabled="disabled" class="form-control  ttfw disabled" value="流程" type="text" />
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 control-label">标签名称：</label>
+                    <div class="col-lg-9 col-sm-9">
+                        <input id="record_mark" disabled="disabled" class="form-control ttfw disabled" value="开场白" type="text" />
+                    </div>
+                </div>
+                <div class="form-group mgb10">
+                    <label class="col-lg-3 col-sm-3 control-label">录音：</label>
+                    <div class="col-lg-9 col-sm-9">
+                      <audio controls src="" id="audio_url">
+											  <source src="horse.mp3" type="audio/mpeg">
+											  您的浏览器不支持该音频格式。
+											</audio>
+                      <div class="marginTop">
+                        <input class="form-control" name="files"  onchange="formSoundv(this);" accept="audio/wav" id="test" type="file">
+	                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary " id='upda_id' data-id='' onclick="preservation();">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  //当Public_wechatMa变动时候上传音频
+  $("#sound_path_learning").on("change", function(){
+     var formData = new FormData();
+		 formData.append('update-audio-file', $('#sound_path_learning')[0].files[0]); 
+    $.ajax({
+        url: '{:url("user/Sound/upload")}',
+        type: 'POST',
+        cache: false,
+        data: formData,
+        processData: false,
+        contentType: false,
+        dataType:"json",
+        success : function(data) {
+        	 console.log(data.data);
+            if(data.code == 1) {
+                $("#sound_path_learning").attr('data-src',data.data.path_name);
+                $("#voice_zid111").attr('src','/'+data.data.path_name);
+                $('#learning_file_size').val(data.data.size)
+            } else {
+                $("#sound_path_learning").attr('data-src','');
+            }
+        }
+    });
+});
+   
+   function formSoundzl11(Object){
+				if(Object.files.length > 0 ){
+					var excel = $(Object).prop('files');//获取到文件列表
+					console.log(excel);
+					var objUrl = getObjectURL(Object.files[0]);
+					console.log(objUrl);
+					var filePath = $(Object).val().toLowerCase().split(".");
+					var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+					if(!(fileType == "wav")){
+		      		alert('文件格式不符合要求！');
+		      		var file = $(Object) ;
+							file.after(file.clone().val(""));      
+							file.remove();  
+		      		return 
+			    }else if(excel[0].size>10485760){
+			        alert('错误！请上传不超过10M的文件');
+			        var file = $(Object) ;
+							file.after(file.clone().val(""));      
+							file.remove();  
+			        return
+			    }else{
+			    	  //上传文件大小放入html中
+			    	  $('#learning_file_size').val(excel[0].size);
+			    		$(Object).parent().nextAll('audio').attr('src',objUrl);
+			    }
+				}else{
+					$('#voice_zid111').attr('src',window.voice_audio);
+				}
+			}
+
+
+
+
+
+		function recordfile_save_zip(){
+			var excel = document.getElementById("zipvioce").files[0];
+			var url = "{:url('filezipbatch')}"//zip包
+			var uid = $('.active .Idlist').val();
+			var formFile = new FormData();
+			formFile.append("excel",excel);
+			formFile.append("id",uid);
+			$.ajax({
+		    type: 'post',
+		    data: formFile,
+		    dataType: 'json',
+		    url: url,
+		    cache: false,
+        contentType: false,    //不可缺
+        processData: false,    //不可缺
+		    success: function (data) {
+		    	console.log(data);
+		    	if(data.code == 0){
+		    		$('#recording_upload_zip').modal('hide');
+		    		show_voicemanage();
+		    	}else{
+		    		$('#recording_upload_zip').modal('hide');
+		    	}
+		    },
+		      error: function (e) {}
+	    })
+		}
+    //录音上传
+    function formSoundp(Object){
+			console.log(Object.files)
+			if(Object.files.length > 0 ){
+				var excel = document.getElementById("zipvioce").files[0];
+				var objUrl = getObjectURL(Object.files[0]);
+				var filePath = $('#zipvioce').val().toLowerCase().split(".");
+				var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+				if(!(fileType == "zip")){
+        		alert('文件格式不符合要求！');
+        		var file = $("#zipvioce") ;
+						file.after(file.clone().val(""));      
+						file.remove();  
+        		return 
+		    }
+			}
+    }
+</script>
+<!--批量上传语音合成文本-->
+<script>
+		function recordfile_save(){
+			var excel = document.getElementById("textvioce").files[0];
+			var url = "{:url('batchvoicetext')}"//excel
+			var formFile = new FormData();
+			formFile.append("excel",excel);
+			$.ajax({
+		    type: 'post',
+		    data: formFile,
+		    dataType: 'json',
+		    url: url,
+		    cache: false,
+        contentType: false,    //不可缺
+        processData: false,    //不可缺
+		    success: function (data) {
+		    	if(data.code == 0){
+		    		$('#recording_upload').modal('hide');
+		    		var file = $("#textvioce") ;
+						file.after(file.clone().val(""));      
+						file.remove();  
+	    			var list = data.data;
+						$.each(list,function(index,value){
+							if(index == 2){
+								$('#one_text').eq(0).val(value.A);
+							}
+							if(index > 2){
+								var texts = '<div class="showbtleftdata">' +
+								            '<textarea class="form-control ttfw" style="height:auto;resize: none;" name="text"  placeholder="请输入文本">'+value.A+'</textarea>' +
+								            '<a href="javascript:;" onclick="add_word();"><img src="__PUBLIC__/img_sj/tianjia.png" alt="" /></a>' +
+								            '<a href="javascript:;" onclick="content_del(this);"><img src="__PUBLIC__/img_sj/shanchu.png" alt="" /></a>' +
+								            '</div>';
+			      		$('.contents').append(texts);	
+							}
+						});
+		    	}
+		    
+		    },
+		      error: function (e) {}
+	    })
+		}
+    //录音上传
+    function formSoundz(Object){
+			console.log(Object.files)
+			if(Object.files.length > 0 ){
+				var excel = document.getElementById("textvioce").files[0];
+				var objUrl = getObjectURL(Object.files[0]);
+				var filePath = $('#textvioce').val().toLowerCase().split(".");
+				var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+				if(!(fileType == "xlsx"|| fileType == "xls")){
+        		alert('文件格式不符合要求！');
+        		var file = $("#textvioce") ;
+						file.after(file.clone().val(""));      
+						file.remove();  
+        		return 
+		    }else if(excel.size>10485760){
+		        alert('错误！请上传不超过10M的文件');
+		        var file = $("#textvioce") ;
+						file.after(file.clone().val(""));      
+						file.remove();  
+		        return
+		    }
+			}
+    	
+    }
+</script>
+
+<!--编辑上传音频-->
+<script>
+		function preservation(){
+			var files = document.getElementById("test").files[0];
+			var url = "{:url('fileUpload')}"
+			var formFile = new FormData();
+			var record_name = $('#record_name').val();
+			var record_content = $('#record_content').val();
+			var id = $('#upda_id').attr('data-id');
+			console.log(files);
+			formFile.append("file",files);
+			formFile.append("record_name",record_name);
+			formFile.append("record_content",record_content);
+			formFile.append("id",id);
+			$.ajax({
+		    type: 'post',
+		    data: formFile,
+		    dataType: 'json',
+		    url: url,
+        contentType: false,    //不可缺
+        processData: false,    //不可缺
+		    success: function (data) {
+		    	console.log(data);
+		    	alert(data.msg);
+	    		$('#recording_edit').modal('hide');
+	    		show_voicemanage();
+		    },
+		      error: function (e) {}
+	    })
+		}
+    //录音上传
+    function formSoundv(Object){
+			console.log(Object.files)
+			if(Object.files.length > 0 ){
+				var objUrl = getObjectURL(Object.files[0]);
+	      $("#audio_url").attr("src", objUrl);
+	      $("#audio_url")[0].pause();
+	      $("#audio_url").show();
+	      getTime();
+			}
+    	
+    }
+    // <!--获取mp3文件的时间 兼容浏览器-->
+    function getTime() {
+        setTimeout(function () {
+            var duration = $("#audio_url")[0].duration;
+            if(isNaN(duration)){
+                getTime();
+            }
+        }, 10);
+    }
+    // <!--把文件转换成可读URL-->
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+</script>
+
+
+
+
+
+

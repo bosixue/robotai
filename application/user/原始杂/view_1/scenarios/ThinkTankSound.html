@@ -1,0 +1,187 @@
+
+	<div class="modal fade " id="ThinkTankSound" tabindex="1" data-backdrop="static" data-keyboard="false"  aria-hidden="true"  role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;">
+		<div class="modal-dialog" style="width:600px; top:10%">
+			<div class="modal-content">
+				 <div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							 <span aria-hidden="true">×</span>
+						</button>
+						<h4 class="modal-title">编辑语音</h4>
+				 </div>
+				 <div class="modal-body pz_innerbox_lay">
+						  <div class="form-group mgb10">
+								<label class="col-lg-3 col-sm-3 text-right">标题：</label>
+								<div class="col-lg-9 col-sm-9">
+									<input id="Soundname" readonly="readonly" class="form-control ttfw" placeholder="请输入节点名称" type="text" />
+								</div>
+							</div>
+
+							<div class="form-group mgb10">
+								<label class="col-lg-3 col-sm-3 text-right">关键字：</label>
+								<div class="col-lg-9 col-sm-9">
+									<textarea id="Soundkeyword" readonly="readonly" class="form-control ttfw" style="height:auto;resize: vertical;"></textarea>
+								</div>
+							</div>
+
+							<div id="soundlist">
+								<form method="post" class="form-horizontal margintop sform" enctype="multipart/form-data">
+								  <div class="form-group mgb10">
+								  	<label class="col-lg-3 col-sm-3 text-right">问题回复：</label>
+								  	<div class="col-lg-9 col-sm-9">
+								  	  <div class="word">好的，那我稍后让我们资深客户经理联系您，我这边就先不打扰您了，祝您生活愉快，再见！</div>
+												<div>
+													<audio src="" preload="preload" controls="controls"></audio>
+												</div>
+												<div>
+													<input type="hidden" name="sid" value="1" />
+													<input type="file" class="form-control" onchange="formSound(this);" accept="audio/*" name="update-audio-file" />
+												</div>
+								  	</div>
+								  </div>
+
+								</form>
+
+								<form method="post" dta="2" action="" class="form-horizontal margintop sform" enctype="multipart/form-data">
+									<div class="form-group mgb10">
+										<label class="col-lg-3 col-sm-3 text-right">问题回复：</label>
+										<div class="col-lg-9 col-sm-9">
+											<div class="word">好的，那我稍后让我们资深客户经理联系您，我这边就先不打扰您了，祝您生活愉快，再见！</div>
+										  <div>
+										  	<audio src="" preload="preload" controls="controls"></audio>
+										  </div>
+
+											<div>
+												<input type="hidden" name="sid" value="2" />
+												<input type="file" class="form-control" onchange="formSound(this);" accept="audio/*" name="update-audio-file" />
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+
+				 </div>
+				 <div class="modal-footer">
+					 <button type="button" class="btn btn-default" data-dismiss="modal" >   关闭		</button>
+					 <button type="button" class="btn btn-primary"  onclick="click_submit_audio_file();">	 确定   </button>
+				 </div>
+				 <div style="clear:both"></div>
+				 <input type="hidden" name="flowSoundId" id="flowSoundId" value="" />
+		 </div>
+		</div>
+</div>
+
+			<script type="text/javascript">
+				// <!--把文件转换成可读URL-->
+		    function getObjectURL(file) {
+		        var url = null;
+		        if (window.createObjectURL != undefined) { // basic
+		            url = window.createObjectURL(file);
+		        } else if (window.URL != undefined) { // mozilla(firefox)
+		            url = window.URL.createObjectURL(file);
+		        } else if (window.webkitURL != undefined) { // webkit or chrome
+		            url = window.webkitURL.createObjectURL(file);
+		        }
+		        return url;
+		    }
+				function formSound(obj){
+					var audioFile = $(obj).val();
+					var file = obj.files[0];
+					
+					if(!audioFile){
+						alert("话术语音不可为空！");
+						return false;
+					}
+					//document.getElementById("test").files[0];
+					console.log(file);
+					console.log(getObjectURL(obj.files[0]));
+					$('#audio_file').attr('src', getObjectURL(obj.files[0]));
+					return true;
+			}
+			
+			//点击提交录音文件
+			function click_submit_audio_file()
+			{
+				submit_audio_file($('#submit_audio_file'));
+			}
+			
+			//提交录音文件
+			function submit_audio_file(obj)
+			{
+				//2.绑定ajaxSubmit
+				var sform = $(obj).parents('.sform').attr('dta');
+				// 1.基本参数设置
+			  var options = {
+				  type: 'POST',    // 设置表单提交方式
+				  url: "{:url('user/Scenarios/addSound')}",    // 设置表单提交URL,默认为表单Form上action的路径
+				  dataType: 'json',    // 返回数据类型
+				  beforeSubmit: function(formData, jqForm, option){    // 表单提交之前的回调函数，一般用户表单验证
+						return true;
+				  },
+			    success: function(responseText, statusText, xhr, $form){    // 成功后的回调函数(返回数据由responseText获得),,
+		        console.log(responseText);
+					  if (responseText.code == '0') {
+		 					$(obj).parent().prev().find("audio").attr("src",responseText.data);
+		 					$('#ThinkTankSound').modal('hide');
+					  } else {
+							console.log(responseText);
+					  // alert("操作失败!" + responseText.msg);    // 成功访问地址，并成功返回数据，由于不符合业务逻辑的失败
+					  }
+				  },
+			    error: function(xhr, status, err) {
+				  	alert("操作失败!");    // 访问地址失败，或发生异常没有正常返回
+				  },
+				  clearForm: true,    // 成功提交后，清除表单填写内容
+				  resetForm: true    // 成功提交后，重置表单填写内容
+			  };
+		    $(obj).parents(".sform").submit(function(){     // 提交表单的id
+				  $(this).ajaxSubmit(options);
+				  return false; //防止表单自动提交
+			  });
+			  $(obj).parents(".sform").submit();
+			}
+				function showSound(id){
+
+						  $("#flowSoundId").val(id);
+
+							var url = "{:url('user/Scenarios/getKnowledgeInfo')}";
+							$.ajax({
+								url : url,
+								dataType : "json",
+								type : "post",
+								data : {'id':id},
+								success: function(data){
+									console.log(data);
+									var data = data.data;
+									$("#Soundname").val(data.name);
+									$("#Soundkeyword").val(data.keyword);
+									$('#soundlist').find("form").remove();
+									var content = data.content;
+									var leng = content.length;
+									var str = '';
+									for(var i=0;i<leng;i++){
+											 str = '<form method="post" class="form-horizontal margintop sform" enctype="multipart/form-data">'
+															  +'<div class="form-group mgb10">'
+																+'<label class="col-lg-3 col-sm-3 text-right">问题回复：</label>'
+																+'<div class="col-lg-7 col-sm-7">'
+																+'<div class="word col-lg-5"><span>'+content[i]["content"]+'</span></div>'
+																+'<div><audio src="'+content[i]["audio"]+'" preload="preload" controls="controls" id="audio_file"></audio></div>'
+																+'</div>'
+																+'</div>'
+																+'<div class="form-group mgb10 l-marginb">'
+																+'<label class="col-lg-3 col-sm-3 text-right ">上传文件：</label>'
+																+'<div class="col-lg-7 text-right" >'
+																+'<input type="hidden" name="sid" value="'+content[i]["id"]+'" />'
+																+'<input type="file" class="form-control word " onchange="formSound(this);" accept="audio/*" name="update-audio-file" id="submit_audio_file" /></div></div>'
+																+'</form>';
+
+										 $('#soundlist').append(str);
+									}
+								},
+								error : function() {
+									alert('获取信息失败。');
+								}
+							});
+							$('#ThinkTankSound').modal('show');
+				}
+
+	</script>

@@ -1,0 +1,263 @@
+<div class="modal fade effect" id="effectTmp" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"   >
+    <div class="modal-dialog" style="width:365px;">
+        <div class="modal-content effect-content import">
+            <div class="modal-header effect-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>-->
+                <!--</button>-->
+                <h4 class="modal-title effect-title" id="singleTel"><span>导出号码</span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="effect-1">
+                        <span >当前进度</span>
+                        <span class="pull-right color90 Progress_value">0%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-data" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span class="sr-only">0%完成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <div>取 消</div>
+            </div>
+        </div>
+        <div class="modal-content effect-content hidden finish">
+            <div class="modal-header effect-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title effect-title">导出号码</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group effect-flex">
+                    <i class="effect-success"></i>
+                    <div class="effect-success-tip" id="effect-tips-content">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="upload_ok">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade effect" id="join_effectTmp" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" data-backdrop="static" data-keyboard="false"   >
+    <div class="modal-dialog" style="width:365px;">
+        <div class="modal-content effect-content import">
+            <div class="modal-header effect-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>-->
+                <!--</button>-->
+                <h4 class="modal-title effect-title" id="singleTel"><span>加入CRM</span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="effect-1">
+                        <span >当前进度</span>
+                        <span class="pull-right color90 Progress_value">0%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-data" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span class="sr-only">0%完成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <div>取 消</div>
+            </div>
+        </div>
+        <div class="modal-content effect-content hidden finish">
+            <div class="modal-header effect-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title effect-title">加入CRM</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group effect-flex">
+                    <i class="effect-success"></i>
+                    <div class="effect-success-tip" id="effect-tips-content_j">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer effect-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="upload_ok_j">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--当前通话记录中添加配置弹框-->
+<div class="modal fade" id="add_config" tabindex="1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:565px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+
+                </button>
+                <h4 class="modal-title"><span>添加配置</span></h4>
+
+            </div>
+            <div class="modal-body pagelists">
+                <form id="branchform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+                    <div class="displayf">
+                        <div class="left-content">
+                            <button type="button" data-type="phoneState" class="btn btn-active">通话状态</button>
+                            <button type="button" data-type="talkTime" class="btn">通话时长</button>
+                            <button type="button" data-type="frequencySpeaking" class="btn ">说话次数</button>
+                            <button type="button" data-type="clientTone" class="btn ">客户语气</button>
+                            <button type="button" data-type="reviewThing" class="btn ">查看已否</button>
+                        </div>
+                        <div class="right-content pz_innerbox">
+                            <div class="statuss flexout_1" id="phoneState">
+                                <p><input type="checkbox" name="phoneState" value="2">已接通</p>
+                                <p><input type="checkbox" name="phoneState" value="3">无人接听 </p>
+                                <p><input type="checkbox" name="phoneState" value="4">停机</p>
+                                <p><input type="checkbox" name="phoneState" value="5">空号 </p>
+                                <p><input type="checkbox" name="phoneState" value="6">正在通话中 </p>
+                                <p><input type="checkbox" name="phoneState" value="7">关机 </p>
+                                <p><input type="checkbox" name="phoneState" value="8">用户拒接 </p>
+
+                            </div>
+                            <div class="statuss  flexout_2 hidden" id="talkTime">
+                                <div class="optins">
+                                    <input type="checkbox" data-type="timeSlot" name="talkTime" value=""><span>时间段</span>
+                                    <div id="timeSlot" class="hidden">
+                                        <input type="text" class="form-control flexout_2_input_1" name="" value="">
+                                        <span>至</span>
+                                        <input type="text" class="form-control flexout_2_input_2" name="" value="">
+                                        <span>秒</span>
+                                    </div>
+                                </div>
+                                <div class="optins ">
+                                    <input type="checkbox" data-type="timeUp" name="talkTime" value=""><span>多少秒以上</span>
+                                    <div id="timeUp" class="hidden">
+                                        <input type="number" min="0" class="form-control flexout_2_input_3" name="" value="">
+                                        <span>秒</span>
+                                    </div>
+                                </div>
+                                <div class="optins">
+                                    <input type="checkbox" data-type="timeDown" name="talkTime" value=""><span>多少秒以下</span>
+                                    <div id="timeDown" class="hidden">
+                                        <input type="number" min="0" class="form-control flexout_2_input_4" name="" value="">
+                                        <span>秒</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="statuss hidden  flexout_3" id="frequencySpeaking">
+                                <div class="optins">
+                                    <input type="checkbox" data-type="talktimes" name="frequencySpeaking" value=""><span>客户说话次数</span>
+                                    <div id="talktimes" class="hidden">
+                                        <select class="form-control sel flexout_3p_select_1" name="frequencySpeakingSel">
+                                            <option value=">=" >>=</option>
+                                            <option value="<=" ><=</option>
+                                        </select>
+                                        <input type="number"min="0" class="form-control flexout_3_input_1" name="" value="">
+                                        <!-- <span>次</span> -->
+                                    </div>
+                                </div>
+                                <div class="optins">
+                                    <input type="checkbox" data-type="effectiveDialogue" name="frequencySpeaking" value=""><span>有效对话次数</span>
+                                    <div id="effectiveDialogue" class="hidden">
+                                        <select class="form-control sel flexout_3p_select_2" name="frequencySpeakingSel">
+                                            <option value=">=" >>=</option>
+                                            <option value="<=" ><=</option>
+                                        </select>
+                                        <input type="number" min="0" class="form-control flexout_3_input_2" name="" value="">
+                                        <!-- <span>次</span> -->
+                                    </div>
+                                </div>
+                                <div class="optins">
+                                    <input type="checkbox" data-type="triggerProblem" name="frequencySpeaking" value=""><span>触发问题次数</span>
+                                    <div id="triggerProblem" class="hidden">
+                                        <select class="form-control sel flexout_3p_select_3" name="frequencySpeakingSel">
+                                            <option value=">=" >>=</option>
+                                            <option value="<=" ><=</option>
+                                        </select>
+                                        <input type="number"  min="0" class="form-control flexout_3_input_3" name="" value="">
+                                        <!-- <span>次</span> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="statuss hidden  flexout_4" id="clientTone">
+                                <div class="optins">
+                                    <input type="checkbox"  data-type="affirmations" name="frequencySpeaking" value=""><span>肯定次数</span>
+                                    <div id="affirmations" class="hidden">
+                                        <select class="form-control sel flexout_4p_select_1" name="frequencySpeakingSel">
+                                            <option value=">=" >>=</option>
+                                            <option value="<=" ><=</option>
+                                        </select>
+                                        <input type="number" min="0" class="form-control flexout_4_input_1" name="" value="">
+                                        <!-- <span>次</span> -->
+                                    </div>
+                                </div>
+                                <div class="optins">
+                                    <input type="checkbox" data-type="neutral" name="frequencySpeaking" value=""><span>中性次数</span>
+                                    <div id="neutral" class="hidden">
+                                        <select class="form-control sel flexout_4p_select_2" name="frequencySpeakingSel">
+                                            <option value=">=" >>=</option>
+                                            <option value="<=" ><=</option>
+                                        </select>
+                                        <input type="number" min="0" class="form-control flexout_4_input_2" name="" value="">
+                                        <!-- <span>次</span> -->
+                                    </div>
+                                </div>
+                                <div class="optins">
+                                    <input type="checkbox"   data-type="negative" name="frequencySpeaking" value=""><span>否定次数</span>
+                                    <div id="negative" class="hidden">
+                                        <select class="form-control sel flexout_4p_select_3" name="frequencySpeakingSel">
+                                            <option value=">=" >>=</option>
+                                            <option value="<=" ><=</option>
+                                        </select>
+                                        <input type="number" min="0" class="form-control flexout_4_input_3" name="" value="">
+                                        <!-- <span>次</span> -->
+                                    </div>
+                                </div>
+                                <!-- <div class="optins">
+                                  <input type="checkbox" data-type="isInvitation" name="frequencySpeaking" value=""><span>是否邀约成功</span>
+                                  <div id="isInvitation" class="hidden">
+                                      <select class="form-control" name="">
+                                        <option value="">----</option>
+                                        <option value="1">是</option>
+                                        <option value="0">否</option>
+                                      </select>
+                                  </div>
+                                </div> -->
+                            </div>
+
+                            <div class="statuss hidden  flexout_5" id="reviewThing">
+                                <div class="optins">
+                                    <input type="checkbox"  data-type="reviewIfSel" value=""><span>是否已查看</span>
+                                    <div id="reviewIfSel" class="hidden">
+                                        <select class="form-control sel1 flexout_5_select_1 sel" >
+                                            <option value="" >全部</option>
+                                            <option value="1" >已查看</option>
+                                            <option value="0" >未查看</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </form>
+            </div>
+            <div style="clear:both"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                <button class="btn btn-primary submit-btn" onclick="addConfigSubmit();" type="button" data-dismiss="modal">确 定</button>
+            </div>
+        </div>
+    </div>
+</div>

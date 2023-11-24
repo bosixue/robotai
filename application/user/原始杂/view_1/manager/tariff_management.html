@@ -1,0 +1,544 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+
+<style>
+	.table tbody>tr>td{
+		padding: 12px 8px;
+	}
+
+	.l-listtable>thead>tr>th{
+
+		background-color: #f2f7fd;
+		border: solid 1px #d7e9ff!important;
+
+
+	}
+	.l-listtable>tbody>tr>td
+	{
+			border: solid 1px #d7e9ff;
+	}
+
+	.l-resetBtn{
+		color: #333;
+		background-color: #fff;
+    border-color: #dedede;
+	}
+	.l-resetBtn:active,
+	.l-resetBtn:focus,
+	.l-resetBtn:hover,
+	.l-resetBtn:active:focus,
+	.l-resetBtn:active:hover{
+   	background-color: #fff;
+    border-color: #0e90fe;
+    color: #0e90fe!important;
+	}
+	.l-recored{
+    padding: 0px 16px;
+	}
+
+	.l-recored span:nth-child(3){
+		margin-left:30px;
+	}
+
+	.smstips{
+		font-size: 12px;
+		color: #909090;
+	}
+	.operator_auto{
+		width: 80px;
+		height: 26px;
+		display: inline-block;
+		margin-top: 2px;
+	}
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header clearfix">
+                <div class="pull-left">
+                	<span class="n_panel_title"><img src="__PUBLIC__/img_sj/zfgl.png" alt="">资费管理</span>
+                </div>
+                <div class="pull-right">
+                	<div class="form-inline  l-operationbtn">
+                    <label class="statusSelect pull-left">用户名:</label>
+                    <input type="text" class="form-control pull-left l-search" id="username" name="keyword">
+                    <span class="btn btn-primary  pull-left" type="button" onclick="show_data();">查询</span>
+										<span class="btn btn-primary  pull-left l-resetBtn" type="button" onclick="reset();">重置</span>
+                  </div>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover ">
+                        <thead>
+                            <tr>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">用户名</th>
+																<th class="text-center">用户类型</th>
+                                <th class="text-center">机器人月租费率</th>
+                                <th class="text-center">服务费费率</th>
+                                <th class="text-center">ASR条数</th>
+                                <th class="text-center">线路条数</th>
+                                <th class="text-center">短信通道条数</th>
+                                <th class="text-center">操作</th>
+																<th class="text-center">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recharge-recored-list">
+                <!--            <tr>-->
+                <!--                <td class="text-center">1</td>-->
+                <!--                <td class="text-center">测试</td>-->
+																<!--<td class="text-center">运营商</td>-->
+                <!--                <td class="text-center">0.05 元 / 天 / 个</td>-->
+                <!--                <td class="text-center">0.05 元 / 次</td>-->
+                <!--                <td class="text-center">5</td>-->
+                <!--                <td class="text-center">6</td>-->
+                <!--                <td class="text-center">-->
+	               <!--                 <a href="javascript:void(0);" class="tariff-view" onclick="tariff_view();">资费查看</a>-->
+																<!--	<a href="javascript:void(0);" class="tariff-view" onclick="modification_record();">修改记录</a>-->
+                <!--                </td>-->
+															 <!-- <td class="text-center">测试</td>-->
+                <!--            </tr>-->
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <footer class="clearfix col-sm-12 paging">
+                        </footer>
+                    </div>
+                </div>
+                <div class="component-page-empty" id="consumeempty">
+									 <div class="empty-tip line">暂无数据</div>
+								</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script id='operator_list' type='text/tepmate'>
+	<tr>
+		<td class="text-center">{%sequence%}</td>
+    <td class="text-center">{%username%}</td>
+    <td class="text-center">{%role_name%}</td>
+    <td class="text-center">{%month_price%}{%price_type%}</td>
+    <td class="text-center">{%service_price%}</td>
+    <td class="text-center">{%ASR_price%}</td>
+  	<td class="text-center">{%line_count%}</td>
+  	<td class="text-center">{%message_count%}</td>
+    <td class="text-center current">
+			<a href="javascript:void(0);" class="tariff-view operator_auto" onclick="tariff_view({%id%});">资费查看</a>
+			{if $role_id != 18}<a href="javascript:void(0);" class="tariff-view operator_auto" onclick="modification_record({%id%});">修改记录</a>{/if}
+    </td>
+    <td class="text-center">{%remark%}</td>
+	</tr>
+</script>
+<script type="text/javascript">
+//当前页全选
+$("input[name='all_checked'][type='checkbox']").click(function () {
+    if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+        $("input[name='roleids'][type='checkbox']").prop("checked", true);
+    } else {
+        $("input[name='roleids'][type='checkbox']").prop("checked", false);
+    }
+});
+//子复选框的事件
+$('input[type="checkbox"][name="roleids"]').click(function () {
+    //当没有选中某个子复选框时，check-all取消选中
+    if (!$(".rolecheck").checked) {
+        $("input[name='all_checked'][type='checkbox']").prop("checked", false);
+    }
+    var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+    var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+    if (checkedsub == chsub) {
+        $("input[name='all_checked'][type='checkbox']").prop("checked", true);
+    }
+});
+
+//重置
+</script>
+
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+
+<script id='operator_asr_l_m_data' type='text/tepmate'>
+	<div class="n_showdata">
+ 		<p title="{%title%}">{%name%}</p>
+ 		<p>成本价：<span>{%c_price%}</span>元/次</span>
+		{if $role_id != 18}<p class="saleprice">销售价：
+			<span><input type="text" class="form-control" data_id='{%id%}' name="{%type%}_price" value="{%x_price%}"></span>元/次</p>{/if}
+ 	</div>
+</script>
+<script id='operator_record_data' type='text/tepmate'>
+		<tr>
+    <td class="text-center">{%modular_name%}</td>
+    <td class="text-center">{%update_front%}</td>
+    <td class="text-center">{%update_after%}</td>
+    <td class="text-center">{%update_time%}</td>
+	</tr>
+</script>
+
+<script>
+	$(function() {
+    $( document ).tooltip();
+  });
+	onmyTime();
+		/**
+	 * 配置分页
+	 * 
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class 
+	 * @param function args.callback 回调函数
+	*/
+	var Paging = new Paging01();
+	Paging.init_args({
+		// url: 
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+	//重置
+ 	function reset()
+ 	{
+ 		$('#username').val('');
+ 		show_data();
+ 	}
+	show_data();
+	function show_data(page,limit){
+		var data = {};
+		if(!page){page = 1;}
+		if(!limit){limit = 10;}
+		data.username = $('#username').val();
+		data.role_name = $('#role_name').find("option:selected").val();
+		data.page = page;
+		data.limit = limit;
+		var url = "{:url('manager/tariff_management')}";	
+		$.ajax({
+			type:'POST',
+			data: data,
+			dataType:'json',
+			url:url,
+			success:function(data){
+				console.log(data);
+				var htmls = '';
+				if(data.code == 1){
+					if(data.data.list.length == 0) {
+						$('#consumeempty').show();
+						$('#recharge-recored-list').html(htmls);
+						Paging.paging(1, 0, 10);
+					}else{
+						$('#consumeempty').hide();
+						var htmls = '';
+					  var total = data.data.page;   //总页数
+					  var Nowpage = data.data.Nowpage;  //当前页码
+					  var count  = data.data.total;  //总条数
+					  var Nowpage = parseInt(Nowpage);
+					  var i = (Nowpage - 1) * limit + 1;
+						$.each(data.data.list, function(index, object) {
+						 	data.i = i;
+						 	if(object.type_price == 1){
+						 		object.type_price_name = '元/天/个'
+						 	}else if(object.type_price == 2){
+						 		object.type_price_name = '元/月/个'
+						 	}else{
+						 		object.type_price_name = ''
+						 	}
+						 	// debugger;
+							var html = $('#operator_list').html();
+							html = html.replace('{%sequence%}', i);
+							html = html.replace('{%username%}', object.username);
+							html = html.replace('{%role_name%}', object.role_name);
+							html = html.replace('{%month_price%}',toFixed_num(object.month_price,3));
+							html = html.replace('{%price_type%}', object.type_price_name);
+							html = html.replace('{%service_price%}', object.technology_service_price+'元/分钟');
+							html = html.replace('{%ASR_price%}', object.asr_count);
+							html = html.replace('{%line_count%}', object.count_line);
+							html = html.replace('{%message_count%}',object.message_count);
+							html = html.replace('{%id%}',object.id);
+							{if $role_id != 18}html = html.replace('{%id%}',object.id);{/if}
+							html = html.replace('{%remark%}', object.cinert);
+							htmls += html;
+							i++;
+						});
+						Paging.paging(Nowpage, count, limit);
+						$('#recharge-recored-list').html(htmls);
+					}
+				}
+			},
+			error:function(e){
+			}
+		})
+	}
+	function tariff_view(id){
+		var url = "{:url('edit_tariff_management')}";
+		$('#tariffViewDialog').modal('show');
+		$.ajax({
+			type:'GET',
+			data: {id:id},
+			dataType:'json',
+			url:url,
+			success:function(data){
+				window.role_id = data.data.role_id;
+				console.log(data);
+				$('#c_service_price').text(toFixed_num(data.data.robot.u.technology_service_price,5)); 
+			  $('#x_service_price').find('input').val(toFixed_num(data.data.robot.u.technology_service_price,3));
+				if(data.data.pid_role_id == 12){
+					$('.robot_rate').hide();
+				}else{
+					$('.robot_rate').show();
+				}
+				if(data.data.pid_role_id == 16){
+					if(data.data.role_id == 17){
+						$('.robot_rate').hide();
+					}else{
+						$('.robot_rate').show();
+						$('#c_price').text(toFixed_num(data.data.robot.p.month_price,3)); 
+						console.log(data.data.robot.u.type_price);
+						if(data.data.robot.p.type_price == 1){
+							$('#c_type').text('元/天/个');
+						}else if(data.data.robot.p.type_price == 2){
+							$('#c_type').text('元/月/个')
+						}
+						$('#x_price').prop('value',toFixed_num(data.data.robot.u.month_price,3));
+						if(data.data.robot.u.type_price == 1){
+							$('#x_type').text('元/天/个');
+						}else if(data.data.robot.u.type_price == 2){
+							$('#x_type').text('元/月/个')
+						}
+					}
+				}
+				if(data.data.pid_role_id == 17){
+					$('.robot_rate').show();
+					$('#c_price').text(toFixed_num(data.data.robot.p.month_price,3)); 
+					if(data.data.robot.p.type_price == 1){
+						$('#c_type').text('元/天/个');
+					}else if(data.data.robot.p.type_price == 2){
+						$('#c_type').text('元/月/个')
+					}
+					
+					$('#x_price').prop('value',toFixed_num(data.data.robot.u.month_price,3));
+					if(data.data.robot.u.type_price == 1){
+						$('#x_type').text('元/天/个');
+					}else if(data.data.robot.u.type_price == 2){
+						$('#x_type').text('元/月/个')
+					}
+					$('#c_service_price').text(toFixed_num(data.data.robot.u.technology_service_price,5)); 
+			  	$('#x_service_price').find('input').val(toFixed_num(data.data.robot.u.technology_service_price,3));
+				}
+				if(data.data.pid_role_id == 18){
+					$('.robot_rate').show();
+					$('#c_price').text(toFixed_num(data.data.robot.p.month_price,3)); 
+					if(data.data.robot.p.type_price == 1){
+						$('#c_type').text('元/天/个');
+					}else if(data.data.robot.p.type_price == 2){
+						$('#c_type').text('元/月/个')
+					}
+					$('#x_price_fji').hide();
+					$('#c_service_price').text(toFixed_num(data.data.robot.u.technology_service_price,5)); 
+			  	$('#x_service_price').text(toFixed_num(data.data.robot.p.technology_service_price,5)); 
+					// $('#input_x').text(toFixed_num(data.data.robot.u.month_price,3));
+					// if(data.data.robot.u.type_price == 1){
+					// 	$('#x_type').text('元/天/个');
+					// }else if(data.data.robot.u.type_price == 2){
+					// 	$('#x_type').text('元/月/个')
+					// }
+				}
+				
+				
+				var htmls = '';
+				if(data.data.asr.length == 0){
+					var html = '';
+							html += '<div class="component-page-empty">'
+							html += 	'<div class="empty-tip line">暂无数据</div>'
+							html += '</div>';
+					$('#asr_data').html(html);
+				}else{
+					$.each(data.data.asr, function(index, object) {
+						var html = $('#operator_asr_l_m_data').html();
+							if(!object.pid_sale_price){
+							object.pid_sale_price = 0.00;
+						}else
+						if(!object.sale_price){
+							object.sale_price = 0.00;
+						}
+						html = html.replace('{%title%}', object.name);
+						html = html.replace('{%name%}', object.name);
+						html = html.replace('{%c_price%}', toFixed_num(object.pid_sale_price,4));
+						html = html.replace('{%x_price%}', toFixed_num(object.sale_price,4));
+						html = html.replace('{%id%}', object.id);
+						html = html.replace('{%type%}', 'asr');
+						htmls += html;
+					});
+					$('#asr_data').html(htmls);
+				}
+				var htmls1 = '';
+				if(data.data.line.length == 0){
+						var html = '';
+							html += '<div class="component-page-empty">'
+							html += 	'<div class="empty-tip line">暂无数据</div>'
+							html += '</div>';
+					$('#line_data').html(html);
+					
+				}else{
+					$.each(data.data.line, function(index, object) {
+						var html = $('#operator_asr_l_m_data').html();
+						if(!object.pid_sale_price){
+							object.pid_sale_price = 0.00;
+						}else
+						if(!object.sale_price){
+							object.sale_price = 0.00;
+						}
+						html = html.replace('{%title%}', object.name);
+						html = html.replace('{%name%}', object.name);
+						html = html.replace('{%c_price%}', toFixed_num(object.pid_sale_price,3));
+						html = html.replace('{%x_price%}', toFixed_num(object.sales_price,3));
+						html = html.replace('{%id%}', object.id);
+						html = html.replace('{%type%}', 'line');
+						htmls1 += html;
+					});
+					$('#line_data').html(htmls1);
+				}
+				
+				var htmls2 = '';
+				if(data.data.sms.length == 0){
+						var html = '';
+							html += '<div class="component-page-empty">'
+							html += 	'<div class="empty-tip line">暂无数据</div>'
+							html += '</div>';
+					$('#msm_data').html(html);
+					$('#msm_data_t').hide();
+				}else{
+					$('#msm_data_t').show();
+					$.each(data.data.sms, function(index, object) {
+						if(!object.pid_sale_price){
+							object.pid_sale_price = 0.00;
+						}else
+						if(!object.price){
+							object.price = 0.00;
+						}
+						var html = $('#operator_asr_l_m_data').html();
+						html = html.replace('{%title%}', object.name);
+						html = html.replace('{%name%}', object.name);
+						html = html.replace('{%c_price%}', toFixed_num(object.pid_sale_price,3));
+						html = html.replace('{%x_price%}', toFixed_num(object.price,3));
+						html = html.replace('{%id%}', object.id);
+						html = html.replace('{%type%}', 'msm');
+						htmls2 += html;
+					});
+					$('#msm_data').html(htmls2);
+				}
+				$('#onlyid').val(data.data.id);
+			},
+			error:function(e){
+			}
+		})
+	}
+
+	function modification_record(id){
+		var url = "{:url('management_record')}";
+		$.ajax({
+			type: 'GET',
+      url: url,
+      data: {id:id},
+      success:function(data){
+      	console.log(data);
+      	if(data.code == 1 ){
+      		$('#re_username').text(data.data.username);
+      		$('#re_role_name').text(data.data.role_name);
+      		var htmls = '';
+      		if(data.data.list.length == 0){
+      			var html = '';
+							html += 	'<div class="empty-tip line">暂无数据</div>'
+						$('#record_ts').html(html);
+						$('#recordListShow').html('');
+      		}else{
+      			$.each(data.data.list, function(index, object) {
+							var html = $('#operator_record_data').html();
+							html = html.replace('{%modular_name%}', object.modular_name);
+							html = html.replace('{%update_front%}', toFixed_num(object.update_front,4));
+							html = html.replace('{%update_after%}', toFixed_num(object.update_after,4));
+							html = html.replace('{%update_time%}', timestampToTime(object.update_time,2));
+							htmls += html;
+						});
+						$('#recordListShow').html(htmls);
+						$('#record_ts').html('');
+      		}
+      	}
+      }
+		});
+		$('#modificationRecord').modal('show');
+	}
+
+	function tariff_edit(){
+		var data ={};
+		var arr_asr_price =[];
+		var arr_asr_id =[];
+		var arr_line_price =[];
+		var arr_line_id =[];
+		var arr_msm_price =[];
+		var arr_msm_id =[];
+		//机器人价格
+		if($('#x_price').is(':visible')){
+			data.robot_price =  $('#x_price').val();
+		}
+		data.service_price = $('#x_service_price').find('input').val();
+		//asr
+		$("input[name='asr_price']").each(function(i){
+			arr_asr_price[i] = $(this).val();
+			arr_asr_id[i] = $(this).attr('data_id');
+		});
+		data.vals_asr_id = arr_asr_id.join();
+		data.vals_asr_price = arr_asr_price.join();
+		//线路
+		$("input[name='line_price']").each(function(i){
+			arr_line_price[i] = $(this).val();
+			arr_line_id[i] = $(this).attr('data_id');
+		});
+		data.vals_line_id = arr_line_id.join();
+		data.vals_line_price = arr_line_price.join();
+		//短信
+		$("input[name='msm_price']").each(function(i){
+			arr_msm_price[i] = $(this).val();
+			arr_msm_id[i] = $(this).attr('data_id');
+		});
+		data.vals_msm_id = arr_msm_id.join();
+		data.vals_msm_price = arr_msm_price.join();
+		//备注
+		data.note = $('#note').val();
+		data.id = $('#onlyid').val();
+		data.role_id = window.role_id;
+		var url = "{:url('edit_tariff_management')}";
+		console.log(data);
+		$.ajax({
+			type: 'POST',
+      url: url,
+      data: data,
+      success:function(data){
+      	console.log(data);
+      	if(data.code == 0){
+      		alert(data.msg);
+      		$('#tariffViewDialog').modal('hide');
+      		show_data();
+      	}
+      }
+		});
+	}
+
+	function tariff_close(){
+		$('#tariffViewDialog').modal('hide');
+		$('.saleprice>input').addClass('hidden');
+		$('.saleprice>span').removeClass('hidden');
+		$('.editbtn').text("编辑");
+	}
+</script>
+
+
+{include file="sms/sms_targer" /}
+{include file="manager/dialog" /}
+
+{/block}

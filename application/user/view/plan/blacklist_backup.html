@@ -1,0 +1,824 @@
+{extend name="public/base" /}
+{block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+
+
+<style type="text/css">
+	.btn-primary.focus, .btn-primary:focus {
+	    color: #fff;
+	    background-color: #03a9f4;
+	     border-color: #03a9f4;
+	}
+	.main-box .main-box-header{
+		padding: 0px 10px 0px;
+	}
+	.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+	    color: #03a9f4;
+	    background-color: initial;
+	    border-color: #03a9f4;
+	}
+	.btn-default.focus, .btn-default:focus {
+     color: #03a9f4;
+	   background-color: initial;
+     border-color: #03a9f4;
+	}
+	.btn-default:hover {
+	    color: #03a9f4;
+	    background-color: initial;
+	    border-color: #03a9f4;
+	}
+
+	.btn-primary.active, .btn-primary:active, .open>.dropdown-toggle.btn-primary {
+	    color: #fff;
+	    background-color: #03a9f4;
+	    border-color: #03a9f4;
+	}
+	.btn-primary:hover {
+	    color: #fff;
+	    background-color: #03a9f4;
+	    border-color: #03a9f4;
+	}
+.table tbody>tr>td {
+		padding: 8px;
+}
+.table-responsive {
+	min-height: .01%;
+	overflow-x: hidden;
+}
+#newModal > .modal-dialog {
+    width: 450px;
+    margin: 30px auto;
+}
+
+.textwidth{
+	width:250px;
+}
+
+.n_panel_title img{
+	margin-right:8px;
+	vertical-align:sub;
+}
+
+.l-margin{
+	margin-left:13px;
+}
+
+.btn-batchdelet{
+  margin-left: 10px;
+	background-color: #fff;
+	border-color: #0e90fe;
+	color: #0e90fe;
+}
+
+.btn-batchdelet.focus,
+.btn-batchdelet:focus,
+.btn-batchdelet:hover{
+	color:#0e90fe!important;
+}
+
+.btn-batchdelet:hove{
+	color:#0e90fe!important;
+}
+
+.modal-title{
+	font-size: 16px;
+	color: #000;
+	/* padding: 12px 15px; */
+}
+
+.modal-body-tips{
+  padding:35px!important;
+}
+
+.navbar{
+	margin-bottom:0px;
+}
+
+.l-dateSelbg{
+	position:relative;
+}
+
+.l-dateSelbg::after{
+	/* content:'';
+	width:15px;
+	height:15px;
+	background:url("/public/img/xuanzeriqi.png") 100% 100% no-repeat;
+	position:absolute;
+	right:10px;
+	top:50%;
+	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%); */
+}
+.c_datebgimg {
+  background: url(/public/img/xuanzeriqi.png) 93% 50% no-repeat;
+}
+
+.l-margin-right{
+	margin-right:8px;
+}
+.btn-add,
+.btn-import{
+	font-size:14px;
+}
+
+.btn-add{
+	padding: 4px 23px;
+}
+.btn-import{
+	padding: 4px 37px!important;;
+}
+
+.btn{
+	/* padding: 6px 15px; */
+}
+
+.modal-body{
+	padding: 30px 15px;
+}
+
+.formattips{
+	color: #8d8d8d;
+  padding: 30px 10px 35px 10px;
+}
+.l-date{
+	margin-top:7px;
+}
+
+@media (max-width: 1490px){
+	.l-width{
+		width:150px!important;
+	}
+}
+
+@media (max-width: 1375px){
+	.pull-left .pull-left.l-margin{
+		margin-top: 12px;
+		margin-bottom: 10px;
+	}
+}
+
+@media (max-width:1055px){
+	.l-margin{
+		margin-top: 10px;
+		/*margin-left: 70px;*/
+	}
+}
+@media (max-width:992px){
+	.l-margin{
+		margin-top: 0px;
+		/*margin-left: 70px;*/
+	}
+}
+
+@media (max-width: 1120px){
+	.l-width{
+		width:140px!important;
+	}
+}
+@media (max-width: 768px){
+	.form-inline .form-control{
+	 display: inline-block;
+	 vertical-align: middle;
+	}
+}
+
+
+
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+			<header class="main-box-header n_head_box n_head_box_b clearfix">
+  		  <div class="pull-left">
+  			  <span class="n_panel_title">
+            <img src="/public/img/wodehuashu.png">黑名单列表</span>
+  		  </div>
+				<div class="btn pull-right btn-primary btn-add" target-form="ids" onclick="del_all_balcklist();" id="delete_all">批量删除</div><!-- data-toggle="modal" data-target="#number-delete"-->
+				<!-- <button class="btn pull-right btn-batchdelet btn-add" target-form="ids" data-toggle="modal" data-target="#number-delete" >批量删除</button> -->
+			  <button class="btn btn-primary pull-right btn-import" type="button" name="importnumber" onclick="loadexcel();">导入</button>
+				<button class="btn btn-primary pull-right btn-add" type="button" name="addtnumber" data-toggle="modal" onclick="addblacklist();" >添加号码</button>
+
+  		</header>
+		</header>
+
+		<div class="main-box-body clearfix">
+			<section class="navbar clearfix">
+					<form method="get" role="form">
+						<div class="form-inline form-group bottomfour" style="display:inline-block;margin-bottom:0px;">
+							<div class=" pull-left ">
+								<!--<label class="pull-left l-date">创建日期：</label>-->
+								<!--<div class=" pull-left l-dateSelbg">-->
+								<!--	<input type="text" class="form-control l-width c_datebgimg"  placeholder="开始时间" id="startDate"-->
+								<!--	 name="startDate" value=""  />-->
+								<!--	<script>-->
+								<!--		$('#startDate').fdatepicker({-->
+								<!--						format: 'yyyy-mm-dd ',-->
+								<!--						pickTime: true-->
+								<!--					});-->
+								<!--	</script>-->
+								<!--</div>-->
+								<div class="pull-left" style="margin-left: 13px;">
+									<label class="control-label">用户名：</label>
+									<input type="text" class="form-control l-margin-right l-width" id="username" name="username" placeholder="请输入姓名">
+									<label class="control-label">电话号码：</label>
+									<input type="text" class="form-control l-margin-right l-width" id="phone" name="usertel" placeholder="请输入电话号码">
+									<label class="control-label">单位名称：</label>
+									<input type="text" class="form-control l-margin-right l-width" id="unit" name="userdanwei" placeholder="请输入单位名称">
+								</div>
+								<div class="pull-left l-margin">
+									<label class="control-label">职务名称：</label>
+									<input type="text" class="form-control l-width" id="duties" name="userzhiwu" placeholder="请输入职务名称">
+									<button class="btn btn-primary" type="button" name="submit" onclick="select_data()">查询</button>
+		 							<button class="btn btn-primary pz_kongxin_anniusty" type="button" onclick="reset_click();">重置</button>
+								</div>
+						 </div>
+					</div>
+				</form>
+			</section>
+		     <!-- <div style="height:10px;line-height:30px;background-color:#FBFBFB;"></div> -->
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">
+									<input class="check-all flow-label check_page" name='all_checked' type="checkbox"/>
+								</th>
+								<th class="text-center">序号</th>
+								<th class="text-center">姓名</th>
+								<th class="text-center">电话</th>
+								<th class="text-center">单位</th>
+								<th class="text-center">职务</th>
+								<th class="text-center">创建日期</th>
+								<th class="text-center">更新日期</th>
+								<th class="text-center">备注信息</th>
+								<th class="text-center">操作</th>
+					    </tr>
+				    </thead>
+				   <tbody id="blacklist">
+					   	<!-- <tr>
+					 			<td class="text-center">
+									 <input type="checkbox" name="roleids" class="rolecheck" value=""/>
+								</td>
+					   		<td class="text-center">1</td>
+								<td class="text-center">张三</td>
+					   		<td class="text-center">15236223696</td>
+					   		<td class="text-center">深圳市XXXXX公司</td>
+					   		<td class="text-center">CEO</td>
+					   		<td class="text-center">2018-11-21</td>
+					   		<td class="text-center">暂无备注</td>
+					   		<td class="text-center">
+									<a href="javascript:void(0);" name="addtnumber" data-toggle="modal" data-target="#addblacklist" onclick="">编辑</a>
+									<a href="javascript:void(0);" onclick="delRole(id)">删除</a>
+								</td>
+					   	</tr> -->
+				    </tbody>
+				  </table>
+				  <div class="component-page-empty" id="consumeempty">
+  					<div class="empty-tip line">暂无数据</div>
+  				</div>
+					<footer class="main-box-footer clearfix">
+						<div class="pull-left margintop">
+              <input class="ppzrolecheck all_checked_count"  type="checkbox"/>全选（已选中<span id='user_count'>0</span>个账号）</div>
+            <div class="text-right pull-right">
+            	<div class="paging clearfix">
+            	</div>
+            </div>
+
+					</footer>
+		</div>
+	</div>
+</div>
+</div>
+<script id='blacklist_record' type='text/tepmate'>
+	<tr>
+		<td class="text-center">
+			<input class="checkids" name='checkids' value="{%id%}" type="checkbox" onclick="check_black();"/>
+		</td>
+		<td class="text-center">{%sequence%}</td>
+		<td class="text-center">{%name%}</td>
+		<td class="text-center">{%mobile%}</td>
+		<td class="text-center">{%unit%}</td>
+  	<td class="text-center">{%duties%}</td>
+		<td class="text-center">{%create_time%}</td>
+    <td class="text-center">{%update_time%}</td>
+    <td class="text-center">{%note%}</td>
+    <td class="text-center">
+			<a href="javascript:void(0);" onclick="editblacklist({%id%})">编辑</a>
+			<a href="javascript:void(0);"  onclick="del_single_balcklist({%id%})" id="delete_single">删除</a>
+		</td>
+	</tr>
+</script>
+</div>
+<!--批量删除提示-->
+ <div class="modal fade" id="number-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-dialog modal-sm" style="width:350px; top:10%;">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" >
+					 操作提示
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips">
+				 确定批量删除选中的号码？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+				 <button type="button" class="btn btn-primary"  onclick="delblacklist(1);">	确定    </button>
+			 </div>
+		 </div><!-- /.modal-content -->
+	 </div><!-- /.modal-dialog -->
+ </div><!-- /.modal -->
+
+
+ <!--添加黑名单模块-->
+  <div class="modal fade" id="addblacklist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ 	 <div class="modal-dialog modal-sm" style="width:460px; top:10%;">
+ 		 <div class="modal-content">
+ 			 <div class="modal-header">
+ 				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+ 					 <span aria-hidden="true">×</span>
+ 				 </button>
+ 				 <h4 class="modal-title" id="myModalLabel">
+ 					 <span>添加黑名单号码</span>
+ 				 </h4>
+ 			 </div>
+			 <div class="modal-body pagelists l-modal-body">
+					<form id="addblacklist-number" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+							<div class="form-group">
+								<label class="col-lg-3 control-label">姓名：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control" placeholder="请输入姓名" name="blacklist-name" id="addname" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">电话：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control" placeholder="请输入电话" name="blacklist-number" id="addphone" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">单位：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control" placeholder="请输入单位" name="blacklist-company" id="addunit" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">职务：</label>
+								<div class="col-lg-7 col-sm-7">
+									 <input type="text" class="form-control" placeholder="请输入职务" name="blacklist-duties" id="addduties" />
+							</div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-3 control-label">备注：</label>
+								<div class="col-lg-7 col-sm-7">
+									<textarea id="addnote" name="blacklist-remarks" rows="2" cols="33" maxlength="30" placeholder="请输入备注信息，限定30个字以内"></textarea>
+									<!-- <span id="text-count" value="">0</span>/30 -->
+								</div>
+							</div>
+				 </form>
+			 </div>
+ 			 <div class="modal-footer">
+ 				 <button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+ 				 <button type="button" class="btn btn-primary"  onclick="addblackphone()">	确定    </button>
+ 			 </div>
+ 		 </div>
+ 	 </div>
+  </div>
+
+	<!--编辑黑名单模块-->
+	 <div class="modal fade" id="edit-blacklist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm" style="width:460px; top:10%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title" >
+						编辑黑名单号码
+					</h4>
+				</div>
+				<div class="modal-body pagelists l-modal-body">
+					 <form id="addblacklist-number" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+							 <div class="form-group">
+								 <label class="col-lg-3 control-label">姓名：</label>
+								 <div class="col-lg-7 col-sm-7">
+										<input type="text" class="form-control"  name="blacklist-name" id="blacklist_name" />
+								 </div>
+							 </div>
+							 <div class="form-group">
+								 <label class="col-lg-3 control-label">电话：</label>
+								 <div class="col-lg-7 col-sm-7">
+										<input type="text" class="form-control"  name="blacklist-number" id="blacklist_number" />
+								 </div>
+							 </div>
+							 <div class="form-group">
+								 <label class="col-lg-3 control-label">单位：</label>
+								 <div class="col-lg-7 col-sm-7">
+										<input type="text" class="form-control"  name="blacklist-company" id="blacklist_company" />
+								 </div>
+							 </div>
+							 <div class="form-group">
+								 <label class="col-lg-3 control-label">职务：</label>
+								 <div class="col-lg-7 col-sm-7">
+										<input type="text" class="form-control"  name="blacklist-duties" id="blacklist_duties" />
+							 </div>
+							 </div>
+							 <div class="form-group">
+								 <label class="col-lg-3 control-label">备注：</label>
+								 <div class="col-lg-7 col-sm-7">
+									 <textarea id="blacklist-remark" name="blacklist-remarks" rows="2" cols="33" maxlength="30" ></textarea>
+									 <!-- <span id="text-count" value="">0</span>/30 -->
+								 </div>
+							 </div>
+							 <div style="display:none;">
+							 			<input name="blacklist-id"/>
+							 </div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">   关闭		</button>
+					<button type="button" class="btn btn-primary"  onclick="addblackphone()">	保存    </button>
+				</div>
+			</div>
+		</div>
+	 </div>
+
+	<!--导入模块-->
+	<div class="modal fade" id="improt-table" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+			<div class="modal-dialog" style="width:430px;">
+				<div class="modal-content">
+						<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									 <span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" >选择导入的xls文件</h4>
+					 </div>
+					 <div class="modal-body">
+	                 <form id="leadingfileform" action="{:url('user/plan/import_blacklist')}" method="post" class="form-horizontal margintop" enctype="multipart/form-data" >
+	                    <input type="file" class="" id="excelImportId" accept="*.zip" name="excel" />
+	                 </form>
+	                 <br/>
+				           <a href="/application/user/static/blacklist_template.xlsx">模板下载</a>
+					 </div>
+					 <div style="clear:both;"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">关闭</button>
+						<button class="btn btn-primary btnokprojectile-frame" onclick="Savechange();" type="button">确认</button>
+					</div>
+				</div>
+				</div>
+	</div>
+	<!--单个删除提示-->
+	 <div class="modal fade" id="del-single-balcklist" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		 <div class="modal-dialog modal-sm" style="width:350px; top:10%;">
+			 <div class="modal-content">
+				 <div class="modal-header">
+					 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+						 <span aria-hidden="true">×</span>
+					 </button>
+					 <h4 class="modal-title" >
+						 操作提示
+					 </h4>
+				 </div>
+				 <div class="modal-body modal-body-tips">
+					 确定删除该任务？
+				 </div>
+				 <div class="modal-footer">
+					 <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+					 <button type="button" class="btn btn-primary"  onclick="delblacklist(2);">	确定    </button>
+				 </div>
+			 </div><!-- /.modal-content -->
+		 </div><!-- /.modal-dialog -->
+	 </div><!-- /.modal -->
+	 
+	 <script type="text/javascript" src='/public/js/paging.js'></script>
+	 <script src="__PUBLIC__/js_manage/account_manage.js"></script>
+	 <script type="text/javascript">
+		//导入文件弹窗
+		function loadexcel(){
+			$('#improt-table').modal('show');
+		}
+
+		//导入文件
+		function Savechange(){
+  	  var excel = document.getElementById('excelImportId');
+			if(excel.files[0] == undefined){
+				alert('未上传文件！');
+				return false;
+			}
+			var filevalue = excel.value;
+			var index = filevalue.lastIndexOf('.');
+			var ename = filevalue.substring(index);
+			if(ename != ".xlsx"){
+				if(ename != ".xls"){
+					alert('文件格式错误。"xlsx"或者"xls"，请用下载的模板改。');
+					return false;
+				}
+			}
+			var imageObject = document.getElementById("excelImportId").files[0];
+      var formFile = new FormData();
+      formFile.append("excel", imageObject); //加入文件对象
+			$.ajax({
+				type:'POST',
+				dataType:'json',
+				data:formFile,
+				cache: false,			//上传文件无需缓存
+       	processData: false,		//用于对data参数进行序列化处理 这里必须false
+       	contentType: false, 	//必须
+				url:'/user/plan/import_blacklist',
+				success:function(result){
+					if(result.code === 0){
+						console.log(result);
+						alert('成功导入'+result.data.success_count+'条数据');
+						window.location.reload();
+					}
+				},
+				error:function(){
+					console.log('错误');
+				}
+			});
+
+			$('#improt-table').modal('hide');
+
+		}
+
+	  //单个选项框选中事件
+	  function check_black(){
+	   	if(!$(".blackcheck").checked) {
+				$('.check_all').prop("checked",false);
+				$('.check_page').prop("checked",false);
+				$('.check_page').attr('data-page',0);
+			}
+			var check_pagenum = $('.blackcheck').length;
+			var check_num = $('.blackcheck:checked').length;
+			if(check_pagenum == check_num){
+				$('.check_page').prop("checked",true);
+				$('.check_page').attr('data-page',$('#count').attr('data-page'));
+			}
+			if(check_num == $('#count').attr('data-total')){
+				$('.check_all').prop("checked",true);
+				$('.check_page').prop("checked",true);
+				$('.check_page').attr('data-page',$('#count').attr('data-total'));
+			}
+			$('#count').text(check_num);
+	   }
+
+		var username,phone,unit,duties;
+		//查询数据
+		function select_data(){
+			ajax_blacklist(1);
+		}
+
+		//重置
+		function reset_click(){
+			// $('input[name="startDate"][type="text"]').val("");//工作日期
+			$('#username').val("");//请输入姓名
+			$('#phone').val("");//请输入电话号码
+			$('#unit').val("");//请输入单位名称
+			$('#duties').val("");//请输入职务名称
+			$('.check_all').prop("checked",false);
+			$('.check_page').prop("checked",false);
+			$('.check_page').attr('data-page',0);
+			$('.blackcheck').prop("checked",false);
+			$('#count').text(0);
+			ajax_blacklist(1);
+		}
+
+		var Paging = new Paging01();
+			Paging.init_args({
+			// url:
+			page: 1, //初始页码
+			limit: 10, //初始每页显示的数据量
+			paging_class: 'paging', //放置分页的class
+			callback: ajax_blacklist //回调函数 比如show_datas(页码, 显示条数)
+		});
+		//列表数据加载渲染
+		ajax_blacklist(1,10);
+		function ajax_blacklist(page,limit){
+				var url = '/user/plan/ajax_blacklist';
+				if(!page){
+    			var page = 1;
+    		}
+				if(!limit){
+					var limit = 10;
+				}
+    		// startDate = $("#startDate").val();
+    		username = $("#username").val();
+    		phone = $("#phone").val();
+    		unit = $("#unit").val();
+    		duties = $("#duties").val();
+	    	$.ajax({
+	          type: 'POST',
+	          url: url,
+	          data:{
+	          	'page':page,
+							'limit':limit,
+	          	// 'startDate':startDate,
+	          	'username':username,
+	          	'phone':phone,
+	          	'unit':unit,
+	          	'duties':duties
+	          },
+	          success: function(result){
+	          	console.log(result);
+	          	var htmls = '';
+	          	var data = result.data.list;
+	          	$("#blacklist").find("tr").remove();
+	          	if(data.length > 0){
+	          		$('#consumeempty').hide();
+	          		$('.main-box-footer').show();
+		            $.each(data, function(index, object){
+		               var html = $('#blacklist_record').html();
+		                   html = html.replace('{%id%}', object.id);
+		                   html = html.replace('{%sequence%}', object.sequence);
+		                   html = html.replace('{%name%}', object.name);
+		                   html = html.replace('{%mobile%}', object.phone);
+		                   html = html.replace('{%unit%}', object.unit);
+		                   html = html.replace('{%duties%}', object.duties);
+											 html = html.replace('{%create_time%}', object.create_time);
+		                   html = html.replace('{%update_time%}', object.update_time);
+		                   html = html.replace('{%note%}', object.note);
+		                   html = html.replace('{%id%}', object.id);
+		                   html = html.replace('{%id%}', object.id);
+		                   htmls += html;
+		             });
+	            }else{
+	            		$('#consumeempty').show();
+	            		$('.main-box-footer').hide();
+	            }
+	            var total = result.data.page;   //总页数
+							var Nowpage = result.data.Nowpage;  //当前页码
+							var count  = result.data.total;  //总条数
+							window.count = count;
+							var Nowpage = parseInt(Nowpage);
+	            $('#blacklist').html(htmls);
+	            Paging.paging(Nowpage, count, limit);
+						  election();
+	          },
+						error:function(){
+							console.log('获取失败');
+						}
+	      })
+		}
+
+
+		//删除单个黑名单信息弹窗
+		function del_single_balcklist(id){
+		 $('#del-single-balcklist').attr('data-id',id);
+		 $('#del-single-balcklist').modal('show');
+		}
+		//删除多个黑名单信息弹窗
+		function del_all_balcklist(){
+		 	var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+			if(checkedsub > 0 ){
+				$('#number-delete').modal('show');
+			}else{
+				alert('请选择批量删除的数据');
+			}
+		}
+		 //删除黑名单信息
+		 function delblacklist(type){
+		 	var data = {};
+		 	if(type == 2){
+		 		//单个删除
+		 		data.id = $('#del-single-balcklist').attr('data-id');
+		 	}else{
+				//批量删除
+				data.type = 0 ;
+				data.username = $("#username").val();
+    		data.phone = $("#phone").val();
+    		data.unit = $("#unit").val();
+    		data.duties = $("#duties").val();
+				var arr = new Array();
+				if($('.all_checked_count').is(':checked')){
+					data.type = 1 ;
+				}
+				if($("input[name='checkids'][type='checkbox']").is(':checked')){
+		    	$("input[name='checkids'][type='checkbox']").each(function(i){
+						if($(this).context.checked == true){
+								arr[i] = $(this).val();
+						}
+					});
+					data.vals = arr.join();
+	    	}
+			}
+			console.log(data);
+			var url = "{:url('delelte_blacklist')}";
+			$.ajax({
+	  		type:'POST',
+	  		data:data,
+	  		dataType:'json',
+	  		url:url,
+	  		success:function(result){
+	  			if(result.code === 0){
+	  				alert(result.msg)
+	  				$('#number-delete').modal('hide');
+	  				$('#del-single-balcklist').modal('hide');
+	  				ajax_blacklist();
+	  			}else{
+	  				alert(result.msg)
+	  				$('#number-delete').modal('hide');
+	  				$('#del-single-balcklist').modal('hide');
+	  			}
+	  		},
+	  		error:function(){
+	  			console.log('删除失败');
+	  			$('#number-delete').modal('hide');
+	  			$('#del-single-balcklist').modal('hide');
+	  		}
+	  	});
+		 }
+
+		 //添加弹窗
+		 function addblacklist(){
+		 	$('#addblacklist').attr('data-id',0);
+		 	$("#addname").val("");
+  		$("#addphone").val("");
+  		$("#addunit").val("");
+  		$("#addduties").val("");
+  		$("#addnote").val("");
+  		$('#myModalLabel>span').text('添加黑名单号码');
+			$('#addblacklist .modal-footer button.btn.btn-primary').text('确定');
+		 	$('#addblacklist').modal('show');
+		 }
+
+		 //编辑弹窗
+		 function editblacklist(id){
+		 	$('#addblacklist').attr('data-id',id);
+		 	//获取文本信息
+		 	var url = "{:url('get_blackinfo')}";
+		 	$.ajax({
+            type: 'POST',
+            url: url,
+            data: {"id":id},
+            success: function(result){
+            	if(result.code == 0){
+            		console.log(result.data);
+            		$("#addname").val(result.data.name);
+            		$("#addphone").val(result.data.phone);
+            		$("#addunit").val(result.data.unit);
+            		$("#addduties").val(result.data.duties);
+            		$("#addnote").val(result.data.note);
+            	}else{
+            		console.log('获取信息失败');
+            		// window.location.reload()
+            	}
+            }
+      });
+		 	$('#myModalLabel>span').text('编辑黑名单号码');
+			$('#addblacklist .modal-footer button.btn.btn-primary').text('保存');
+		 	$('#addblacklist').modal('show');
+		 }
+
+		 //添加-编辑 黑名单号码ajax方法
+		 function addblackphone(){
+			var id = $('#addblacklist').attr('data-id');
+		  var username = $("#addname").val();
+      var phone =	$("#addphone").val();
+      var unit = $("#addunit").val();
+      var duties = $("#addduties").val();
+      var note = $("#addnote").val();
+		  var pattern = /^1[345789]\d{9}$/;
+			if(username == "" || username == null){
+				alert('用户名不能为空');
+				return;
+			}
+			if(phone == "" || phone == null){
+				alert('手机号不能为空');
+				return;
+			}
+			if(pattern.test(phone) == false){
+				alert('手机格式错误');
+				return;
+			}
+			var url = '/user/plan/add_blackphone';
+    	$.ajax({
+          type: 'POST',
+          url: url,
+          data: {"id":id,"username":username,"phone":phone,"unit":unit,"duties":duties,"note":note},
+          success: function(result){
+          	console.log(result);
+          	if(result.code == 0){
+          		alert('编辑成功');
+          		window.location.reload();
+          	}else{
+          		console.log('编辑失败');
+          		window.location.reload();
+          	}
+          }
+      });
+
+		 }
+
+
+	</script>
+
+{/block}

@@ -1,0 +1,515 @@
+{extend name="public/base" /}
+{block name="body"}
+
+ <link href="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
+ <link href="__PUBLIC__/plugs/graph/font-awesome.min.css" rel="stylesheet">
+ <script src="__PUBLIC__/plugs/graph/uuid.min.js"></script>
+ <script src="__PUBLIC__/plugs/graph/mustache.min.js"></script>
+ <script src="__PUBLIC__/plugs/graph/jquery.min.js"></script>
+ <script src="__PUBLIC__/plugs/graph/jquery-ui.min.js"></script>
+ <script src="__PUBLIC__/plugs/graph/jquery.jsPlumb.min.js"></script>
+ <script src="__PUBLIC__/plugs/graph/graphlib.min.js"></script>
+ <script src="__PUBLIC__/plugs/graph/data.js?v=2006"></script>
+ <script src="__PUBLIC__/plugs/graph/config.js"></script>
+ <script src="__PUBLIC__/plugs/graph/index.js?v=106"></script>
+ <link href="__PUBLIC__/css/scene_new.css" rel="stylesheet">
+ <link href="__PUBLIC__/css/scene_two.css" rel="stylesheet">
+ 
+ <script type="text/javascript" src='/public/js/paging.js'></script>
+
+ 
+ 
+
+ <style>
+  .nav-tabs.over {
+  	width: auto;
+  	overflow-x: auto;
+  	white-space: nowrap;
+  	overflow-y: hidden;
+  }
+  .nav-tabs.over li {
+  	float: initial;
+  	display: inline-block;
+  }
+ </style>
+
+<div class="row" style="margin-bottom:20px;">
+	<div class="col-lg-12">
+		<div class="main-box clearfix fadeInRight animated">
+		  <div class="main-box-body clearfix">
+			  <div class="container-fluid">
+					<div class="left-robot-list col-xs-3 col-md-2 pr">
+            <header class="main-box-header n_head_box n_head_box_b clearfix">
+        		  <div class="pull-left">
+        			  <span class="n_panel_title">
+                  <img src="__PUBLIC__/img/wodehuashu.png"/>我的话术
+                </span>
+        		  </div>
+        		</header>
+						<div class="btntop">
+							<button type="button" class="btn btn-primary ltbtn" onclick="newScenariosModal(0);">新建话术</button>
+							<button type="button" class="btn btn-default ltbtn" onclick="copyshow();" style="margin-right: 0px;">复制话术</button>
+						</div>
+						<div class="robot-limit ">
+							 <span>{$num|default="0"}/100</span>
+							 <span class="glyphicon glyphicon-question-sign" aria-hidden="true"
+							 data-toggle="tooltip" data-placement="right" title="数值为‘已有话术/可添加话术总数’，若需扩容，请联系你的服务商。"></span>
+						</div>
+						<div class="robot-list l-overflow pz_innerbox ">
+							{volist name="scenarioslist" id="vo" key="k"}
+								<div class="robot-item {if $vo['notempty'] eq 0 }scene-status-normal{else/}scene-status-abnormal{/if}" id="taskItem{$vo.id}" title="{$vo.name}" scene-id="{$vo.id}" onclick="getscenarios(this,{$vo.id});">
+									<input id="list{$k}" type="hidden" class="Idlist" value="{$vo.id}" />
+									<!-- <div class="control-icon">
+										<span class="anticon glyphicon glyphicon-edit" onclick="newScenariosModal({$vo.id});" aria-hidden="true"></span>
+										<span class="anticon glyphicon glyphicon-trash" data-toggle="modal" data-target="#delscene" onclick="delete_sc({$vo.id});"  aria-hidden="true"></span>
+									</div> -->
+                	<div class="control-icon">
+                    <span onclick="newScenariosModal({$vo.id});">编辑</span>
+                    <span  data-title="删除单个话术" data-id ="{$vo.id}"  onclick="popTipswin(this);" >删除</span>
+                  </div>
+                  <div class="secene">
+                    <span class="item-name">
+                      {$vo.name}
+                    </span>
+                    <p class="industry">行业：
+                    		{switch name="$vo.type"}
+                          {case value="0"}请选择行业{/case}
+                          {case value="1"}金融{/case}
+                          {case value="2"}贷款{/case}
+                          {case value="3"}房产{/case}
+                          {case value="4"}装修{/case}
+                          {case value="5"}汽车{/case}
+                          {case value="6"}教育{/case}
+                          {default /}其他
+                        {/switch}
+                      </p>
+                    </div>
+
+									<div class="word">
+                   {eq name="examine" value="1"}
+									 	<div>审核结果：
+											{if condition="$super == 1"}
+												{switch name="$vo.auditing"}
+													{case value="2"}
+													 <a href="javascript:void(0);" onclick="showExamine({$vo.id});">审核</a>
+													{/case}
+													{default /}
+													 无
+												{/switch}
+											{else /}
+														{switch name="$vo.auditing"}
+															{case value="1"}
+																<a href="javascript:void(0);"  onclick="submitAuditing({$vo.id});">提交审核</a>
+															{/case}
+															{case value="2"}
+																待审核
+															{/case}
+															{case value="3"}
+																审核未通过
+															{/case}
+															{default /}
+																审核通过
+														{/switch}
+											{/if}
+										</div>
+										{/eq}
+										<div>更新时间：{$vo.update_time}</div>
+									</div>
+								</div>
+							{/volist}
+						</div>
+						<div class="n_retract" data-on="1" onclick="retract(this);"></div>
+					</div>
+
+					<div class="right-robot-list col-xs-15 col-md-10" id="fullScreen">
+            <header class="main-box-header n_head_box n_head_box_b clearfix">
+              <div class="pull-left">
+                <span class="n_panel_title">
+                  <img src="__PUBLIC__/img/huashuxiangqing.png" alt="">话术详情
+                </span>
+              </div>
+              <button class="btn btn-primary pull-right  headbtnt" type="button"  data-toggle="modal" data-target="#backupscene">
+                <span>备份</span>
+              </button>
+              <button class="btn btn-primary pull-right  daoru" type="button" onclick="loadexcel();">导入话术</button>
+            </header>
+						<!-- 当前话术的ID -->
+						<input type="hidden" name="nowsceneID" id="nowsceneID" value="" />
+							<!-- 当前话术的名字 -->
+						<input type="hidden" name="nowsceneName" id="nowsceneName" value="" />
+						<!-- 当前流程的ID -->
+						<input type="hidden" name="nowProcessId" id="nowProcessId" value="" />
+						<!-- style="overflow-x: scroll;" -->
+						<div class="spin-container" id="spinContainer" >
+							 <!-- Nav tabs id="myTab" -->
+							 <ul class="nav nav-tabs tabul over pz_innerbox"  role="tablist" style="margin-bottom: 10px;">
+								 	<li role="presentation" class="active">
+										<a href="#process" aria-controls="process" role="tab" data-toggle="tab">流程</a>
+									</li>
+                  <li role="presentation">
+										<a href="#processLabel" aria-controls="processLabel" role="tab" data-toggle="tab">流程标签</a>
+									</li>
+								 	<li role="presentation">
+										<a href="#knowledgeBase" aria-controls="knowledgeBase" role="tab" data-toggle="tab">知识库</a>
+									</li>
+									<li role="presentation">
+										<a href="#knowledgeBaseLabel" aria-controls="knowledgeBaseLabel" role="tab" data-toggle="tab">知识库标签</a>
+									</li>
+									<li role="presentation">
+										<a href="#semanticLabel" aria-controls="semanticLabel" role="tab" data-toggle="tab">语义标签</a>
+									</li>
+                  <li role="presentation">
+										<a href="#recordingManagement" aria-controls="recordingManagement" role="tab" data-toggle="tab">录音管理</a>
+									</li>
+                  <li role="presentation">
+										<a href="#gradeClassification" aria-controls="gradeClassification" role="tab" data-toggle="tab">等级分类</a>
+									</li>
+                  <li role="presentation">
+										<a href="#manMachine" aria-controls="manMachine" role="tab" data-toggle="tab">人机训练</a>
+									</li>
+                  <li role="presentation">
+										<a href="#systemConfiguration" aria-controls="systemConfiguration" role="tab" data-toggle="tab">系统配置</a>
+									</li>
+							 </ul>
+
+               <div class="tab-content">
+                 <!--流程页面-->
+                 <div role="tabpanel" class="tab-pane active" id="process">
+                 	{include file="scenarios/scene/process" /}
+                 </div>
+
+                 <!--流程标签页面-->
+                 <div role="tabpanel" class="tab-pane" id="processLabel">
+                 	{include file="scenarios/scene/processLabel" /}
+               	 </div>
+
+                 <!--知识库页面-->
+                 <div role="tabpanel" class="tab-pane" id="knowledgeBase">
+                 	{include file="scenarios/scene/knowledgeBase" /}
+               	 </div>
+
+                 <!--知识库标签页面-->
+                 <div role="tabpanel" class="tab-pane" id="knowledgeBaseLabel">
+                 	{include file="scenarios/scene/knowledgeBaseLabel" /}
+               	 </div>
+
+
+                 <!--语义标签页面-->
+                 <div role="tabpanel" class="tab-pane" id="semanticLabel">
+                 	{include file="scenarios/scene/semanticLabel" /}
+               	 </div>
+
+                 <!--录音管理页面-->
+                 <div role="tabpanel" class="tab-pane" id="recordingManagement">
+                 	{include file="scenarios/scene/recordingManagement" /}
+               	 </div>
+
+                 <!--等级分类页面-->
+                 <div role="tabpanel" class="tab-pane" id="gradeClassification">
+                 	{include file="scenarios/scene/gradeClassification" /}
+               	 </div>
+
+                 <!--人机训练页面-->
+                 <div role="tabpanel" class="tab-pane" id="manMachine">
+                 	{include file="scenarios/scene/manMachine" /}
+               	 </div>
+
+                 <!--系统配置页面-->
+                 <div role="tabpanel" class="tab-pane" id="systemConfiguration">
+                 	{include file="scenarios/scene/systemConfiguration" /}
+                 	<button class="btn btn-primary paging_go_upundefined" type="button" data-title="话术配置" onclick="popTipswin(this)" data-toggle="modal">确定</button>
+               	 </div>
+
+                </div>
+              </div>
+            </div>
+				</div>
+		</div>
+		<div class="simulation-test" onclick="show_dialog();">
+			<img src="/public/img_sj/huihua.png" >
+			<p >模拟测试</p>
+		</div>
+	</div>
+  </div>
+</div>
+<div class="modal fade" id="knowledge-batch-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+ <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+   <div class="modal-content">
+     <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+         <span aria-hidden="true">×</span>
+       </button>
+       <h4 class="modal-title" id="myModalLabel">
+         操作提示
+       </h4>
+     </div>
+     <div class="modal-body modal-body-tips">
+       确定删除所选数据？
+     </div>
+     <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+       <button type="button" class="btn btn-primary" onclick="delKnowledge(1);">	 确定    </button>
+     </div>
+   </div><!-- /.modal-content -->
+ </div><!-- /.modal-dialog -->
+</div>
+
+<script type="text/javascript">
+			function newScenariosModal(id){
+				 if(id){
+							var url = "{:url('user/Scenarios/getmessage')}";
+						 $.ajax({
+								url : url,
+								dataType : "json",
+								type : "post",
+								data : {'id':id},
+								success: function(data){
+									console.log(data);
+										 $("#name").val(data.name);
+										 $("#scenariosId").val(data.id);
+										 $("#break").val(data.break);
+											 document.getElementById('tradeType').value = data.type;
+										 //$("#is_tpl option[value="+data.type+"]").;
+										 $("#tplContent").css("display","none");
+										 //$("#breakContent").css("display","none");
+										 $("#speechcraft_title span").html('编辑话术');
+										 $('#speechcraft').modal('show')
+								},
+								error : function() {
+									alert('审核信息失败。');
+								}
+							});
+
+				 }
+				 else{
+
+					    $("#name").val("");
+						  $("#scenariosId").val("");
+							document.getElementById('tradeType').value = "0";
+							$("#is_tpl").val("0");
+              $("#break").val("1");
+						  $("#tplContent").css("display","block");
+						  $("#breakContent").css("display","block");
+						  $("#speechcraft_title span").html('新建话术');
+						  $('#speechcraft').modal('show');
+				 }
+			}
+			
+		 // 复制话术检查表单的必填项
+			function formScenarios(){
+					var name = $("#name").val();
+					if(!name){
+						alert("话术名称不能为空");
+						return false;
+					}
+
+				 var scenariosId = $("#scenariosId").val();
+				 var href = "{:url('user/Scenarios/addScenarios')}";
+				 if(scenariosId){
+						 href = "{:url('user/Scenarios/editscenarios')}";
+				 }
+				 $.ajax({
+						 type: "POST",
+						 dataType:'json',
+						 url: href,
+						 cache: false,
+						 data: $("#formScenariosform").serialize(),
+						 success: function(data) {
+							if (data.code == 0) {
+
+									$('#speechcraft').modal('hide');
+								 location.reload();
+							}else{
+								 alert(data.msg);
+
+							}
+
+						 },
+						 error: function(data) {
+							 alert("提交失败");
+						 }
+				 })
+			}
+			var _timer = {};
+      function delay_till_last(id, fn, wait) {
+        if (_timer[id]) {
+            window.clearTimeout(_timer[id]);
+            delete _timer[id];
+        }
+        return _timer[id] = window.setTimeout(function() {
+            fn();
+            delete _timer[id];
+        }, wait);
+      }
+
+			function copyshow(){
+
+ 						$("#newSName").val("");
+
+						$("#targetObj").val(" ");
+
+						$('#Replicas').modal('show');
+
+			}
+ 			 //检查表单的必填项
+ 			function copySubmit(){
+ 			  delay_till_last( 'id' , function() {
+          var targetObj = $("#targetObj").val();
+ 					var newSName = $("#newSName").val();
+          //var sceneId = $("#nowsceneID").val();
+					if(newSName == '' || newSName == null){
+						alert('请填写新话术名称');
+						return false;
+					}else{
+						var url = "{:url('user/Scenarios/copyScene')}";
+ 						 $.ajax({
+ 										url : url,
+ 										type : "post",
+ 										data : {'targetObj':targetObj,'newSName':newSName},
+ 										success: function(data){
+										console.log(data.data);
+ 											$('#Replicas').modal('hide');
+ 											if(data.code == 1){
+ 												console.log(data);
+ 											}else{
+ 												location.reload();
+ 											}
+ 										},
+ 										error : function() {
+ 											console.log(data);
+ 										}
+ 							});
+
+					}
+        }, 1500);
+ 			}
+		</script>
+
+
+<!-- 知识库 添加录音的 -->
+<script type="text/javascript" src="__PUBLIC__/plugs/jquery/jquery.form.min.js"></script>
+
+<script src="__PUBLIC__/js_scene/scene.js"> </script>
+<script src="__PUBLIC__/js_scene/knowledge.js"> </script>
+<script src="__PUBLIC__/js/jquery.cookie.js"> </script>
+
+<script src="https://cdn.bootcss.com/jquery-weui/1.2.1/js/jquery-weui.min.js"></script>
+<script src="https://cdn.bootcss.com/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+
+<script type="text/javascript">
+  
+ 
+
+  
+  
+  
+  //我的话术下默认选中第一个话术
+  $('.robot-item:nth-of-type(1)').addClass('active');
+  //页面刚进入时候 第一个默认的话术id
+  var first_scene_id = $('.robot-item:nth-of-type(1)').attr('scene-id');
+   //页面刚进入时候 第一个默认的话术名字
+  var sceneName = $('.robot-item:nth-of-type(1)').attr('title');
+  //第一个话术名字 放在input中备用
+  $("#nowsceneName").val(sceneName);
+  //将页面刚夹菜时候 第一个默认话术id放入nowsceneID中 备用
+  $("#nowsceneID").val(first_scene_id)
+  //将第一次获取的话术场景id 放入显示话术配置的方法中
+  view_scenarios_config(first_scene_id);
+  ajaxGetLearning();
+  
+   //获取话术场景
+   function getscenarios(obj,id){
+     window.scen_node_id = '';
+     $(".flowlist").find("div").remove();
+     $(obj).addClass("active").siblings().removeClass("active");
+     $("#nowsceneID").val(id);
+     //得到话术名字放入隐藏input中备用
+     var sceneName = $(obj).attr('title');
+     $("#nowsceneName").val(sceneName);
+    
+     
+     //每次点击话术场景 都清空话术模拟中的谈话内容
+     $('#simulationTestform').html('');
+     //每次点击 都随着场景id的变化刷新话术的系统配置
+     view_scenarios_config(id);
+     //每次点击话术 获取不同话术的学习内容的
+     ajaxGetLearning();
+     
+     // $("#dflearn").css({ 'color': "#fffff", 'background-color': "#03a9f4" });
+     $("#dflearn").removeClass("btn-default");
+     $("#dflearn").addClass("btn-primary");
+     $("#dflearn").siblings(".btn").addClass("btn-default");
+      // searchdata(1,""); //获取学习的数据
+      $('.check_learns').removeAttr("checked");
+      // getLabelList(1); //获取意向标签
+      $('.check_labels').removeAttr("checked");
+      // getNoteList();//获取话术节点
+      // getKnowledgeList(1); //获取知识列表
+      $('.check_knowledgebase').removeAttr("checked");
+      //获取知识库类型为8的记录
+      // gettype8();
+      // show_voicedata();//錄音管理
+      // show_voicemanage();//音頻合成
+      // show_processlabel_data();//流程标签
+      // show_knowledgelabel_data();//知识库标签
+      // show_semanticlabel_data();//语义标签
+      // show_intentionleve_data();//意向等级
+      var type = $("#spinContainer").children('ul').find('.active').children('a').attr('aria-controls');
+       //	console.log(type);
+         if(type == "knowledgeBase"){
+           $('#contactNumber').val('');
+           getKnowledgeList(1);  //获取知识库列表数据
+         }else if(type == "process"){
+           searchdata(1,""); //获取学习的数据
+           //获取流程节点列表
+           getNoteList();
+         }else if(type == "processLabel"){
+           $('processName').val('');
+           $('process_content').val('');
+           show_processlabel_data();//流程标签
+         }else if(type == "knowledgeBaseLabel"){
+           $('#lableProcessName').val('');
+           $('#lablecontent').val('');
+           show_knowledgelabel_data();//知识库标签
+         }else if(type == "semanticLabel"){
+           $('#semanticlabel_keword').val();
+           show_semanticlabel_data();//语义标签
+         }else if(type == "recordingManagement"){
+            $('#voice_keyword').val('');
+            $('#voice_lableName').val('');
+            $('#record_source').val('');
+            $('#record_vocie_name').val('');
+            show_voicedata();//錄音管理
+            show_voicemanage();//音頻合成
+         }else if(type == "gradeClassification"){
+           show_intentionleve_data();//意向等级
+         }else if(type == "manMachine"){
+           searchdata(1,""); //获取学习的数据
+        }else if(type == "systemConfiguration"){
+           
+        }
+   }
+   
+   //显示导入话术对话框
+   function loadexcel(){
+		 $('#exampleModal').modal('show');
+	 }
+</script>
+
+ <script type="text/javascript" src="__PUBLIC__/js_scene/grade.js"></script>
+
+<!--引入弹框页面-->
+{include file="scenarios/scene/dialog" /}
+
+<!-- 添加或者编辑知识库 -->
+{include file="scenarios/ThinkTank" /}
+<!-- 编辑语音 -->
+{include file="scenarios/ThinkTankSound" /}
+<!--弹框提示-->
+{include file="sms/sms_targer" /}
+{include file="member/calldetail" /}
+<!--人机训练-处理-->
+{include file="scenarios/scene/dialog_two" /}
+
+{/block}

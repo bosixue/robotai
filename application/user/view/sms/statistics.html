@@ -1,0 +1,300 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img/pz_qianming.png" alt="">消费记录</span>
+		  </div>
+			<a class="btn s_addnew pull-right btn-primary" href="javascript:void(0);" data-title="导出文件" onclick="importdata();">导出文件</a>
+
+		</header>
+
+
+		<div class="main-box-body clearfix">
+
+	     <section class="navbar  clearfix">
+	         <div  class="pull-left">
+						 <form class="form-inline"  method="get" role="form">
+
+							 <div class="form-group c_seldate clearfix">
+									 <!-- 发送时间 -->
+	 								<label class="levelSelect statusSelect">消费时间:</label>
+	 								<div class="formgroup">
+	 									<div class="dis_in c_dateSelbg pr">
+	 										<input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+	 										<script>
+	 												$('#startDate').fdatepicker({
+	 													format: 'yyyy-mm-dd',
+	 													// pickTime: true
+	 												});
+	 										</script>
+	 									</div>
+	 									<span style="margin:0px 4px;">至</span>
+	 									<div class="dis_in c_dateSelbg pr">
+	 										<input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+	 										<script>
+	 											$('#endTime').fdatepicker({
+	 												format: 'yyyy-mm-dd',
+	 												// pickTime: true
+	 											});
+	 										</script>
+	 									</div>
+	 								</div>
+
+									<!-- 用户名称 -->
+									{eq name="super" value="1"}
+										<div class="form-group c_marleft">
+								 				<label class="levelSelect statusSelect">用户名称:</label>
+												<div class="formgroup">
+													<select style="width:120px;" name="username" id="username" class="form-control">
+									 					<option value=" " selected="">请选择用户</option>
+									 					{volist name="adlist" id="cvo"}
+									 						<option value="{$cvo.id|default=""}">{$cvo.username|default=""}</option>
+									 					{/volist}
+									 				</select>
+												</div>
+								 		</div>
+									{/eq}
+
+										<!-- 查询、重置按钮 -->
+									 <div class="dis_in c_marleft">
+										 <button class="btn btn-primary" type="button" id='query' onclick="get_statistics(1,10);">查询</button>
+										 <button class="btn btn-primary pz_kongxin_anniusty" onclick="reset_click();" type="button">重置</button>
+									 </div>
+
+							 </div>
+						</form>
+
+
+			    </div>
+		   </section>
+
+			  <div class="table-responsive">
+
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>
+								<th class="text-center">序号</th>
+								<th class="text-center">账号</th>
+								<th class="text-center">消费日期</th>
+								<th class="text-center">消费数量(条)</th>
+								<th class="text-center">费率(元/条)</th>
+								<th class="text-center">合计消费(元)</th>
+					    </tr>
+				    </thead>
+				   <tbody id="statisticslist">
+
+				   </tbody>
+				  </table>
+					<div class="component-page-empty" id="consumeempty">
+						<div class="empty-tip line">
+							<p><img src="__PUBLIC__/img/none.png" /></p>
+							<p>暂无数据</p>
+						</div>
+					</div>
+					<footer class="main-box-footer clearfix">
+						<div class="pull-left margintop">
+              <input class="ppzrolecheck all_checked_count"  type="checkbox"/>全选（已选中<span id='user_count'>0</span>个消费记录）</div>
+            <div class="text-right pull-right">
+            	<div class="paging clearfix">
+            	</div>
+            </div>
+					</footer>
+		</div>
+	</div>
+</div>
+<!--导出弹窗-->
+<div class="modal fade in" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body contenttips">
+				确定导出该数据？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消			</button>
+				<button type="button" class="btn btn-primary" onclick="import_sms_consumption();">		确认			</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type='text/template' id='template'>
+	<tr class="itemId{%id%}" alt="{%id%}">
+    <td class="text-center">
+        <input type="checkbox" name="checkids" value='{%id%}' class="rolecheck" value="">
+    </td>
+    <td>{%key%}</td>
+    <td>{%username%}</td>
+    <td>{%date%}</td>
+    <td>{%count%}</td>
+    <td>{%price%}元</td>
+    <td>{%money%}元</td>
+	</tr>
+</script>
+<script type='text/javascript' src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type="text/javascript">
+	var cpage = 1;
+	$(function(){
+		// orderGrouping(cpage,0);
+		$('#query').click();
+	});
+	var Paging = new Paging01();
+	/**
+	 * 配置
+	 *
+	 * @param int args.page 页码 页码参数统一"page"
+	 * @param int args.limit 每页显示的数量 参数统一"limit"
+	 * @param string args.paging_class 放置分页的class
+	 * @param function args.callback 回调函数
+	 * @param string args.key 多个分页时 提供一个唯一值
+	 * @param string args.data 自定义参数
+	*/
+	Paging.init_args({
+		page:1,
+		limit:10,
+		paging_class:'paging',
+		callback:get_statistics
+	});
+	//获取等待列表
+	var start_time,end_time,count;
+	function get_statistics(page, limit)
+	{
+		// template
+		var url = "{:url('/user/sms/get_sms_consumption_statistics')}";
+		var data = {};
+		data.start_time = $('#startDate').val();
+		start_time = data.start_time;
+		data.end_time = $('#endTime').val();
+		end_time = data.end_time;
+		data.page = page;
+		data.limit = limit;
+		$.ajax({
+			type:"POST",
+			dataType:"json",
+			data:data,
+			url:url,
+			success:function(result){
+				console.log(result);
+				var htmls = '';
+				if(result.code == 0){
+					if(result.data.datas.length == 0){
+						window.count = 0;
+						$('#consumeempty').show();
+						$('#statisticslist').html('');
+						$('.main-box-footer').hide();
+					}else{
+						$('#consumeempty').hide();
+						$('.main-box-footer').show();
+						$.each(result.data.datas, function(index, object){
+							var html = $('#template').html();
+									html = html.replace(/{%id%}/g, object.id);
+									html = html.replace(/{%key%}/g, object.key);
+									html = html.replace(/{%date%}/g, object.date);
+									html = html.replace(/{%count%}/g, object.count);
+									html = html.replace(/{%price%}/g, object.price);
+									html = html.replace(/{%money%}/g, object.money);
+									html = html.replace(/{%username%}/g, object.username);
+							htmls += html;
+						});
+					}
+					$('#statisticslist').html(htmls);
+					count = result.data.count;
+					window.count = count;
+					Paging.paging(page, count, limit);
+				}else{
+					count = 0;
+					Paging.paging(1, 0, 10);
+					window.count = 0;
+				}
+				election();
+			},
+			error:function(){
+				console.log('错误');
+			}
+		})
+	}
+</script>
+<!--全选，单选-->
+<script type="text/javascript">
+	//重置
+  function reset_click(){
+    $('input[name="startDate"][type="text"]').val("");//开始日期
+    $('input[name="endTime"][type="text"]').val("");//结束日期
+    get_statistics(1, 10);
+  }
+</script>
+<!--导出-->
+<script type="text/javascript">
+	function importdata(){
+		if($('.rolecheck:checked').length == 0){
+	 		alert("请至少选择一条数据");
+	 	}else{
+	 		$('#import-data').modal('show');
+	 	}
+	}
+	var excel_statelist = true;
+	function import_sms_consumption(){
+		$('#import-data').modal('hide');
+ 		if(excel_statelist === true){
+ 			//将导出状态值改为false
+ 			excel_statelist = false;
+ 			//定义路径
+ 			var url = "{:url('export_sms_consumption')}";
+ 			//定义传递的参数
+ 			var data = {};
+ 			//判断是否全部选中
+ 			if($("input[name='DataCheck_all'][type='checkbox']").is(":checked")){  //导出所有数据
+ 				data.export_type = 1;
+ 			}else{
+ 				data.export_type = 0;
+ 			}
+ 			//开始时间
+ 			data.start_time = $('#startDate').val();
+ 			//结束时间
+			data.end_time = $('#endTime').val();
+
+ 			//获取选中的id
+ 			var usercheck = [];
+			$.each($('.rolecheck:checked'), function(index, object){
+ 				usercheck.push($(object).val());
+ 			});
+ 			data.usercheck = usercheck;
+ 			console.log(usercheck);
+ 			$.post(url,data,
+ 			function(result){
+ 				console.log(result);
+ 				if(result.code === 0){
+ 					window.location.href = result.data;
+ 					// alert('导出成功');
+ 				}else{
+ 					alert('导出失败');
+ 				}
+ 				excel_statelist = true;
+
+ 			});
+ 		}
+	}
+</script>
+</div>
+
+{include file="sms/sms_targer" /}
+
+{/block}

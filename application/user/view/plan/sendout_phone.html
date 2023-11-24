@@ -1,0 +1,103 @@
+{extend name="public/base" /} {block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/css/new_index.css" rel="stylesheet" type="text/css">
+<link href="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script type="text/javascript" src='__PUBLIC__/js_plan/sendout_phone.js'></script>
+<style>
+  .form-group input,.form-group select{
+    margin-right: 30px;
+  }
+  
+  .marginr15{
+    margin-right: 15px!important;
+  }  
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box n_head_box_b clearfix">
+                <div class="pull-left"> <span class="n_panel_title">
+
+                    <img src="/public/img/renwutongji.png">号码下发记录
+
+                  </span>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <section class="navbar main-box-header clearfix l-padding">
+                    <form method="get" role="form">
+                        <div class="form-inline bottomfour">
+                            <div class=" form-inline pull-left">
+                                <div class="form-group">
+                                    <label>号码组名：</label>
+                                    <input type="text" class="form-control l-input-width" id="numberGroup" name="keyword" placeholder="请输入号码组名称">
+                                </div>
+                                <div class="form-group">
+                                    <label>用户类型：</label>
+                                    <select class="form-control l-input-width" id="role_id">
+                                        <option value="">全部用户类型</option>
+                                        {volist name="role_list" id="vo"}
+                                          <option value="{$key}">{$vo}</option>
+                                        {/volist}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>用户名：</label>
+                                    <input type="text" class="form-control l-input-width marginr15" id="userName" name="keyword" placeholder="请输入用户名">
+                                </div>
+                                <button class="btn btn-primary" type="button" name="submit" onclick="show_data()">查询</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover pz_table_contents">
+                        <thead>
+                            <tr>
+                                <!--<th class="text-center">-->
+                                <!--    <input class=" check-all" type="checkbox" name="all_checked">-->
+                                <!--</th>-->
+                                <th class="text-center">序号</th>
+                                <th class="text-center">号码组名</th>
+                                <th class="text-center">下发用户</th>
+                                <th class="text-center">用户类型</th>
+                                <th class="text-center">下发数量</th>
+                                <th class="text-center">下发时间</th>
+                                <th class="text-center">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sendPhoneList"></tbody>
+                    </table>
+                </div>
+                <div class="component-page-empty" id="consumeempty">
+                    <div class="empty-tip line">
+                      <p><img src="__PUBLIC__/img/none.png" /></p>
+							        <p>暂无数据</p>
+                    </div>
+                </div>
+                 <footer class="main-box-footer clearfix footerA">
+        					<div class="row">
+        						<div class="col-sm-3 text-left"></div>
+        						<div class="col-sm-9 text-right pagingA"></div>
+        					</div>
+        				</footer>
+            </div>
+        </div>
+    </div>
+</div>
+<script id='sendout_phone_data' type="text/template">
+    <tr>
+        <td class="text-center">{%sequence%}</td>
+        <td class="text-center">{%box_name%}</td>
+        <td class="text-center">{%username%}</td>
+        <td class="text-center">{%role_name%}</td>
+        <td class="text-center">{%sendout_num%}</td>
+        <td class="text-center">{%create_time%}</td>
+        <td class="text-center">{%remark%}</td>
+    </tr>
+</script>
+{/block}

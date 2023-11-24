@@ -1,0 +1,397 @@
+<!--销售管理弹框-->
+
+<!--编辑账号管理弹框-->
+<div class="modal fade in" id="sales-account-edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 470px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>编辑销售账号</span></h4>
+				 </div>
+				 <div class="modal-body pagelists" style="padding-bottom:5px;">
+						<form id="editaccountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								 <div class="form-group">
+									<label class="col-lg-4 control-label">用户名：</label>
+									<div class="col-lg-6 col-sm-6">
+										 <input type="text" class="form-control"  name="name" id="editusername">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 control-label">登录密码：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="password" class="form-control"  id="pwd">
+									</div>
+								</div>
+
+                <div class="form-group">
+									<label class="col-lg-4 control-label">联系邮箱：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" id="email">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">开通人工坐席：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+                    <input type="radio" name="sittable" id="editsittabley" >是
+                    <input type="radio"  name="sittable" id="editsittablen">否
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 control-label">机器人月租：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" id="robot-monthly-rent">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 control-label">语音识别费用：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" id="speech-recognition-cost">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 control-label">可透支额度：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" id="overdraft-limit">
+									</div>
+								</div>
+
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+
+<!--添加账号管理弹框-->
+<div class="modal fade in" id="sales-account-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 470px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>添加销售账号</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="addaccountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								 <div class="form-group">
+									<label class="col-lg-4 control-label">用户名：</label>
+									<div class="col-lg-6 col-sm-6">
+										 <input type="text" class="form-control" placeholder="请输入用户名"  name="name" id="addusername">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-lg-4 control-label">登录密码：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="password" class="form-control" placeholder="请输入密码" id="addloginpwd">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">确认密码：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="password" class="form-control"  placeholder="再次输入密码" id="addpwd">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">联系手机：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" placeholder="请输入联系手机"  id="addconfirmpwd">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">联系邮箱：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" placeholder="请输入联系邮箱  " id="addemail">
+									</div>
+								</div>
+                <div class="form-group">
+									<label class="col-lg-4 control-label">开通人工坐席：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+                    <input type="radio" name="sittable" id="addsittabley" >是
+                    <input type="radio"  name="sittable" id="addsittablen">否
+									</div>
+								</div>
+
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+
+
+<!--充值弹框-->
+<div class="modal fade in" id="recharge" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>充值</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="rechargeform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+
+								<div class="form-group">
+									<label class="col-lg-4 control-label">金额：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" placeholder="请输入金额"  id="rechargemoney">
+									</div>
+								</div>
+
+                <div class="form-group">
+									<label class="col-lg-4 control-label">备注：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+                    <textarea class="l-textarea" name="name" rows="5" maxlength="30" placeholder="备注充值信息，限定30个字以内"></textarea>
+									</div>
+								</div>
+
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+
+<!--分配机器人弹框-->
+<div class="modal fade in" id="distribution-robot" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>分配机器人</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="distributionform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								 <div class="form-group account ">
+									<label class="col-lg-4 control-label">用户：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <select class="form-control  " id="user">
+										  <option value="">请选择用户名</option>
+                      <option value="">用户1</option>
+                      <option value="">用户2</option>
+                      <option value="">用户3</option>
+                    </select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-4 control-label">分配数量：</label>
+									<div class="col-lg-6 col-sm-6">
+                    <input type="text" class="form-control" placeholder="剩余可分配机器人100个"  id="distributionnum">
+									</div>
+								</div>
+
+                <div class="form-group">
+									<label class="col-lg-4 control-label">开通时长：</label>
+                  <div class="col-lg-6 col-sm-6">
+                    <select class="form-control  "  id="time">
+										  <option value="">请选择开通时长</option>
+                      <option value="">1星期</option>
+                      <option value="">1个月</option>
+                      <option value="">1年</option>
+                    </select>
+									</div>
+								</div>
+
+                <div class="form-group">
+									<label class="col-lg-4 control-label">备注：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+                    <textarea class="l-textarea" name="name" rows="5"  placeholder="请输入备注信息"></textarea>
+									</div>
+								</div>
+
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+<!--绑定微信弹框-->
+<div class="modal fade in" id="bindingwechat" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+	  <div class="modal-dialog modal-sm" style="width: 390px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>绑定微信</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<div class="wechattips">
+							打开微信扫描下方二维码绑定微信，获取意向客户实时推送？
+						</div>
+						<div class="wechatimg">
+							<img src="__PUBLIC__/img_sj/wechat.png" alt="">
+						</div>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">关闭</button>
+				</div>
+		 </div>
+    </div>
+	</div>
+
+	<!--延长机器人使用时间弹框-->
+	<div class="modal fade in" id="extendrobot" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+		  <div class="modal-dialog modal-sm" style="width: 470px;">
+				<div class="modal-content">
+						<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									 <span aria-hidden="true">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel"><span>延长机器人有效期</span></h4>
+					 </div>
+					 <div class="modal-body pagelists">
+							<form id="dextendrobotform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+									 <div class="form-group  ">
+											<label class="col-lg-4 control-label">用户：</label>
+											<div class="col-lg-6 col-sm-6">
+	                   	<label class="col-lg-4 control-label l-textleft">小明</label>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-lg-4 control-label">机器人数量：</label>
+										<div class="col-lg-6 col-sm-6">
+											<label class="col-lg-4 control-label l-textleft">100</label>
+										</div>
+									</div>
+
+	                <div class="form-group">
+										<label class="col-lg-4 control-label">延长时间：</label>
+	                  <div class="col-lg-6 col-sm-6">
+	                    <select class="form-control  " id="extendtime">
+											  <option value="">请选择延长时间</option>
+	                      <option value="">1星期</option>
+	                      <option value="">1个月</option>
+	                      <option value="">1年</option>
+	                    </select>
+										</div>
+									</div>
+
+	                <div class="form-group">
+										<label class="col-lg-4 control-label">备注：</label>
+										<div class="col-lg-6 col-sm-6 l-radio">
+	                    <textarea class="l-textarea" name="name" rows="5"  placeholder="请输入备注信息"></textarea>
+										</div>
+									</div>
+
+						 </form>
+					 </div>
+					 <div style="clear:both"></div>
+					 <div class="modal-footer">
+							 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+							 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+	             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+					</div>
+			 </div>
+	    </div>
+		</div>
+
+	<!--回收机器人弹框-->
+	<div class="modal fade in" id="recoveryrobot" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" style="display: none;">
+		<div class="modal-dialog modal-sm" style="width: 470px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel"><span>回收机器人</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="recoveryrobotform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								 <div class="form-group  ">
+										<label class="col-lg-4 control-label">用户：</label>
+										<div class="col-lg-6 col-sm-6">
+										<label class="col-lg-4 control-label l-textleft">小明</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-4 control-label">机器人数量：</label>
+									<div class="col-lg-6 col-sm-6">
+										<label class="col-lg-4 control-label l-textleft">100</label>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-4 control-label">回收数量：</label>
+									<div class="col-lg-6 col-sm-6">
+  										<input type="text" class="form-control"  id="recoveryrobotnum">
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-lg-4 control-label">备注：</label>
+									<div class="col-lg-6 col-sm-6 l-radio">
+										<textarea class="l-textarea" name="name" rows="5"  placeholder="请输入备注信息"></textarea>
+									</div>
+								</div>
+
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <input type="hidden" name="scenariosId" id="scenariosId" value="">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+						 <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+				</div>
+		 </div>
+		</div>
+		</div>
+
+<!--重置密码-->
+<div class="modal fade" id="resetpwd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: block;">
+   <div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+           <span aria-hidden="true">×</span>
+         </button>
+         <h4 class="modal-title" id="myModalLabel">
+           操作提示
+         </h4>
+       </div>
+       <div class="modal-body modal-body-tips">
+         确定将该账号进行密码重置？重置后，初始密码为：
+				 <span class="l-resetpwd">654321</span>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal">   取 消		</button>
+         <button type="button" class="btn btn-primary" onclick="outexcel();">	确 定    </button>
+       </div>
+     </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+</div>

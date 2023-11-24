@@ -1,0 +1,194 @@
+<!--线路管理中的弹框-->
+<!--添加、编辑线路弹框-->
+<div class="modal fade in" id="line-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+  <div class="modal-dialog modal-sm" style="width: 530px;">
+		<div class="modal-content">
+		 <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					 <span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="add_editLine"><span>添加线路</span></h4>
+		 </div>
+		 <div class="modal-body pagelists">
+				<form id="editaccountform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+						 <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label"><span class="l-star">*</span>线路商名称：</label>
+							<div class="col-lg-6 col-sm-6">
+								 <input type="text" class="form-control"  name="name" id="e-linename" autocomplete="off">
+							</div>
+						</div>
+						<!--
+						<div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label"><span class="l-star">*</span>线路对接类型：</label>
+							<div class="col-lg-6 col-sm-6">
+                <select class="form-control c_selectimg resetSel" name="type" id="type">
+                  <option value="">请选择线路对接类型</option>
+                  <option value="1">ip</option>
+                  <option value="0">网关</option>
+                </select>
+
+							</div>
+						</div>
+						-->
+            <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label"><span class="l-star">*</span>接口IP：</label>
+							<div class="col-lg-6 col-sm-6">
+                <input type="text" class="form-control" id="e-interface-IP" name="inter_ip"  />
+
+							</div>
+						</div>
+            <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label">呼叫前缀：</label>
+							<div class="col-lg-6 col-sm-6">
+                <input type="name" class="form-control" id="e-call-prefix" name="call_prefix" />
+							</div>
+						</div>
+						<!--
+            <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label">网关名称：</label>
+							<div class="col-lg-6 col-sm-6">
+                <input type="text" class="form-control" id="e-gateway-name" name="gateway">
+							</div>
+						</div>
+            <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label">账号：</label>
+							<div class="col-lg-6 col-sm-6">
+                <input type="text" class="form-control" id="e-account" >
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label">密码：</label>
+							<div class="col-lg-6 col-sm-6">
+                <input type="password" class="form-control" id="e-password">
+							</div>
+						</div>
+						-->
+            <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label"><span class="l-star">*</span>线路价格：</label>
+							<div class="col-lg-6 col-sm-6 pr">
+                <input type="text" class="form-control" id="e-cost-price" name="sales_price">
+                <span class="l_price">元/分钟</span>
+							</div>
+						</div>
+            <div class="form-group">
+							<label class="col-lg-4 col-sm-4 control-label">备注：</label>
+							<div class="col-lg-6 col-sm-6">
+                <textarea class="textarea-len form-control" name="remark" rows="3" maxlength="30" id="remarks" placeholder="请输入备注信息，限定30个字以内"></textarea>
+							</div>
+						</div>
+
+			 </form>
+		 </div>
+		 <div style="clear:both"></div>
+		 <div class="modal-footer">
+				 <input type="hidden" name="scenariosId" id="line_id" value="">
+				 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+         <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="add_line()" type="button">确 定</button>
+			</div>
+	 </div>
+  </div>
+</div>
+
+<!--分配路线-->
+<div class="modal fade in" id="alloction-line" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+  <div class="modal-dialog modal-sm" style="width: 530px;">
+	 <div class="modal-content">
+	 <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				 <span aria-hidden="true">×</span>
+			</button>
+			<h4 class="modal-title" id="myModalLabel"><span>分配线路</span></h4>
+	 </div>
+	 <div class="modal-body pagelists">
+			<form id="userlistform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+        <div class="form-group" >
+          <label class="col-lg-4 col-sm-4 control-label">账户名称：</label>
+          <div class="col-lg-6 col-sm-6">
+            <label class="control-label" id="username_fenpei" user-id="" >yunyingshang1</label>
+          </div>
+        </div>
+				<div class="form-group" style="padding-top:7px">
+						<label class="col-lg-4 col-sm-4 control-label">选择线路：</label>
+						<div class="col-lg-6 col-sm-6 l_selectline">
+              <select class="form-control resetSel c_selectimg" name="fenpeilineSelect" id="fenpeilineSelect" onchange="get_price_by_lineid()">
+                <option value="">请选择线路</option>
+
+              </select>
+						</div>
+					</div>
+					<div class="form-group hidden distribution-line">
+						<label class="col-lg-4 col-sm-4 control-label">线路成本价：</label>
+						<div class="col-lg-6 col-sm-6">
+              <label class="control-label" id="sales_price"  name="sales_price"></label>
+						</div>
+					</div>
+					{if session('user_auth.role') != '商家'}
+					<div class="form-group">
+						<label class="col-lg-4 col-sm-4 control-label">线路销售价：</label>
+						<div class="col-lg-6 col-sm-6 l-yuanmm">
+              <input type="text" class="form-control"  name="price" id="line-saleprice" value="" placeholder="请输入线路价格">
+						</div>
+					</div>
+					{/if}
+          <div class="form-group" style="padding-top:7px">
+            <label class="col-lg-4 col-sm-4 control-label" >备注：</label>
+            <div class="col-lg-6 col-sm-6">
+              <textarea class="textarea-len form-control" name="name" rows="3" maxlength="30" id="notes" placeholder="请输入备注信息，限定30个字以内"></textarea>
+            </div>
+          </div>
+		 </form>
+	 </div>
+	 <div style="clear:both"></div>
+	 <div class="modal-footer">
+					 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+           <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="fenpeiLine()" type="button" >确 定</button>
+				</div>
+	 </div>
+  </div>
+</div>
+
+
+<!--查看用户名单-->
+<div class="modal fade in" id="user_list" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+  <div class="modal-dialog modal-sm" style="width: 480px;">
+	 <div class="modal-content">
+		 <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					 <span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel"><span>查看用户名单</span></h4>
+		 </div>
+		<div class="modal-body pagelists">
+			<form id="allotlineform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+				<div class="form-group">
+					<div class="col-lg-10 col-sm-10">
+            <label class="control-label" style="margin-left:16px;">线路名称：线路01</label>
+					</div>
+				</div>
+        <div class="form-group">
+          <table class="table table-bordered table-hover l_listtable">
+					   <thead>
+						    <tr>
+	                <th class="text-center">用户名称</th>
+	                <th class="text-center">用户类型</th>
+	                <th class="text-center">销售价</th>
+									<th class="text-center">分配时间</th>
+						    </tr>
+					    </thead>
+					    <tbody id="userListShow">
+	            	<tr>
+		              <td class="text-center">scy000</td>
+		              <td class="text-center">运营商</td>
+		              <td class="text-center">0.03</td>
+		              <td class="text-center">2018.11.02</td>
+								</tr>
+					    </tbody>
+				  	</table>
+        </div>
+			</form>
+			<button type="button" class="btn btn-default pull-right l_colsebot" data-dismiss="modal">关闭</button>
+		</div>
+		<div style="clear:both"></div>
+	 </div>
+  </div>
+</div>

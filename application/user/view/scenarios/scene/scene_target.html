@@ -1,0 +1,77 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/new_index.css">
+<!-- 提示模板框 -->
+<!--<div class="modal fade" id="tips_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--</div>-->
+<!-- 弹窗模板 -->
+<script type="text/template" id="popTips">
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					{{tipstitle}}
+				</h4>
+			</div>
+			<div class="modal-body">
+				{{tipsdata}}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" class="btn btn-primary"  onclick="{{clickfun}}">
+					确认
+				</button>
+			</div>
+		</div>
+	</div>
+</script>
+<!-- 弹窗展示 -->
+<script type="text/javascript">
+	function popTipswin(obj) {
+		//获取弹窗标题
+		var poptitle = $(obj).attr('data-title');
+		switch (poptitle) {
+			case '删除单个话术':
+				var title = '操作提示';
+				var note = '确定删除该话术？'
+				var click = 'del_sence();';
+				break;
+			case '删除单个语义标签':
+				var title = '操作提示';
+				var note = '确定删除该语义标签？'
+				var click = 'del_semanticLablesingle();';
+				break;
+			case '删除多个语义标签':
+				var title = '操作提示';
+				var note = '确定删除所选中的数据？'
+				var click = 'del_semanticlabelall();';
+				break;
+			case '删除单个等级分类':
+				var title = '操作提示';
+				var note = '确定删除该模板？'
+				var click = 'del_gradesingle();';
+				break;
+			case '删除多个等级分类':
+				var title = '操作提示';
+				var note = '确定删除所选中的数据？'
+				var click = 'del_gradeall();';
+				break;
+			case '删除场景节点':
+				var title = '操作提示';
+				var note = '确定该场景节点？'
+				var click = 'scenenode_del();';
+				break;
+
+		}
+		$template = $("#popTips").html();
+		$template = $template.replace("{{tipstitle}}", title);
+		$template = $template.replace("{{tipsdata}}", note);
+		$template = $template.replace("{{clickfun}}", click);
+		//追加
+		$('#tips_model').html($template);
+		$('#tips_model').modal('show');
+	}
+
+</script>

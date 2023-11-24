@@ -1,0 +1,765 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+
+<link href="/public/css/systemManage.css" rel="stylesheet" type="text/css">
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<style>
+  .form-group{
+    margin-bottom:0px!important;
+  }
+  .c_marleft {
+    margin-left: 10px;
+  }
+  .version {
+    margin-left: 31px;
+  }
+  .version input {
+    width: 160px;
+  }
+  table, .table thead>tr>th, .table tbody>tr>td {
+    border: solid 1px #e7ebee;
+  }
+  .table thead>tr>th {
+    border-top: solid 1px #e7ebee !important;
+  }
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><img src="__PUBLIC__/img/updatelog.png" alt="">版本更新日志</span>
+		  </div>
+		</header>
+
+		<div class="main-box-body clearfix">
+	      <section class="navbar clearfix">
+					<form method="get" role="form">
+						<div class="form-group dis_in  c_seldate clearfix">
+							<!-- 选择日期 -->
+							 <label class="levelSelect statusSelect">更新时间:</label>
+							 <div class="formgroup">
+								 <div class="dis_in c_dateSelbg pr">
+									 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+									 <script>
+											 $('#startDate').fdatepicker({
+												 format: 'yyyy-mm-dd',
+												 // pickTime: true
+											 });
+									 </script>
+								 </div>
+								 <span class="pz_zhi">至</span>
+								 <div class="dis_in c_dateSelbg pr">
+									 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+									 <script>
+										 $('#endTime').fdatepicker({
+											 format: 'yyyy-mm-dd',
+											 // pickTime: true
+										 });
+									 </script>
+								 </div>
+							 </div>
+
+							<!-- 搜索版本号 -->
+							<div class="dis_in c_marleft version">
+                <label class="levelSelect statusSelect">版本号:</label>
+                <div class="dis_in formgroup">
+                  <input type="text" class="form-control" id="keyword" name="keyword" placeholder="请输入版本号" autocomplete="off">
+                </div>
+							</div>
+
+							<!-- 查询、重置按钮 -->
+							<div class="dis_in c_marleft">
+								<button class="btn btn-primary" type="submit">查询</button>
+							</div>
+					  </div>
+				 </form>
+				</section>
+
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover" style="table-layout:fixed;">
+				   <thead>
+					    <tr>
+								<!-- <th class="text-center" style="width:10%"><input class="check-all" name='all_checked' type="checkbox"/></th> -->
+								<th class="text-center" style="width:15%">序号</th>
+								<th class="text-center" style="width:15%">版本号</th>
+								<th class="text-center" style="width:20%">更新时间</th>
+								<th class="text-center" style="width:40%;padding:13px 20px;">更新内容</th>
+					    </tr>
+				    </thead>
+					<?php $i=1; ?>
+					<tbody>
+			<tr>
+              <td class="text-center"><?php echo $i++; ?></td>
+              <td class="text-center">V7.0.4</td>
+              <td class="text-center">2019-08-12 19:00:00</td>
+              <td class="text-center updatecontent" style="padding:13px 20px;">
+                <div class="s_content s_setheight">
+                    1、新增隐藏话术备份按钮功能，在添加商家和销售账户中可以将话术备份的按钮隐藏，防止用户将话术导出；
+					2、优化当天通话、历史通话和CRM客户管理通话记录的上一条和下一条切换按钮的响应速度；
+					3、优化话术检测功能，当录音路径异常，则自动修复，防止打电话时候，遇到这段录音出现挂机的情况；
+					4、优化CRM客户管理模块，解决拨打任务中，若号码中前面带0直接去掉的问题；
+					5、优化CRM客户管理模块，解决通话记录中个别没有显示机器人挂断还是客户挂断的问题；
+					6、优化话术配置模块，解决机器人在拨打电话中第一句话不会播放开场白录音的问题；
+					7、修复CRM删除功能，筛选意向等级C后，点击全选删除，删除的是所有CRM意向客户的问题；
+                </div>
+                <div class="c_selshowhide">
+                  <p>...</p>
+                  <a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center"><?php echo $i++; ?></td>
+              <td class="text-center">V7.0.3</td>
+              <td class="text-center">2019-07-26 20:00:00</td>
+              <td class="text-center updatecontent" style="padding:13px 20px;">
+                <div class="s_content s_setheight">
+                    1、优化机器人外呼模块呼叫性能；
+					2、优化任务管理版块的性能；
+					3、优化微信推送模块功能，在任务完成之后，会给微信用户推送任务完成的信息；
+                </div>
+                <div class="c_selshowhide">
+                  <p>...</p>
+                  <a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center"><?php echo $i++; ?></td>
+              <td class="text-center">V7.0.2</td>
+              <td class="text-center">2019-07-23 19:00:00</td>
+              <td class="text-center updatecontent" style="padding:13px 20px;">
+                <div class="s_content s_setheight">
+                  1.优化CRM模块
+                    1).CRM模块新增加入呼叫功能，提高对单个号码进行拨打的便利性；
+                    2).CRM模块的通话记录中对话数据进行优化，不会有过期时间，解决通话记录超过5天后对话内容显示为空的问题；
+                    3).CRM模块的通话记录会在下一次拨打这个号码时，更新这条通话记录；
+                  2.优化导入号码的提示，显示的信息更加详细；
+                  3.新增上级用户分配的ASR不可以删除的限制；
+                  4.对操作记录的操作内容的说明进行优化，显示信息更详细准确；
+                  5.线路组新增编辑的功能；
+                </div>
+                <div class="c_selshowhide">
+                  <p>...</p>
+                  <a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center"><?php echo $i++; ?></td>
+              <td class="text-center">V7.0.1</td>
+              <td class="text-center">2019-07-16 19:00:00</td>
+              <td class="text-center updatecontent" style="padding:13px 20px;">
+                <div class="s_content s_setheight">
+                  1、优化话术变量版块，实现若当前话术为变量话术的话，所有的流程，知识库中的录音上传功能隐藏，自动以合成音的形式进行合成；
+                  2、优化CRM客户管理版块：
+                    1）优化客户的通话详情功能，默认只展示最后一次加入CRM的通话记录,点击可以直接查看客户通话详情，并且记录一直保留；
+                    2）新增意向等级筛选，可以筛选A/B/C意向；
+                    3）新增任务名称查询，每次加入CRM会将任务名称携带过来，方便客户根据任务名称实时筛选客户；
+                    4）新增已查看和未查看功能筛选，可以筛选出已查看通话详情的客户和未查看通话详情的客户；
+                    5）新增已分配和未分配功能筛选，可以筛选出已经分配给坐席人员的客户和未分配给坐席人员的客户；
+                  3、优化控制台版块账户余额展示，新增上月余额数据，方便单个账户进行对账；
+                </div>
+                <div class="c_selshowhide">
+                  <p>...</p>
+                  <a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V7.0.0</td>
+							<td class="text-center">2019-07-08 18:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+                  1、新增变量话术，可以通过添加话术中配置变量，通过变量话术正常进行任务呼叫；
+                  2、优化通话记录和消费明细版块，可以根据系统配置不同的记录保留时间，支持保留1个月，2个月甚至3个月，可以根据客户需求进行配置；
+                  3、优化语义标签版块：
+                    (1)	在配置语义标签中新增客户意向等级，该意向等级优先于等级分类和知识库；
+                    (2)	在语义标签中默认精准识别进行匹配；
+                    (3)	在语义标签中可以添加排除关键字，以“(A|B)C”这种形式进行添加；
+                  4、优化话术下发功能，支持单个话术可以同时下发给多个账户；
+                  5、优化财务管理版块：
+                    (1)	概况中的今日/昨日数据的呼叫次数中去除重呼的次数；
+                    (2)	日消费统计中的呼叫次数去除重呼的次数；
+                    (3)	商家账户在概况中查看当前余额，查看的为自己的余额，新增可以查看商家和销售的总余额；
+                  6、优化等级分类中的通话内容，可以添加排除关键字，关键字以“(A|B)C”这种形式进行添加；
+                </div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+            <tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.2.2</td>
+							<td class="text-center">2019-6-25 21:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、新增线路组功能模块，原有的线路会自动生成对应的线路组，以线路组的形式进行拨打电话，该功能优势在于最大化的使用线路的并发，提高线路使用率；
+									2、优化计费统计模块：
+										1）管理员可以查看每个角色账户的计费统计信息；
+										2）查看各个层级查看下级账户的计费统计信息，包括当前下级账户以及下级账户子级的计费统计信息；
+										3）不记账销售人员查看自己的概况，日消费统计，消费明细都可以查看到对应的消费金额；
+										4）商家账户概况和日消费统计中的数据包括下级销售的呼叫数据和呼叫计费；
+										5）上级账户查看商家账户，可以查看到商家账户的数据和下级所有销售账户的数据总和；
+									3、优化通话记录管理查询版块
+										1）新增通话记录已查看未查看筛选，筛选条件在更多条件中让用户自定义选择；
+										2）通话记录中更多筛选条件支持"<="筛选；
+									4、优化话术检测功能：
+										1）在话术导入导出中新增话术检测功能；
+										2）在添加任务和启动任务中新增话术检测功能；
+										3）话术检测中新增录音格式异常检测；
+										5、优化重呼的功能，解决重呼异常的问题；
+										6、优化话术模拟版块，解决话术模拟未根据分支优先级识别关键字；
+										7、优化客户管理中的导入客户模板，使其导入模板和任务管理中的导入号码模板一致；
+
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.2.1</td>
+							<td class="text-center">2019-6-05 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、新增微信推送记录模块，可以查看每个任务微信推送的情况和统计；
+									2、新增话术下发功能：
+									1）上级账户可以将话术下发给自己子级账户；
+									2）生成对应的话术下发记录；
+									3）可以对下发的话术进行回收；
+									3、新增号码下发功能：
+									1）上级账户可以将号码组直接下发给子级账户；
+									2）生成对应的号码组下发记录；
+									4、优化日消费统计和消费明细模块，新增全部运营商，全部代理商，全部商家，全部销售联动查询:
+									1）管理员：可以查看所有账户的日消费数据;
+									2）运营商：查看自己账户和子级账户的日消费数据；
+									3）代理商：查看自己账户和子级账户的日消费数据；
+									4）商家：查看自己账户和子级销售的日消费数据；
+									5）销售：查看自己账户的日消费数据；
+									5、优化重新呼叫功能，解决反馈的重呼丢失话单以及重呼次数不对的问题；
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.2.0</td>
+							<td class="text-center">2019-5-28 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、新增隐藏话术管理版块控制，添加商家和销售账户可以选择是否隐藏话术版块；
+									2、新增隐藏导出短信验证功能控制，添加商家和销售账户可以选择是否开启短信验证功能；
+									3、新增销售人员拨打电话扣除商家账户余额计费；
+									4、优化微信公众号推送功能，新增推送序号展示；
+									5、优化所有角色控制台数据展示，只展示今日数据；
+									6、优化通话记录和任务列表模块，新增客户姓名字段；
+									7、优化操作记录模块，优化内容为：
+									1）添加账户，账户充值，操作记录里面可以查看到记录；
+									2）锁定和开启下级账户，操作记录里面可以查看到记录；
+									8、优化通话详情内容展示，新增通过触发的关键词可以查看到触发的具体流程和知识库；
+									9、优化流程标签界面展示，当流程中有标签名称的才展示出来；
+									10、优化话术知识库模块，新增用户未说话类型查询；
+
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.9.2</td>
+							<td class="text-center">2019-5-22 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、优化历史通话记录版块性能，只保存前5天的数据；
+									2、优化消费明细模块，只保存前5天的数据；
+									3、优化任务管理模块，只保存前5天的任务数据；
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.9.1</td>
+							<td class="text-center">2019-5-17 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、优化历史通话记录，消费明细模块数据查询，处理数据量过大查询缓慢问题：
+									1）数据查询区分前7天数据查询和7天之后数据查询；
+									2）前7天数据查询分为昨天，前2到3天，前4到7天数据查询；
+									2、优化通话详情查看功能，新增可以通过上一页下一页查看通话详情功能；
+									3、优化任务列表模块，当由于数据量过大，加载缓慢，新增加载过渡效果，提升用户体验；
+									4、优化导入号码功能，实现支持7位数以上号码导入；
+									5、优化账户编辑功能，可以查看用户的可透支余额情况；
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.9</td>
+							<td class="text-center">2019-5-15 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、优化意向等级配置模块，新增流程标签，问答标签，语义标签配置，精准定位客户意向等级；
+									2、新增短信群发功能，实现导入号码可以自动发送短信，目前该功能仅支持爱讯短信（客户若有短信通道需求，可实现对接）；
+									3、优化计费模块，解决当运营商或者代理商账户修改商家的线路，ASR，短信通道费率情况下，商家下级的销售账户也会同步进行修改；
+									4、号码、话术导出验证：
+									1)	号码、话术导出新增手机验证，可以输入相应的手机号码获取验证码之后进行导出；
+									2)	新增导出记录模块，实现上级账户可以查看下级账户的导出情况；
+									5、优化录音查询功能，实现在录音管理模块中，可以通过知识库标题或者流程节点名称进行查询录音；
+									6、优化任务详情内容：
+									1）新增任务添加ASR；
+									2）新增任务定时状态，若定时，鼠标放在状态上自动显示当前任务的定时时间；
+									7、优化控制台我的数据板块，若任务已删除，则当前任务中的数据不进行统计；
+
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.8.3</td>
+							<td class="text-center">2019-5-9 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、数据性能优化：
+									  1）通话管理中，将历史通话记录中添加最近七天记录和全部通话记录数据筛选；
+									  2）财务管理中，将消费明细模块单独独立出来，并且添加最近七天明细和全部明细数据筛选；
+									2、优化等级分类版块，默认意向等级配置中新增客户说话次数，只在新建话术中可以查看到；
+									3、优化账户管理版块，实现锁定上级账户，下级账户同步进行锁定；
+									4、优化话术模拟功能，实现触发知识库中关键词，若知识库有多个语料，则依次进行输出；
+									5、优化日消费统计数据加载时间过长的问题，已经添加相关索引，解决由于数据量过大加载慢的问题；
+									6、优化通话记录详情中缺少录音以及通话卡顿的问题；
+									7、优化话术流程中选择指定未回复功能，解决选中之后再次查看没有显示的问题；
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.8.2</td>
+							<td class="text-center">2019-5-6 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1.	使用消息队列，优化系统性能，提高系统并发，目前最大可以支持并发数可以达至2万左右
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.8.1</td>
+							<td class="text-center">2019-5-5 19:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1.	优化日消费统计模块，解决由于数据量过大加载较慢的问题；
+									2.	优化任务删除功能：
+									1）任务进行暂停之后才能进行任务删除操作；
+									2）任务已完成才能进行任务删除操作；
+									3.	优化通话管理、客户管理模块：
+									1）导出客户号码新增进度条提示；
+									2）导出客户话单新增进度条提示；
+									4.	优化知识库中异常情况处理：
+									1）添加知识库中，若没有关键字，则知识库异常，知识库标题变红；
+									2）添加知识库中，若没有录音，则知识库异常，知识库标题变红；
+									3）添加知识库中，客户选择动作为“指定场景节点”，若当前知识库中若无录音，知识库也显示正常，知识库标题不变红；
+									4）系统默认用户不回答，未听清楚，无法回答用户问题，连续三次无法回答用户问题。即使里面没有录音和关键字，知识库也显示正常，知识库标题不变红；
+									5.	优化知识库模块，当知识库类型为用户未说话，默认动作为挂机；
+									6.	优化知识库转接人工坐席功能，优化方式为在触发知识库关键字之后，先回复机器人话术，再进行转接相应坐席；
+									7.	优化微信推送界面；
+									1）解决话术删除之后，推送内容正常显示；
+									2）解决不同手机，录音展示适配界面的问题；
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.8</td>
+							<td class="text-center">2019-4-28 17:30:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、优化主界面登录延迟的问题，解决方式为控制台中我的数据不进行实时统计，当天的数据第二天才进行统计；
+								2、优化通话记录模块的性能，解决由于数据量大的情况下，查询数据比较缓慢，加载时间过长的问题；
+								3、优化计费管理模块的性能，解决日消费统计，月消费统计，年消费统计中查询数据比较缓慢，加载时间过长，统计数据有时候会出现重复的问题；
+								4、新增话术检测功能，解决话术备份和导入导出出现的录音丢失问题；
+								5、优化微信推送详情界面，新增客户意向等级配置信息，客户命中标签信息，机器人无法回答用户内容信息，整体录音，以及点击客户号码能直接进行拨打功能；
+								6、优化添加任务中机器人的提示信息，提示客户单任务使用机器人数建议不超过300个；
+								7、新增CRM客户管理中单个号码加入呼叫功能；
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.7.3</td>
+							<td class="text-center">2019-4-27 20:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、修复拨打任务完成之后，任务状态显示不对的问题；
+									2、优化重呼性能调整，新增任务状态“重呼第*次”；
+									3、修复CRM中添加单个客户添加失败问题；
+									4、优化知识库中通过关键字触发客户意向等级，该功能可以和意向等级分类同步进行使用，评，提高客户的意向等级精准度；
+									5、优化由于数据量过大，客户登录缓慢问题；
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.7.2</td>
+							<td class="text-center">2019-4-25 17:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、修复通话记录中选择大量号码新建任务失败的问题；
+									2、修复任务暂停之后再次启动，提示启动失败的问题；
+									3、修复信息管理中各个角色的信息权限配置问题；
+									4、导入导出号码增加支持txt格式，主要解决由于数据量过大导出失败的问题；
+									5、优化拨打任务中数据部分丢失问题，新增数据主动找回机制进行处理；
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.7.1</td>
+							<td class="text-center">2019-4-23 18:30:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1、修复通话记录中由于重拨导致的通话记录重复的问题；
+									2、修复任务模板中时间配置问题:
+									a)	若非定时任务，则时间自动默认为当日;
+									b)	若为定时任务，在添加任务中，会自动进行时间校对；
+									3、修复微信公众号动态IP推送问题:
+									a)	已将动态IP修改为固定IP，后期不需要多次添加微信白名单；
+									b)	修复微信推送总数错误问题；
+									4、优化CRM客户管理版块：
+									a)	修复的内容为客户的通话记录中点击查看之后颜色加灰处理;
+									b)	单个客户的通话记录中的通话详情查看之后颜色加灰处理；
+
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-center"><?php echo $i++; ?></td>
+							<td class="text-center">V6.1.7</td>
+							<td class="text-center">2019-4-18 12:00:00</td>
+							<td class="text-center updatecontent" style="padding:13px 20px;">
+								<div class="s_content s_setheight">
+									1. 优化自定义流程分支节点中关键词识别排序，可以自定义进行配置识别排序，优先排序数字越小，越优先进行识别；
+									2. 新增关键词模糊识别和精准识别处理，解决同音字触发关键词问题；
+									3. 新增知识库打断功能，默认知识库支持打断；
+									4. 优化用户不回答处理机器人回复情况，若用户多次不回答，机器人回复内容不会进行累计，会重新开始进行计算，直至最终挂机操作；
+									5. 优化通话详情展示界面，只展示命中的关键词，将排除关键词进行去除；
+									6. 优化知识库标签界面，当知识库中填入标签之后，知识库标签中才有对应的记录信息；
+									7. 优化分支节点中的关键词识别，将自定义关键词和默认关键词进行整合；
+									8. 新增意向客户推送可以推送给多个坐席账号，推送的方式以轮询的形式进行处理；
+									9. 优化任务暂停功能，将任务暂停的原因通过点击任务可以进行查看；
+									10. 新增日消费统计，月消费统计，年消费统计计费板块导出账单合计；
+									11. 优化添加任务定时配置，若设定的定时时间中任务被人工暂停，则当前定时任务定时启动设定会自动变为非定时启动；
+									12. 优化录音管理界面，新增关键词查询录音；
+								</div>
+								<div class="c_selshowhide">
+									<p>...</p>
+									<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+								</div>
+							</td>
+						</tr>
+				     				      <tr>
+                <td class="text-center"><?php echo $i++; ?></td>
+                <td class="text-center">V6.1.6</td>
+                <td class="text-center">2019-4-10 12:00:00</td>
+                <td class="text-center updatecontent" style="padding:13px 20px;">
+                  <div class="s_content s_setheight">
+1. 优化意向等级配置，将原有“且”的关系修改为自定义“且和或”；
+2. 优化通话记录界面，支持意向等级多选查询，将通话状态，说话次数，通话时长，客户语气查询做成可配置项，并且将意向等级信息进行展示；
+3. 新增跳转节点中自定义标签，并将标签同步到通话记录中，实现标签精准定位意向客户；
+4. 新增任务模板模块，通过任务模板配置相应的任务参数，通过选择任务模板一键完成任务参数编写；
+5. 新增号码管理模块，支持添加号码组和导入号码，在任务导入号码中可以选择对应的号码组进行导入号码；
+6. 优化CRM客户管理模块，实现界面的操作方便，新增客户分配坐席可以进行多选分配，分配方式按轮询处理，新增客户自定义添加订单记录；
+7. 优化话术版块的细节调整，新增切换动态效果以及操作提示信息，以及话术导入，导出，备份的进度提示条；
+8. 优化任务管理版块，新增切换动态效果以及选中任务效果，号码导入加载进度提示条；
+9. 优化系统的bug,提升系统的性能；
+                  </div>
+                  <div class="c_selshowhide">
+                    <p>...</p>
+          					<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+          				</div>
+                </td>
+						</tr>
+				      <tr>
+                <td class="text-center"><?php echo $i++; ?></td>
+                <td class="text-center">V6.0.6</td>
+                <td class="text-center">2019-3-23 16:00:00</td>
+                <td class="text-center updatecontent" style="padding:13px 20px;">
+                  <div class="s_content s_setheight">
+                    修复部分BUG，如下：
+          					  1.通话指定场景节点的停顿时间至少2秒；
+                      2.通话流程与话术流程不对应；
+                      3.语义标签的新增之后在新增数据数据还是显示在里面；
+                      4.问答标签无法触发；
+                      5.私有短信通道无法删除；
+                      6.打开合成音频页面出现“文本合成”加载框；
+                      7.录音来源选择筛选上传录音时是筛选全部；
+                      8.号码成功导入后，加载页面不会消失；
+                      9.点击合成录音后，有加载条不会消失；
+                      10.添加坐席时电话号码必须是必填项；
+                      11.通话记录切片录音丢失；
+                      12.客户详情中查看通话详情在编辑性别异常；
+                      13.话术模拟人工测试有时会出现失败；
+                      14.话术模拟 - 触发跳转节点流程后说完ai话术不会执行跳转动作直接挂机；
+                      15.话术模拟知识库里面执行挂机、指定流程节点、下一场景节点动作不会说知识库里面的话；
+                      16.话术合成录音可以选择多个节点并且丢失；
+                      17.技术服务费在昨日数据一栏中不会显示，但在今日数据中会显示；
+                      18.复制话术无效；
+                      19.机器人月租在昨日数据中是今日数据的两倍；
+                      20.跳转节点中的跳转前话术改为AI话术；
+                      21.通话记录与通话信息显示不一致；
+                  </div>
+                  <div class="c_selshowhide">
+                    <p>...</p>
+          					<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+          				</div>
+                </td>
+						</tr>
+  				   	<tr>
+                  <td class="text-center"><?php echo $i++; ?></td>
+                  <td class="text-center">V6.0.5</td>
+                  <td class="text-center">2019-3-15 18:00:00</td>
+                  <td class="text-center updatecontent" style="padding:13px 20px;">
+                    <div class="s_content s_setheight">
+          					  1.话术导入导出导致知识库互串；       
+          					  2.通话时，机器人暂停等待时间；
+          					  3.流程节点中肯定、否定等节点有丢失、重复；
+          					  4.客户触发管理挂机流程，机器人未应主动挂机；
+          					  5.录音管理的合成录音使用时录音丢失；
+          					  6.流程指定未回复，识别流程数据显示不全；
+          					  7.技术服务费显示和计算错误；
+          					  8.机器人打电话进度条和状态显示；
+          					  9.机器人月租计算错误；
+          					  10.删除的账号禁止再登录；
+          					  11.账号充值金额限制和充值失败；
+          					  12.话术模拟人工测试有时会出现失败；
+          					  13.通话状态是已接通但没有通话时间和意向等级；
+          					  14.手机通话时长和web端数据显示不一致；
+          					  15.导入电话号码，出现异常停止；
+          					  16.微信扫码绑定公众号，出现乱码；
+                    </div>
+                    <div class="c_selshowhide">
+                      <p>...</p>
+            					<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+            				</div>
+                  </td>
+  							</tr>
+  					  <tr>
+                  <td class="text-center"><?php echo $i++; ?></td>
+                  <td class="text-center">V6.0.3</td>
+                  <td class="text-center">2019-1-19 11:00:00</td>
+                  <td class="text-center updatecontent" style="padding:13px 20px;">
+                    <div class="s_content s_setheight">
+                     1.通话管理模块新增排序功能;
+                     2.计费模块加入技术服务费用;
+                     3.新增技术服务管理模块;
+                     4.财务模块加入技术服务费;
+                     5.话术知识库模块调整显示的数据 将话术流程节点默认分支的全局关键词隐藏。
+                    </div>
+                    <div class="c_selshowhide">
+                      <p>...</p>
+            					<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+            				</div>
+                  </td>
+  							</tr>
+  				   	<tr>
+                  <td class="text-center"><?php echo $i++; ?></td>
+                  <td class="text-center">V6.0.2</td>
+                  <td class="text-center">2019-1-17 10:00:00</td>
+                  <td class="text-center updatecontent" style="padding:13px 20px;">
+                    <div class="s_content s_setheight">
+                      1.调整话术的匹配顺序 具体顺序如下：
+                        1).自定义关键词
+                        2).知识库关键词
+                        3).否定关键词
+                        4).拒绝关键词
+                        5).肯定关键词
+                        6).中性关键词
+                        7).未识别
+                      2.处理当客户一直重复问一个能够触发知识库时出现重复播放同一段录音的问题
+                      3.调整注册接口
+                      4.话术模块中跳转节点新增录音上传功能
+                      5.调整话术模块中话术模拟回复""(空)时，出现报错的情况与细节调整
+
+                    </div>
+                    <div class="c_selshowhide">
+                      <p>...</p>
+            					<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+            				</div>
+                  </td>
+  							</tr>
+  						<tr>
+                  <td class="text-center"><?php echo $i++; ?></td>
+                  <td class="text-center">V6.0.1</td>
+                  <td class="text-center">2019-1-15 17:00:00</td>
+                  <td class="text-center updatecontent" style="padding:13px 20px;">
+                    <div class="s_content s_setheight">
+                      1.	新增招商管理模块，对各个角色层级进行充值和分配相应的配置，以及将所有的操作记录进行保存；
+                      2.	新增ASR，线路，短信通道管理模块，做统一角色分配和设置定价；
+                      3.	重构话术配置模块，新增录音管理模块，对流程和知识库中的录音进行统一管理,并且针对话术信息进行版本控制，话术导入导出进行加密处理，优化设置意向等级配置以及融合语义标签；
+                      4.	新增坐席管理模块，支持人工转接自定义坐席；
+                      5.	优化通话记录模块，针对各个条件查询通话记录进行相应的细化；
+                      6.	新增微信公众号模块，可以自定义配置微信公众号推送，并指定相应的微信账号推送客户意向信息和通话录音；
+                      7.	新增短信审核模块，用户可以自定义短信模块提交审核，审核成功之后可以以短信模块对客户进行短信发送；
+                      8.	优化财务管理模块，将用户的各个子层级计费情况进行统计显示；
+                      9.	新增重呼功能和连续呼叫异常短信提醒功能；
+                      10.	优化任务管理模块，在新建任务中新增根据意向等级将客户加入CRM中、进行微信公众号推送、进行短信推送；
+
+                    </div>
+                    <div class="c_selshowhide">
+                      <p>...</p>
+            					<a href="javascript:;" id="c_selectstate" data-state="1" onclick="c_selectshow(this);" class="pr c_selshowhide_a c_selshidea">展开全部</a>
+            				</div>
+                  </td>
+  							</tr>
+				    </tbody>
+				  </table>
+				    <div class="row">
+								<div class="col-sm-4 text-left"></div>
+								<div class="col-sm-8 text-right"></div>
+						</div>
+			  </div>
+
+				<footer class="main-box-footer clearfix">
+					<div class="pull-left">
+						<!-- <input class="check-all" name='DataCheck_all' type="checkbox"/> 已选择<span id="check_count">0</span>条记录 -->
+            <!--<p>全部日志：<span>50</span>条</p>-->
+					</div>
+				</footer>
+		</div>
+	</div>
+
+</div>
+
+ <script type="text/javascript">
+
+ $(function(){
+
+
+		var keyword = "{$_GET['keyword']|default=''}";
+		$('#keyword').val(keyword);
+})
+
+function c_selectshow(obj) {
+  var state = $(obj).attr('data-state');
+  if (state == '1') {
+     $(obj).text('收起全部');
+     $(obj).attr('data-state', '0');
+     $(obj).removeClass('c_selshidea');
+     $(obj).parent().siblings('.s_content').removeClass('s_setheight');
+     $(obj).siblings('p').addClass('dis_no');
+  } else {
+    $(obj).attr('data-state', '1');
+    $(obj).text('展开全部');
+    $(obj).addClass('c_selshidea');
+    $(obj).parent().siblings('.s_content').addClass('s_setheight');
+    $(obj).siblings('p').removeClass('dis_no');
+  }
+}
+
+
+ //当前页全选
+  $("input[name='all_checked'][type='checkbox']").click(function(){
+ 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+   	} else {
+  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+  	}
+    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+  });
+ 	//子复选框的事件
+ 	$('input[type="checkbox"][name="roleids"]').click(function(){
+ 		//当没有选中某个子复选框时，check-all取消选中
+ 		if (!$(".rolecheck").checked) {
+ 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+ 		}
+ 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+ 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+ 		if (checkedsub == chsub) {
+ 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+ 		}
+    $("#check_count").text(checkedsub);
+ 	});
+  //全部数据全选 DataCheck
+  $("input[name='DataCheck_all'][type='checkbox']").click(function(){
+   if ($("input[name='DataCheck_all'][type='checkbox']").is(":checked")) {
+      $("input[name='roleids'][type='checkbox']").prop("checked",true);
+      $("input[name='all_checked'][type='checkbox']").prop("checked",true);
+    } else {
+      $("input[name='roleids'][type='checkbox']").prop("checked",false);
+      $("input[name='all_checked'][type='checkbox']").prop("checked",false);
+    }
+    $("#check_count").text($("input[name='roleids'][type='checkbox']:checked").length);
+  });
+ </script>
+
+</div>
+
+
+{include file="sms/sms_targer" /}
+
+{/block}

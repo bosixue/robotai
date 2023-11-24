@@ -1,0 +1,124 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="device/dialog" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link  href="/public/css/line.css" type="text/css" rel="stylesheet">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css"/>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/line_management.css"/>
+
+<script>
+    var group_id={$group_id};
+    if(group_id=='')history.go(-1);
+</script>
+
+<style>
+  .nav-tabs>li.active>a,
+  .nav-tabs>li.active>a, 
+  .nav-tabs>li.active>a:hover, 
+  .nav-tabs>li.active>a:focus{
+    border-bottom: 0px!important;
+    cursor: pointer;
+  }
+  
+  .pointer{
+   pointer-events: none; 
+  }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="clearfix fadeInRight animated">
+            <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+                <li role="presentation" class='active' >
+                    <a href="javascript:;" onclick="javascript:history.back(-1);" aria-controls="home" role="tab" data-toggle="tab" >返回列表</a>
+                    <i></i>
+                </li>
+                <li role="presentation" class="pointer"  >
+                    <a href="javascript:;"  role="tab" data-toggle="tab">线路详情</a>
+                </li>
+            </ul>
+
+            <div class="main-box s_padding20 clearfix pz_manping_height">
+                <div class="tab-content">
+                    <!--线路列表-->
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <section class="navbar clearfix">
+                            <div class="form-inline pull-left">
+                                <div class="form-group">
+                                    <label class="statusSelect pull-left" >线路名称：</label>
+                                    <input type="text" class="form-control pull-left l-search" id="line_name" autocomplete="off" placeholder="请输入线路名称" name="keyword" >
+                                </div>
+                                <div class="form-group">
+                                    <span class="btn btn-primary  pull-left" type="button" onclick="query_datas(1,10)">查询</span>
+                                </div>
+                            </div>
+                            <div class="form-inline pull-right " >
+                                <span class="btn btn-primary {$addLineClass}" type="button" onclick="addLine();" id="addButton">添加私有线路</span>
+                            </div>
+                        </section>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="text-center"><input type="checkbox"  class="all_checked_this_page"></th>
+                                    <th class="text-center">序号</th>
+                                    <th class="text-center">线路组名称</th>
+                                    <th class="text-center">线路名称</th>
+                                    <th class="text-center">创建日期</th>
+                                    <th class="text-center">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody id="line_in_group_list">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="component-page-empty" id="consumeempty">
+                            <div class="empty-tip line">
+                                <p><img src="__PUBLIC__/img/none.png" /></p>
+                                <p>暂无数据</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="pull-left h_page checks" style="margin-left:8px">
+                                <input class="all_checked_all_page" name='DataCheck_all' type="checkbox" />全选<i id='totalCount' class='hidden'>（已选中<span id="countNum"></span>条）</i></div>
+                            <div class="paging"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input type='hidden' id='Nowpagehidden' value='{$currentPage}'>
+<input type='hidden' id='Nowlimithidden' value='{$pageLimit}'>
+
+<table id="line_detail_template" class="hidden">
+    <tr>
+        <td class="text-center"><input  type="checkbox"  name="checkid"  class="check_id"></td>
+        <td class="text-center">{%i%}</td>
+        <td class="text-center">{%group_name%}</td>
+        <td class="text-center">{%name%}</td>
+        <td class="text-center">{%create_time%}</td>
+        <td class="text-center" >
+            <a href="javascript:"  onclick="addLine({%id%});" class='{%hidden0%}'>编辑</a>
+            <a href="javascript:" data-title="删除线路" data-id="{%id1%}" onclick="popTipswin(this);"  class='{%hidden1%}'>删除</a>
+        </td>
+
+    </tr>
+
+</table>
+
+<script src="__PUBLIC__/js_manager/line_details.js"></script>
+
+
+
+{include file="sms/sms_targer" /}
+{/block}

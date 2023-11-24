@@ -1,0 +1,50 @@
+
+
+<!--编辑服务费率弹框-->
+<div class="modal fade in" id="edit_service_cost" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false" >
+	  <div class="modal-dialog modal-sm" style="width: 450px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">×</span>
+							</button>
+							<h4 class="modal-title" id=""><span>编辑服务费率</span></h4>
+				 </div>
+				 <div class="modal-body pagelists">
+						<form id="serviceCostform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+								 <div class="form-group ">
+									<label class="col-lg-4 control-label">用户名称：</label>
+									<div class="col-lg-6 col-sm-6">
+                   <label class="control-label" id='edit_username'></label>
+									</div>
+								</div>
+								<div class="form-group ">
+									<label class="col-lg-4 control-label">服务费成本价：</label>
+									<div class="col-lg-6 col-sm-6 ">
+									  <label class="control-label" id='service_cost_cost'>0.0000元/分钟</label>
+									</div>
+								</div>
+								<div class="form-group ">
+									<label class="col-lg-4 control-label" >服务费销售价：</label>
+									<div class="col-lg-6 col-sm-6 l-yuanmm">
+                     <input type="text" class="form-control" id="service_cost_price"  placeholder="请输入服务费销售价">
+									</div>
+								</div>
+								
+                <div class="form-group">
+									<label class="col-lg-4 control-label">备注：</label>
+									<div class="col-lg-6 col-sm-6 l-radio ">
+                    <textarea class="l-textarea form-control" id="service_remark" name="name" rows="5"  placeholder="请输入备注信息"></textarea>
+									</div>
+								</div>
+								<input type="text" hidden  id="only_id_sercice" value="">
+					 </form>
+				 </div>
+				 <div style="clear:both"></div>
+				 <div class="modal-footer">
+						 <button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+             <button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="edit_service_cost()" type="button">确 定</button>
+				</div>
+		 </div>
+    </div>
+	</div>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{$allcinfig.websitename|default=''} AI智能机器人-专业的智能语音客服系统服务商</title>
+	<meta name="keywords" content="{$allcinfig.websitename|default=''} AI智能机器人-专业的智能语音客服系统服务商" />
+  <meta name="description" content="{$allcinfig.websitename|default=''} AI智能机器人-专业的智能语音客服系统服务商" />
+  <meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="Author" content="ruikesoft" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="Shortcut Icon" href="../favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="__CSS__/animate.css" media="all">
+	<link rel="stylesheet" type="text/css" href="__CSS__/login.css?w3" media="all">
+</head>
+<body>
+
+<div id="bg-body">
+	<div class="n_header dflex">
+		<img src="__PUBLIC__/img/AIlogo.png" alt="">
+		<div class="n_headerright">
+			<span><img src="__IMG__/tu01.png" alt="">崇高的价值追求</span>
+			<span><img src="__IMG__/tu02.png" alt="">卓越的研发技术</span>
+			<span><img src="__IMG__/tu03.png" alt="">优秀的解决方案</span>
+		</div>
+	</div>
+	<div class="n_main">
+		<div class="n_mainshow dflex">
+			<img src="__IMG__/banner_2.png" alt="">
+			<div class="l_maindata layui-layout  shake larry-delay2" id="larry_login">
+				<p class="l_datatitle dflex">
+			    <!--<img src="__IMG__/ai.png" alt="">-->
+			    <!--<span>欢迎登录</span>-->
+			    <a href="javascript:;" class="" id='show_login'>账号登录</a>
+			    <!--<i></i>-->
+			    <a href="javascript:;"></a>
+			  </p>
+			  <!--账号登录-->
+				<div class="user-info">
+					<form class="layui-form l_datashow" id="larry_form" >
+						 <div class="layui-form-item">
+						 	  <label class="layui-form-label">
+									<img src="__IMG__/yonghuming_19.png" alt="">
+									<img src="__IMG__/yonghuming.png" alt="">
+								</label>
+						 	  <input type="text" name="username"  class="layui-input larry-input" placeholder="请输入用户名"  autocomplete="off">
+						 </div>
+						 <div class="layui-form-item" id="password">
+						 	  <label class="layui-form-label">
+									<img src="__IMG__/mima.png" alt="">
+									<img src="__IMG__/pwd.png" alt="">
+								</label>
+						 	  <input type="password" name="password"  class="layui-input larry-input" placeholder="请输入密码" autocomplete="off" >
+						 </div>
+		
+						 <div class="layui-form-item larry-verfiy-code" id="larry_code">
+							 <label class="layui-form-label">
+								 <img src="__IMG__/yanzhengma.png" alt="">
+							 </label>
+						 	   <input type="text" name="verify" class="layui-input larry-input" placeholder="请输入验证码"  autocomplete="off">
+						 	   <div class="code">
+						 	   	   <div class="arrow"></div>
+						 	   	   <div class="code-img">
+						 	   	   	<img src="{:url('user/index/verify')}" alt="" id="verifyimg" >
+						 	   	   </div>
+						 	   </div>
+						 </div>
+						 <div class="forgetpw">
+						 	 <a href="javascript:;" onclick="forget_password();">忘记密码？</a>
+						 </div>
+		
+						 <div class="layui-form-item setmargin">
+						 	 <button class="layui-btn " lay-filter="submit" lay-submit>登 录</button>
+						 </div>
+					</form>
+				</div>
+				<!--免费注册-->
+		<!--		<div class="user-info dis_no">-->
+		<!--			<form class="layui-form l_datashow" id="regist_larry_form" >-->
+					<!-- <div class="layui-form-item">-->
+				 <!--	  <label class="layui-form-label">-->
+					<!--		<img src="__IMG__/yonghuming_19.png" alt="">-->
+					<!--		<img src="__IMG__/yonghuming.png" alt="">-->
+					<!--	</label>-->
+				 <!--	  <input type="text" name="regist_username"  class="layui-input larry-input" placeholder="请输入用户名"  autocomplete="off">-->
+				 	  
+				 <!--</div>-->
+		<!--		 <div class="layui-form-item">-->
+		<!--		 	  <label class="layui-form-label">-->
+		<!--					<img src="__IMG__/shoujihao.png" alt="">-->
+		<!--				</label>-->
+		<!--		 	  <input type="text" name="phone" id='register-phone' class="layui-input larry-input" placeholder="请输入手机号码"  autocomplete="off">-->
+		<!--		 </div>-->
+				 <!---->
+		<!--		 <div class="layui-form-item larry-verfiy-code" id="regist_larry_code">-->
+		<!--					 <label class="layui-form-label">-->
+		<!--						 <img src="__IMG__/yanzhengma.png" alt="">-->
+		<!--					 </label>-->
+		<!--				 	   <input type="text" name="verify" class="layui-input larry-input" id='verify_code' placeholder="请输入验证码"  autocomplete="off">-->
+		<!--				 	   <div class="code">-->
+		<!--				 	   	   <div class="arrow"></div>-->
+		<!--				 	   	   <div class="code-img">-->
+		<!--				 	   	   	<img src="{:url('user/index/verify_register')}" alt="" id="regist-verifyimg" >-->
+		<!--				 	   	   </div>-->
+		<!--				 	   </div>-->
+		<!--				 </div>-->
+		<!--		 <div class="dflex">-->
+		<!--			 <div class="layui-form-item" id="regist_phone_larry_code">-->
+		<!--				 <label class="layui-form-label">-->
+		<!--					 <img src="__IMG__/yanzhengma.png" alt="">-->
+		<!--				 </label>-->
+		<!--			 	   <input type="text" name="phone_verify" class="layui-input larry-input" id='sms_verify_code' placeholder="请输入手机验证码"  autocomplete="off">-->
+		<!--			 </div>-->
+		<!--			 <div class="phonecode">-->
+		<!--		 	   	<a href="javascript:;" id='send_sms_verify_code'>获取验证码</a> -->
+		<!--		 	 </div>-->
+		<!--		 </div>-->
+				 
+		<!--		 <div class="layui-form-item" id="setpassword">-->
+		<!--		 	  <label class="layui-form-label">-->
+		<!--					<img src="__IMG__/mima.png" alt="">-->
+		<!--					<img src="__IMG__/pwd.png" alt="">-->
+		<!--				</label>-->
+		<!--		 	  <input type="password" name="setpassword" id='register-password' class="layui-input larry-input" placeholder="请设置登录密码" autocomplete="off" >-->
+		<!--		 </div>-->
+		<!--		 <div class="layui-form-item" id="surepassword">-->
+		<!--		 	  <label class="layui-form-label">-->
+		<!--					<img src="__IMG__/querenmima.png" alt="">-->
+		<!--				</label>-->
+		<!--		 	  <input type="password" name="surepassword" id='register-confirm-password' class="layui-input larry-input" placeholder="请确认登录密码" autocomplete="off" >-->
+		<!--		 </div>-->
+		<!--			 <div class="layui-form-item setmargin">-->
+		<!--		 	 <button class="layui-btn " lay-filter="submit" type='button' id='register' lay-submit>注 册</button>-->
+		<!--		 </div>-->
+		<!--	</form>-->
+		<!--</div>-->
+		<!--<div class="copy-right">© 2016-2017 RK 版权所有 </div>-->
+			</div>
+			<div class="l_maindata layui-layout  shake larry-delay2 dis_no" id="retrieve_password">
+				<p class="l_datatitle dflex">
+			    <a href="javascript:;">找回密码</a>
+			  </p>
+				<div class="user-info">
+					<form class="layui-form l_datashow" id="forget_larry_form" >
+				 <div class="layui-form-item">
+				 	  <label class="layui-form-label">
+							<img src="__IMG__/shoujihao.png" alt="">
+						</label>
+				 	  <input type="text" name="for_phone"  class="layui-input larry-input" placeholder="请输入手机号码"  autocomplete="off">
+				 </div>
+				 <div class="dflex">
+					 <div class="layui-form-item" id="for_larry_code">
+						 <label class="layui-form-label">
+							 <img src="__IMG__/yanzhengma.png" alt="">
+						 </label>
+					 	   <input type="text" name="for_verify" class="layui-input larry-input" placeholder="请输入手机验证码"  autocomplete="off">
+					 </div>
+					 <div class="phonecode">
+				 	   	<a href="javascript:;">获取验证码</a> 
+				 	 </div>
+				 </div>
+				 <div class="layui-form-item" id="for_password">
+				 	  <label class="layui-form-label">
+							<img src="__IMG__/mima.png" alt="">
+							<img src="__IMG__/pwd.png" alt="">
+						</label>
+				 	  <input type="password" name="for_password"  class="layui-input larry-input" placeholder="请设置登录密码" autocomplete="off" >
+				 </div>
+				 <div class="layui-form-item" id="for_surepassword">
+				 	  <label class="layui-form-label">
+							<img src="__IMG__/querenmima.png" alt="">
+						</label>
+				 	  <input type="password" name="for_surepassword"  class="layui-input larry-input" placeholder="请确认登录密码" autocomplete="off" >
+				 </div>
+				 <div class="forgetpw">
+					 	 <a href="javascript:;" onclick="go_login();">去登录></a>
+					 </div>
+				 <div class="layui-form-item setmargin">
+				 	 <button class="layui-btn " lay-filter="submit" lay-submit>确 认</button>
+				 </div>
+			</form>
+		</div>
+			</div>
+		</div>
+	</div>
+	<div class="n_footer dflex">Copyright  All rights reserved. © 2010-2019</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/plugs/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.bcat.bgswitcher.js"></script>
+<script src="__PUBLIC__/js/messager.js"></script>
+<script src="__PUBLIC__/js/login.js" type='text/javascript'></script>
+
+<script type="text/javascript">
+// var srcBgArray = ["__IMG__/3.png","__IMG__/2.jpg"];
+var srcBgArray = ["__IMG__/blackground.png"];
+$(function(){
+	$('body').click(function() {
+		$('.layui-form-item').removeClass('active');
+	});
+	
+	// 登录/注册切换
+	$('.l_datatitle a').click(function(event) {
+		var index = $('.l_datatitle a').index($(this));
+		var data = $('.user-info');
+		$(this).addClass('active').siblings().removeClass('active');
+		data.eq(index).removeClass('dis_no').siblings('.user-info').addClass('dis_no');
+	});
+	
+  var currHeight = ($(document).height()-$('#larry_login').height())/2.5;
+ // $('#larry_login').css("margin-top", currHeight);
+
+
+  // $("#bg-body").bcatBGSwitcher({
+  //   urls: srcBgArray,
+  //   alt: 'Full screen background image'
+  // });
+
+  var verifyimg = $("#verifyimg").attr("src");
+	$("#verifyimg").click(function(){
+		if(verifyimg.indexOf('?')>0){
+			$("#verifyimg").attr("src", verifyimg+'&random='+Math.random());
+		}else{
+			$("#verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+		}
+	});
+
+	$("form").submit(function(){
+		var self = $(this);
+		$.post(self.attr("action"), self.serialize(), success, "json");
+		return false;
+
+		function success(data){
+			if(data.code){
+				//$.messager.show(data.msg, {placement: 'center',type:'success'});
+				setTimeout(function(){
+					window.location.href = data.url;
+				},500);
+			} else {
+				$.messager.show(data.msg, {placement: 'center',type:'warning'});
+				//刷新验证码
+
+				$("#verifyimg").click();
+			}
+		}
+	});
+})
+
+//找回密码
+	function forget_password() {
+		$('#retrieve_password').show();
+		$('#larry_login').hide();
+	}
+	
+	function go_login() {
+		$('#retrieve_password').hide();
+		$('#larry_login').show();
+	}
+
+</script>
+
+</body>
+</html>

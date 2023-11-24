@@ -1,0 +1,270 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+<style type="text/css">
+    .table tbody > tr > td {
+        padding: 9px 8px;
+    }
+
+    .table-responsive {
+        min-height: .01%;
+        overflow-x: hidden;
+    }
+
+    #newModal > .modal-dialog {
+        width: 450px;
+        margin: 30px auto;
+    }
+
+    .textwidth {
+        width: 250px;
+    }
+
+    .n_panel_title img {
+        margin-right: 8px;
+        vertical-align: sub;
+    }
+
+    @media (max-width: 1312px) {
+        .pz_input_width {
+            width: 157px !important;
+        }
+
+        .l-input-width {
+            width: 120px !important;
+        }
+    }
+
+    @media (max-width: 1300px) {
+        .pz_butanniu {
+            margin-top: 0px !important;
+        }
+    }
+
+    @media (max-width: 1241px) {
+        .pz_butanniu {
+            margin-top: 15px !important;
+        }
+
+        .btn.pz_kongxin_anniusty {
+            margin-top: 15px !important;
+        }
+
+        .l-input-width {
+            width: 150px !important;
+        }
+
+        .pz_keywords .form-control.pz_input_width {
+            width: 200px !important;
+            /* margin-top: 15px; */
+        }
+
+        .form-group.pz_keywords {
+            margin-top: 15px;
+        }
+    }
+
+    @media (max-width: 1055px) {
+        .l-input-width {
+            width: 135px !important;
+        }
+    }
+
+    .c_dateSelbg::after {
+        /* content: ''; */
+        width: 15px;
+        height: 15px;
+        background: url(/public/img/xuanzeriqi.png) 100% 100% no-repeat;
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+    }
+
+    .c_datebgimg {
+        background: url(/public/img/xuanzeriqi.png) 94% 50% no-repeat;
+    }
+
+    .c_selectimg {
+        background: url(/public/img_sj/jiantou.png) 94% 50% no-repeat;
+    }
+
+    .resetSel {
+        background-clip: padding-box;
+        border-color: #e0e3e4;
+        color: #404040;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    .navbar {
+        margin-bottom: 8px;
+    }
+</style>
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header n_head_box clearfix">
+                <div class="pull-left">
+                    <span class="n_panel_title" style="line-height: 34px;"><img
+                            src="/public/img/renwutongji.png">查看详情</span>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+                <section class="navbar main-box-header clearfix" style="padding: 7px 0px 9px;">
+                    <div class="clearfix">
+                        <div class="form-inline pull-left pz_formGroup" method="get" role="form">
+                            <div class="form-group">
+                                <label class="statusSelect" style="float:left;padding-top: 8px;">号码查询:</label>
+                                <div class="col-lg-8 col-sm-8">
+                                    <div class="col-lg-12 col-sm-12 c_dateSelbg" style="padding:0px;">
+                                        <input type="text" AUTOCOMPLETE="off" class="form-control l-input-width " placeholder="请输入号码查询" id="phone">
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="btn btn-primary pz_butanniu" type="button" onclick="show_data();">查询</span>
+                            <span class="btn btn-primary pz_kongxin_anniusty" type="button"
+                                  onclick="reset_click();">重置</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">序号</th>
+                            <th class="text-center">通道名称</th>
+                            <th class="text-center">模板名称</th>
+                            <th class="text-center">号码</th>
+                            <th class="text-center">发送状态</th>
+                            <th class="text-center">完成时间</th>
+                        </tr>
+                        </thead>
+                        <tbody id='show_datas'>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="component-page-empty" id="consumeempty">
+                    <div class="empty-tip line">
+                        <p><img src="__PUBLIC__/img/none.png"/></p>
+                        <p>暂无数据</p>
+                    </div>
+                </div>
+                <footer class="main-box-footer clearfix">
+                    <div class="pull-left margintop">
+                        <input class="ppzrolecheck all_checked_count" type="checkbox"/>全选（已选中<span
+                            id='user_count'>0 </span>条详情）
+                    </div>
+                    <div class="text-right pull-right">
+                        <div class="paging clearfix">
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <script type="text/template" id='detail_template'>
+        <tr>
+            <td class="text-center">{%sequence%}</td>
+            <td class="text-center">{%channel_name%}</td>
+            <td class="text-center">{%template_name%}</td>
+            <td class="text-center">{%phone%}</td>
+            <td class="text-center">{%is_state%}</td>
+            <td class="text-center">{%finish_time%}</td>
+        </tr>
+    </script>
+    <script type="text/javascript" src='/public/js/paging.js'></script>
+    <script>
+      var Paging = new Paging01();
+      Paging.init_args({
+          // url:
+          page: 1, //初始页码
+          limit: 10, //初始每页显示的数据量
+          paging_class: 'paging', //放置分页的class
+          callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+      });
+      function getUrlParam(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r!=null) return unescape(r[2]); return null;
+      }
+      show_data();
+      function show_data(page,limit) {
+      var id = getUrlParam('id');
+      if (!page) {
+          page = 1;
+      }
+      if (!limit) {
+          limit = 10;
+      }
+      var data = {};
+      var url = "/user/sms/smsdetail"
+      data.phone = $('#phone').val();
+      data.state = $('#state').val();
+      data.startTime = $('#start_create_time').val();
+      data.endTime = $('#end_create_time').val();
+      data.id = id;
+      data.page = page;
+      data.limit = limit;
+      $.ajax({
+          url: url,
+          dataType: 'json',
+          type: 'post',
+          data: data,
+          success: function(result) {
+              console.log(result);
+              if (result.code === 0) {
+                  var htmls = '';
+                  if (result.data.list.length == 0) {
+                      $('#consumeempty').show();
+                      window.count = 0;
+                  } else {
+                      $('#consumeempty').hide();
+                      var total = result.data.page; //总页数
+                      var Nowpage = result.data.Nowpage; //当前页码
+                      var count = result.data.total; //总条数
+                      window.count = count;
+                      var Nowpage = parseInt(Nowpage);
+                      var i = (Nowpage - 1) * limit + 1;
+                      $.each(result.data.list, function(index, object) {
+                          data.i = i;
+                          var html = $('#detail_template').html();
+                          html = html.replace('{%sequence%}', i);
+                          html = html.replace('{%channel_name%}', object.channel);
+                          html = html.replace('{%template_name%}', object.template);
+                          html = html.replace('{%phone%}', object.phone);
+                          html = html.replace('{%is_state%}', object.is_state);
+                          html = html.replace('{%finish_time%}', object.ok_time);
+                          htmls += html;
+                          i++;
+                      });
+                      //Nowpage  当前页
+                      //count    数据总条数
+                      //total    总共页数
+                      //limit    分页数量
+                      //Paging.paging(当前页码, 总数量, 每页显示的条数)
+                      Paging.paging(Nowpage, count, limit);
+                  }
+                  $('#show_datas').html(htmls);
+                  election();
+              }
+          },
+          error: function(error) {
+              console.log(error);
+              alert('数据获取失败！');
+          }
+      });
+    }
+      
+    </script>
+</div>
+{/block}

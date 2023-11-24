@@ -1,0 +1,658 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link href="/public/css/line.css" type="text/css" rel="stylesheet">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/line_management.css" />
+<script src="__PUBLIC__/js/pubics.js"></script>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="clearfix fadeInRight animated pz_manping_height">
+			<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 10px;">
+				<li role="presentation" class='active'>
+					<a href="#home" aria-controls="home" role="tab" data-toggle="tab">ASR列表</a>
+					<i></i>
+				</li>
+				<li role="presentation">
+					<a href="#ASRAllocate" aria-controls="ASRAllocate" role="tab" data-toggle="tab">ASR分配</a>
+					<i></i>
+				</li>
+				{if session('user_auth.role') == '管理员' || session('user_auth.role') == '运营商'}
+				<li role="presentation">
+					<a href="#Consumption" aria-controls="Consumption" role="tab" data-toggle="tab">ASR统计计费</a>
+				</li>
+				{/if}
+			</ul>
+
+			<div class="main-box s_padding20 clearfix pz_manping_height">
+				<div class="tab-content">
+					<!--ASR列表-->
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<section class="navbar clearfix">
+							<div class="form-inline pull-left">
+								<div class="form-group">
+									<label class="statusSelect pull-left">ASR名称：</label>
+									<input type="text" class="form-control pull-left l-search" autocomplete="off" id="username_list" name="keyword" placeholder="请输入ASR名称">
+								</div>
+								<div class="form-group">
+									<span class="btn btn-primary  pull-left" type="button" onclick="get_asrs();">查询</span>
+									<span class="btn btn-primary  pull-left ant-btn btn-default" type="button" onclick="reset();">重置</span>
+								</div>
+							</div>
+							<div class="form-inline pull-right">
+								{if $role_id neq 17 && $role_id neq 18 }<span class="btn btn-primary add_asr" type="button">添加私有ASR</span>{/if}
+								<a href="#ASRAllocate" class="btn btn-primary" aria-controls="ASRAllocate" role="tab" data-toggle="tab" onclick="switch_lines();">ASR分配</a>
+							</div>
+						</section>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="text-center">序号</th>
+										<th class="text-center">ASR名称</th>
+										<th class="text-center">价格(元/次)</th>
+										<th class="text-center">来源</th>
+										<th class="text-center">操作</th>
+										<th class="text-center">备注</th>
+									</tr>
+								</thead>
+								<tbody id="recharge-recored-list">
+
+								</tbody>
+							</table>
+							<div class="component-page-empty" id="consumeempty">
+								<div class="empty-tip line">
+									<p><img src="__PUBLIC__/img/none.png" /></p>
+									<p>暂无数据</p>
+								</div>
+							</div>
+							<div class="row">
+								<footer class="main-box-footer clearfix col-sm-12 foots">
+									<div class="pull-left">
+										全部数据：<span id='count'></span>
+									</div>
+									<div class="pull-right " id="modalpagebody">
+										<div class=" pull-right" id="consumepage">
+
+										</div>
+										<div class="text-right pull-right paging">
+
+										</div>
+									</div>
+								</footer>
+							</div>
+						</div>
+					</div>
+
+					<!--ASR配置-->
+					<div role="tabpanel" class="tab-pane" id="ASRAllocate">
+						<div class="sectionbg">
+							<section class="navbar l-navbar clearfix sectionstyle">
+								<div class="form-inline pull-left">
+									<!--用户角色筛选-->
+									<!--role_options-->
+									{if count($role_options) > 0}
+									<div class="form-group l-formmargin hide">
+										<label class="control-label">账户类型：</label>
+										<select class="form-control" name="accountsel" id="find_users-role_name">
+											<option value="">请选择账户类型</option>
+											{volist name="role_options" id="role"}
+											<option value="{$role}">{$role}</option>
+											{/volist}
+										</select>
+									</div>
+									{/if}
+									<div class="form-group l-formmargin">
+										<label class="control-label">用户名称：</label>
+										<select class="form-control" name="accountsel" id="find_users-select_user_name">
+											<option value="">请选择用户</option>
+											{volist name="find_users" id="find_user"}
+											<option value="{$find_user['id']}">{$find_user['username']}</option>
+											{/volist}
+										</select>
+									</div>
+									<div class="form-group l-formmargin">
+										<label class="control-label">用户搜索：</label>
+										<input type="text" class="form-control" placeholder="请输入用户名" id='find_users-input_user_name' name="" value="">
+									</div>
+									<div class="form-group formmargin">
+										<button type="button" class="btn btn-primary" name="button" id='find_users-search'>查询</button>
+										<button type="button" class="btn btn-primary ant-btn btn-default" name="button" onclick="reset_asr_distribution();">重置</button>
+									</div>
+								</div>
+							</section>
+						</div>
+						<div class="content">
+							<div class="left-content l-overflow pz_innerbox">
+								<div class="maincontent">
+									<div class="list-title">
+										<p><i class="blueline"></i>账户列表</p>
+									</div>
+									<div class="operator">
+										{volist name="find_users" id="find_user"}
+										<!--高亮 l-account-active-->
+										<div class="l-account" data-name="{$find_user['username']}" data-role_name="{$find_user['role_name']}" data-id="{$find_user['id']}">
+											<span>{$find_user['username']}</span>
+										</div>
+										{/volist}
+									</div>
+								</div>
+							</div>
+							<div class="right-content">
+								<div class="main-head clearfix">
+									{if count($find_users) > 0}
+									<p class="pull-left line-details" id='current_username'><span></span></p>
+									{/if}
+									<button type="button" class="btn btn-primary pull-left" name="button" onclick="show_distribution_popup();">分配ASR</button>
+								</div>
+								<div>
+									<table class="table table-bordered table-hover">
+										<tbody id="distribution-details">
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--/ASR配置-->
+
+					<!--ASR统计计费-->
+
+					<div role="tabpanel" class="tab-pane" id="Consumption">
+						<section class="navbar clearfix">
+							<div class="form-inline pull-left">
+								<div class="form-group">
+									<label class="statusSelect pull-left">ASR名称：</label>
+									<select name="ASRName" id="selectASRName" class="form-control resetSel c_selectimg l-search">
+										<option value="0">请选择ASR名称</option>
+										{volist name="asrs" id="asr"}
+										<option value="{$asr['name']}" data-cost="{$asr['sale_price']}">{$asr['name']}</option>
+										{/volist}
+									</select>
+								</div>
+								<div class="form-group e_headmargin">
+									<label class="statusSelect pull-left">用户名：</label>
+									<input type="text" class="form-control pull-left l-search" autocomplete="off" id="username_details" name="keyword" placeholder="请输入用户名">
+								</div>
+								<div class="form-group">
+									<span class="btn btn-primary  pull-left" type="button" onclick="get_asrs_statistical();">查询</span>
+									<span class="btn btn-primary  pull-left ant-btn btn-default" type="button" onclick="ASR_list_reset();">重置</span>
+								</div>
+							</div>
+							<div class="form-inline pull-right ">
+								<!--<span class="btn btn-primary" type="button" data-title="删除多个线路" onclick="popTipswin(this)">批量删除</span>-->
+							</div>
+						</section>
+						<div class="table-responsive">
+							<table class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th class="text-center">序号</th>
+										<th class="text-center">ASR名称</th>
+										<th class="text-center">用户名称</th>
+										<th class="text-center">用户类型</th>
+										<th class="text-center">语音识别次数</th>
+										<th class="text-center">成本价</th>
+										<th class="text-center">成本总额</th>
+										<th class="text-center">销售价</th>
+										<th class="text-center">销售总额</th>
+										<th class="text-center">利润</th>
+										<th class="text-center">计费时间</th>
+										<th class="text-center">ASR来源</th>
+									</tr>
+								</thead>
+								<tbody id="asr_recored_list">
+
+								</tbody>
+							</table>
+							<div class="component-page-empty" id="consumeemptys">
+								<div class="empty-tip line">
+									<p><img src="__PUBLIC__/img/none.png" /></p>
+									<p>暂无数据</p>
+								</div>
+							</div>
+							<div class="row">
+								<footer class="main-box-footer clearfix col-sm-12 footss">
+									<div class="pull-left" style="line-height: 44px;">
+										全部数据：<span id='jifei_count'></span>条
+									</div>
+									<div class="text-right pull-right asrpaging">
+										<p>总页数：1页</p>
+									</div>
+									<!--<div class="pull-right " id="modalpagebody">-->
+									<!--	<div class=" pull-right"  id="consumepage">-->
+
+									<!--	</div>-->
+
+									<!--</div>-->
+								</footer>
+							</div>
+							<div class="row">
+								<footer class="clearfix col-sm-12">
+									<table class="table table-bordered table-hover sumdata">
+										<thead>
+											<tr>
+												<th class="text-center">合计：</th>
+												<th>总使用次数：<label id="zong_count"></label></th>
+												<th>成本总额：<label id="zonge_cost"></label></th>
+												<th>销售总额：<label id="zonge_Sale"></label></th>
+												<th>总利润：<label id="zong_profit"></label></th>
+											</tr>
+										</thead>
+									</table>
+								</footer>
+							</div>
+						</div>
+					</div>
+
+					<!--/ASR统计计费-->
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--添加、编辑私有ASR-->
+<div class="modal fade in" id="asr-add" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+	<div class="modal-dialog modal-sm" style="width: 450px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="add_editASR"><span>添加私有ASR</span></h4>
+			</div>
+			<div class="modal-body pagelists">
+				<form id="editAsrForm" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+					<input type='hidden' name="asr_id" id='asr_id' value="" />
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">ASR名称:</label>
+						<div class="col-lg-7 col-sm-7">
+							<input type="text" class="form-control" name="name" id="e-asrname" autocomplete="off" placeholder="请输入ASR名称" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">ASR类型:</label>
+						<div class="col-lg-7 col-sm-7">
+							<!--<input type="text" class="form-control" name="name" id="e-type" autocomplete="off" placeholder="请输入ASR名称" />-->
+							<select id="e-type" class="form-control">
+							  <option value="">请选择asr类型</option>
+						    {foreach($support_asr_type as $key=>$value)}
+							  <option value="{$key}">{$value}</option>
+                {/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">项目密钥:</label>
+						<div class="col-lg-7 col-sm-7">
+							<input type="text" class="form-control" name="name" id="e-secret" autocomplete="off" placeholder="请输入项目密钥" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">app key:</label>
+						<div class="col-lg-7 col-sm-7">
+							<input type="text" class="form-control" name="name" id="e-appkey" autocomplete="off" placeholder="请输入app key" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">app-secret:</label>
+						<div class="col-lg-7 col-sm-7">
+							<input type="text" class="form-control" id="e-appsecret" autocomplete="off" placeholder="请输入app secret" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">ASR价格:</label>
+						<div class="col-lg-7 col-sm-7 l-yuanci">
+							<input type="name" class="form-control" id="e-asrprice" autocomplete="off" placeholder="请输入ASR价格" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">备注:</label>
+						<div class="col-lg-7 col-sm-7">
+							<textarea class="textarea-len form-control" name="name" rows="3" autocomplete="off" maxlength="30" id="asrRemarks" placeholder="请输入备注信息，限定30个字以内"></textarea>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div style="clear:both"></div>
+			<div class="modal-footer">
+				<input type="hidden" name="scenariosId" id="scenariosId" value="">
+				<button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+				<button class="btn btn-primary submit-btn btnokprojectile-frame submit-asr" data-type='add' type="button">确 定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--分配ASR-->
+<div class="modal fade in" id="alloction-ASR" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+	<div class="modal-dialog modal-sm" style="width: 450px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel"><span>ASR分配</span></h4>
+			</div>
+			<div class="modal-body pagelists">
+				<form id="asrlistform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">用户名:</label>
+						<div class="col-lg-7 col-sm-7">
+							<label class="control-label" id="username_ASR" user-id=""></label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">选择ASR:</label>
+						<div class="col-lg-7 col-sm-7 l_selectline">
+							<select class="form-control resetSel c_selectimg" id="asr_list" name="">
+								<option value="">请选择ASR</option>
+								{volist name="asrs" id="asr"}
+								<option value="{$asr['id']}" data-cost="{$asr['sale_price']}">{$asr['name']}</option>
+								{/volist}
+							</select>
+						</div>
+					</div>
+					<div class="form-group hidden cost-price">
+						<label class="col-lg-3 col-sm-3 control-label">ASR成本价:</label>
+						<div class="col-lg-7 col-sm-7">
+							<label class="control-label" style="margin-left:15px" id='show_cost'></label>
+						</div>
+					</div>
+					{if session('user_auth.role') != '商家'}
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">ASR销售价:</label>
+						<div class="col-lg-7 col-sm-7 l-yuanci">
+							<input type="text" class="form-control" name="price" id="asr-saleprice" placeholder="请输入ASR价格">
+						</div>
+					</div>
+					{/if}
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">备注:</label>
+						<div class="col-lg-7 col-sm-7 l-radio">
+							<textarea class="textarea-len form-control" name="name" rows="3" maxlength="30" id="asrnotes" placeholder="请输入备注信息，限定30个字以内"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div style="clear:both"></div>
+			<div class="modal-footer">
+				<input type='hidden' id='find_user_id' value="" />
+				<button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+				<button class="btn btn-primary submit-btn btnokprojectile-frame" id='asr_distribution_submit' type="button">确 定</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--ASR管理中ASR分配弹框-->
+<div class="modal fade in" id="alloction-ASR" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="false">
+	<div class="modal-dialog modal-sm" style="width: 450px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel"><span>分配ASR</span></h4>
+			</div>
+			<div class="modal-body pagelists">
+				<form id="asrlistform" method="post" class="form-horizontal margintop" enctype="multipart/form-data">
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">用户名称:</label>
+						<div class="col-lg-7 col-sm-7">
+							<label class="control-label current_username">yunyingshang01</label>
+						</div>
+					</div>
+					<div class="form-group" style="padding-top:9px">
+						<label class="col-lg-3 col-sm-3 control-label">选择ASR:</label>
+						<div class="col-lg-7 col-sm-7 l_selectline">
+							<select class="form-control resetSel c_selectimg" name="">
+								<option value="">请选择ASR</option>
+								{volist name="asrs" id="asr"}
+								<option value="{$asr['id']}">{$asr['name']}</option>
+								{/volist}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">ASR成本价:</label>
+						<div class="col-lg-7 col-sm-7">
+							<label class="control-label" style="margin-left:15px">0.02元/次</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">ASR销售价:</label>
+						<div class="col-lg-7 col-sm-7 l-yuanci">
+							<input type="text" class="form-control" name="price" id="asr-saleprice">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 col-sm-3 control-label">备注:</label>
+						<div class="col-lg-7 col-sm-7 l-radio">
+							<textarea class="textarea-len form-control" name="name" rows="3" maxlength="30" id="asrnotes" placeholder="请输入备注信息，限定30个字以内"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div style="clear:both"></div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btncloseprojectile-frame" data-dismiss="modal">取消</button>
+				<button class="btn btn-primary submit-btn btnokprojectile-frame" onclick="" type="button">确 定</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--招商列表下，ASR管理-->
+<script type="text/template" id='asr_template'>
+	<tr>
+    <td class="text-center">{%key%}</td>
+    <td class="text-center">{%name%}</td>
+    <td class="text-center">{%sale_price%}</td>
+    <td class="text-center">{%p_name%}</td>
+    <td class="text-center">
+    	<!-- <a href="javascript:void(0);" onclick="displayUser({%id%});">查看用户名单&nbsp;&nbsp;&nbsp;</a>-->
+    	{if $role_id neq 18 && $role_id neq 17}<a href="javascript:void(0);" data-id="{%id%}" id="edit-asr-{%id%}" class="edit_asr">编辑&nbsp;&nbsp;&nbsp;</a>{/if}
+      <a href="javascript:void(0);" data-title="删除单个ASR" data-id="{%id%}" id="del-asr-{%id%}" onclick="popTipswin(this);">删除</a>
+    </td>
+    <td class="text-center">{%note%}</td>
+	</tr>
+ </script>
+<script type="text/template" id='asr_distribution_template'>
+	<tr>
+		<td><b>ASR名称：</b>{%asr_name%}</td>
+		<td><b>成本价：</b>{%cost%}元/次</td>
+		{if session('user_auth.role') != '商家'}
+		<td><b>销售价：</b>{%sales_price%}元/次</td>
+		{/if}
+		<td><b>分配时间：</b>{%create_time%}</td>
+		<td  class="remarktab"><b>备注：</b>{%note%}</td>
+		<td>
+			<a href="javascript:;" data-title="删除用户ASR" onclick="popTipswin(this)" data-id="{%id%}"><img src="__PUBLIC__/img_sj/del.png" alt=""></a>
+		</td>
+	</tr>
+ </script>
+<script type="text/javascript">
+	//当前页全选
+	$("input[name='all_checked'][type='checkbox']").click(function() {
+		if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+			$("input[name='roleids'][type='checkbox']").prop("checked", true);
+		} else {
+			$("input[name='roleids'][type='checkbox']").prop("checked", false);
+		}
+	});
+	//子复选框的事件
+	$('input[type="checkbox"][name="roleids"]').click(function() {
+		//当没有选中某个子复选框时，check-all取消选中
+		if (!$(".rolecheck").checked) {
+			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+		}
+		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+		if (checkedsub == chsub) {
+			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+		}
+	});
+</script>
+<!--ASR统计计费  表格模板-->
+<script type="text/template" id='asr_recored_template'>
+	<tr>
+	    <td class="text-center">{%key%}</td>
+	    <td class="text-center">{%asr_name%}</td>
+	    <td class="text-center">{%asr_username%}</td>
+	    <td class="text-center">{%username_type%}</td>
+	    <td class="text-center">{%voice_frequency%}</td>
+	    <td class="text-center">{%cost_price%}</td>
+	    <td class="text-center">{%total_cost%}</td>
+	    <td class="text-center">{%selling_price%}</td>
+	    <td class="text-center">{%total_selling%}</td>
+	    <td class="text-center">{%profit%}</td>
+	    <td class="text-center">{%charging_time%}</td>
+	    <td class="text-center">{%asr_source%}</td>
+		</tr>
+	</script>
+
+<script type="text/javascript">
+	function allocation_ASR() {
+		$('#alloction-ASR').modal('show');
+		var user = $('.l-account.l-account-active').data('name');
+		$('#username_ASR').text(user);
+	}
+
+	function displayUser() {
+		$('#user_list').modal('show');
+	}
+</script>
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/new_index.css">
+<!-- 提示模板框 -->
+<div class="modal fade" id="tips_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+<!-- 弹窗模板 -->
+<script type="text/template" id="popTips">
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					{{tipstitle}}
+				</h4>
+			</div>
+			<div class="modal-body">
+				{{tipsdata}}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" data-id="{{id}}" class="btn btn-primary" onclick="{{clickfun}}">
+					确认
+				</button>
+			</div>
+		</div>
+	</div>
+</script>
+<!-- 弹窗展示 -->
+<script type="text/javascript">
+	function popTipswin(obj) {
+		//获取弹窗标题
+		var poptitle = $(obj).attr('data-title');
+		switch (poptitle) {
+			case '删除单个ASR': // 待处理
+				var title = '操作提示';
+				var note = '确定删除该ASR？';
+				var click = 'delete_asr(this);';
+				break;
+			case '删除用户ASR': // 待处理
+				var title = '操作提示';
+				var note = '确定删除当前用户的ASR？';
+				var click = 'delete_find_asr(this);';
+				break;
+		}
+		//获取asrID
+		var asr_id = $(obj).data('id');
+		template = $("#popTips").html();
+		template = template.replace("{{tipstitle}}", title);
+		template = template.replace("{{tipsdata}}", note);
+		template = template.replace("{{clickfun}}", click);
+		template = template.replace('{{id}}', asr_id);
+		//追加
+		$('#tips_model').html(template);
+		$('#tips_model').modal('show');
+	}
+
+	//导出文件
+	function n_listdataout() {
+		$('#tips_model').modal('hide');
+	}
+
+	function switch_lines() {
+		$('.nav-tabs>li:nth-of-type(2)').addClass('active').siblings().removeClass('active');
+	}
+
+	// $(".operator .l-account").hover(function(){
+	// 	alert("2");
+	// 	 // $(this).addClass('l-active').siblings().removeClass('l-active');
+	// });
+</script>
+<script type="text/javascript" src="/public/js/paging.js"></script>
+<script type="text/javascript" src="/public/js/asr.js"></script>
+
+
+<!--确认添加ASR弹框-->
+<div class="modal fade in" id="add-tips" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:350px; top:15%">
+		<div class="modal-content modal-contenttips">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="myLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body ASR-content">
+				确认添加该私有ASR？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary " onclick="add_asr();">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--/确认添加ASR弹框<-->
+<div class="modal fade in" id="update-tips" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="false">
+	<div class="modal-dialog" style="width:350px; top:15%">
+		<div class="modal-content modal-contenttips">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="myLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body ASR-content">
+				确认修改该私有ASR？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-primary " onclick="update_asr();">确认</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{/block}

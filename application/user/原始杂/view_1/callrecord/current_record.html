@@ -1,0 +1,264 @@
+{extend name="public/base" /} {block name="body"}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js_manage/account_manage.js"></script>
+<link href="/public/css/callrecord.css" rel="stylesheet" type="text/css">
+<div class="row">
+    <div class="col-lg-12">
+        <div class=" clearfix fadeInRight animated">
+            <div class=" main-box">
+                <header class="main-box-header clearfix  callrecord-title">
+                    <div class="pull-left"> <span class="n_panel_title"><img src="__PUBLIC__/img/tonghuajilu1.png" alt="">当前通话记录</span>
+
+                    </div>
+                    <div class="pull-right">
+                        <input type="text" class="form-control" placeholder="请输入号码查询" />
+                    </div>
+                </header>
+            </div>
+            <div class="container-fluid callrecord-bg">
+                <div class="callrecord-bg2">
+                    <section class="navbar ">
+                        <div class="form-inline pull-left ">
+                            <div class="form-group ">
+                                <label class="contorl-label">任务筛选1：</label>
+                                <select class="form-control">
+                                    <option value="">请选择任务</option>
+                                    <option value="">任务1</option>
+                                    <option value="">任务2</option>
+                                </select>
+                            </div>
+                            <div class="form-group ">
+                                <label class="contorl-label">话术筛选：</label>
+                                <select class="form-control">
+                                    <option value="">请选择话术</option>
+                                    <option value="">话术1</option>
+                                    <option value="">话术2</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="contorl-label">拨打时间：</label>
+                                <input type="text" class="form-control c_datebgimg" placeholder="开始拨打时间" id="startDate" name="startDate" value="" readonly="" />
+                                <script>
+                                $('#startDate').fdatepicker({
+                                    format: 'yyyy-mm-dd hh:ii',
+                                    pickTime: true
+                                });
+                                </script> <span class="z-word">至</span>
+
+                                <input type="text" class="form-control c_datebgimg" placeholder="结束拨打时间" id="endTime" name="endTime" value="" readonly="" />
+                                <script>
+                                $('#endTime').fdatepicker({
+                                    format: 'yyyy-mm-dd hh:ii',
+                                    pickTime: true
+                                });
+                                </script>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary">查询</button>
+                            </div>
+                        </div>
+                    </section>
+                    <div class="screening-conditions">
+                        <div class="left-condition ">
+                            <div class="condition-title">
+                                <img src="__PUBLIC__/img/tiaojianshaixuan.png"> <span>条件筛选</span>
+
+                                <div class="pull-right"> <a href="javascript:;" onclick="moreCondition();">更多条件</a>
+
+                                </div>
+                            </div>
+                            <div class="condition-content">
+                                <div class="form-inline">
+                                    <div class="form-group l-width c_dflex" style="margin-top:5px;">
+                                        <label class="levelSelect statusSelect">意向等级:</label>
+                                        <div class="formgroup statusSelect c_dflex_1">
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="6"> <span class="word">A级意向</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">B级意向</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="4">	<span class="word">C级意向</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="3">	<span class="word">D级意向</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="2">	<span class="word">E级意向</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="1">	<span class="word">F级意向</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group l-width c_dflex" style="margin-top:5px;">
+                                        <label class="levelSelect statusSelect">语义标签:</label>
+                                        <div class="formgroup statusSelect c_dflex_1">
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="6"> <span class="word">炒股</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">炒股</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="4">	<span class="word">炒股</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group l-width c_dflex" style="margin-top:5px;">
+                                        <label class="levelSelect statusSelect">流程标签:</label>
+                                        <div class="formgroup statusSelect c_dflex_1">
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="6"> <span class="word">加微信</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">咨询</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="4">	<span class="word">感兴趣</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="3">	<span class="word">D级意向</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-inline">
+                                    <div class="form-group l-width c_dflex" style="margin-top:5px;">
+                                        <label class="levelSelect statusSelect">问答标签:</label>
+                                        <div class="formgroup statusSelect c_dflex_1">
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="6"> <span class="word">问公司</span>
+
+                                            </div>
+                                            <div class="checkbox-wrapper radio_t" data-type="false">
+                                                <input type="checkbox" name="levelcheck" class="levelcheck" value="5">	<span class="word">问业务</span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="record-list">
+                                <div class="record-list-title">
+                                    <img src="__PUBLIC__/img/jiluliebiao.png"> <span>记录列表</span>
+
+                                    <button type="button" class="btn btn-primary">查询</button>
+                                    <div class="btn-op pull-right">
+                                        <button type="button" class="btn btn-primary">加入CRM</button>
+                                        <button type="button" class="btn btn-primary">导出话单</button>
+                                        <button type="button" class="btn btn-primary">导出号码</button>
+                                        <button type="button" class="btn btn-primary">新建任务拨打</button>
+                                    </div>
+                                </div>
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">
+                                                <input class="icheckbox_square-blue" id="member_all_check" type="checkbox" name='all_checked'>
+                                            </th>
+                                            <th class="text-center">序号</th>
+                                            <th class="text-center">手机号码</th>
+                                            <th class="text-center">通话时长(S)
+                                                <div class="sort"><i data-type='duration' data-value='desc' class="first gray-color"></i><i data-type='duration' data-value='asc' class="second gray-color1"></i>
+
+                                                </div>
+                                            </th>
+                                            <th class="text-center">状态</th>
+                                            <th class="text-center">意向等级</th>
+                                            <th class="text-center">任务名称</th>
+                                            <th class="text-center">话术名称</th>
+                                            <th class="text-center">拨打时间
+                                                <div class="sort"><i data-type='call_time' data-value='desc' class="first active-selected"></i><i data-type='call_time' data-value='asc' class="second gray-color1"></i>
+
+                                                </div>
+                                            </th>
+                                            <th class="text-center">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tablepagelist">
+                                        <tr>
+                                            <td class="text-center">
+                                                <input class="icheckbox_square-blue" id="member_all_check" type="checkbox" name='all_checked'>
+                                            </td>
+                                            <td class="text-center">1</td>
+                                            <td class="text-center">187XXXXXXXX</td>
+                                            <td class="text-center">58S</td>
+                                            <td class="text-center">已接通</td>
+                                            <td class="text-center">A级意向</td>
+                                            <td class="text-center">任务1</td>
+                                            <td class="text-center">测试</td>
+                                            <td class="text-center">2019-03-06 8:00</td>
+                                            <td class="text-center"> <a href="javascript::">未查看</a>
+ <a href="javascript::">加入CRM</a>
+ <a href="javascript::">加入呼叫</a>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="right-condition pz_innerbox">
+                            <div class="grade-title">
+                                <img src="__PUBLIC__/img/yixiangdengji.png"> <span>意向等级</span>
+
+                            </div>
+                            <div class="grade">
+                                <label>A级</label>
+                                <p>通话时长 > 40S</p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+                            <div class="grade">
+                                <label>B级</label>
+                                <p>通话时长 > 40S</p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+                            <div class="grade">
+                                <label>C级</label>
+                                <p>通话时长 > 40S</p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+                            <div class="grade">
+                                <label>D级</label>
+                                <p>通话时长 > 40S</p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+                            <div class="grade">
+                                <label>E级</label>
+                                <p>通话时长 > 40S</p>
+                                <p>肯定次数 > 5次</p>
+                                <p>处罚问题次数 > 1次</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>{include file="callrecord/dialog" /}
+<script type="text/javascript" src="__PUBLIC__/js_callrecord/current_record.js"></script>{/block}

@@ -1,0 +1,423 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/new_index.css">
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<style>
+	.form-group{
+    margin-bottom: 0px!important;
+	}
+@media (max-width: 1386px){
+	.c_dateSelbg input {
+	    width: 135px ;
+	}
+	.c_marleft {
+    margin-left: 9px;
+	}
+}
+@media (max-width: 1310px){
+	.formgroup {
+	    margin-left: 10px;
+	    margin-right: 6px;
+	}
+	.pz_zhi{
+		margin:0px 10px !important;
+	}
+	.c_marleft {
+    margin-left: 20px;
+	}
+	.c_dateSelbg input {
+    width: 170px;
+	}
+	.c_seldate select {
+    width: 180px !important;
+    padding: 0px 14px;
+	}
+	.form-group.c_marleft.pz_fasong{
+		margin-right: 40px;
+    margin-left: 40px;
+	}
+	.form-group.c_marleft.pz_shouji{
+		margin-left:0px;
+		margin-top:10px;
+	}
+	.dis_in.c_marleft.pz_anniu{
+		margin-top:10px;
+	}
+
+	.c_dateSelbg input {
+    width: 150px !important;
+	}
+}
+@media (max-width: 1051px){
+	.form-group.c_marleft.pz_fasong {
+    margin-right: 20px;
+    margin-left: 20px;
+	}
+	.c_dateSelbg input {
+    width: 150px;
+	}
+}
+.pz_zhi{
+	margin:0px 4px;
+}
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><img src="__PUBLIC__/img/pz_qianming.png" alt="">发送记录</span>
+		  </div>
+			<a class="btn s_addnew pull-right" href="javascript:void(0);" data-title="导出文件" onclick="importdata();">导出文件</a>
+			<a class="btn s_addnew pull-right" data-title="批量删除"  onclick="popTipswin(this);" target-form="ids">批量删除</a>
+		</header>
+
+
+		<div class="main-box-body clearfix">
+	     <section class="navbar clearfix">
+	         <div class="pull-left">
+						 <form method="get" role="form">
+								<div class="form-group c_seldate clearfix">
+									 <!-- 发送时间 -->
+									 <label class="levelSelect statusSelect">发送时间:</label>
+									 <div class="formgroup">
+										 <div class="dis_in c_dateSelbg pr">
+											 <input type="text" class="form-control pz_lwithdsz c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+											 <script>
+													 $('#startDate').fdatepicker({
+														 format: 'yyyy-mm-dd',
+														 // pickTime: true
+													 });
+											 </script>
+										 </div>
+										 <span class="pz_zhi">至</span>
+										 <div class="dis_in c_dateSelbg pr">
+											 <input type="text" class="form-control pz_lwithdsz c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+											 <script>
+												 $('#endTime').fdatepicker({
+													 format: 'yyyy-mm-dd',
+													 // pickTime: true
+												 });
+											 </script>
+										 </div>
+									 </div>
+
+									 <!-- 发送状态 -->
+									 <div class="form-group dis_in c_marleft c_selectset pr pz_fasong">
+										 <label class="levelSelect statusSelect">发送状态:</label>
+										 <div class="formgroup">
+											 <select name="status" id="status" class="form-control resetSel pz_lwithdsz c_selectimg">
+		 											<option value=" " selected="">全部</option>
+		 											<option value="0">失败</option>
+		 											<option value="1">成功</option>
+		 										</select>
+										 </div>
+									 </div>
+
+									 <!-- 手机号码 -->
+									 <div class="form-group dis_in c_marleft pz_shouji">
+										 <label class="levelSelect statusSelect">手机号码:</label>
+										 <div class="formgroup">
+										 	<input type="text" class="form-control pz_lwithdsz" id="mobile" name="mobile" placeholder="请输入手机号码进行查询">
+										 </div>
+									 </div>
+
+									 <!-- 查询、重置按钮 -->
+		 							<div class="dis_in c_marleft pz_anniu">
+		 								<div class="btn btn-primary"  onclick="show_data();">查询</div>
+		 								<div class="btn btn-default " onclick="reset_click();">重置</div>
+		 							</div>
+
+								</div>
+						</form>
+			    </div>
+		   </section>
+
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+				   	<!--销售-->
+					    <tr>
+								<th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>
+								<th class="text-center">序号</th>
+								<th class="text-center">手机号</th>
+								<th class="text-center">短信类型</th>
+								<th class="text-center">短信内容</th>
+								<th class="text-center">任务名称</th>
+								<th class="text-center">计费(元)</th>
+								<th class="text-center">发送时间</th>
+								<th class="text-center">发送状态</th>
+								<th class="text-center">操作</th>
+					    </tr>
+					    <!--/销售-->
+					    
+					    
+					    <!--运营商-->
+					   <!-- <tr>-->
+								<!--<th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>-->
+								<!--<th class="text-center">序号</th>-->
+								<!--<th class="text-center">手机号</th>-->
+								<!--<th class="text-center">模板ID</th>-->
+								<!--<th class="text-center">计费(元)</th>-->
+								<!--<th class="text-center">发送时间</th>-->
+								<!--<th class="text-center">发送状态</th>-->
+					   <!-- </tr>-->
+					    <!--/运营商-->
+				    </thead>
+				   <tbody id="tablepagelist">
+				    </tbody>
+				  </table>
+					<div class="component-page-empty" id="consumeempty">
+						<div class="empty-tip line">暂无数据</div>
+					</div>
+			  </div>
+				<footer class="main-box-footer clearfix">
+					<div class="row">
+						<div class="col-sm-3 text-left"><input class="check-all all_checked_count" name='DataCheck_all' type="checkbox"/>全选（已选中<span id="user_count">0</span>条发送记录）</div>
+						<div class="col-sm-9 text-right paging"></div>
+					</div>
+				</footer>
+		</div>
+
+	</div>
+
+
+
+</div>
+</div>
+<!--导出弹窗-->
+<div class="modal fade in" id="import-data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" >
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					操作提示
+				</h4>
+			</div>
+			<div class="modal-body contenttips">
+				确定导出该数据？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消			</button>
+				<button type="button" class="btn btn-primary" onclick="import_sms_record();">		确认			</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script id='operator_list' type='text/tepmate'>
+	<tr>
+		<td><input type="checkbox" name="checkids" class="checkids" value="{%id%}"/></td>
+		<td class="text-center">{%serial%}</td>
+		<td class="text-center">{%mobile%}</td>
+		<td class="text-center">{%sms_type%}</td>
+		<td class="text-center" style="width:25%;">{%content%}</td>
+		<td class="text-center">{%task_id%}</td>
+		<td class="text-center">{%money%}</td>
+		<td class="text-center">{%create_time%}</td>
+		<td class="text-center">{%status%}</td>
+		<td class="text-center">
+			<a href="javascript:void(0);" data-title="删除记录" data-id="{%id%}" onclick="popTipswin(this);">删除</a>
+		</td>
+	</tr>
+</script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type="text/javascript">
+	var Paging = new Paging01();
+		Paging.init_args({
+		// url:
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+	show_data();
+ //show_data();
+ function show_data(page,page_size){
+ 	var data = {};
+ 	data.mobile = $('#mobile').val();
+ 	data.statusz = $('#status').val();
+ 	data.startDate = $('#startDate').val();
+ 	data.endTime = $('#endTime').val();
+ 	console.log(data);
+ 	if(!page){
+ 		page = 1;
+ 	}
+ 	if(!page_size){
+ 		page_size = 10;
+ 	}
+ 	data.page = page;
+ 	data.page_size = page_size;
+ 	var url = "{:url('ajax_sendrecord')}"
+ 	$.ajax({
+			url: url,
+			dataType: 'json',
+			type: 'post',
+			data: data,
+			success: function(result) {
+				console.log(result);
+				var htmls = '';
+				if(result.code == 0){
+					if(result.data.list.length == 0){
+						$('.main-box-footer').hide();
+						$('#consumeempty').show();
+						window.count = 0;
+					}else{
+						$('#consumeempty').hide();
+						$('.main-box-footer').show();
+						var total = result.data.page;   //总页数
+						var Nowpage = result.data.Nowpage;  //当前页码
+						var count  = result.data.total;  //总条数
+						window.count = count;
+						Nowpage = parseInt(Nowpage);
+						var i = (Nowpage - 1) * page_size + 1;
+						$.each(result.data.list, function(index, object) {
+							data.i = i;
+							var html = $('#operator_list').html();
+							html = html.replace('{%id%}', object.id);
+							html = html.replace('{%serial%}', i);
+							html = html.replace('{%mobile%}', object.mobile);
+							html = html.replace('{%sms_type%}', object.sms_type);
+							html = html.replace('{%content%}', object.content);
+							html = html.replace('{%task_id%}',object.task_id);
+							html = html.replace('{%money%}',object.money+'元');
+							html = html.replace('{%create_time%}',object.create_time);
+							html = html.replace('{%status%}',object.status);
+							html = html.replace('{%id%}', object.id);
+							htmls += html;
+							i++;
+						})
+					}
+					$('#tablepagelist').html(htmls);
+					Paging.paging(Nowpage, count, page_size);
+					election();
+				}
+			}
+		})
+ }
+		
+ $(function(){
+ })
+		function delRole(id){
+			console.log(id)
+			var data = {};
+			data.type = 0 ;
+			var arr = new Array();
+			var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+			if(checkedsub > 0 || id !=''){
+				if($('.all_checked_count').is(':checked')){
+					data.type = 1 ;
+				}
+				if($("input[name='checkids'][type='checkbox']").is(':checked')){
+		    	$("input[name='checkids'][type='checkbox']").each(function(i){
+						if($(this).context.checked == true){
+								arr[i] = $(this).val();
+						}
+					});
+					data.vals = arr.join();
+	    	}
+	    	if(id){
+	    		data.id = id; 
+	    	}
+	    	console.log(data);
+	    	var url = "{:url('del_message')}";
+	    	$.ajax({
+		  		type:'POST',
+		  		data: data,
+		  		dataType:'json',
+		  		url:url,
+		  		success:function(data){
+		  			console.log(data);
+		  			if(data.code == 0){
+		  				alert(data.msg);
+		  				$('#tips_model').modal('hide');
+		  				show_data();
+		  			}else{
+		  				alert(data.msg);
+		  				$('#tips_model').modal('hide');
+		  			}
+		  		},
+		  		error:function(e){
+		  			alert('数据提交失败！');
+		  		}
+		  	});
+			}else{
+				alert('请选择批量删除的数据');
+			}
+		}
+	//重置
+	function reset_click(){
+		$('input[name="startDate"]').val("");//开始日期
+		$('input[name="endTime"]').val("");//结束日期
+		$('select[name="status"] option:eq(0)').prop("selected", 'selected');//发送状态
+		$('input[name="mobile"]').val("");//手机号码
+		show_data();
+	}
+ </script>
+<!--导出-->
+<script>
+function importdata(){
+		if($("input[name='checkids'][type='checkbox']:checked").length == 0){
+	 		alert("请至少选择一条数据");
+	 	}else{
+	 		$('#import-data').modal('show');
+	 	}
+	}
+	var excel_statelist = true;
+	function import_sms_record(){
+		$('#import-data').modal('hide');
+ 		if(excel_statelist === true){
+ 			//将导出状态值改为false
+ 			excel_statelist = false;
+ 			//定义路径
+ 			var url = "{:url('export_sms_sendrecord')}";
+ 			//定义传递的参数
+ 			var data = {};
+ 			//判断是否全部选中
+ 			if($('.all_checked_count').is(":checked")){  //导出所有数据
+ 				data.export_type = 1;
+ 			}else{
+ 				data.export_type = 0;
+ 			}
+		 	data.mobile = $('#mobile').val();
+		 	data.statusz = $('#status').val();
+		 	data.startDate = $('#startDate').val();
+		 	data.endTime = $('#endTime').val();
+			
+ 			//获取选中的id
+ 			var usercheck = [];
+			$.each($("input[name='checkids'][type='checkbox']:checked"), function(index, object){
+ 				usercheck.push($(object).val());
+ 			});
+ 			data.usercheck = usercheck;
+ 			console.log(usercheck);
+ 			$.post(url,data,
+ 			function(result){
+ 				console.log(result);
+ 				if(result.code === 0){
+ 					window.location.href = result.data;
+ 					// alert('导出成功');
+ 				}else{
+ 					alert('导出失败');
+ 				}
+ 				excel_statelist = true;
+
+ 			});
+ 		}
+	}
+</script>
+
+
+
+{include file="sms/sms_targer" /}
+{/block}

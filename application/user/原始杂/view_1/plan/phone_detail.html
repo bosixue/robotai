@@ -1,0 +1,82 @@
+{extend name="public/base" /} {block name="body"} {include file="device/dialog" /}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script type="text/javascript" src='__PUBLIC__/js_task/phone_manage.js'></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<link href="/public/css/line.css" type="text/css" rel="stylesheet">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/enterpriseA.css" />
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/phone_management.css" />
+<div class="row">
+    <div class="col-lg-12">
+        <div class="clearfix fadeInRight animated">
+            <div class="main-box s_padding20 clearfix pz_manping_height">
+                <div class="tab-content">
+                    <!--号码组-->
+                    <div role="tabpanel" class="tab-pane active" id="home">
+                        <section class="navbar clearfix">
+                            <div class="form-inline pull-left phone-manage">
+                                <div class="form-group">
+                                    <label class="statusSelect pull-left">号码查询：</label>
+                                    <input type="text" class="form-control pull-left " id="groupName" autocomplete="off" placeholder="请输入组名称" name="keyword">
+                                </div>
+                                <div class="form-group"> <span class="btn btn-primary  pull-left" type="button" onclick="ajaxInfo()">查询</span>
+                                </div>
+                            </div>
+                            <div class="form-inline pull-right "> 
+                                <span class="btn btn-primary width100" type="button" data-title="删除号码组" onclick="popTipswin(this);">批量删除</span>
+                            </div>
+                        </section>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            <input class=" check-all" type="checkbox" name="all_checked">
+                                        </th>
+                                        <th class="text-center">序号</th>
+                                        <th class="text-center">所属组别</th>
+                                        <th class="text-center">号码</th>
+                                        <th class="text-center">姓名</th>
+                                        <th class="text-center">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="number-list">
+                                    <tr>
+                                        <td class="text-center">
+                                            <input class=" check-all" type="checkbox" name="all_checked">
+                                        </td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-center">金融1组</td>
+                                        <td class="text-center">400</td>
+                                        <td class="text-center">2019-10-30 12:23:22</td>
+                                        <td class="text-center"><a href="javascript:;" data-title="删除单个号码" onclick="popTipswin(this);">删除</a>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <input type="hidden" value="" id="saveNowpage">
+                            <footer class="main-box-footer clearfix col-sm-12"></footer>
+                            <div class="pull-left h_page" style="margin-left:8px">
+                                <input type="checkbox" class="member_check rolecheck all_checked_count" name="all_checked">全 选</div>
+                            <div class="paging"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{include file="sms/sms_targer" /}
+{include file="plan/dialog" /}
+{/block}
+
+
+

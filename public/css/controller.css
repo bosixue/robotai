@@ -1,0 +1,1560 @@
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.clearfix:after, .clearfix:before {
+    display: table;
+    content: ''
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.pr {
+    position: relative;
+}
+
+#content-wrapper {
+    /*padding: 20px 0px 0px;*/
+    padding: 0px;
+}
+
+.panel-top {
+    padding-top: 7px;
+    /*padding-left: 10px;*/
+}
+
+.panel-title {
+    color: #000;
+}
+
+.panel-title img {
+    margin-right: 10px;
+    vertical-align: sub;
+}
+
+.panel {
+    /* border: solid 1px #eaeaea; */
+    border: none !important;
+    border-radius: 0px;
+    box-shadow: none;
+}
+
+.c_dialstatistic {
+    margin-top: 29px;
+    padding-left: 0px;
+    margin-bottom: 20px;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+}
+
+.c_dialstatistic li {
+    display: inline-block;
+    width: 15.5%;
+    /* height: 174px; */
+    /*min-width: 275px;*/
+    margin-right: 1.4%;
+    /* margin-bottom: 25px; */
+    /* background: url(../images/controll/blue.png) 100% 100% no-repeat; */
+    background-size: 100% 100%;
+    padding: 24px 23px;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    justify-content: center;
+    -webkit-justify-content: center;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    border-bottom: 2px solid #d9dee4;
+}
+
+.c_dialstatistic.sj_c_dialstatistic li {
+    display: inline-block;
+    width: 18.8%;
+    /* height: 174px; */
+    /*min-width: 275px;*/
+    margin-right: 1.5%;
+    /* background: url(../images/controll/blue.png) 100% 100% no-repeat; */
+    background-size: 100% 100%;
+    padding: 24px 23px;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    justify-content: center;
+    -webkit-justify-content: center;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    border-bottom: 2px solid #d9dee4;
+}
+
+/* .c_dialstatistic li:nth-of-type(2) {
+  background: url(../images/controll/orange.png) 100% 100% no-repeat;
+  background-size: 100% 100%;
+}
+.c_dialstatistic li:nth-of-type(3) {
+  background: url(../images/controll/purple.png) 100% 100% no-repeat;
+  background-size: 100% 100%;
+}
+.c_dialstatistic li:nth-of-type(4) {
+  background: url(../images/controll/green.png) 100% 100% no-repeat;
+  background-size: 100% 100%;
+  margin-right: 0px;
+} */
+.c_dialstatistic li:last-child {
+    margin-right: 0px;
+}
+
+.c_dialstatistic li p {
+    font-size: 20px;
+    color: #404447;
+    text-align: center;
+}
+
+.c_dialstatistic li p.pz_dataTitle {
+    text-align: left;
+    margin-bottom: 27px;
+}
+
+.c_dialstatistic li p span {
+    margin-left: 8px;
+}
+
+.c_countdetail a {
+    width: 50px;
+    line-height: 23px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: solid 1px #ffffff;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    margin-left: 25px;
+}
+
+.c_recharge {
+    /* margin-top: 10px; */
+}
+
+.c_recharge .c_rechargeZongshu p {
+    text-align: left;
+}
+
+.c_recharge .c_rechargeZongshu p:first-child {
+    color: #404447;
+    font-size: 18px;
+    padding: 0;
+    /* margin-top: -5px;
+    margin-bottom: 6px; */
+    margin-top: 9px;
+    margin-bottom: 0px;
+}
+
+.c_recharge .c_rechargeZongshu p:last-child {
+    color: #8d99a3;
+    font-size: 12px;
+    margin-bottom: 0px;
+    width: 93%;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    float: left;
+    /* margin-top:4px; */
+}
+
+.c_recharge .c_rechargeImg img {
+    vertical-align: unset;
+}
+
+.c_recharge .c_rechargeZongshu {
+    width: 57%;
+    float: left;
+}
+
+.c_recharge .c_rechargeImg {
+    /* width: 40%; */
+    width: auto;
+    margin-right: 17px;
+    text-align: left;
+}
+
+.c_recharge a {
+    display: inline-block;
+    line-height: 30px;
+    border-radius: 5px;
+    border: solid 1px #ffffff;
+    padding: 0px 8px;
+    font-size: 14px;
+    color: #ffffff;
+    vertical-align: middle;
+}
+
+.c_recharge a:nth-of-type(2) {
+    background: #fff;
+    color: #2fa3f4;
+}
+
+.c_recharge span, .c_dialbottom i {
+    height: 32px;
+    border-left: 1px solid #fff;
+    margin: 0px 20px !important;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.c_dialtop {
+    margin-top: 5px;
+}
+
+.c_dialtop p {
+    display: inline-block;
+    width: 48%;
+    text-align: center;
+}
+
+.c_dialtop p span {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 0px !important;
+}
+
+.c_dialbottom {
+    margin-top: 15px;
+}
+
+.c_dialbottom span {
+    width: 44%;
+    display: inline-block;
+    margin-left: 0px !important;
+    vertical-align: middle;
+}
+
+.c_dialbottom i {
+    margin: 0px 8px !important;
+}
+
+.date-left a {
+    color: #0e90fe;
+}
+
+.c_databox {
+    width: 48%;
+    /*min-width: 600px;*/
+    float: left;
+    margin-right: 1%;
+    height: 210px;
+}
+
+.date-rightborder {
+    height: 83px;
+    border-left: 1px solid #eeeeee;
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+}
+
+.date-right-text {
+    text-align: center;
+    padding: 27px 0px 16px;
+}
+
+.table tbody > tr > td {
+    padding: 6px 8px;
+}
+
+.table-responsive {
+    min-height: .01%;
+    overflow-x: hidden;
+}
+
+canvas {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.panel-default > .panel-heading {
+    background-color: #e8e8e8;
+    border-color: #f5eaea;
+    color: #f5eaea;
+    border-radius: 0;
+    background-clip: padding-box;
+}
+
+.panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 17px;
+}
+
+.panel-mini {
+    float: left;
+    width: 8%;
+    height: 110px;
+    margin-bottom: 0px;
+    background-color: #337ab7;
+    margin-right: 1%;
+    text-align: center;
+}
+
+.panel-mini > .mini-height {
+    border-color: #90989c;
+    text-align: center;
+}
+
+.panel-body .panel-step {
+    float: left;
+    width: 16.5%;
+    margin-bottom: 0px;
+    border: none;
+}
+
+.panel-step > .mini-height {
+    border-color: #90989c;
+    text-align: center;
+}
+
+.up-num {
+    color: #0e90fe;
+    font-size: 36px;
+    text-align: center;
+}
+
+.up-num .pz_upnumP {
+    width: 84px;
+    height: 84px;
+    border-radius: 90px;
+    border: 1px solid #dddddd;
+    display: inline-block;
+    text-align: center;
+    /*padding: 13px 18px;*/
+    line-height: 78px;
+}
+
+.date-left {
+    float: left;
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+    line-height: 24px;
+    padding-right: 19%;
+}
+
+.date-right {
+    float: left;
+    width: 100%;
+    text-align: center;
+    /* padding-top: 19px; */
+    line-height: 24px;
+    color: #2c2c2c;
+    font-size: 16px;
+}
+
+.date-right a {
+    color: #0e90fe;
+}
+
+.up-num span {
+    border-radius: 40px;
+    padding: 14px;
+    border: 1px solid #ccc;
+    font-size: 30px;
+    font-weight: 600;
+    color: #0e90fe;
+}
+
+.up-num i {
+    float: right;
+    line-height: 2;
+    font-size: 35px;
+    color: #ddd;
+}
+
+.up-num.pzUpnum_on .pz_upnumP {
+    background-color: #288ee6;
+    border: 1px solid #288ee6 !important;
+}
+
+.call-number {
+    font-size: 78px;
+    color: white;
+    font-weight: bold;
+}
+
+.c_linetype {
+    margin-left: 30px;
+}
+
+.c_linetype span {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.c_linetype span:nth-last-of-type(1), .c_yeartype span:nth-last-of-type(1) {
+    margin-right: 0px;
+}
+
+.c_yeartype span {
+    display: inline-block;
+    width: 59px;
+    line-height: 27px;
+    background-color: #858585;
+    border-radius: 3px;
+    color: #fff;
+    text-align: center;
+    margin-right: 4px;
+    padding-bottom: 0px;
+    font-size: 14px;
+}
+
+.imgbtn {
+    cursor: pointer;
+    /*border-bottom: 2px solid #0e90fe;*/
+    padding-bottom: 3px;
+    color: #858585;
+    font-size: 16px;
+}
+
+.fr {
+    float: right;
+}
+
+.fl {
+    float: left;
+}
+
+.btn-default, .wizard-cancel, .wizard-back {
+    /*background-color: #90a4ae;*/
+    /*border-color: #607d8b;*/
+    color: #0e90fe;
+    border-bottom: 2px solid #0e90fe;
+}
+
+.c_yeartype .btn-default {
+    background-color: #0e90fe;
+    color: #fff;
+    border-bottom: none;
+}
+
+.home-call-l {
+    position: absolute;
+    display: inline-block;
+    bottom: 40px;
+    right: 10px;
+    width: 14%;
+    z-index: 9;
+}
+
+.home-call-block {
+    position: relative;
+    margin-top: 1.5rem;
+    padding: .5rem 0;
+    width: 100%;
+    height: 5rem;
+    background: #e5e5e5;
+    border-radius: .25rem;
+}
+
+.home-call-block .left {
+    position: absolute;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-pack: center;
+    justify-content: center;
+    top: 0;
+    bottom: 0;
+    left: .5rem;
+    width: 1.5rem;
+    height: 100%;
+}
+
+.home-call-block .left > .circle {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: .25rem solid #8995a0;
+    border-radius: 50%;
+    transform: rotate(45deg);
+}
+
+.home-call-block .left > .circle-purple {
+    border-color: #ef44ca;
+}
+
+.home-call-block .right {
+    /*float: right;*/
+    /*margin-right: 1.5rem;*/
+    color: #666666;
+    font-size: 12px;
+}
+
+.home-call-block .right > .num {
+    font-size: 22px;
+    line-height: 2rem;
+    color: #2c393f;
+    white-space: nowrap;
+    margin-bottom: 5px;
+}
+
+.home-call-block .right > p {
+    font-size: .6rem;
+    line-height: 1rem;
+    text-align: center;
+}
+
+.home-call-block .left > .circle-blue {
+    border-color: #02c1de;
+}
+
+.c_dialresult {
+    width: 48%;
+    /*min-width: 600px;*/
+    float: left;
+    margin-right: 1%;
+    height: 405px;
+    position: relative;
+}
+
+.c_intention {
+    width: 51%;
+    float: left;
+    height: 405px;
+    /*min-width: 600px;*/
+}
+
+.dialresulticon i {
+    font-size: 23px;
+}
+
+.dialgrade i {
+    font-size: 25px;
+    margin-right: 0px;
+    margin-left: -7px;
+}
+
+.c_reboticon {
+    font-size: 27px !important;
+}
+
+.c_survey {
+    margin: 25px 0px;
+    display: flex;
+    display: -webkit-flex;
+}
+
+.c_survey li {
+    float: left;
+    width: 16.666%;
+    text-align: center;
+    border-right: 1px solid #eeeeee;
+    box-sizing: border-box;
+}
+
+.c_survey li:nth-last-of-type(1) {
+    border-right: 0px;
+}
+
+.c_surveyicon {
+    width: 84px;
+    height: 84px;
+    line-height: 84px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
+    margin: 0px auto 15px;
+}
+
+.c_surveyicon i {
+    font-size: 34px;
+    color: #0e90fe;
+}
+
+.c_survey li p:nth-of-type(2) {
+    font-size: 16px;
+    color: #666666;
+    margin-bottom: 0px;
+}
+
+.c_surveycount {
+    font-size: 14px;
+    color: #909090;
+}
+
+.c_surveycount span {
+    font-size: 30px;
+    color: #000000;
+    margin-right: 5px;
+}
+
+.c_surveycount a {
+    font-size: 14px;
+    color: #0e90fe;
+    margin-left: 8px;
+}
+
+.c_linestate {
+    flex: 1;
+    display: flex;
+    display: -webkit-flex;
+}
+
+.c_linestate .panel-body {
+    width: 100%;
+}
+
+.c_quickbox {
+    /*width: 100%;*/
+    width: 48%;
+    float: left;
+    margin-right: 1%;
+}
+
+.c_entrance {
+    float: left;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.c_entrance_t {
+    margin-top: 8px;
+    float: left;
+    /*width: 60%;*/
+    width: 100%;
+}
+
+.c_entrancetype {
+    font-size: 14px;
+    color: #000000;
+}
+
+.c_entrancedata {
+    text-align: center;
+    margin-top: 27px;
+}
+
+.c_entrancedata li {
+    float: left;
+    width: 32%;
+    text-align: left;
+    margin-bottom: 27px;
+}
+
+.c_entrancedata li i {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.c_entrancedata li i img {
+    width: 60px;
+}
+
+.c_entrance.c_entrance_t .c_entrancedata li {
+    /*width: 25%;*/
+}
+
+.c_entrancedata_r {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.c_entrancedata_r p {
+    font-size: 15px;
+    margin-bottom: 6px;
+}
+
+.c_entrancedata_r a {
+    font-size: 14px;
+    color: #0e90fe;
+}
+
+.c_linebutton a {
+    width: 59px;
+    line-height: 27px;
+    background: #b3b3b3;
+    border-radius: 3px;
+    text-align: center;
+    font-size: 14px;
+    color: #ffffff;
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.c_linebutton a.active {
+    background: #0e90fe;
+}
+
+.c_linedata {
+    margin-top: 25px;
+}
+
+.c_linedata .table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.c_linedata .table tr th, .c_linedata .table tr td {
+    text-align: center;
+}
+
+.c_linedata .table tr th {
+    font-size: 13px;
+}
+
+.c_linedata .table tbody > tr > td {
+    padding: 12px 8px;
+}
+
+.table tbody > tr > td:first-child {
+    font-size: 0.875em;
+}
+
+.c_account {
+    max-width: 420px;
+    min-width: 325px;
+    width: 30%;
+    float: left;
+    margin-right: 11px;
+    margin-right: 1%;
+}
+
+.c_rebotbox {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.c_account .c_dialstatistic {
+    margin-top: 20px;
+}
+
+.c_account .c_dialstatistic li {
+    width: 100%;
+    height: auto;
+}
+
+.c_datatop, .c_taskdata {
+    width: 100%;
+    display: flex;
+    display: -webkit-flex;
+}
+
+.c_rebotbox .panel-body {
+    width: 100%;
+}
+
+.c_mycount p {
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+}
+
+.c_mycount p:nth-of-type(2) span {
+    font-size: 28px;
+    margin-left: 0px;
+}
+
+.c_mycount p:nth-of-type(3) {
+    font-size: 14px;
+}
+
+.c_mycount p:nth-of-type(3) span:first-child {
+    margin-left: 0px;
+}
+
+.c_mycount p:nth-of-type(4) a {
+    display: inline-block;
+    /*width: 90px;*/
+    line-height: 32px;
+    border-color: #ffffff;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+}
+
+.c_mycount p:nth-of-type(4) a:nth-of-type(2) {
+    /*margin-left: 10%;*/
+    background: #fff;
+    color: #2fa3f4;
+}
+
+.c_taskleft {
+    max-width: 352px;
+    min-width: 200px;
+    width: 30%;
+    float: left;
+    margin-right: 11px;
+    margin-right: 0px;
+    flex: 1;
+    display: flex;
+    display: -webkit-flex;
+}
+
+.c_taskleft .panel {
+    width: 100%;
+    /* max-height: 652px;
+  min-height: 500px;
+    overflow-y: scroll;
+  padding-top: 15px; */
+}
+
+.c_taskleftdata.pz_innerbox {
+    max-height: 570px;
+    overflow-y: scroll;
+    padding: 0px 0px 15px;
+
+}
+
+.c_taskleftdata.pz_innerbox .c_tasklshow:first-child {
+    margin-top: 0px;
+}
+
+.c_calendaricon {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    color: #0e90fe;
+}
+
+.form-control {
+    margin-right: 0px;
+    background-color: #fff !important;
+    padding: 0px 5px;
+}
+
+.form-control.task_name,
+.form-control.task_state {
+    height: 28px;
+}
+
+.c_agentaccount {
+    margin-top: 15px;
+}
+
+.c_agentaccount li {
+    display: inline-block;
+    width: 100%;
+    background: url(../images/controll/bj.png) center center no-repeat;
+    background-size: 104% 100%;
+    padding: 24px 20px;
+    text-align: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    justify-content: center;
+    -webkit-justify-content: center;
+}
+
+.c_agentaccount li p {
+    color: #fff;
+    text-align: center;
+}
+
+.c_agentaccount li p:nth-of-type(1) {
+    font-size: 16px;
+}
+
+.c_agentaccount p:nth-of-type(2) span {
+    font-size: 28px;
+    margin-left: 0px;
+}
+
+.c_agentaccount p:nth-of-type(4) a {
+    width: 90px;
+    line-height: 32px;
+    border-radius: 5px;
+    color: #fff;
+    display: inline-block;
+    text-align: center;
+}
+
+.c_agentaccount p:nth-of-type(4) a:nth-of-type(2) {
+    background-color: #ffffff;
+    color: #2fa3f4;
+}
+
+.c_countdetail span {
+    padding: 0px 6px;
+}
+
+.c_countdetail {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+}
+
+.c_recharge {
+    margin-top: 5px;
+}
+
+@media (max-width: 1060px) {
+    .c_calen {
+        width: 111px !important;
+    }
+}
+
+@media (max-width: 993px) {
+    .c_calen {
+        width: 110px !important;
+    }
+}
+
+.c_calen {
+    /* width: 117px; */
+    width: 110px;
+}
+
+.pz_addtask_colo {
+    color: #288ee6 !important;
+    background: #fff;
+    border-radius: 3px;
+    padding: 4px 10px !important;
+}
+
+.c_addtask {
+    font-size: 13px;
+    padding: 4px 16px;
+    float: right;
+}
+
+.c_margintop {
+    margin-top: 10px;
+}
+
+.task_user {
+    margin-top: 5px;
+}
+
+.task_user p {
+    font-size: 14px;
+    margin-bottom: 0px;
+    margin-top: 2px;
+    color: #000;
+    font-weight: 500;
+    max-width: 170px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.icn_f {
+    background: #ffffff !important;
+    color: #108ee9 !important;
+    padding: 2px 12px;
+    margin-top: 1px;
+    border: 1px solid #108ee9 !important;
+    font-size: 12px !important;
+    border-radius: 3px !important;
+    font-weight: normal !important;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.task_progress {
+    margin-top: 20px;
+}
+
+.progress {
+    float: left;
+    width: 50%;
+    background-color: #eee;
+    border-radius: 0;
+    background-clip: padding-box;
+    height: 8px;
+    margin-bottom: 12px;
+    box-shadow: none;
+}
+
+.task_left_schedule_two {
+    margin-left: 8px;
+    line-height: 7px;
+    float: left;
+    font-size: 13px;
+}
+
+.task_type {
+    margin-top: 10px;
+}
+
+.task_type p {
+    font-size: 13px;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.c_taskright {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    display: -webkit-flex;
+}
+
+.c_taskright .panel {
+    width: 100%;
+}
+
+.c_detailbutton span {
+    display: inline-block;
+    line-height: 22px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    margin-left: 5px;
+    font-size: 13px;
+}
+
+.c_pause {
+    background: #108ee9;
+    color: #fff;
+    border: 1px solid #108ee9;
+}
+
+.c_delect {
+    background: #fff;
+    color: #108ee9;
+    border: 1px solid #108ee9;
+}
+
+.c_taskrighttitle {
+    padding: 23px 0px 20px;
+    border-bottom: 1px solid #e2e2e2;
+    margin: 0px 30px;
+}
+
+.panel.panel-default .c_taskrighttitle {
+    padding: 23px 0px 0px;
+    border-bottom: none;
+    margin: 0px 30px -16px;
+}
+
+.c_rightmiddle {
+    margin: 10px 0px;
+}
+
+.c_rightmiddletop p {
+    display: inline-block;
+    margin-bottom: 0px;
+    margin-right: 8px;
+}
+
+.c_rightmiddletop span, .c_rightmiddletop a {
+    display: inline-block;
+    line-height: 24px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    margin-left: 5px;
+    font-size: 12px;
+    border: 1px solid #108ee9;
+    color: #108ee9;
+    margin-left: 2px;
+}
+
+.c_dialstype {
+    margin-top: 18px;
+}
+
+.c_dialstype div, .c_dialstype p {
+    float: left;
+    width: 24.5%;
+    padding-right: 10px;
+    color: #404040;
+    box-sizing: border-box;
+    min-width: 195px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.c_dialstype .creat {
+    color: #999999;
+}
+
+.c_dialstype p span {
+    margin-left: 8px;
+    font-weight: normal;
+    /* vertical-align: middle; */
+}
+
+.c_dialsdata {
+    margin-top: 5px;
+}
+
+.c_dialsdatatop > div {
+    float: left;
+    text-align: center;
+    background: #f3f7fd;
+    height: 48px;
+    line-height: 48px;
+    color: #333;
+    font-weight: 600;
+}
+
+.c_dialsshow > div {
+    float: left;
+}
+
+.task_main_fetail_left > div, .task_level {
+    width: 100%;
+    border-bottom: 1px solid #e9e9e9;
+    border-radius: 0px !important;
+    border-right: 1px solid #e9e9e9;
+}
+
+.task_main_fetail_left.clearfix {
+    border-left: 1px solid #e9e9e9;
+}
+
+.task_main_fetail_left > div > div {
+    float: left;
+    width: 50%;
+    border-right: 1px solid #e9e9e9;
+    border-radius: 0px !important;
+    box-sizing: border-box;
+    text-align: center;
+    margin-bottom: 22px;
+    margin-top: 22px;
+}
+
+.task_main_fetail_left > div > div:nth-last-of-type(1) {
+    border-right: none;
+}
+
+.task_main_fetail_left > div > div span {
+    display: block;
+}
+
+.task_main_fetail_left > div > div span:nth-last-of-type(1) {
+    color: #999999;
+}
+
+.task_level_total {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.task_level_left {
+    float: left;
+    padding-top: 13px;
+    font-size: 12px;
+}
+
+.task_level_right {
+    float: right;
+    padding-top: 13px;
+    font-size: 12px;
+}
+
+.task_level_left > div, .task_level_right > div {
+    height: 26px;
+    line-height: 26px;
+}
+
+.task_level_total1 > div > div {
+    height: 39px;
+    line-height: 39px;
+}
+
+.percentage {
+    margin-top: 18px;
+    margin-bottom: 15px;
+}
+
+.percentage > div {
+    float: left;
+    text-align: center;
+}
+
+.pz_percentage {
+    text-align: center;
+    margin: 50px 0px 40px;
+}
+
+.pz_percentage a.btn {
+    padding: 7px 34px;
+    margin-left: 35px;
+}
+
+.pz_rechargeImg {
+    margin-right: 0px !important;
+    text-align: right !important;
+    float: right;
+}
+
+.pz_rechargeImg img {
+    width: 100%;
+    height: auto;
+}
+
+@media screen and (max-width: 1920px) {
+
+}
+
+@media screen and (max-width: 1820px) {
+    .c_dialstatistic li {
+        padding: 23px 23px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 23px;
+    }
+
+    .c_dialstatistic li p {
+        font-size: 19px;
+    }
+}
+
+@media screen and (max-width: 1720px) {
+    .c_dialstatistic li {
+        padding: 22px 22px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 21px;
+    }
+
+    .c_dialstatistic li p {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 1620px) {
+    .c_dialstatistic li {
+        padding: 21px 22px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 19px;
+    }
+}
+
+@media screen and (max-width: 1520px) {
+    .c_dialstatistic li {
+        padding: 20px 22px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 18px;
+    }
+
+    .pz_rechargeImg {
+        width: 42%;
+    }
+
+    .c_recharge .c_rechargeZongshu p:last-child {
+        margin-top: 3px;
+    }
+}
+
+@media screen and (max-width: 1420px) {
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 20px;
+    }
+
+    .c_dialstatistic li p {
+        font-size: 18px;
+    }
+
+    .c_dialstatistic li {
+        padding: 18px 21px;
+    }
+
+    .pz_rechargeImg {
+        width: 41%;
+    }
+
+    .c_recharge .c_rechargeZongshu p:last-child {
+        margin-top: 0px;
+    }
+
+    .c_recharge .c_rechargeZongshu p:first-child {
+        /* margin-bottom: 5px; */
+        margin-top: 8px;
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .pz_rechargeImg {
+        width: 40%;
+    }
+
+    .c_recharge .c_rechargeZongshu p:last-child {
+        margin-top: 1px;
+    }
+
+    .c_dialstatistic li {
+        padding: 17px 17px;
+    }
+
+    /* .c_recharge .c_rechargeZongshu p:first-child {
+      margin-bottom: 1px;
+      font-size: 16px;
+    } */
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 17px;
+    }
+
+    .c_dialstatistic li p {
+        font-size: 16px;
+    }
+
+    .c_dialstatistic {
+        margin-top: 25px;
+        margin-bottom: 20px;
+    }
+
+    .date-right-text {
+        padding: 22px 0px 13px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .pz_rechargeImg {
+        width: 43%;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 15px;
+    }
+
+    .c_recharge .c_rechargeZongshu p:first-child {
+        font-size: 15px;
+        margin-top: 7px;
+    }
+
+    .c_dialstatistic li {
+        padding: 15px 17px;
+    }
+
+    .c_dialstatistic {
+        margin-top: 23px;
+        margin-bottom: 19px;
+    }
+
+    .up-num .pz_upnumP {
+        width: 76px;
+        height: 76px;
+        line-height: 68px;
+    }
+
+    .date-right-text {
+        padding: 20px 0px 12px;
+    }
+}
+
+@media screen and (max-width: 1100px) {
+    .c_dialstatistic li {
+        padding: 12px 11px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 12px;
+    }
+
+    .c_dialstatistic {
+        margin-top: 19px;
+        margin-bottom: 15px;
+    }
+
+    .up-num .pz_upnumP {
+        width: 70px;
+        height: 70px;
+        line-height: 63px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .c_dialstatistic li {
+        padding: 6px 9px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        font-size: 14px;
+    }
+
+    .c_recharge .c_rechargeZongshu p:first-child {
+        /* margin-bottom: 0px; */
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    .c_dialstatistic li p.pz_dataTitle {
+        margin-bottom: 10px;
+    }
+
+    .c_dialstatistic {
+        margin-top: 17px;
+        margin-bottom: 12px;
+    }
+
+    .c_taskleft {
+        max-width: 260px;
+    }
+
+    .clearfix.percentage div .icn_f {
+
+    }
+
+    .clearfix.percentage > div:nth-child(2) > div.icn_f {
+        width: 133px !important;
+    }
+
+    .panel.panel-default .c_dialsdata {
+        padding: 0 15px !important;
+    }
+
+}
+
+@media screen and (max-width: 991px) {
+    .c_recharge .c_rechargeZongshu p:first-child {
+        margin-top: 7px;
+    }
+}
+
+
+@media screen and (max-width: 1325px) {
+    .c_dialstype p {
+        width: 45.5%;
+        min-width: 224px;
+    }
+
+    .c_taskleft .panel {
+        max-height: 680px;
+    }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1324px) {
+    .c_dialstype p {
+        width: 45.5%;
+        min-width: 156px;
+    }
+}
+
+@media screen and (max-width: 1438px) {
+    /* .c_dialstatistic li {
+      width: 31.2%;
+      margin-right: 2%;
+    } */
+}
+
+@media screen and (max-width: 1400px) {
+    /* .c_dialstatistic li p {
+      font-size: 14px;
+    } */
+    /* .c_dialstatistic li {
+      width: 31.2%;
+      margin-right: 2%;
+    } */
+    .c_account {
+        width: 30%;
+    }
+
+    .c_survey li p:nth-of-type(2) {
+        font-size: 14px;
+    }
+
+    .c_surveycount {
+        font-size: 12px;
+    }
+
+    .c_surveycount span {
+        font-size: 25px;
+        margin-right: 3px;
+    }
+
+    .c_surveycount a {
+        font-size: 12px;
+    }
+
+}
+
+@media screen and (max-width: 1360px) {
+    /*.c_account {*/
+    /* 	height: 315px;*/
+    /* }*/
+}
+
+@media screen and (max-width: 1315px) {
+
+    .c_entrancedata_r p {
+        font-size: 14px;
+    }
+}
+
+@media screen and (min-width: 990px) and (max-width: 1190px) {
+
+
+}
+
+@media screen and (min-width: 990px) and (max-width: 1300px) {
+
+    .c_entrancedata li i {
+        margin-right: 3px;
+    }
+
+    .c_entrancedata_r p {
+        font-size: 13px;
+    }
+
+    .c_entrancedata_r a {
+        font-size: 12px;
+    }
+
+    .c_entrancedata li i img {
+        width: 50px;
+    }
+}
+
+
+.pz_renwu_title {
+    background: #fff;
+    padding: 24px 0px;
+    margin: 0px;
+    height: 76px;
+    line-height: 29px;
+}
+
+.pz_renwu_title .panel-title {
+    margin-left: 30px;
+}

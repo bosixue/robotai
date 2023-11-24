@@ -1,0 +1,272 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+
+<style>
+	.table tbody>tr>td{
+		padding: 12px 8px;
+	}
+	.l-margin{
+		margin-left: 15px;
+	}
+
+	.l-resetBtn{
+		color: #333;
+		background-color: #fff;
+    border-color: #dedede;
+	}
+	.l-resetBtn:active,
+	.l-resetBtn:focus,
+	.l-resetBtn:hover,
+	.l-resetBtn:active:focus,
+	.l-resetBtn:active:hover{
+   	background-color: #fff;
+    border-color: #0e90fe;
+    color: #0e90fe!important;
+	}
+	.l-operationbtn label{
+		font-size:14px;
+	}
+	.main-box .main-box-body{
+		padding: 0 20px 0px 20px;
+	}
+  .l-word{
+    vertical-align: middle;
+    padding: 7px 8px;
+  }
+  .l-bottom{
+    margin-bottom: 7px!important;
+  }
+
+</style>
+<div class="row">
+	<div class="col-lg-12">
+		<div class="main-box clearfix fadeInRight animated pz_manping_height">
+			<header class="main-box-header clearfix">
+				<div class="pull-left">
+					<span class="n_panel_title"><img src="__PUBLIC__/img_sj/daochujilu.png" alt="">导出记录</span>
+				</div>
+			</header>
+			<div class="main-box-body clearfix">
+				<section class="navbar clearfix">
+						<div class="form-inline ">
+							<div class="form-group ">
+								<label class="statusSelect pull-left">电话号码:</label>
+								<input type="text" class="form-control  l-margin l-bottom" autocomplete="off" placeholder="电话号码" id="keyword">
+							</div>
+							<div class="form-group ">
+								<label class="statusSelect pull-left l-margin"> 功能模块:</label>
+								<select class="form-control pull-left" id="operation" name="operation">
+                                                                    <option value="0">请选择功能模块</option>
+                                                                    <option value="话术配置">话术配置</option>
+                                                                    <option value="任务管理">任务管理</option>
+                                                                    <option value="号码管理">号码管理</option>
+                                                                    <option value="当天通话记录">当天通话记录</option>
+                                                                    <option value="历史通话记录">历史通话记录</option>
+                                                                    <option value="客户管理">客户管理</option>
+								</select>
+							</div>
+							<div class="form-group  ">
+								<label class="statusSelect pull-left l-margin">导出时间：</label>
+								<input type="text" class="form-control pull-left l-search c_datebgimg" id="startshow" name="startshow"
+								 placeholder="选择开始日期">
+								<span class="pull-left l-word">至</span>
+								<input type="text" class="form-control pull-left l-search c_datebgimg" id="endshow" name="endshow" placeholder="选择结束日期">
+								<script>
+									$('#startshow').fdatepicker({
+                          format: 'yyyy-mm-dd ',
+                          // pickTime: true
+                        });
+                        $('#endshow').fdatepicker({
+                          format: 'yyyy-mm-dd ',
+                        // 	pickTime: true
+                        });
+                </script>
+							</div>
+							<div class="form-group l-bottom">
+								<span class="btn btn-primary  pull-left" type="button" onclick="show_data();">查询</span>
+								<span class="btn btn-primary l-resetBtn" type="button" onclick="export_reset();">重置</span>
+							</div>
+						</div>
+				</section>
+			</div>
+			<div class="main-box-body clearfix">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr>
+								<th class="text-center">序号</th>
+								<th class="text-center">用户名</th>
+								<th class="text-center">电话号码</th>
+								<th class="text-center">IP地址</th>
+								<th class="text-center">功能模块</th>
+								<th class="text-center">导出内容</th>
+								<th class="text-center">导出时间</th>
+                <th class="text-center">备注</th>
+							</tr>
+						</thead>
+						<tbody id="operation-recored-list">
+  						<!--<tr>-->
+        <!--        <td class="text-center">1</td>-->
+        <!--        <td class="text-center">15070836954</td>-->
+        <!--        <td class="text-center">120.110.130.16</td>-->
+        <!--        <td class="text-center">任务管理</td>-->
+        <!--        <td class="text-center"> 导出全部号码</td>-->
+        <!--        <td class="text-center"> 2018-12-12 10:00</td>-->
+        <!--        <td class="text-center"> <button class="btn-primary btn" onclick="test();">弹框查看</button></td>-->
+        <!--      </tr>-->
+						</tbody>
+					</table>
+					<div class="component-page-empty hidden" id="consumeempty">
+						<div class="empty-tip line">暂无数据</div>
+					</div>
+					<div class="row">
+						<footer class="clearfix col-sm-12">
+							<div class="pull-left margintop">
+								全部数据：<span id="totalData"></span>
+							</div>
+							<div class="text-right pull-right">
+								<div class="paging clearfix">
+								</div>
+							</div>
+						</footer>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{include file="exportmanagement/dialog" /}
+
+<!--数据展示-->
+<script id="operation-data" type="text/template">
+	<tr>
+			<td class="text-center">{%sequence%}</td>
+			<td class="text-center">{%username%}</td>
+			<td class="text-center">{%phone%}</td>
+			<td class="text-center">{%ip_address%}</td>
+			<td class="text-center">{%exportx%}</td>
+			<td class="text-center">{%export_name%}</td>
+			<td class="text-center">{%create_time%}</td>
+			<td class="text-center">{%remark%}</td>
+	</tr>
+</script>
+
+<script type="text/javascript">
+	//当前页全选
+	$("input[name='all_checked'][type='checkbox']").click(function() {
+		if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+			$("input[name='roleids'][type='checkbox']").prop("checked", true);
+		} else {
+			$("input[name='roleids'][type='checkbox']").prop("checked", false);
+		}
+	});
+	//子复选框的事件
+	$('input[type="checkbox"][name="roleids"]').click(function() {
+		//当没有选中某个子复选框时，check-all取消选中
+		if (!$(".rolecheck").checked) {
+			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+		}
+		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+		if (checkedsub == chsub) {
+			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+		}
+	});
+
+	//重置
+	function export_reset() {
+		$("#username").val('');
+    $("#startshow").val('');
+    $("#endshow").val('');
+    $("#keyword").val('');
+		$("select[name=operation] option:eq(0)").prop('selected', 'selected');
+	}
+	var Paging = new Paging01();
+  	Paging.init_args({
+  	// url: 
+  	page: 1, //初始页码
+  	limit: 10, //初始每页显示的数据量
+  	paging_class: 'paging', //放置分页的class
+  	callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+	show_data();
+  //查询
+  function show_data(page,limit) {
+  	if (!page) {
+  		page = 1;
+  	}
+  	if (!limit) {
+  		limit = 10;
+  	}
+  	var data = {};
+  	var url = "{:url('ajax_export_record')}";
+  	data.keyword = $('#keyword').val();
+  	data.operation = $('#operation').val();
+  	data.startshow = $('#startshow').val();
+  	data.endshow = $('#endshow').val();
+  	data.page = page;
+  	data.limit = limit;
+  	$.ajax({
+  		url:url,
+  		dataType:'json',
+  		type:'post',
+  		data:data,
+  		success:function(result){
+  			// console.log(result);
+  			if(result.code === 0){
+  				var htmls = '';
+  				if(result.data.list.length == 0){
+  					$('#consumeempty').show();
+  				}else{
+  					$('#consumeempty').hide();
+  					var total = result.data.page;   //总页数
+  					var Nowpage = result.data.Nowpage;  //当前页码
+  					var count  = result.data.total;  //总条数
+  					var Nowpage = parseInt(Nowpage);
+  					var i = (Nowpage - 1) * limit + 1;
+  					$.each(result.data.list,function(index,object){
+  						data.i = i;
+  						var html = $('#operation-data').html();
+  						html = html.replace('{%sequence%}',i);
+  						html = html.replace('{%username%}',object.username);
+  						html = html.replace('{%phone%}',object.phone);
+  						html = html.replace('{%ip_address%}',object.ip_address);
+  						html = html.replace('{%exportx%}',object.export);
+  						html = html.replace('{%export_name%}',object.export_name);
+  						html = html.replace('{%create_time%}',object.create_time);
+  						html = html.replace('{%remark%}',object.note);
+  						htmls += html;
+  						i++;
+  					});
+  					$('#totalData').text(result.data.total);
+  					//Nowpage  当前页
+  					//count    数据总条数
+  					//total    总共页数
+  					//limit    分页数量
+  					//Paging.paging(当前页码, 总数量, 每页显示的条数) 
+       			Paging.paging(Nowpage, count, limit);
+  				}
+  				$('#operation-recored-list').html(htmls);
+  			}
+  		},
+  		error: function(error) {
+  			console.log(error);
+  			alert('数据获取失败！');
+  		}
+  	});
+  }
+    
+  function test(){
+    $('#export-validation').modal('show');
+  }
+</script>
+
+{/block}

@@ -1,0 +1,168 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+{include file="device/dialog" /}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+
+<style>
+@media (max-width:1250px){
+  .operationbtn{
+    margin-left: 0px;
+    padding: 0px 0px;
+  }
+}
+
+@media (max-width:1046px){
+  .l-rechargedate{
+    margin-left: 15px;
+  }
+}
+
+
+</style>
+
+
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header clearfix">
+		  <div class="pull-left">
+			   <span class="n_panel_title"><img src="__PUBLIC__/img_sj/xiaoshouzhanghaoguanli.png" alt="">销售账号充值记录</span>
+		  </div>
+		</header>
+		<div class="main-box-body clearfix">
+			<section class="navbar clearfix">
+				<div class="form-inline  l-operationbtn">
+
+					<div class="form-group pull-left">
+						<label class="statusSelect " >账号名称：</label>
+						<input type="text" class="form-control  l-search" id="" name="keyword" >
+					</div>
+
+          <div class="formgroup l-rechargedate">
+          	<label class="statusSelect " >充值日期：</label>
+							 <div class="dis_in c_dateSelbg ">
+								 <input type="text" class="form-control c_datebgimg" placeholder="选择开始日期" id="startDate" name="startDate" value="" readonly="">
+								 <script>
+										 $('#startDate').fdatepicker({
+											 format: 'yyyy-mm-dd',
+											 // pickTime: true
+										 });
+								 </script>
+							 </div>
+							 <span class="pz_zhi">至</span>
+							 <div class="dis_in c_dateSelbg ">
+								 <input type="text" class="form-control c_datebgimg" placeholder="选择结束日期" id="endTime" name="endTime" value="" readonly="">
+								 <script>
+									 $('#endTime').fdatepicker({
+										 format: 'yyyy-mm-dd',
+										 // pickTime: true
+									 });
+								 </script>
+							 </div>
+						 </div>
+
+
+
+					<div class="form-group operationbtn">
+						<span class="btn btn-primary  pull-left" type="button" onclick="">搜索</span>
+						<span class="btn btn-primary  pull-left pz_kongxin_anniusty" type="button" onclick="">重置</span>
+					</div>
+				</div>
+			</section>
+			  <div class="table-responsive">
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr>
+								<th class="text-center">序号</th>
+                <th class="text-center">充值日期</th>
+								<th class="text-center">充值账号</th>
+								<th class="text-center">充值金额</th>
+								<th class="text-center">充值前余额</th>
+								<th class="text-center">充值后余额</th>
+              	<th class="text-center">备注</th>
+					    </tr>
+				    </thead>
+				    <tbody id="recharge-recored-list">
+            	<tr>
+                <td class="text-center">1</td>
+	              <td class="text-center">2018-11-21</td>
+	              <td class="text-center">pzz</td>
+	              <td class="text-center">100</td>
+	              <td class="text-center">50</td>
+	              <td class="text-center">150</td>
+	              <td class="text-center">充值测试</td>
+							</tr>
+				    </tbody>
+				  </table>
+					<div class="row">
+						<footer class="main-box-footer clearfix col-sm-12">
+						<!--	<div class="pull-left">已选择1条记录</div>-->
+						<!--	<div class="pull-right " id="modalpagebody">-->
+						<!--		<div class=" pull-right"  id="consumepage">-->
+									<!--页码-->
+
+						<!--		</div>-->
+						<!--		<div class="  text-right pull-right">-->
+						<!--			<p>全部记录：12条</p>-->
+						<!--		</div>-->
+						<!--</div>-->
+						</footer>
+					</div>
+			  </div>
+		</div>
+	</div>
+</div>
+</div>
+
+ <script type="text/javascript">
+	 //当前页全选
+	  $("input[name='all_checked'][type='checkbox']").click(function(){
+	 	 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+	   		$("input[name='roleids'][type='checkbox']").prop("checked",true);
+	   	} else {
+	  		$("input[name='roleids'][type='checkbox']").prop("checked",false);
+	  	}
+	  });
+	 	//子复选框的事件
+	 	$('input[type="checkbox"][name="roleids"]').click(function(){
+	 		//当没有选中某个子复选框时，check-all取消选中
+	 		if (!$(".rolecheck").checked) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+	 		}
+	 		var chsub = $("input[name='roleids'][type='checkbox']").length; //获取roleids的个数
+	 		var checkedsub = $("input[name='roleids'][type='checkbox']:checked").length; //获取选中的roleids的个数
+	 		if (checkedsub == chsub) {
+	 			$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+	 		}
+	 	});
+
+		//重置
+		function orderChongzhi(){
+			$('#startDate').val("");
+			$('#endTime').val("");
+		}
+  </script>
+
+<script type="text/javascript">
+	function saleRecharge(){
+		$('#sale-rechargedialog').modal('show');
+	}
+
+</script>
+
+
+
+
+
+
+
+{include file="sms/sms_targer" /}
+{include file="enterprise/dialog" /}
+{/block}

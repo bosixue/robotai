@@ -1,0 +1,275 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<!-- datepicker statr -->
+<link href="__PUBLIC__/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="__PUBLIC__/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.custom.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/webuploader/webuploader.css">
+
+<script type="text/javascript" src="__PUBLIC__/plugs/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/bootstrap-select/dist/css/bootstrap-select.min.css" />
+
+<style type="text/css">
+.textwidth{
+width:250px;
+}
+.nav-tabs {
+background: #ffffff;
+}
+.nav-tabs {
+border-bottom: 1px solid #ddd;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+color: #555;
+cursor: default;
+background-color: #fff;
+border: 1px solid #ddd;
+border-bottom-color: transparent;
+}
+.panel-default>.panel-heading {
+background-color: #FFFFFF;
+border-color: #FFFFFF;
+color: #FFFFFF;
+border-radius: 0;
+background-clip: padding-box;
+}
+.dropup > .btn-default{
+   background-color: #fff;
+   border: 1px solid #ccc;
+   color: #555;
+}
+.dropup > .btn-default:hover, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default {
+ background-color: #fff;
+ border: 1px solid #ccc;
+}
+.bootstrap-select>.dropdown-toggle.bs-placeholder, .bootstrap-select>.dropdown-toggle.bs-placeholder:active, .bootstrap-select>.dropdown-toggle.bs-placeholder:focus, .bootstrap-select>.dropdown-toggle.bs-placeholder:hover {
+    color: #555;
+}
+.dropup > .btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+.bootstrap-select.btn-group .dropdown-toggle .filter-option {
+  color: #555;
+  /*overflow: auto;*/
+}
+.bootstrap-select>.dropdown-toggle {
+	padding: 6px;
+}
+.checkbox-wrapper{
+	 margin-right: 20px;
+}
+.word{
+	  line-height: 40px;
+    font-size: 14px;
+}
+.bootstrap-select.form-control:not([class*=col-]) {
+     width: 250px;
+}
+.dropdown-menu>li>a>span{
+    color: #000;
+}
+.btn-group > .btn-default{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #555;
+}
+.n_panel_title img {
+    margin-right: 8px;
+    vertical-align: sub;
+}
+.panel-body {
+	padding-top: 0px;
+}
+.form-horizontal .form-group {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+.dflex {
+	display: flex;
+	display: -webkit-flex;
+}
+.dflex>label {
+	width: 140px;
+}
+.dflex>div {
+	flex: 1;
+}
+.inputset {
+	border: solid 1px #eeeeee;
+	padding: 16px 25px 24px 10px;
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+	flex-wrap: wrap;
+	-webkit-flex-wrap: wrap;
+	margin: 0px 8px;
+  border-radius: 3px;
+}
+.inputset>div.dis_in {
+	margin-top: 8px;
+}
+.inputset label {
+	margin-left: 25px;
+}
+.inputset input {
+	width: 120px;
+	background-color: #fbfbfb;
+}
+.dis_in {
+	display: inline-block;
+}
+.align-items {
+	align-items: center;
+	-webkit-align-items: center;
+}
+</style>
+     
+<div class="row">
+<div class="col-lg-12">
+	
+  
+<div class="panel panel-default pz_manping_height">
+    <div class="panel-heading">
+   <!--   <header class="main-box-header clearfix">-->
+		 <!--  <div class="pull-left">-->
+			<!--  <h1><span>{$current|default=''}</span>页面</h1>-->
+		 <!--  </div>-->
+		 <!--</header>-->
+			 <header class="main-box-header n_head_box n_head_box_b clearfix">
+			  <div class="pull-left">
+				  <span class="n_panel_title"><img src="/public/img_sj/zhanneixiaoxi.png" alt="">意见反馈</span>
+			  </div>
+			</header>
+     </div>
+	  <div class="panel-body">
+
+		  <form name="fomr1" id="form1" onsubmit="return false;">
+	    <div class="tab-content">
+		  <div role="tabpanel" class="tab-pane active" id="home">
+	
+	      <div class="main-box-body clearfix" style="max-width:1200px">
+	      	<div class="form-group dflex" style="margin-top:20px;">
+						<label class="col-lg-2 col-sm-2 control-label">您要反馈的内容：</label>
+						<div class="col-lg-10 col-sm-10">
+						  <textarea name="content" id="content" style="width:100%;height:300px;"></textarea>
+						</div>
+		    	</div>
+
+
+	    		<div class="form-group dflex align-items" style="margin-top:35px;">
+						<label class="col-lg-2 col-sm-2 control-label">联系方式：</label>
+						<div class="inputset">
+							<div class="dis_in">
+								<label class="control-label">您的电话：</label>
+								<div class="pull-left">
+								   <input type="text" class="form-control textwidth" name="phone" id="phone"/>
+								</div>
+							</div>
+							<div class="dis_in">
+								<label class="control-label">您的邮箱：</label>
+								<div class="pull-left">
+								   <input type="text" class="form-control textwidth" name="email" id="email"/>
+								</div>
+							</div>
+							<div class="dis_in">
+								<label class="control-label">您的微信：</label>
+								<div class="pull-left">
+								   <input type="text" class="form-control textwidth" name="weixin" id="weixin"/>
+								</div>
+							</div>
+
+			    	</div>
+			    </div>
+		     <div class="form-group dflex">
+		     	<label class="col-lg-2 col-sm-2 control-label"></label>
+		     	<div class="col-lg-10 col-sm-10">
+		     		<p style="color:#909090">温馨提示：请留下您的联系方式方便后期和您联系。</p>
+	     		</div>
+		     </div>
+			 
+			  <div class="form-group dflex" style="margin-top:30px;">
+			  	<label class="col-lg-2 col-sm-2 control-label"></label>
+					<div class="col-lg-10 col-sm-10">
+				    <input type="hidden" name="docId" id="docId" value="{$doclist.id|default=''}" />	
+						<button id="submit_1" class="btn btn-success submit-btn"  onclick="sendMsg();return false;">提交</button>
+					</div>
+				</div>
+		 
+		
+		      </div>
+
+			  </fomr>
+		  </div>
+
+		</div>
+
+
+
+	  </div>
+</div>	
+					
+	
+					
+<!-- 样式文件 -->
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/umeditor/themes/default/css/umeditor.css">
+<!-- 配置文件 -->
+<script type="text/javascript" src="__PUBLIC__/plugs/umeditor/umeditor.config.js?vi=ddd"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="__PUBLIC__/plugs/umeditor/umeditor.js"></script>
+
+<script type="text/javascript">
+		$(function(){
+        var um = UM.getEditor('content',{ 
+        	imageUrl: "{:url('upload/editor')}"
+        });
+		
+    }); 
+	// 提价成功后的提示：您的意见提交成功！我们会尽快处理，感谢您的支持！
+function checkform() {
+	// if ($.trim( $("#content").val()  ) == '') {
+	// 	alert('请输入建议内容。');
+	// 	return false;
+	// }
+	if ($.trim($("#phone").val()) == ''&& $.trim(("#weixin").val()) == ''&& $.trim(("#email").val()) == '') {
+		alert('请输入联系方式。');
+		return false;
+	}
+return true;
+}
+function sendMsg() {
+			if(false===checkform())return false;
+			var url = location.href+'/feedback';
+			var datas=$("#form1").serialize();
+			$.ajax({
+				url : url,
+				dataType : "json",
+				type : "post",
+				data : datas ,
+				success: function(msg){
+					if(msg.code == 0){
+						alert('提交建议成功！感谢支持。');
+						location.reload();
+					}else{
+						alert('提交建议失败！请重试。');
+					}
+				},
+				error : function() {
+					alert('失败。');
+				}
+			});
+				}
+</script>
+
+
+</div>
+
+</div>
+
+{/block}

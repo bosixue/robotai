@@ -1,0 +1,605 @@
+{extend name="public/base" /}
+{block name="body"}
+<style type="text/css">
+.table tbody>tr>td {
+padding: 9px 8px;
+}
+.table-responsive {
+min-height: .01%;
+overflow-x: hidden;
+}
+.imgclass > td > p>img{
+width:50px;
+}
+.textwidth{
+	width:250px;
+}
+
+.table-bordered, .table thead>tr>th {
+  border: none;
+}
+
+.navbar{
+	margin-bottom:8px;
+}
+
+.l-padding{
+	padding:7px 0px!important;
+}
+
+</style>
+<div class="row">
+<div class="col-lg-12">
+	<div class="main-box clearfix fadeInRight animated pz_manping_height">
+		<header class="main-box-header n_head_box clearfix">
+		  <div class="pull-left">
+			  <span class="n_panel_title"><i class="icon iconfont icon-label"></i>语义标签</span>
+
+		  </div>
+		</header>
+		<div class="main-box-body clearfix ">
+
+	        <section class="navbar  main-box-header clearfix l-padding">
+	         <div  class="pull-left">
+						 <form class="form-inline"  method="get" role="form">
+
+							<div class="form-group">
+								<label>标签名：</label>
+								<input type="text" class="form-control" id="label_name" name="name" placeholder="">
+							</div>
+							<button class="btn btn-primary" type="button" onclick="select_data()">搜索</button>
+						</form>
+			    </div>
+			    <a class="btn btn-primary pull-right" href="javascript:void(0);" onclick="del_all_label();">删除标签</a>
+			    <a class="btn btn-primary pull-right" href="javascript:void(0);" onclick="addlabellist();">添加标签</a>
+
+		   </section>
+
+		     <!--<div style="height:10px;line-height:30px;background-color:#FBFBFB;"></div>-->
+
+			  <div class="table-responsive">
+
+				 <table class="table table-bordered table-hover">
+				   <thead>
+					    <tr style="background-color:#f2f7fd">
+					        <th class="text-center"><input id="member_all_check" class="check_page" name='all_checked' data-page="0" type="checkbox" onclick="check_pagelabel();"></th>
+									<th class="text-center">序号</th>
+					        <th class="text-center">标签名称</th>
+					        <th class="text-center" style="width: 35%;">关键字</th>
+					        <th class="text-center">操作</th>
+					    </tr>
+				    </thead>
+				   <tbody id="labellist">
+
+				    </tbody>
+				  </table>
+
+			  </div>
+				<footer class="main-box-footer clearfix pz-fenye">
+					<div class="pull-left" style="line-height: 47px;">
+						<input class="check-all check_all" name="DataCheck_all" type="checkbox" onclick="check_alllabel();">全选（已选中<span id="count">0</span>个语义标签）
+					</div>
+
+					<div id="statpage" class="pull-right">
+
+          </div>
+          <div style="font-size: 12px;float: right;margin: 14px 9px 0px 0px;display: inline-block;" class="pull-right">
+        		<span style="font-size: 12px;">总页数：
+        			<span id="all_page">13889 </span>&nbsp;&nbsp;页
+        		</span>
+        	</div>
+
+				</footer>
+		</div>
+	</div>
+</div>
+
+</div>
+<!-- 批量删除提示 -->
+<div class="modal fade" id="number-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none;">
+	<div class="modal-dialog modal-sm" style="width:350px; top:6%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span aria-hidden="true">×</span></button>
+				<h4 class="modal-title" id="myModalLabel">操作提示</h4>
+			</div>
+			<div class="modal-body modal-body-tips">确定批量删除选中的语义标签？</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+				<button type="button" class="btn btn-primary" onclick="dellabel(1);" >	确定    </button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+<!--单个删除提示-->
+ <div class="modal fade" id="del-single-label" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	 <div class="modal-dialog modal-sm" style="width:350px; top:10%;">
+		 <div class="modal-content">
+			 <div class="modal-header">
+				 <button type="button" class="close" data-dismiss="modal"	aria-hidden="true">
+					 <span aria-hidden="true">×</span>
+				 </button>
+				 <h4 class="modal-title" >
+					 操作提示
+				 </h4>
+			 </div>
+			 <div class="modal-body modal-body-tips">
+				 确定删除该任务？
+			 </div>
+			 <div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">   取消		</button>
+				 <button type="button" class="btn btn-primary"  onclick="dellabel(2);">	确定    </button>
+			 </div>
+		 </div><!-- /.modal-content -->
+	 </div><!-- /.modal-dialog -->
+ </div><!-- /.modal -->
+
+<script id='label_info' type='text/tepmate'>
+	<tr>
+		<td class="text-center">
+			<input class="rolecheck" name='roleids' value="{%id%}" type="checkbox" onclick="check_label();"/>
+		</td>
+		<td class="text-center">{%sequence%}</td>
+		<td class="text-center">{%label%}</td>
+		<td class="text-center">{%keyword%}</td>
+    <td class="text-center">
+			<a href="javascript:void(0);" onclick="editlabellist({%id%})">编辑</a>
+			<a href="javascript:void(0);" onclick="del_single_label({%id%})" id="delete_single">删除</a>
+		</td>
+	</tr>
+</script>
+<!-- 编辑语义标签 -->
+<div class="modal fade" id="addlabellist" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog" style="width:540px;">
+			<div class="modal-content">
+					<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								 <span aria-hidden="true">&times;</span>
+							</button>
+							<h4 class="modal-title" id="myModalLabel" style="color:#000;"><span>编辑语义标签</span></h4>
+				 </div>
+				 <div class="modal-body" style="padding-top: 23px;">
+						  <form id="form" method="post" class="form-horizontal" enctype="multipart/form-data" method="post">
+									<div class="form-group">
+										<label class="col-lg-3 control-label">标签名：</label>
+										<div class="col-lg-9 col-sm-9">
+											 <input type="text" class="form-control textwidth" placeholder="请输入标签名" name="labelName" id="labelName" value="" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 control-label">关键字：</label>
+										<div class="col-lg-9 col-sm-9">
+											 <textarea name="remark" id="remark" style="width: 65%;height: 120px;border: solid 1px #e0e2e4;font-size: 13px;border-radius: 3px;padding:7px 12px;" placeholder='关键字，多个之间用","分隔'></textarea>
+											 <!-- <div class="help-block">关键字，多个之间用“;"分隔</div> -->
+										</div>
+									</div>
+				          <input type="hidden" name="labelId" id="labelid" value="" />
+							</form>
+				  <br/>
+				 </div>
+				 <div style="clear:both;"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal" style="padding: 5px 22px;">取消</button>
+					<button type="button" onclick="addlabeldata();" class="btn btn-primary" style="padding: 5px 22px;">保存</button>
+				</div>
+			</div>
+			</div>
+		</div>
+    <script type="text/javascript">
+
+			//全部数据全选
+			function check_alllabel(){
+	   	if($('.check_all').is(':checked')){
+				$('.check_page').prop("checked",true);
+				$('.rolecheck').prop("checked",true);
+				$('#count').text($('#count').attr('data-total'));
+				$('.check_page').attr('data-page',$('#count').attr('data-total'));
+				var usercheck = [];
+				type = 'day';
+	 			var data = {};
+			  data.label_name = $('#label_name').val();
+			  var url = "{:url('labelinfo')}";
+			  $.ajax({
+			     url : url,
+			     dataType : "json",
+			     type : "post",
+			     data : data,
+			     success:function(result){
+			       if(result.code === 0){
+			           $.each(result.data, function(index, object){
+			             usercheck.push(object.id);
+			           });
+			           usercheck = usercheck.join(',');
+			           $('.check_all').attr('data-id',usercheck);
+			           //console.log(usercheck);
+			       }
+			     },
+			     error:function(){
+			       console.log('获取全选数据失败');
+			     }
+			   });
+			}else{
+				$('.check_page').prop("checked",false);
+				$('.rolecheck').prop("checked",false);
+				$('#count').text(0);
+				$('.check_page').attr('data-page',0);
+			}
+	   }
+		  //本页全选
+		  function check_pagelabel(){
+		   	if($('.check_page').is(':checked')) {
+					$('.rolecheck').prop("checked",true);
+					// if($('.rolecheck:checked').length == $('#count').attr('data-total')){
+					// 	$('.check_all').prop("checked",true);
+					// 	$('.check_page').prop("checked",true);
+					// 	$('.check_page').attr('data-page',$('#count').attr('data-total'));
+					// }else {
+
+					// 	$('.check_page').attr('data-page',$('#count').attr('data-page'));
+					// }
+					$('.check_page').attr('data-page',$('#count').attr('data-page'));
+					$('#count').text($('.rolecheck:checked').length);
+				}else{
+					$('.check_all').prop("checked",false);
+					$('.rolecheck').prop("checked",false);
+					$('#count').text(0);
+					$('.check_page').attr('data-page',0);
+				}
+		   }
+		  //单个选项框选中事件
+		  function check_label(){
+		   	if(!$(".rolecheck").checked) {
+					$('.check_all').prop("checked",false);
+					$('.check_page').prop("checked",false);
+					$('.check_page').attr('data-page',0);
+				}
+				var check_pagenum = $('.rolecheck').length;
+				var check_num = $('.rolecheck:checked').length;
+				if(check_pagenum == check_num){
+					$('.check_page').prop("checked",true);
+					$('.check_page').attr('data-page',$('#count').attr('data-page'));
+				}
+				if(check_num == $('#count').attr('data-total')){
+					$('.check_all').prop("checked",true);
+					$('.check_page').prop("checked",true);
+					$('.check_page').attr('data-page',$('#count').attr('data-total'));
+				}
+				$('#count').text(check_num);
+		   }
+
+			var label_name;
+			//查询数据
+			function select_data(){
+				get_labellist(1);
+			}
+
+			//分页显示
+	    function fenye(total_page,now_page,limit,show=5){
+	     if(show > total_page){
+	       show = total_page;
+	     }
+	     var star = now_page - 2;
+			 var end = now_page + 2;
+			 if(star < 1){
+			   end = end - star;
+			   star = 1;
+
+			 }
+			 if(end > total_page){
+			   end = total_page;
+			 }
+
+	     var limits = [10,30,50,100];
+	     var fenye_html = "";
+			 fenye_html = '<ul class="pagination">';
+
+			 fenye_html += '<div style="font-size: 12px;display: inline-block;"><select class="limit" style="width: 80px;margin: 0px 8px;height:32px;background:#fff;border:1px solid #ddd;">';
+			 for(var i = 0; i < limits.length; i++){
+				 if(limits[i] == limit){
+					 fenye_html += '<option value="'+limits[i]+'" selected>'+limits[i]+'条/页</option>';
+				 }else{
+					 fenye_html += '<option value="'+limits[i]+'">'+limits[i]+'条/页</option>';
+				 }
+			 }
+			 fenye_html += '</select></div>';
+
+			 fenye_html +=  '<div style="font-size: 12px;margin: 0px;display: inline-block;">跳至'
+										+	'<input class="Nowpage" type="number" style="width: 50px;height:32px; margin: 1px 8px;border:1px solid #ddd;border-radius: 5px;text-align: center;"value="" max="13889" min="1">页'
+										+  '</div><button class="btn btn-primary go_up lp_tz" type="button" >确定</button>';
+	     if(total_page > 1){
+
+
+	      if(now_page == 1){
+	        fenye_html += '<li id="prevbtn" class="disabled"><span>«</span></li>';
+	      }
+
+	      if(now_page > 1){
+	        fenye_html += '<li data-page="'+(now_page - 1)+'" title="'+(now_page - 1)+'"><a href="javascript:void(0);"> « </a></li>';
+	      }
+	      for(star; star <= end; star++ ){
+	        if(star == now_page){
+	          fenye_html += '<li class="active" title="'+star+'"><a href="javascript:void(0);">'+star+'</a></li>';
+	        }else{
+	          fenye_html += '<li data-page="'+star+'" title="'+star+'"><a href="javascript:void(0);">'+star+'</a></li>';
+	        }
+	      }
+	      if(now_page < total_page){
+	        fenye_html += '<li data-page="'+(now_page + 1)+'" title="'+(now_page + 1)+'"><a href="javascript:void(0);"> » </a></li>';
+	      }else if(now_page == total_page){
+	        fenye_html += '<li  class="disabled"><span> » </span></li>';
+	      }
+	      fenye_html += '</ul>';
+	    }else{
+
+				fenye_html += '<li id="prevbtn" class="disabled"><span>«</span></li>';
+	      fenye_html += '<li class="active" title="1"><a href="javascript:void(0);">1</a></li>';
+				fenye_html += '<li  class="disabled"><span> » </span></li>'
+	      fenye_html += '</ul>';
+	    }
+
+	     $('#statpage').html(fenye_html);
+	     $('.Nowpage').val(now_page);
+			 //获取选中框隐藏的选中状态
+			 var check_state = $('.check_page').attr('data-page');
+			 if(check_state == now_page){
+			 	 $('.check_page').prop("checked",true);
+				 $('.rolecheck').prop("checked",true);
+				 $('#count').text($('.rolecheck:checked').length);
+				 $('.check_page').attr('data-page',$('#count').attr('data-page'));
+				 // $('.check_page').click();
+			 }else if(check_state == $('#count').attr('data-total')){
+				 $('.check_all').prop("checked",true);
+				 $('.check_page').prop("checked",true);
+ 				 $('.rolecheck').prop("checked",true);
+ 				 $('#count').text($('#count').attr('data-total'));
+ 				 $('.check_page').attr('data-page',$('#count').attr('data-total'));
+				 // $('.check_all').click();
+			 }else{
+				 console.log(check_state);
+				 $('#count').text(0);
+				 $('.check_page').prop("checked",false);
+				 $('.check_all').prop("checked",false);
+			 }
+
+
+			 //分页页码点击事件
+	     $('.pagination>li[data-page]').unbind('click');
+	     $('.pagination>li[data-page]').click(function(){
+	       var page = $(this).data('page');
+	       $(this).siblings('li').removeClass('active');
+	       $(this).addClass('active');
+	       $('.Nowpage').val(page);
+	       get_labellist(page,limit);
+	     });
+	     //分页输入内容变化事件
+	     $('.Nowpage').change(function(){
+	     	if($('.Nowpage').val() > total_page){
+	     		alert("输入的页数不能大于总页数");
+	     		$('.Nowpage').val("");
+	     	}
+	     });
+	     //分页输入内容跳转事件
+	     $('.lp_tz').unbind('click');
+	     $('.lp_tz').click(function(){
+	     	var page = $('.Nowpage').val();
+				var nowlimit = $('.limit').val();
+	     	get_labellist(page,nowlimit);
+	     });
+	     //分页选项框跳转事件
+	     $('.limit').change(function(){
+	     	var nowlimit = $('.limit').val();
+				var numbers = $(".limit").find("option");
+				for (var j = 1; j < numbers.length; j++) {
+					if ($(numbers[j]).val() == nowlimit) {
+						$(numbers[j]).attr("selected", "selected");
+					}else {
+						$(numbers[j]).attr("selected", false);
+					}
+				}
+	     	get_labellist(1,nowlimit);
+	     });
+
+	   }
+
+			//语义标签数据加载
+			get_labellist(1,10);
+			function get_labellist(page,limit){
+					var url = '/user/label/get_label_data';
+					if(!page){
+	    			var page = 1;
+	    		}
+					if(!limit){
+						var limit = 10;
+					}
+	    		label_name = $('#label_name').val();
+		    	$.ajax({
+		          type: 'POST',
+		          url: url,
+		          data:{
+		          	'page':page,
+								'limit':limit,
+		          	'label_name':label_name
+		          },
+		          success: function(result){
+		          	console.log(result);
+		          	var data = result.data.list;
+		          	$("#labellist").find("tr").remove();
+		          	if(data.length > 0){
+		          		$('.pz-fenye').removeClass('hide');
+		          		var htmls = '';
+			            $.each(data, function(index, object){
+			               var html = $('#label_info').html();
+			                   html = html.replace('{%id%}', object.id);
+			                   html = html.replace('{%sequence%}', object.sequence);
+			                   html = html.replace('{%label%}', object.label);
+			                   html = html.replace('{%keyword%}', object.keyword);
+			                   html = html.replace('{%id%}', object.id);
+			                   html = html.replace('{%id%}', object.id);
+			                   htmls += html;
+			             });
+
+			             $('#labellist').html(htmls);
+			             $('#count').attr('data-page',page);
+			             $('#count').attr('data-total',result.data.count);
+			             total_page = Math.ceil(result.data.count/limit);
+			             $('#all_page').text(total_page);
+			             fenye(total_page,page,limit);
+
+		          	}else{
+		          		$('.pz-fenye').addClass('hide');
+		              $('#count').text(0);
+		              $('#all_page').text(0);
+		          	}
+		          },
+							error:function(){
+								console.log('获取数据失败');
+							}
+		      })
+			}
+
+
+			//删除单个语义标签信息弹窗
+			function del_single_label(id){
+			 $('#del-single-label').attr('data-id',id);
+			 $('#del-single-label').modal('show');
+			}
+			//删除多个语义标签信息弹窗
+			function del_all_label(){
+			 	var del_id = [];
+			 	//判断是否全部选中
+		 		if($('.check_all').is(':checked')){  //删除所有数据
+		 			//获取当前搜索条件
+
+					del_id= $('.check_all').attr('data-id').split(",");
+
+		 		}else{
+		 			$.each($('.rolecheck:checked'), function(index, object){
+		 				del_id.push($(object).val());
+		 			});
+
+		 		}
+				if(del_id.length == 0){
+					alert("至少选择一条！");
+				}else{
+					$('#number-delete').attr('data-id',del_id);
+					$('#number-delete').modal('show');
+				}
+
+			}
+
+			 //删除语义标签
+			 function dellabel(type){
+			 	console.log(type);
+			 	if(type == 2){
+			 		//单个删除
+			 		var id = $('#del-single-label').attr('data-id');
+			 		console.log(id);
+			 	}else{
+			 		//批量删除
+			 		var id = $('#number-delete').attr('data-id');
+			 		id = id.split(",");
+			 		console.log(id);
+			 	}
+				var url = "{:url('delelte_label')}";
+				$.ajax({
+		  		type:'POST',
+		  		data:{
+		  			ids:id
+		  		},
+		  		dataType:'json',
+		  		url:url,
+		  		success:function(result){
+		  			if(result.code === 0){
+		  				console.log('删除成功');
+		  				window.location.href = '';
+		  			}else{
+		  				console.log('删除失败');
+		  				$('#number-delete').modal('hide');
+		  				$('#del-single-balcklist').modal('hide');
+		  			}
+		  		},
+		  		error:function(){
+		  			console.log('删除失败');
+		  			$('#number-delete').modal('hide');
+		  			$('#del-single-balcklist').modal('hide');
+		  		}
+
+		  	});
+			 }
+		
+			
+			 //添加弹窗
+			 function addlabellist(){
+			 	
+			 	$('#addlabellist').attr('data-id',0);
+			 	$("#labelName").val("");
+				$("#remark").val("");
+	  		$('#myModalLabel>span').text('添加语义标签');
+				$('#addlabellist > div > div > div.modal-footer > button.btn.btn-primary').text('确认');
+			 	$('#addlabellist').modal('show');
+			 }
+
+			 //编辑弹窗
+			 function editlabellist(id){
+			 	$('#addlabellist').attr('data-id',id);
+			 	//获取文本信息
+			 	var url = "{:url('get_edit_label')}";
+			 	$.ajax({
+	            type: 'POST',
+	            url: url,
+	            data: {"id":id},
+	            success: function(result){
+	            	if(result.code == 0){
+	            		console.log(result.data);
+	            		$("#labelName").val(result.data.label);
+	            		$("#remark").val(result.data.keyword);
+	            	}else{
+	            		console.log('获取信息失败');
+	            		// window.location.reload()
+	            	}
+	            }
+	      });
+			 	$('#myModalLabel>span').text('编辑语义标签');
+				$('#addlabellist > div > div > div.modal-footer > button.btn.btn-primary').text('保存');
+			 	$('#addlabellist').modal('show');
+			 }
+
+			 //添加-编辑 语义标签ajax方法
+			 function addlabeldata(){
+				var id = $('#addlabellist').attr('data-id');
+			  var label_name = $("#labelName").val();
+	      var keyword =	$("#remark").val();
+
+				if(label_name == "" || label_name == null){
+					alert('标签名不能为空');
+					return;
+				}
+				if(keyword == "" || keyword == null){
+					alert('关键字不能为空');
+					return;
+				}
+				//将关键词中中文逗号替换成英文逗号
+				keyword=keyword.replace(/，/ig,',');
+				var url = '/user/label/add_label';
+	    	$.ajax({
+	          type: 'POST',
+	          url: url,
+	          data: {"id":id,"label_name":label_name,"keyword":keyword},
+	          success: function(result){
+	          	console.log(result);
+	          	if(result.code == 0){
+	          		console.log('操作成功');
+	          		window.location.reload();
+	          	}else{
+	          		console.log('操作失败');
+	          	}
+	          }
+	      });
+				$('#addlabellist').modal('hide');
+			 }
+    </script>
+
+
+
+
+{/block}

@@ -1,0 +1,1799 @@
+
+<link href="__PUBLIC__/plugs/bsdatepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/bsdatepicker/js/bootstrap-datepicker.js"></script>
+
+<link href="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/plugs/timepicker/bootstrap-timepicker.js"></script>
+
+<script type="text/javascript" src="__PUBLIC__/plugs/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/bootstrap-select/dist/css/bootstrap-select.min.css" />
+
+
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/new_index.css">
+
+<!-- 提示模板框 -->
+<div class="modal fade" id="tips_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+<!-- 弹窗模板 -->
+<script type="text/template" id="popTips">
+	<div class="modal-dialog" style="width:350px;">
+		<div class="modal-content modal-contenttips n_modalcontent">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="mytitleLabel">
+					{{tipstitle}}
+				</h4>
+			</div>
+			<div class="modal-body">
+				{{tipsdata}}
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" class="btn btn-primary"  onclick="{{clickfun}}">
+					确认
+				</button>
+			</div>
+		</div>
+	</div>
+</script>
+<!-- 弹窗展示 -->
+<script type="text/javascript">
+	function popTipswin(obj) {
+		//获取弹窗标题
+		var poptitle = $(obj).attr('data-title');
+		switch (poptitle) {
+			case '暂停所有任务':
+				var title = '操作提示';
+				var note = '确定暂停所有任务？';
+				var click = 'stopAll();';
+				break;
+			case '开始任务':
+				var title = '操作提示';
+				var note = '确定开始该任务？';
+				var click = 'startTask(1);';
+				break;
+			case '暂停任务':
+				var title = '操作提示';
+				var note = '确定暂停该任务？';
+				var click = 'startTask(2);';
+				break;
+			case '终止任务':
+				var title = '操作提示';
+				var note = '确定终止该任务？';
+				var click = 'startTask(3);';
+				break;
+			case '删除任务':
+				var title = '操作提示';
+				var note = '确定删除该任务？';
+				var click = 'startTask(-1);';
+				break;
+			case '导出号码':
+				var title = '操作提示';
+				var note = '确定导出该任务中所有的号码？';
+				var click = 'outexcel();';
+				break;
+			case '导出未拨打号码':
+				var title = '操作提示';
+				var note = '确定导出该任务中未拨打的号码？';
+				var click = 'outoutexcelNotCall()';
+				break;
+			case '批量删除':
+				var title = '批量删除';
+				var note = '确定批量删除选中的数据？';
+				var click = 'n_listdatadelete(0,0);';
+				break;
+			case '删除客户':
+				var title = '操作提示';
+				var note = '确定删除选中记录？';
+				var click = 'delete_custom();';
+				break;
+			case '导出文件':
+				var title = '操作提示';
+				var note = '确定导出选中数据？';
+				var click = 'n_listfileout();';
+				break;
+			case '导出客户':
+				var title = '操作提示';
+				var note = '确定导出选中数据？';
+				var click = 'n_listdataout();';
+				break;
+			case '当前通话导出号码':
+				var title = '操作提示';
+				var note = '确定导出通话记录中的号码？';
+				var click = 'outexcel();';
+				break;
+			case '导出话单':
+				var title = '操作提示';
+				var note = '确定导出话单？';
+				var click = 'exportlistExcel();';
+				break;
+			case '删除通话记录':
+				var title = '操作提示';
+				var note = '确认要删除所选中的数据？';
+				var id = $(obj).attr('data-id');
+				console.log("接收传过来的"+id);
+				var click = 'del('+id+');';
+				break;
+			case '批量删除通话记录':
+				var title = '操作提示';
+				var note = '确认要删除所选中的数据？';
+				var click = 'del();';
+				break;
+			case '开启':    //商家账户中账户状态开启/锁定
+				var title = '操作提示';
+				var note = '确认开启？';
+				var click = 'openstar()';
+				break;
+			case '加入CRM':
+				var title = '操作提示';
+				var note = '确定加入CRM？';
+				var click = 'joincrm()';
+				break;
+			case '锁定':
+				var title = '操作提示';
+				var note = '确认锁定？';
+				var click = 'checkthis()';
+				break;
+			case '重置密码':
+				var title = '操作提示';
+				var note = '确认重置密码？';
+				var click = 'resetpassword()';
+		}
+
+		$template = $("#popTips").html();
+		$template = $template.replace("{{tipstitle}}", title);
+		$template = $template.replace("{{tipsdata}}", note);
+		$template = $template.replace("{{clickfun}}", click);
+		//追加
+		$('#tips_model').html($template);
+		$('#tips_model').modal('show');
+	}
+
+	//导出文件
+	function n_listdataout(task_uid, num) {
+		$('#tips_model').modal('hide');
+	}
+
+	//删除客户
+	function n_listdatadelete(task_uid, num) {
+		$('#tips_model').modal('hide');
+	}
+
+
+
+
+</script>
+
+<script type="text/javascript" src="__PUBLIC__/plugs/jquery/jquery.form.min.js"></script>
+<!-- 新建任务 -->
+<style media="screen">
+	@media screen and (min-width: 1370px){
+		#NewPlan .modal-dialog .modal-content .modal-body {
+		    overflow-y: scroll;
+		    max-height: 540px;
+		}
+	}
+	@media screen and (max-width: 1370px){
+		#NewPlan .modal-dialog .modal-content .modal-body {
+		    overflow-y: scroll;
+		    max-height: 380px;
+		}
+	}
+	@media (min-width: 768px){
+		#NewPlan #home > div.main-box-body > div.form-group > label.control-label {
+		    width: 26%;
+		}
+	}
+</style>
+<div class="modal fade" id="NewPlan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog modal-lg" >
+    <div class="modal-content">
+
+       <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabeltitle">新建拨打任务</h4>
+				</div>
+
+       <div class="modal-body pagelists pz_innerbox_lay">
+					<form id="form" method="post" class="form-horizontal" enctype="multipart/form-data">
+						<div id='task_id_only' hidden>
+							<input value="">
+						</div>
+				    <div class="tab-content">
+						  <div role="tabpanel" class="tab-pane active" id="home">
+					      <div class="main-box-body clearfix">
+
+									<div class="form-group" style="margin-top:20px;">
+										<input type="hidden" name="call_type" id="call_type" value="1">
+										<label class="col-lg-2 control-label">任务名称:</label>
+										<div class="col-lg-8 col-sm-8">
+											 <input type="text" class="form-control textwidth" placeholder="请输入任务名称" name="task_name" id="name" value="{$list.name|default=''}" />
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="col-lg-2 control-label">选择话术:</label>
+										<div class="col-lg-8 col-sm-8">
+											<select name="scenarios_id" id="scenarios_id" class="form-control textwidth resetSel c_selectimg">
+												<option value="">请选择话术</option>
+												{volist name="scenarioslist" id="item"}
+													<option value="{$item['id']}" >  {$item['name']} </option>
+												{/volist}
+											</select>
+											<!--
+												<input type="text" class="form-control textwidth" name="destination_extension" id="destination_extension" autocomplete="false" value="{$list.destination_extension|default=''}">
+												<div class="help-block">越高排序越靠前</div>-->
+										</div>
+									</div>
+
+									<!-- 工作日期 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">工作日期:</label>
+										<div class="col-lg-8 col-sm-8 pz_addTimes_click">
+											<div class="form-group">
+				 							 	<div class="col-lg-12 col-sm-12">
+													<!--<input type="hidden" name="start_date" id="STime_data" value="" />-->
+				 							 		<div class="col-lg-4 col-sm-4 n_inputwidth">
+				 							 			<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择开始日期" id="start_date" name="start_date" value="" readonly="" />
+				 							 		</div>
+				 							 		<script>
+				 							 		$('#start_date').fdatepicker({
+				 							 			format: 'yyyy-mm-dd',
+				 							 			pickTime: false,
+				 							 			autoShow: true,
+				 							 		});
+				 							 		</script>
+													<div style="text-align:center; line-height: 30px;width: 25px;" class="pull-left"> 至 </div>
+				 									<div class="col-lg-4 col-sm-4 n_inputwidth">
+				 										<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择结束日期" id="end_date" name="end_date" value="" readonly="" />
+				 									</div>
+														<script>
+															$('#end_date').fdatepicker({
+																format: 'yyyy-mm-dd',
+																pickTime: false,
+																autoShow: true,
+															});
+														</script>
+													<div class="col-lg-3 col-sm-3 pz_addTimes" data-addtime="工作日期">
+														<img style="margin-right:6px;vertical-align: sub;" src="__PUBLIC__/img/tianjia.png"/>添加多个日期
+													</div>
+				 							 	</div>
+				 							</div>
+
+											<div class="form-group pz_formgroup_moban"  id="list_data" style="margin-bottom: 0px;"></div>
+
+										</div>
+									</div>
+									<!-- /工作日期 -->
+									<!-- 工作时间 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">工作时间:</label>
+										<div class="col-lg-8 col-sm-8 pz_addTimes_click">
+											<div class="form-group" >
+												<div class="col-lg-12 col-sm-12">
+													 <input type="hidden" name="morning" id="morning" value="" />
+														<div class="col-lg-4 col-sm-4 n_inputwidth">
+															<input type="text" class="form-control textTimeWidth c_timebgimg" id="start_time" placeholder="请输入开始时间" name="start_time" value="" readonly="" />
+														</div>
+														<script>
+															$('#start_time').timepicker({  //fdatepicker
+																format: 'hh:ii',
+																defaultTime:'8:00',
+																showMeridian:false
+															});
+														</script>
+														<div style="text-align:center; line-height: 30px;width: 25px;" class="pull-left"> 至 </div>
+
+														<div class="col-lg-4 col-sm-4 n_inputwidth">
+															<input type="text" class="form-control textTimeWidth c_timebgimg" id="end_time" placeholder="请输入结束时间" name="end_time" value="" readonly="" />
+														</div>
+														<script>
+															$('#end_time').timepicker({
+																format: 'hh:ii',
+																defaultTime:'21:30',
+																showMeridian:false
+															});
+														</script>
+														<div class="col-lg-3 col-sm-3 pz_addTimes" data-addtime="工作时间">
+															<img style="margin-right:6px;vertical-align: sub;" src="__PUBLIC__/img/tianjia.png"/>添加多个时间
+														</div>
+												</div>
+											</div>
+											<!-- 添加多个工作时间 -->
+											<div class="form-group pz_formgroup_moban" id="list_time" style="margin-bottom: 0px;"></div>
+											<!-- / 添加多个工作时间 -->
+											<div style="color: #909090;font-size:12px;padding:10px 0px;">温馨提示：有效工作的时间范围是08:00-21:30</div>
+										</div>
+									</div>
+
+									<!--待处理-->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">任务是否自动启动：</label>
+										<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="autocallY" name="is_auto" value="1" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status " style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="autocallN" name="is_auto" value="0" title="否" checked="checked">
+													<span>否</span>
+											</div>
+											<div class="tips-manualoperation" style="color: #909090;font-size:12px;padding:32px 0px 15px 0px;">温馨提示：该任务到达指定时间后将不会自动开启，您需手动开启任务</div>
+											<div class="tips-auto hidden" style="color: #909090;font-size:12px;padding:32px 0px 15px 0px;">温馨提示：该任务到达指定时间后将自动拨打</div>
+										</div>
+							    </div>
+
+									<!-- /工作时间 -->
+
+									<!-- 机器人数量 -->
+									<div class="form-group" style="margin-top:10px;">
+										<label class="col-lg-2 control-label">机器人数量:</label>
+										<div class="col-lg-8 col-sm-8">
+											 <input type="text" class="form-control textwidth dis_in" placeholder="请输入机器人数量" name="robot_count" id="number" value="" />
+											 <div class="pz_tishi" id="usable_robot_count">当前可用机器人数量为<span></span> </div>
+										</div>
+									</div>
+									<!-- /机器人数量 -->
+
+									<!--选择线路 待处理-->
+									{if condition="!empty($line_datas)"}
+									<div class="form-group" style="margin-top:10px;">
+										<label class="col-lg-2 control-label">选择线路:</label>
+										<div class="col-lg-8 col-sm-8">
+
+											<select class="form-control textwidth resetSel c_selectimg dis_in" name="line_id" onchange="getline()">
+												<option value='0'>请选择线路</option>
+												{volist name='line_datas' id='line_data'}
+													{if $line_data['id'] != $default_line_id}
+														<option value="{$line_data['id']}">{$line_data['name']}</option>
+													{else/}
+														<option value="{$line_data['id']}" selected="selected">{$line_data['name']}</option>
+													{/if}
+												{/volist}
+											</select>
+											<div class="tishi" id="default-lines">
+												<input type="checkbox" class="defaultline " id="defaultlines" name="is_default_line" onclick="checkline(this);">
+												将此线路设置为默认线路
+											</div>
+										</div>
+									</div>
+                  {/if}
+									<!--/选择线路-->
+									<!--ASR-->
+									{if condition="!empty($asr_list)"}
+									<div class="form-group" style="margin-top:10px;">
+										<label class="col-lg-2 control-label">选择ASR:</label>
+										<div class="col-lg-8 col-sm-8">
+
+											<select class="form-control textwidth resetSel c_selectimg dis_in" name="asr_id">
+												<option value='0'>请选择ASR</option>
+												{volist name='asr_list' id='asr'}
+													<option value="{$asr['id']}">{$asr['name']}</option>
+												{/volist}
+											</select>
+										</div>
+									</div>
+                  {/if}
+                  
+                  
+                  	 <!-- 任务异常短信提醒 -->
+									<div class="form-group" style="margin-top:10px;">
+										<label class="col-lg-2 control-label">任务异常短信提醒的手机号码:</label>
+										<div class="col-lg-8 col-sm-8">
+											 <input type="text" class="form-control textwidth" placeholder="任务异常短信提醒的手机号码" name="task_abnormal_remind_phone" id="task_abnormal_remind_phone" value="" />
+											 <!--<div class="pz_tishi" id="usable_robot_count">当前可用机器人数量为<span></span> </div>-->
+										</div>
+									</div>
+									<!-- /任务异常短信提醒 -->
+                  
+                  <!-- 重新呼叫 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否重新呼叫:</label>
+										<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+												<label style="cursor:pointer;">
+													<input type="radio" class="radio-radioed" id="yes_again_call" name="is_again_call" value="是" title="是">
+													<span>是</span>
+												</label>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+												<label style="cursor:pointer;">
+													<input type="radio" class="radio-radioed" id="not_again_call" name="is_again_call" value="否" title="否" checked="">
+													<span>否</span>
+												</label>
+											</div>
+											<div class="pz_clear hide pz_again_call" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择要重新呼叫的通话状态(可多选)：</p>
+												<div class="pz_Duanxinfasong">
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status3" name="again_call_status" value="3" title="无人接听">
+														<span>无人接听</span>
+													</label>
+												  <label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status4" name="again_call_status" value="4" title="停机">
+														<span>停机</span>
+													</label>
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status5" name="again_call_status" value="5" title="空号">
+														<span>空号</span>
+													</label>
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status6" name="again_call_status" value="6" title="正在通话中">
+														<span>正在通话中</span>
+													</label>
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status8" name="again_call_status" value="8" title="用户拒接">
+														<span>用户拒接</span>
+													</label>
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status9" name="again_call_status" value="9" title="用户拒接">
+														<span>网络忙</span>
+													</label>
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status10" name="again_call_status" value="10" title="来电提醒">
+														<span>来电提醒</span>
+													</label>
+													<label class="field-status">
+														<input type="checkbox" class="radio-radioed" id="again_call_status11" name="again_call_status" value="11" title="呼叫转移失败">
+														<span>呼叫转移失败</span>
+													</label>
+												</div>
+												<div>
+  												<label style="color: #000000;font-size:14px;padding-bottom:10px;float:left;padding-top:7px;" class="">重新呼叫次数：</label>
+  												<div class="col-lg-9 col-sm-9" style="float:left;">
+  												  <select id="again_call_count" class="form-control textwidth" name="">
+  														<option value='0'>请选择重新呼叫次数</option>
+  														<option value='1'>1次</option>
+  														<option value='2'>2次</option>
+  														<option value='3'>3次</option>
+  														<option value='4'>4次</option>
+  													</select>
+  												</div>
+											  </div>
+											</div>
+										</div>
+							    </div>
+									<!-- /重新呼叫 -->
+									<!--推送给云控-->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否将意向客户推送给云控：</label>
+										<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+												<label style="cursor:pointer;">
+													<input type="radio" class="radio-radioed" id="yunkong-agree" name="yunkong"  value="是" title="是">
+													<span>是</span>
+												</label>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+												<label style="cursor:pointer;">
+													<input type="radio" class="radio-radioed" id="yunkong-disagree" name="yunkong"  value="否" title="否" checked="">
+													<span>否</span>
+                        </label>
+											</div>
+
+											<div class="pz_clear hide pz_yunkong_dengji" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择加入CRM的客户意向等级(可多选)：</p>
+												<div class="pz_Yixiangdengji">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="level_yun6" name="yunkong-Yixiangdengji" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="level_yun5" name="yunkong-Yixiangdengji" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="level_yun4" name="yunkong-Yixiangdengji" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group pz_yunkong hide">
+											<label class="col-lg-2 control-label">推送人员：</label>
+											<div class="col-lg-9 col-sm-9">
+												<div >
+												  <input type='search' id='yunkong_username' class='form-control textwidth' style='margin-bottom:0;float:left' />
+  												<button type='button' id='query_yunkong_username' onclick="check_yunkong_username();" class='btn btn-success submit-btn'  style="float:left">检索</button>
+												</div>
+												<p id='verify_yunkong_username_result' style="clear:both"></p>
+											</div>
+										</div>
+									</div>
+                  
+                  
+                  
+                  
+                  
+									<!--/ASR-->
+									<!--==============待处置=========待处理=============我是万恶的分割线===================================================================================-->
+
+									<!-- 是否开启人工转接 -->
+									<!--<div class="form-group">-->
+									<!--	<label class="col-lg-2 control-label">是否开启人工转接：</label>-->
+									<!--	<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">-->
+									<!--		<div class="field-status pz_radioChecked">-->
+									<!--				<input type="radio" class="radio-radioed" id="YesZhuangjie" name="Zhuangjie" value="是" title="是">-->
+									<!--				<span>是</span>-->
+									<!--		</div>-->
+									<!--		<div class="field-status pz_radioChecked" style="margin-left:20px;">-->
+									<!--				<input type="radio" class="radio-radioed" id="NotZhuangjie" name="Zhuangjie" value="否" title="否" checked="">-->
+									<!--				<span>否</span>-->
+									<!--		</div>-->
+									<!--	</div>-->
+							  <!--  </div>-->
+									<!-- /是否开启人工转接 -->
+
+									<!-- 人工坐席 -->
+									<!--<div class="form-group pz_rengongzuoxi hide">-->
+									<!--	<label class="col-lg-2 control-label">人工坐席：</label>-->
+									<!--	<div class="col-lg-8 col-sm-8">-->
+									<!--			<select id="phone_id" class="form-control textwidth" name="phone_id">-->
+									<!--				<option value=''>请选择人工座席</option>-->
+									<!--			</select>-->
+									<!--	</div>-->
+									<!--</div>-->
+									<!-- /人工坐席 -->
+
+									<!--是否将意向客户加入CRM 待处理-->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否将意向客户加入CRM：</label>
+										<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="agree" name="joinCRM"  value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="disagree" name="joinCRM"  value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+
+											<div class="pz_clear hide pz_CRM_dengji" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择加入CRM的客户意向等级(可多选)：</p>
+												<div class="pz_Yixiangdengji">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="levelA" name="crm-Yixiangdengji" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="levelB" name="crm-Yixiangdengji" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="levelC" name="crm-Yixiangdengji" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--/是否将意向客户加入CRM-->
+
+
+									<!-- 是否启用微信公众号推送 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否启用公众号推送：</label>
+										<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="YesTuisong" name="Tuisong" value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="NotTuisong" name="Tuisong" value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+
+											<div class="pz_clear hide pz_tuisong_dengji" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择要推送的客户意向等级(可多选):</p>
+												<div class="pz_Yixiangdengji">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="wx_push-level6" name="wx_push-Yixiangdengji" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="wx_push-level5" name="wx_push-Yixiangdengji" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="wx_push-level4" name="wx_push-Yixiangdengji" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+										</div>
+							    </div>
+							    <div class="form-group pz_tuisong_dengji hide">
+										<label class="col-lg-2 control-label">推送人员：</label>
+										<div class="col-lg-8 col-sm-8">
+												<select id="wx-push-users" class="form-control textwidth" name="">
+													<option >请选择推送人员</option>
+													{volist name="wx_push_users" id="wp_push_user"}
+													<option value="{$wp_push_user['id']}">
+														{$wp_push_user['name']}
+													</option>
+												{/volist}
+												</select>
+										</div>
+									</div>
+									<!-- /是否启用微信公众号推送 -->
+
+									<!-- 是否触发短信发送 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">是否触发短信发送:</label>
+										<div class="col-lg-8 col-sm-8 pz_radio" style="margin-top: 6px;">
+											<div class="field-status pz_radioChecked">
+													<input type="radio" class="radio-radioed" id="YesDuanxinfasong" name="Duanxinfasong" value="是" title="是">
+													<span>是</span>
+											</div>
+											<div class="field-status pz_radioChecked" style="margin-left:20px;">
+													<input type="radio" class="radio-radioed" id="NotDuanxinfasong" name="Duanxinfasong" value="否" title="否" checked="">
+													<span>否</span>
+											</div>
+
+											<div class="pz_clear hide pz_duanxing_fasong" style="padding-top: 10px;">
+												<p style="color: #000000;font-size:14px;padding-bottom:10px;">选择要发送的客户意向等级(可多选)：</p>
+												<div class="pz_Duanxinfasong">
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="leve6" name="Duanxinfasong-dengji" value="6" title="A等级">
+															<span>A级(意向客户)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="leve5" name="Duanxinfasong-dengji" value="5" title="B等级">
+															<span>B级(一般意向)</span>
+													</label>
+													<label class="field-status">
+															<input type="checkbox" class="radio-radioed" id="leve4" name="Duanxinfasong-dengji" value="4" title="C等级">
+															<span>C级(简单对话)</span>
+													</label>
+												</div>
+											</div>
+
+										</div>
+							    </div>
+									<!-- /是否触发短信发送 -->
+									<!-- 短信模板 -->
+									<div class="form-group pz_duanxing_fasong hide">
+										<label class="col-lg-2 control-label">短信模板：</label>
+										<div class="col-lg-8 col-sm-8">
+												<select id="sms-template" class="form-control textwidth" name="">
+													<option >请选择短信模板</option>
+													<!-- <option value='模板1'>模板1</option>
+													<option value='模板2'>模板2</option> -->
+													{volist name="sms_template" id="item_sms"}
+													<option value="{$item_sms['id']}" data-sign_name="{$item_sms['sign_name']}" data-content="{$item_sms['content']}">
+														{$item_sms['name']}
+													</option>
+												{/volist}
+												</select>
+												<div class="pz_clear smsmodal hidden  " style="padding-top: 10px;">
+													<p style="color: #000;font-size:14px;padding-bottom:10px;">短信模板内容预览：</p>
+													<div class="sms-modal">
+														<p id="show_sms_template">
+														【中国移动】尊敬的客户176*****607，9月话费账单已送达您的139邮箱，看账单参与“金秋旅游季”活动赢100元话费！点击查看账单。
+														</p>
+													</div>
+												</div>
+										</div>
+									</div>
+
+									<!-- /短信模板 -->
+									<!-- 备注 -->
+									<div class="form-group">
+										<label class="col-lg-2 control-label">备注：</label>
+										<div class="col-lg-8 col-sm-8">
+											<textarea name="remark" cols="60" rows="5" maxlength="30" id="remark" style="border: 1px solid #e0e2e4;padding: 6px 11px;font-size: 14px;color: #adadad;" placeholder="请输入备注信息，限定30字以内"></textarea>
+										</div>
+									</div>
+									<!-- /备注 -->
+					      </div>
+						  </div>
+						</div>
+					</form>
+       </div>
+			 <div class="form-group modal-footer" style="margin:0px;">
+				 <div class="">
+					 <input type="hidden" name="taskId" id="taskId" value="{$list.uuid|default=''}" />
+					 <input type="hidden" name="groupId" id="groupId" value="{$list.disable_dial_timegroup|default=''}" />
+					 <input type="hidden" name="onetime" id="onetime" value="{$list.timerange.0.begin_datetime|default='08:00'}" />
+				   <input type="hidden" name="twotime" id="twotime" value="{$list.timerange.0.end_datetime|default='12:00'}" />
+					 <input type="hidden" name="threetime" id="threetime" value="{$list.timerange.1.begin_datetime|default='14:00'}" />
+					 <input type="hidden" name="fourtime" id="fourtime" value="{$list.timerange.1.end_datetime|default='20:00'}" />
+					 <span class="btn submit-btn btn-default" data-dismiss="modal" aria-label="Close" style="padding: 5px 20px;">取 消</span>
+					 <span class="btn btn-success submit-btn" onclick="checkform_create_task();" style="padding: 5px 20px;">确 定</span>
+				 </div>
+			 </div>
+				<!-- 确定提交 提示框 -->
+				<!-- <style>.pz_modal{background:rgba(0, 0, 0, 0.62);}</style> -->
+				<div class="modal fade in pz_modal" role="dialog" id="l-delnote" style="display: none;">
+					<div class="modal-dialog modal-sm" style="width:350px; top:20%;">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								<span class="pz_clockshan">×</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel">操作提示</h4>
+							</div>
+							<div class="modal-body modal-body-tips">确定新建任务？</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" onclick="pz_delFlowNote();">   取消		</button>
+								<button type="button" class="btn btn-primary" onclick="adFlowNote();">	 确定    </button>
+							</div>
+						</div>
+					</div>
+				</div>
+	  </div>
+
+  </div>
+
+	<script type="text/javascript">
+	 function is_phone(phone)
+      {
+          //手机号正则
+      	var phoneReg = /^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/;
+      	//电话
+      	if (!phoneReg.test(phone)) {
+      		return false;
+      	}else{
+      	  return true;
+      	}
+      }	
+	
+		//判断线路选择启动默认线路勾选
+		$('#defaultlines').attr("disabled",true);
+		function getline(){
+			var line_id = $('select[name="line_id"]').val();
+			console.log(line_id);
+			if(line_id != 0){
+				$('#defaultlines').attr("disabled",false);
+			}else if(line_id == 0){
+				$('#defaultlines').attr("disabled",true);
+				$('#defaultlines').attr("checked",false);
+			}
+		}
+		//选中默认编辑路线字体颜色变化
+		function checkline(checkbox){
+			if(checkbox.checked == true){
+				$('.tishi').addClass('default-line');
+			}else{
+				$('.tishi').removeClass('default-line');
+			}
+		}
+
+		var flagdate = 0;
+		var flagtime = 0;
+		//编辑计划
+		function editNewPlan(){
+			 $('#form').html(window.form);
+			 $('#NewPlan').modal('show');
+			 $('#myModalLabeltitle').text('编辑拨打计划');
+			 var taskID = $('#nowTaskID').val();
+			 var url = "{:url('get_task_config_data_api')}";
+			 $.ajax({
+			 			dataType : "json",
+						type : "post",
+						data : {'task_id':taskID},
+						url : url,
+						success: function(data){
+							console.log(data);
+							var code = data.code;
+							var data = data.data;
+							if(code == 0 ){
+								if( data.call_phone_id != 0){
+									$('#defaultlines').attr("disabled",false);
+								}else if (data.call_phone_id == 0){
+									$('#defaultlines').attr("disabled",true);
+								}
+								$('input[name="task_name"]').val(data.task_name);
+								$("#scenarios_id option[value='"+data.scenarios_id+"']").attr("selected", "selected");
+								flagdate = data.task_date.length;
+								flagtime = data.task_time.length;
+								$.each(data.task_date, function(index, object){
+
+									if(index == 0){
+										$('#start_date').val(object.start_date);
+										$('#end_date').val(object.end_date);
+
+									}else if(index != 0){
+										 	var gongzuoriqi_html = '<div class="col-lg-11 col-sm-11 pz_zhuijiadata" style="margin-top: 10px">';
+													gongzuoriqi_html += '<input type="hidden" name="morning" id="STime_data" value="" />';
+													gongzuoriqi_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+													gongzuoriqi_html += '<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择开始日期" class="form-control" id="start_date'+index+'" name="start_date" value="'+object.start_date+'" readonly="" />';
+													gongzuoriqi_html += '</div><div style="text-align:center; line-height: 30px;width: 25px;" class="pull-left"> 至 </div>';
+													gongzuoriqi_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+													gongzuoriqi_html += '<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择结束日期" id="end_date'+index+'" name="end_date" value="'+object.end_date+'" readonly="" />';
+													gongzuoriqi_html += '</div>';
+													gongzuoriqi_html += '<div class="col-lg-1 col-sm-1 pz_delTimes"><img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+													gongzuoriqi_html += '</div>';
+										 $('#list_data').append(gongzuoriqi_html);
+										 delTimes();
+										 //时间
+										 $('#start_date'+index).fdatepicker({
+											 format: 'yyyy-mm-dd',
+										 });
+										 $('#end_date'+index).fdatepicker({
+											 format: 'yyyy-mm-dd',
+										 });
+									}
+								});
+								$.each(data.task_time, function(index, object){
+									if(index == 0){
+										$('#start_time').val(object.start_time);
+										$('#end_time').val(object.end_time);
+
+									}else if(index != 0){
+											var gongzuoshijian_html = '<div class="col-lg-11 col-sm-11 pz_zhuijiadata" style="margin-top: 10px;">';
+													gongzuoshijian_html += '<input type="hidden" name="morning" id="" value="" />';
+													gongzuoshijian_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+													gongzuoshijian_html += '<input type="text" class="form-control textTimeWidth c_timebgimg" placeholder="请输入开始时间" name="start_time" value="'+object.start_time+'" readonly="" id="start_time'+index+'"/>';
+													gongzuoshijian_html += '</div>';
+													gongzuoshijian_html += '<div style="text-align:center; line-height: 30px;width: 25px;" class="pull-left"> 至 </div>';
+													gongzuoshijian_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+													gongzuoshijian_html += '<input type="text" class="form-control textTimeWidth c_timebgimg"  placeholder="请输入结束时间" name="end_time" value="'+object.end_time+'" readonly="" id="end_time'+index+'"/>';
+													gongzuoshijian_html += '</div>';
+													gongzuoshijian_html += '<div class="col-lg-1 col-sm-1 pz_delTimes">';
+													gongzuoshijian_html += '<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+													gongzuoshijian_html += '</div>';
+													gongzuoshijian_html += '</div>';
+											 $('#list_time').append(gongzuoshijian_html);
+											 delTimes();
+											 //时间
+											 $('#start_time'+index).timepicker({
+												 	format: 'hh:ii:ss',
+												 	// pickTime: true,
+												 	defaultTime:'8:00',
+												 	showMeridian:false,
+											 });
+											$('#end_time'+index).timepicker({
+												format: 'hh:ii:ss',
+												// pickTime: true,
+												defaultTime:'21:30',
+												showMeridian:false,
+											});
+										}
+								});
+								$("input[type=radio][name='is_auto'][value ='"+data.is_auto+"' ]").attr("checked", "checked");
+								$("#number").val(data.robot_cnt);
+								$("select[name='line_id'] option[value='"+data.call_phone_id+"']").attr("selected", "selected");
+								$('#remark').text(data.remarks);
+								$('#usable_robot_count > span').text(data.usable_robot_count);
+								$('#task_id_only > input').val(data.task_id);
+								if(data.default_line_id == 1){
+									$('#defaultlines').attr('checked','checked');
+								}
+								date_func();
+								if(data.send_sms_status == 1){
+									$('#YesDuanxinfasong').click();
+									$('#sms-template').val(data.sms_template_id);
+									$('#sms-template').trigger('change');
+									// $('')
+									var send_sms_level = data.send_sms_level.split(',');
+									var send_sms_level_length = send_sms_level.length;
+									for(var i=0; i < send_sms_level_length; i++){
+										$('#leve' + send_sms_level[i]).prop('checked', true);
+									}
+								}
+							}
+						}
+			 })
+		}
+		// 时间
+		var riqi_frequency = flagdate+1; //定义工作日期点击次数
+		var shijian_frequency = flagtime+1; //定义工作时间点击次数
+		var paichu_frequency = 0; //定义排除日期点击次数
+    
+    var query_yunkong_username_status = 0;
+    //检索云控用户名
+    function  check_yunkong_username(){
+        var data = {};
+        data.username = $('#yunkong_username').val();
+        var url = '{:url("user/plan/verify_yunkong_username")}';
+        $.ajax({
+          type:"POST",
+          data:data,
+          url:url,
+          dataType:"json",
+          success:function(result){
+            console.log(result);
+            if(result.code == 0){
+              $('#verify_yunkong_username_result').css('color', 'green');
+              $('#verify_yunkong_username_result').text('当前用户可以进行推送');
+              query_yunkong_username_status = 1;
+            }else{
+              $('#verify_yunkong_username_result').css('color', 'red');
+              $('#verify_yunkong_username_result').text('当前用户不存在');
+              query_yunkong_username_status = 2;
+            }
+          },
+          error:function(){
+            console.log('错误');
+          }
+        });
+      }
+    
+    
+    
+		date_func();
+		function date_func()
+		{
+			$(".pz_addTimes_click .form-group .col-lg-12 .pz_addTimes").unbind('click');
+			$(".pz_addTimes_click .form-group .col-lg-12 .pz_addTimes").click(function(){
+			//得到当前点击的日期data-addtime属性，属性值有 "工作日期","工作时间","排除日期"
+			var $time_state = $(this).attr("data-addtime");
+			switch ($time_state) {
+				case '工作日期':
+					riqi_frequency = riqi_frequency + 1;
+					var gongzuoriqi_html = '<div class="col-lg-11 col-sm-11 pz_zhuijiadata" style="margin-top: 10px">';
+					gongzuoriqi_html += '<input type="hidden" name="morning" id="STime_data" value="" />';
+					gongzuoriqi_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+					gongzuoriqi_html += '<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择开始日期" class="form-control" id="start_date'+riqi_frequency+'" name="start_date" value="" readonly="" />';
+					gongzuoriqi_html += '</div><div style="text-align:center; line-height: 30px;width: 25px;" class="pull-left"> 至 </div>';
+					gongzuoriqi_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+					gongzuoriqi_html += '<input type="text" class="form-control textTimeWidth c_datebgimg" placeholder="请选择结束日期" id="end_date'+riqi_frequency+'" name="end_date" value="" readonly="" />';
+					gongzuoriqi_html += '</div>';
+					gongzuoriqi_html += '<div class="col-lg-1 col-sm-1 pz_delTimes"><img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+					gongzuoriqi_html += '</div>';
+					$(this).parents(".pz_addTimes_click").find(".pz_formgroup_moban").append(gongzuoriqi_html);
+					delTimes();//删除多余的时间
+					// 工作日期
+					$('#start_date'+riqi_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+					$('#end_date'+riqi_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+				break;
+				case '工作时间':
+					shijian_frequency = shijian_frequency + 1;
+					var gongzuoshijian_html = '<div class="col-lg-11 col-sm-11 pz_zhuijiadata" style="margin-top: 10px;">';
+							gongzuoshijian_html += '<input type="hidden" name="morning" id="" value="" />';
+							gongzuoshijian_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+							gongzuoshijian_html += '<input type="text" class="form-control textTimeWidth c_timebgimg" id="start_time'+shijian_frequency+'" placeholder="请输入开始时间" name="start_time" value="" readonly="" />';
+							gongzuoshijian_html += '</div>';
+							gongzuoshijian_html += '<div style="text-align:center; line-height: 30px;width: 25px;" class="pull-left"> 至 </div>';
+							gongzuoshijian_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+							gongzuoshijian_html += '<input type="text" class="form-control textTimeWidth c_timebgimg" id="end_time'+shijian_frequency+'"  placeholder="请输入结束时间" name="end_time" value="" readonly="" />';
+							gongzuoshijian_html += '</div>';
+							gongzuoshijian_html += '<div class="col-lg-1 col-sm-1 pz_delTimes">';
+							gongzuoshijian_html += '<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+							gongzuoshijian_html += '</div>';
+							gongzuoshijian_html += '</div>';
+
+					$(this).parents(".pz_addTimes_click").find(".pz_formgroup_moban").append(gongzuoshijian_html);
+					delTimes();//删除多余的时间
+					// 工作时间
+					$('#start_time'+shijian_frequency).timepicker({format: 'hh:ii:ss',pickTime: true,showMeridian:false,	defaultTime:'8:00'});
+					$('#end_time'+shijian_frequency).timepicker({format: 'hh:ii:ss',pickTime: true,showMeridian:false,	defaultTime:'21:30'});
+				break;
+				case '排除日期':
+					paichu_frequency = paichu_frequency + 1;
+					var paichuriqi_html = '<div class="col-lg-11 col-sm-11 pz_zhuijiadata" style="margin-top: 10px;">';
+							paichuriqi_html += '<input type="hidden" name="morning" id="STime_data" value="" />';
+							paichuriqi_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+							paichuriqi_html += '<input type="text" style="form-control textTimeWidth" placeholder="请选择日期" class="form-control" id="sOvercome_data'+paichu_frequency+'" name="sOvercome_data'+paichu_frequency+'" value="" readonly="" />';
+							paichuriqi_html += '</div>';
+							paichuriqi_html += '<div style="text-align:center; line-height: 30px;width:4%;" class="pull-left"> 至 </div>';
+							paichuriqi_html += '<div class="col-lg-3 col-sm-3 n_inputwidth">';
+							paichuriqi_html += '<input type="text" class="form-control textTimeWidth" placeholder="请选择日期" id="eOvercome_data'+paichu_frequency+'" name="eOvercome_data'+paichu_frequency+'" value="" readonly="" />';
+							paichuriqi_html += '</div>';
+							paichuriqi_html += '<div class="col-lg-1 col-sm-1 pz_delTimes">';
+							paichuriqi_html += '<img style="margin-right:8px;vertical-align: sub;" src="__PUBLIC__/img/shanchu.png"/>';
+							paichuriqi_html += '</div>';
+							paichuriqi_html += '</div>';
+
+					$(this).parents(".pz_addTimes_click").find(".pz_formgroup_moban").append(paichuriqi_html);
+					delTimes();//删除多余的时间
+					// 排除日期
+					$('#sOvercome_data'+paichu_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+					$('#eOvercome_data'+paichu_frequency).fdatepicker({format: 'yyyy-mm-dd',pickTime: false});
+				break;
+			}
+		});
+			$('input[name="is_auto"]').unbind('change');
+			$('input[name="is_auto"]').change(function(){
+				if($('input[name="is_auto"][value="1"]').prop("checked")){
+					$(".tips-auto").removeClass('hidden');
+					$(".tips-manualoperation").addClass('hidden');
+				}else{
+					$(".tips-manualoperation").removeClass('hidden');
+					$(".tips-auto").addClass('hidden');
+				}
+			})
+
+			//短信模板显示
+			$('#sms-template').unbind('change');
+			$('#sms-template').change(function(){
+				if($('#sms-template').val() != '请选择短信模板'){
+					var sign_name = $(this).find('option:selected').data('sign_name');
+					var content = $(this).find('option:selected').data('content');
+					$('#show_sms_template').text('【'+sign_name+'】' + content);
+					$('.smsmodal').removeClass('hidden');
+				}else{
+					$('.smsmodal').addClass('hidden');
+				}
+			})
+
+
+			// radio事件
+			$(".pz_radio .pz_radioChecked input[type='radio']").unbind('click');
+			$(".pz_radio .pz_radioChecked input[type='radio']").click(function(){
+				// 三个字段的radio name的判断 字段内容：”是否开启人工转接 Zhuangjie“，“是否启用公众号推送 Tuisong”，”是否触发短信发送 Duanxinfasong”
+				var radio_name = $(this).attr("name");
+				switch (radio_name) {
+					case 'Zhuangjie':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='Zhuangjie']:checked")) {
+									$(".pz_rengongzuoxi").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='Zhuangjie']:checked")) {
+									$(".pz_rengongzuoxi").addClass("hide");
+								}
+							break;
+						}
+					break;
+					case 'joinCRM':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='joinCRM']:checked")) {
+									$(".pz_CRM_dengji").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='joinCRM']:checked")) {
+									$(".pz_CRM_dengji").addClass("hide");
+								}
+							break;
+						}
+					break;
+					case 'Tuisong':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='Tuisong']:checked")) {
+									$(".pz_tuisong_dengji").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='Tuisong']:checked")) {
+									$(".pz_tuisong_dengji").addClass("hide");
+								}
+							break;
+						}
+					break;
+					case 'Duanxinfasong':
+						switch ($(this).attr("value")) {
+							case '是':
+								if ($("input[name='Duanxinfasong']:checked")) {
+									$(".pz_duanxing_fasong").removeClass("hide");
+								}
+							break;
+							case '否':
+								if ($("input[name='Duanxinfasong']:checked")) {
+									$(".pz_duanxing_fasong").addClass("hide");
+								}
+							break;
+						}
+					break;
+          case 'is_again_call':
+            if($(this).val() == '是'){
+              if ($("input[name='is_again_call']:checked")) {
+                $('.pz_again_call').removeClass('hide');
+                $('#again_call_count_label').removeClass('hide');
+              }
+            }else if($(this).val() == '否'){
+              if ($("input[name='is_again_call']:checked")) {
+                $('.pz_again_call').addClass('hide');
+                $('#again_call_count_label').addClass('hide');
+              }
+            }
+          break;
+          case 'yunkong':
+            if($(this).val() == '是'){
+              $('.pz_yunkong_dengji').removeClass('hide');
+              $('.pz_yunkong').removeClass('hide');
+            }else if($(this).val() == '否'){
+              $('.pz_yunkong_dengji').addClass('hide');
+              $('.pz_yunkong').addClass('hide')
+            }
+          break;
+				}
+			});
+		}
+
+		function delTimes(){
+			//删除多余的时间
+			$(".pz_delTimes").click(function(){
+				$(this).parents(".pz_zhuijiadata").remove();
+			});
+		}
+
+		// 确定提交 提示框
+	</script>
+
+	<script type="text/javascript">
+		$('.n_transfer label').click(function() {
+			$(this).addClass('n_tran_lableSel').siblings().removeClass('n_tran_lableSel');
+			// 获取单选框选项
+			var flag = $(this).attr('data-val');
+			var data = $(this).parent()
+			//处理对应模块
+			if ($(data).hasClass('n_switch')) {
+				if (flag == '1') {
+					$('#n_agent').removeClass('dis_no');
+				} else {
+					$('#n_agent').addClass('dis_no');
+				}
+			} else if ($(data).hasClass('n_weixin')) {
+				if (flag == '1') {
+					$('#n_wenxinpush').removeClass('dis_no');
+				} else {
+					console.log('11');
+					$('#n_wenxinpush').addClass('dis_no');
+				}
+			} else if ($(data).hasClass('n_message')) {
+				if (flag == '1') {
+					$('#n_messagepush, #n_addmess').removeClass('dis_no');
+				} else {
+					$('#n_messagepush, #n_addmess').addClass('dis_no');
+				}
+			}
+			});
+	</script>
+
+  <script type="text/javascript">
+		$(function (){
+			window.form = $('#form').html();
+			show_usable_robot_count();
+		})
+
+
+		//获取可用机器人数
+		function show_usable_robot_count(){
+			var url = '{:url("Plan/get_usable_robot_count_api")}';
+			$.ajax({
+				type:'GET',
+				data:{},
+				dataType:'json',
+				url:url,
+				success:function(result){
+					console.log(result);
+					if(result.code === 0){
+						$('#usable_robot_count > span').text(result.data);
+					}
+				},
+				error:function(){
+					console.log('获取机器人数量失败');
+				}
+			});
+		}
+
+		function bindCallNums(type,phone_id){
+			$.ajax({
+					type: "POST",
+					dataType:'json',
+					url: "{:url('User/Plan/bindCallNum')}",
+					cache: false,
+					data: {"type":type,'phone':phone_id},
+					success: function(res) {
+						if (res.code == 0) {
+								var optionstring = "";
+								var jsonObj = res.data;
+								var is_select = "";
+								$("#phone_id").empty();
+								//return;
+								for (var j = 0; j < jsonObj.length; j++) {
+
+									is_select = "";
+									if (jsonObj[j].id == phone_id){
+										is_select =  'selected';
+
+									}
+									optionstring += '<option value="' + jsonObj[j].id + '"' + is_select +' >'+ jsonObj[j].phone + ' - '+ jsonObj[j].price +'元</option>';
+								}
+
+								if (type == '1'){
+									console.log(optionstring);
+									$("#phone_id").append("<option value=''>请选择中继线路</option> ");
+								}
+								else{
+									$("#phone_id").append("<option value=''>请选择机器座席</option> ");
+									if (phone_id){
+										phone = phone_id;
+									}
+								}
+								$("#phone_id").append(optionstring);
+
+								//phone = "";
+						}else{
+							//alert(data.msg);
+						}
+					},
+					error: function(data) {
+						// alert("提交失败");
+					}
+			});
+
+		}
+
+		function changes(obj){
+
+			var val = $(obj).find('input[type="hidden"]').val();
+
+			if(val == 1){
+
+				$(obj).find('input[type="hidden"]').val('0');
+				$(obj).removeClass("btn-primary");
+				$(obj).addClass("btn-default");
+
+			}else{
+				$(obj).find('input[type="hidden"]').val('1');
+				$(obj).removeClass("btn-default");
+				$(obj).addClass("btn-primary");
+			}
+
+		}
+
+			//确定按钮提交 先验证 后显示弹窗提示
+			function checkform_create_task(){
+				var ints = 0;
+				//任务名称
+				var task_name = $('#form input[name="task_name"]').val();
+				if(task_name == ''){
+					alert('任务名称不能为空');
+					ints++;
+					return false;
+				}
+				//话术
+				var  scenarios_id = $('#form select[name="scenarios_id"]').val();
+				if(scenarios_id == ''){
+					alert('请先选择话术');
+					ints++;
+					return false;
+				}
+					//机器人数量
+				var robot_count = $('#form input[name="robot_count"]').val();
+				if(robot_count == ''){
+					alert('请输入机器人数量');
+					ints++;
+					return false;
+				}
+				//线路
+				var line_id = $('#form select[name="line_id"]').val();
+				if(line_id == ''){
+					alert('请选择线路');
+					ints++;
+					return false;
+				}
+				//ASR
+				var asr_id = $('#form select[name="asr_id"]').val();
+				if(asr_id == ''){
+					alert('请选中ASR');
+					ints++;
+					return false;
+				}
+				 	//任务异常短信提醒的手机号码
+				var task_abnormal_remind_phone = $('#task_abnormal_remind_phone').val();
+				if(task_abnormal_remind_phone != ''){
+				  // task_abnormal_remind_phone
+				   if(is_phone(task_abnormal_remind_phone) == false){
+				     alert('任务异常短信提醒的手机号码格式错误');
+				     return false;
+				   }
+				}
+				//验证是否开启重新呼叫功能
+				var is_again_call = $('input[name="is_again_call"]:checked').val();
+				if(is_again_call == '是'){
+				  //验证是否有选择需要重新呼叫的通话状态
+				  var again_call_status = $('input[name="again_call_status"]:checked').length;
+				  if(again_call_status == 0){
+				    alert('至少需要选中一项重新呼叫的通话状态');
+				    return false;
+				  }
+				  //验证重新呼叫次数
+				  var again_call_count = $('#again_call_count').val();
+				  if(again_call_count == 0){
+				    alert('请选择重新呼叫次数');
+				    return false;
+				  }
+				}
+				//验证是否开启微信云控推送
+				var yunkong_push_status = $("input[name='yunkong']:checked").val();
+				if(yunkong_push_status == '是'){
+				  if(query_yunkong_username_status == 0){
+				    alert('请先检索推送给微信云控的用户是否存在');
+				    return false;
+				  }
+				  if(query_yunkong_username_status == 2){
+				    alert('该微信云控推送用户不存在');
+				    return false;
+				  }
+				  var yunkong_push_level = $('input[name="yunkong-Yixiangdengji"]:checked').length;
+				  if(yunkong_push_level == 0){
+				    alert('请选择需要推送到微信云控的意向等级');
+				    return false;
+				  }
+				}
+				
+				
+				
+				
+				//验证是否发送短信
+				var send_sms_status = $('input[name="Duanxinfasong"]:checked').val();
+				if(send_sms_status == '是'){
+					//验证是否有选择意向等级
+					var level_length = $('input[name="Duanxinfasong-dengji"]:checked').length;
+					if(level_length == 0){
+						alert('至少需要选中一项触发发送短信的意向等级');
+						return false;
+					}
+					var sms_template_id = $('#sms-template').val();
+					if(sms_template_id == ''){
+						alert('请选择短信模版');
+						return false;
+					}
+				}
+				//加入CRM
+				var is_add_crm = $('input[name="joinCRM"]:checked').val();
+				if(is_add_crm == '是'){
+					if($('input[name="crm-Yixiangdengji"]:checked').length == 0){
+						alert('请选择加入CRM的客户意向等级');
+						return false;
+					}
+				}
+				//微信推送
+				var wx_push_status = $('input[name="Tuisong"]:checked').val();
+				if(wx_push_status == '是'){
+					if($('input[name="wx_push-Yixiangdengji"]:checked').length == 0){
+						alert('请选择微信推送的客户意向等级');
+						return false;
+					}
+					if($('#wx-push-users').val() == ''){
+						alert('请选择微信推送的人员');
+						return false;
+					}
+				}
+				//指定日期
+				var start_date_objects = $('#form input[name="start_date"]');
+				var end_date_objects = $('#form input[name="end_date"]');
+				var start_date = [];
+				var end_date = [];
+				$.each(start_date_objects, function(index, object){
+					if($(object).val() == ''){
+						alert('指定开始日期不能为空');
+						ints++;
+						return false;
+					}
+					if(end_date_objects.eq(index).val() == ''){
+						alert("指定结束日期不能为空");
+						ints++;
+						return false;
+					}
+					if($(object).val() != '' && end_date_objects.eq(index).val() != ''){
+							if($.myTime.DateToUnix($(object).val()) >= $.myTime.DateToUnix(end_date_objects.eq(index).val())){
+								alert('开始日期不能大于等于结束日期');
+								ints++;
+							}
+					}
+				});
+				//指定时间
+				var start_time_objects = $('#form input[name="start_time"]');
+				var end_time_objects = $('#form input[name="end_time"]');
+				var end_time = [];
+				var start_time = [];
+				$.each(start_time_objects, function(index, object){
+					if($(object).val() == ''){
+						alert('指定时间不能为空');
+						ints++;
+						return false;
+					}
+
+					if(end_time_objects.eq(index).val() == ''){
+						alert('指定时间不能为空');
+						ints++;
+						return false;
+					}
+					if($(object).val() != '' &&  end_time_objects.eq(index).val() != ''){
+						if(!judge($(object).val() , end_time_objects.eq(index).val())){
+								alert('开始时间不能大于等于结束时间');
+								ints++;
+								return false;
+						}
+						if(judge($(object).val(),'8:00')){
+								alert('开始时间不能小于8:00');
+								ints++;
+								return false;
+						}
+						if(!judge(end_time_objects.eq(index).val(),'21:31')){
+								alert('开始时间不能大于21:30');
+								ints++;
+								return false;
+						}
+					}
+				});
+
+				if(ints > 0){
+					return false;
+				}
+
+				$('#l-delnote').modal('show');
+
+			}
+			function adFlowNote(){
+				var data = {};
+				//筛选ID
+				data.screen_ids = [];
+				//是否全选
+				data.is_all_selection = 0;
+				if($('.all_checked_count').is(':checked')){
+					data.is_all_selection = 1;
+				}else{
+					$.each($('input[name="checkids"]:checked'), function(index, object){
+  		  		data.screen_ids.push($(object).val());
+  			  })
+				}
+    		/**
+				* 提交规则
+				* 	1.任务名称不能重复（范围：当前用户）
+				* 	2.任务名称、话术、机器人数量、线路、工作日期和工作时间不能为空
+				* 	3.工作时间必须在08:00到21:30范围内
+				*/
+				//获取提交数据
+
+				//任务名称
+				data.task_name = $('#form input[name="task_name"]').val();
+				//话术
+				data.scenarios_id = $('#form select[name="scenarios_id"]').val();
+				//机器人数量
+				data.robot_count = $('#form input[name="robot_count"]').val();
+				//线路
+				data.line_id = $('#form select[name="line_id"]').val();
+				//ASR
+				data.asr_id = $('#form select[name="asr_id"]').val();
+				
+				
+					//验证是否开启重新呼叫功能
+				data.is_again_call = $('input[name="is_again_call"]:checked').val();
+				if(data.is_again_call == '是'){
+				  data.is_again_call = 1;
+				  //验证是否有选择需要重新呼叫的通话状态
+				  var again_call_status_length = $('input[name="again_call_status"]:checked').length;
+				  if(again_call_status_length == 0){
+				    alert('至少需要选中一项重新呼叫的通话状态');
+				    return false;
+				  }
+				  data.again_call_status = [];
+				  $.each($('input[name="again_call_status"]:checked'), function(index, object){
+				    data.again_call_status.push($(object).val());
+				  });
+				  //验证重新呼叫次数
+				  data.again_call_count = $('#again_call_count').val();
+				  if(data.again_call_count == 0){
+				    alert('请选择重新呼叫次数');
+				    return false;
+				  }
+				}
+				//任务异常短信提醒的手机号码
+				data.task_abnormal_remind_phone = $('#task_abnormal_remind_phone').val();
+				if(data.task_abnormal_remind_phone != ''){
+				  // task_abnormal_remind_phone
+				   if(is_phone(data.task_abnormal_remind_phone) == false){
+				     alert('任务异常短信提醒的手机号码格式错误');
+				     return false;
+				   }
+				}
+				//验证是否开启微信云控推送
+				var yunkong_push_status = $("input[name='yunkong']:checked").val();
+				if(yunkong_push_status == '是'){
+				  data.yunkong_push_status = 1;
+				  if(query_yunkong_username_status == 0){
+				    alert('请先检索推送给微信云控的用户是否存在');
+				    return false;
+				  }
+				  if(query_yunkong_username_status == 2){
+				    alert('该微信云控推送用户不存在');
+				    return false;
+				  }
+				  data.yunkong_push_username = $('#yunkong_username').val();
+				  data.yunkong_push_level = [];
+				  $.each($('input[name="yunkong-Yixiangdengji"]:checked'), function(index, object){
+				    data.yunkong_push_level.push($(object).val());
+				  });
+				  if(data.yunkong_push_level.length == 0){
+				    alert('请选择需要推送到微信云控的意向等级');
+				    return false;
+				  }
+				}
+				
+				
+				
+				//验证是否发送短信
+				var send_sms_status = $('input[name="Duanxinfasong"]:checked').val();
+				if(send_sms_status == '是'){
+					data.send_sms_status = 1;
+					//验证是否有选择意向等级
+					var level_length = $('input[name="Duanxinfasong-dengji"]:checked').length;
+					if(level_length == 0){
+						alert('至少需要选中一项触发发送短信的意向等级');
+						return false;
+					}
+					data.send_sms_level = [];
+					$.each($('input[name="Duanxinfasong-dengji"]:checked'), function(index, object){
+						data.send_sms_level.push($(object).val());
+					});
+					data.sms_template_id = $('#sms-template').val();
+				}else{
+					data.send_sms_status = 0;
+				}
+				var is_add_crm = $('input[name="joinCRM"]:checked').val();
+				if(is_add_crm == '是'){
+					data.is_add_crm = 1;
+					data.add_crm_level = [];
+					if($('input[name="crm-Yixiangdengji"]:checked').length == 0){
+						alert('请选择加入CRM的客户意向等级');
+					}
+					$.each($('input[name="crm-Yixiangdengji"]:checked'), function(index, object){
+						data.add_crm_level.push($(object).val());
+					});
+				}else{
+					data.is_add_crm = 0;
+					data.add_crm_level = [];
+				}
+				var wx_push_status = $('input[name="Tuisong"]:checked').val();
+				if(wx_push_status == '是'){
+					data.wx_push_status = 1;
+					data.wx_push_level = [];
+					if($('input[name="wx_push-Yixiangdengji"]:checked').length == 0){
+						alert('请选择微信推送的客户意向等级');
+						return false;
+					}
+					$.each($('input[name="wx_push-Yixiangdengji"]:checked'), function(index, object){
+						data.wx_push_level.push($(object).val());
+					});
+					data.wx_push_user_id = $('#wx-push-users').val();
+					if(data.wx_push_user_id == ''){
+						alert('请选择推送的人员');
+						return false;
+					}
+				}else{
+					data.wx_push_status = 0;
+					data.wx_push_level = [];
+					data.wx_push_user_id = '';
+				}
+				//指定日期
+				var start_date_objects = $('#form input[name="start_date"]');
+				var end_date_objects = $('#form input[name="end_date"]');
+				data.start_date = [];
+				data.end_date = [];
+				$.each(start_date_objects, function(index, object){
+					data.start_date.push($(object).val());
+				});
+				$.each(end_date_objects, function(index, object){
+					data.end_date.push($(object).val());
+				});
+				//指定时间
+				var start_time_objects = $('#form input[name="start_time"]');
+				data.start_time = [];
+				var end_time_objects = $('#form input[name="end_time"]');
+				data.end_time = [];
+				$.each(start_time_objects, function(index, object){
+					data.start_time.push($(object).val());
+				});
+				$.each(end_time_objects, function(index, object){
+					data.end_time.push($(object).val());
+				});
+				//是否自动开启
+				data.is_auto = $('#form input[name="is_auto"]:checked').val();
+				//是否设置默认线路
+				// data.is_default_line = $('#form input[name="is_default_line"]').val();
+				if($("input[type='checkbox'][name='is_default_line']").is(':checked')) {
+					data.is_default_line = 1;
+				}else{
+					data.is_default_line = 0;
+				}
+				//备注
+				data.remark = $('#form textarea[name="remark"]').val();
+
+		    data.screen_task_id = $('#calltask').val();//呼叫任务
+				data.screen_scenarios_id = $('#scenarios').val();//场景话术
+				data.screen_start_call_time = $('#startDate').val();//开始拨打时间
+				data.screen_end_call_time = $('#endTime').val();//结束拨打时间
+				data.screen_phone = $('#h_phone').val();//查询电话
+				data.screen_level = $('input[name="levelcheck"]:checked').val();//意向等级
+				$("input[name='conversation'][type='checkbox']:checked").each(function(i){
+							data.screen_call_status[i] = $(this).val();//通话状态
+				});
+				if($('#startNum').val() != '' || $('#endNum').val()){
+					data.screen_min_duration = $('#startNum').val();
+					data.screen_max_duration = $('#endNum').val();
+				}else if($('#second_upper').val() !==''){
+					data.screen_min_duration = $('#second_upper').val();
+				}else if($('#second_lower').val() !==''){
+					data.screen_max_duration = $('#second_lower').val();
+				}
+				data.screen_call_times = $('#call_times').val();//客户说话次数
+				data.screen_effective_times = $('#effective_times').val();//有效对话次数
+				data.screen_hit_times = $('#hit_times').val();//触发问题次数
+				data.screen_affirm_times = $('#affirm_times').val();//肯定次数
+				data.screen_neutral_times = $('#neutral_times').val()//中性次数
+				data.screen_negative_times = $('#negative_times').val();//否定次数
+				data.screen_invitations = $('#invitations').val();//是否邀约成功
+				$("input[name='semantic-label'][type='checkbox']:checked").each(function(i){
+							data.screen_semantic_label[i] = $(this).val();//通话状态
+				});
+				$("input[name='flow-label'][type='checkbox']:checked").each(function(i){
+							data.screen_flow_label[i] = $(this).val();//通话状态
+				});
+				$("input[name='knowledge-label'][type='checkbox']:checked").each(function(i){
+							data.screen_knowledge_label[i] = $(this).val();//通话状态
+				});
+
+
+				var href = "{:url('User/Callrecord/create_call_record_task')}";
+				$.ajax({
+					type: "POST",
+					dataType:'json',
+					url: href,
+					cache: false,
+					data: data,
+					success: function(result) {
+						console.log(result);
+						if(result.code == 0){
+							alert('添加成功');
+							window.location.href = '{:url("user/plan/newindex")}';
+						}else if(result.code == 2){
+							alert(result.msg);
+						}else{
+							alert('添加失败');
+						}
+					},
+					error: function(data) {
+						alert("添加失败");
+					}
+				})
+
+     	}
+
+		  //时间的判断
+
+		  function judge(start,end){
+
+				var date = new Date();
+
+				var Y = date.getFullYear() + '-';
+				var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+				var D = date.getDate() + ' ';
+				var h = date.getHours() + ':';
+				var m = date.getMinutes() + ':';
+				var s = date.getSeconds();
+
+				var startstr = Y + M + D + start;
+				var starttime = Date.parse(new Date(startstr));
+
+				var endstr = Y + M + D + end;
+				var endtime = Date.parse(new Date(endstr));
+
+		// 		console.log(starttime);
+		// 		console.log(endtime);
+
+				if(starttime < endtime){
+					return true;
+				}else{
+					return false;
+				}
+
+
+			}
+
+		  //格式化日期
+		  function backDate(time,cate){
+
+		    var date = new Date();
+
+		    var Y = date.getFullYear() + '-';
+		    var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+		    var D = date.getDate() + ' ';
+		    var h = date.getHours() + ':';
+		    var m = date.getMinutes() + ':';
+		    var s = date.getSeconds();
+
+		    var datastr = Y + M + D + time;
+		    //没有时间的签到时间
+				if(cate > 0){
+					var preSign = Date.parse(new Date(datastr)) + 60000;
+				}else{
+					var preSign = Date.parse(new Date(datastr)) - 60000;
+				}
+
+
+			  var date = new Date(parseInt(preSign));
+				var Y = date.getFullYear() + '-';
+				var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+				var D = date.getDate() + ' ';
+				//var h = date.getHours() + ':';
+				var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+				//var m = date.getMinutes() + ':';
+
+				var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+
+				var s = date.getSeconds();
+
+				var datastr = Y + M + D + h + m + "00";
+				var preSign = Date.parse(new Date(datastr))
+
+		    var backdata = datastr.split(" ");
+
+		    return backdata[1];
+
+		  }
+
+
+		  document.addEventListener('DOMContentLoaded', function () {
+		    var mySelect = $('#first-disabled2');
+
+		    $('#special').on('click', function () {
+		      mySelect.find('option:selected').prop('disabled', true);
+		      mySelect.selectpicker('refresh');
+		    });
+
+		    $('#special2').on('click', function () {
+		      mySelect.find('option:disabled').prop('disabled', false);
+		      mySelect.selectpicker('refresh');
+		    });
+
+
+		  });
+		// pz 日期对比
+			(function($) {
+			    $.extend({
+			        myTime: {
+			            // 当前时间戳
+			            // @return <int>        unix时间戳(秒)
+			            CurTime: function(){
+			                return Date.parse(new Date())/1000;
+			            },
+			            // 日期 转换为 Unix时间戳
+			            // @param <string> 2014-01-01 20:20:20  日期格式
+			            // @return <int>        unix时间戳(秒)
+			            DateToUnix: function(string) {
+			                var f = string.split(' ', 2);
+			                var d = (f[0] ? f[0] : '').split('-', 3);
+			                var t = (f[1] ? f[1] : '').split(':', 3);
+			                return (new Date(
+			                        parseInt(d[0], 10) || null,
+			                        (parseInt(d[1], 10) || 1) - 1,
+			                        parseInt(d[2], 10) || null,
+			                        parseInt(t[0], 10) || null,
+			                        parseInt(t[1], 10) || null,
+			                        parseInt(t[2], 10) || null
+			                        )).getTime() / 1000;
+			            },
+			            // 时间戳转换日期
+			            // @param <int> unixTime    待时间戳(秒)
+			            // @param <bool> isFull    返回完整时间(Y-m-d 或者 Y-m-d H:i:s)
+			            // @param <int>  timeZone   时区
+			            UnixToDate: function(unixTime, isFull, timeZone) {
+			                if (typeof (timeZone) == 'number')
+			                {
+			                    unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+			                }
+			                var time = new Date(unixTime * 1000);
+			                var ymdhis = "";
+			                ymdhis += time.getUTCFullYear() + "-";
+			                ymdhis += (time.getUTCMonth()+1) + "-";
+			                ymdhis += time.getUTCDate();
+			                if (isFull === true)
+			                {
+			                    ymdhis += " " + time.getUTCHours() + ":";
+			                    ymdhis += time.getUTCMinutes() + ":";
+			                    ymdhis += time.getUTCSeconds();
+			                }
+			                return ymdhis;
+			            }
+			        }
+			    });
+			})(jQuery);
+  </script>
+
+</div>

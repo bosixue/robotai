@@ -1,0 +1,366 @@
+
+<div>
+    <section class="main-head clearfix r_section">
+        <div class="form-inline dis_in">
+            <div class="form-group clearfix">
+                <label class="statusSelect pull-left">变量名：</label>
+                <input type="text" class="form-control pull-left inwidth" autocomplete="off" id="var_keyword" name="keyword" placeholder="请输入关键字">
+            </div>
+            <div class="form-group">
+                <botton class="btn btn-primary " type="button" onclick="show_variabledata()">搜索</botton>
+                <botton class="btn btn-primary ant-btn btn-reset" type="button" onclick="reset();">重置</botton>
+            </div>
+        </div>
+        <div class="pull-right">
+            <botton class="btn btn-primary " type="button"   data-title="合成音配置" onclick="var_luyin_config()">合成音配置</botton>
+            <botton class="btn btn-primary " type="button" data-title="号码模板下载" onclick="popTipswin(this);">号码模板下载</botton>
+            <botton class="btn btn-primary " type="button" onclick="add_var(0)">添加变量</botton>
+            <botton class="btn btn-primary " type="button" data-title="批量删除变量管理" onclick="popTipswin(this);">批量删除</botton>
+        </div>
+    </section>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    <input class="check-all" name='all_checked' type="checkbox" />
+                </th>
+                <th class="text-center">序号</th>
+                <th class="text-center">变量名称</th>
+                <th class="text-center ">变量标识</th>
+                <th class="text-center ">变量示例</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody id="var_list"></tbody>
+    </table>
+    <footer class="main-box-footer clearfix">
+        <div class="text-right pull-right">
+            <div class="paging clearfix"></div>
+        </div>
+    </footer>
+    <div class="datatips datatips_know"> 
+      <span>暂无相关内容</span>
+    </div>
+</div>
+<script id="variable-data" type="text/template">
+	<tr>
+	  <td class="text-center">
+			<input type="checkbox" name="checkids" value="{%id%}" class="check_knowledgebase" data-page="0">
+		</td>
+    <td class="text-center">{%sequence%}</td>
+    <td class="text-center">{%variable_name%}</td>
+    <td class="text-center">{%annotation%}</td>
+    <td class="text-center">{%example%}</td>
+    <td class="text-center">
+    	<a href="javascript:;" onclick="add_var({%id%});">编辑</a>
+    	<a href="javascript:;" data-title="删除变量" data-id={%id%} onclick="popTipswin(this);">删除</a>
+    </td>
+	</tr>
+</script>
+<script>
+//保存 配置 到redis中
+function save_config_redis(){
+  data={};
+  var amount_2 = $("#amount_2").text(); //音量
+  var amount_rate_2 = $("#amount-rate_2").text(); //语速
+  var amount_tone_2 = $("#amount-tone_2").text(); // 语调
+  var voice_2 = $("#voice_2").val();
+  var scenarios_id = $('.active .Idlist').val();  //话术id
+  data.amount_2=amount_2;
+  data.amount_rate_2=amount_rate_2;
+  data.amount_tone_2=amount_tone_2;
+  data.voice_2=voice_2;
+  data.scenarios_id=scenarios_id;
+  var url = "{:url('scenarios/save_var_config_redis')}"
+   $.ajax({
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        url: url,
+        success: function (data) {
+          alert(data.msg);
+          $('#record_compose2').modal('hide');
+        },
+        error :function (e){
+          console.log(e);
+          $('#record_compose2').modal('hide');
+        }
+     
+   });
+}
+//显示 合成变量录音的配置
+function var_luyin_config(){
+    $("#one_text").val('');
+    $("#voice_volist_10").html('');
+    $('#record_compose2').modal('show');
+     var scenarios_id = $('.active .Idlist').val();  //话术id
+     var url = "{:url('scenarios/var_luyin_config')}"
+     data={};
+
+     data.id = scenarios_id;
+     $.ajax({
+        type: 'post',
+        data: data,
+        dataType: 'json',
+        url: url,
+        success: function (data) {
+           console.log(data);
+          var	amount_2 = data.data.amount_2;  //音量
+        	var amount_rate_2 = data.data.amount_rate_2; //语速
+        	var amount_tone_2 = data.data.amount_tone_2;  //语调
+        	var voice_2 = data.data.voice_2; // 发音人
+        	 $('#voice_2').val(voice_2);
+        	 $('.l_loadfixed').hide();
+        $("#slider-range-min_2").slider({
+            range: "min",
+            value:amount_2,
+            min: 0,
+            max: 100,
+            slide: function (event, ui) {
+                $("#amount_2").text(ui.value);
+                $("#amount_2").css('left', $('#slider-range-min_2').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#slider-range-rate_2").slider({
+            range:"min",
+            value:amount_rate_2,
+            min: -500,
+            max: 500,
+            slide: function (event, ui) {
+                $("#amount-rate_2").text(ui.value);
+                $("#amount-rate_2").css('left', $('#slider-range-rate_2').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#slider-range-tone_2").slider({
+            range:"min",
+            value:amount_tone_2,
+            min: -500,
+            max: 500,
+            slide: function (event, ui) {
+                $("#amount-tone_2").text(ui.value);
+                $("#amount-tone_2").css('left', $('#slider-range-tone_2').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#amount_2").text($("#slider-range-min_2").slider("value"));
+        $("#amount_2").css('left', $('#slider-range-min_2').children('.ui-slider-range').css('width'));
+
+        $("#amount-rate_2").text($("#slider-range-rate_2").slider("value"));
+        $("#amount-rate_2").css('left', $('#slider-range-rate_2').children('.ui-slider-range').css('width'));
+
+        $("#amount-tone_2").text($("#slider-range-tone_2").slider("value"));
+        $("#amount-tone_2").css('left', $('#slider-range-tone_2').children('.ui-slider-range').css('width'));
+        },
+        error: function (e) {
+           var amount_2=50;
+           var amount_rate_2=0;
+           var amount_tone_2=0;
+           var voice_2='xiaoyun';
+         $('#voice_2').val(voice_2);
+           $('.l_loadfixed').hide();
+        $("#slider-range-min_2").slider({
+            range: "min",
+            value:amount_2,
+            min: 0,
+            max: 100,
+            slide: function (event, ui) {
+                $("#amount_2").text(ui.value);
+                $("#amount_2").css('left', $('#slider-range-min_2').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#slider-range-rate_2").slider({
+            range:"min",
+            value:amount_rate_2,
+            min: -500,
+            max: 500,
+            slide: function (event, ui) {
+                $("#amount-rate_2").text(ui.value);
+                $("#amount-rate_2").css('left', $('#slider-range-rate_2').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#slider-range-tone_2").slider({
+            range:"min",
+            value:amount_tone_2,
+            min: -500,
+            max: 500,
+            slide: function (event, ui) {
+                $("#amount-tone_2").text(ui.value);
+                $("#amount-tone_2").css('left', $('#slider-range-tone_2').children('.ui-slider-range').css('width'));
+            }
+        });
+        $("#amount_2").text($("#slider-range-min_2").slider("value"));
+        $("#amount_2").css('left', $('#slider-range-min_2').children('.ui-slider-range').css('width'));
+
+        $("#amount-rate_2").text($("#slider-range-rate_2").slider("value"));
+        $("#amount-rate_2").css('left', $('#slider-range-rate_2').children('.ui-slider-range').css('width'));
+
+        $("#amount-tone_2").text($("#slider-range-tone_2").slider("value"));
+        $("#amount-tone_2").css('left', $('#slider-range-tone_2').children('.ui-slider-range').css('width'));
+        }
+      })
+       
+}
+
+function  del_variable(id){
+    var url = "{:url('del_variable')}"
+    data.id = id;
+    $.ajax({
+      type: 'post',
+      data: data,
+      dataType: 'json',
+      url: url,
+      success: function (data) {
+      	console.log(data);
+      	alert(data.msg);
+      	$("#tips_model").modal("hide");
+      	show_variabledata();
+      },
+        error: function (e) {}
+    })
+}
+function add_var(tag) {
+  $('#varName').val('');
+  $('#varNote').val('');
+  $('#example').val('');
+  $('#varID').val('');
+  if(tag != 0){
+    $("#add_var_modal").modal("show");
+    $(".varTitle span").text("编辑变量");
+    var url = "{:url('get_variable')}"
+    $.ajax({
+      type: 'GET',
+      data: {id:tag},
+      dataType: 'json',
+      url: url,
+      success: function (data) {
+      	console.log(data);
+      	var info = data.data;
+      	$('#varName').val(info.variable_name);
+        $('#varNote').val(info.annotation);
+        $('#example').val(info.example);
+        $('#varID').val(info.id);
+      },
+        error: function (e) {}
+    })
+  }else{
+    $("#add_var_modal").modal("show");
+    $(".varTitle span").html("添加变量");
+  }
+    
+}
+var Paging11 = new Paging01();
+Paging11.init_args({
+    // url: 
+    page: 1, //初始页码
+    limit: 10, //初始每页显示的数据量
+    paging_class: 'paging01', //放置分页的class
+    callback: show_variabledata //回调函数 比如show_voicedatas(页码, 显示条数)
+});
+
+function show_variabledata(pase, limit) {
+    pase = pase ? pase : 1;
+    limit = limit ? limit : 10;
+    var data = {};
+    var url = "{:url('variable_config')}";
+    data.page = pase;
+    data.limit = limit;
+    data.variableName = $('#var_keyword').val();
+    data.id = $('.active .Idlist').val();  //话术id
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        type: 'post',
+        data: data,
+        success: function (result) {
+            console.log(result);
+            var htmls = '';
+            if (result.code === 0) { //数据获取成功
+                if (result.data.list.length == 0) {
+                    $('.datatips_know').show();
+                } else {
+                    $('.datatips_know').hide();
+                    var total = result.data.page; //总页数
+                    var Nowpage = result.data.Nowpage; //当前页码
+                    var count = result.data.total; //总条数
+                    window.count = count;
+                    var Nowpage = parseInt(Nowpage);
+                    var i = (Nowpage - 1) * limit + 1;
+                    $.each(result.data.list, function (index, object) {
+                        data.i = i;
+                        var html = $('#variable-data').html();
+                        html = html.replace('{%id%}', object.id);
+                        html = html.replace('{%sequence%}', i);
+                        html = html.replace('{%variable_name%}', object.variable_name);
+                        html = html.replace('{%annotation%}', object.annotation);
+                        html = html.replace('{%example%}', object.example);
+                        html = html.replace('{%id%}', object.id);
+                        html = html.replace('{%id%}', object.id);
+                        htmls += html;
+                        i++;
+                    });
+                    Paging11.paging(Nowpage, count, limit);
+                }
+                $('#var_list').html(htmls);
+                election();
+            }
+        },
+        error: function (error) {
+            alert('数据获取失败！');
+        }
+  });
+}
+function saveVar(){
+  var data = {};
+  data.variable_name = $('#varName').val();
+  data.annotation = $('#varNote').val(); 
+  data.example = $('#example').val(); 
+  if(data.variable_name ==''){
+    alert('变量名称不能为空');
+    return false;
+  }else if(data.annotation == ''){
+    alert('变量标识不能为空');
+    return false;
+  }else if(data.example == ''){
+    alert('变量示例不能为空');
+    return false;
+  }else{
+    data.scenarios_id = $('.active .Idlist').val();
+    var url = "{:url('edit_variable')}"
+    data.id = $('#varID').val();
+    $.ajax({
+      type: 'post',
+      data: data,
+      dataType: 'json',
+      url: url,
+      success: function (data) {
+      	console.log(data);
+      	alert(data.msg);
+      	$("#add_var_modal").modal("hide");
+      	show_variabledata();
+      },
+        error: function (e) {}
+    })
+  }
+}
+
+//下载变量模板
+function download_model (){
+  data.id = $('.active .Idlist').val();
+  var url = "{:url('Variabl_template')}"
+  $.ajax({
+      type: 'post',
+      data: data,
+      dataType: 'json',
+      url: url,
+      success: function (data) {
+        console.log(data);
+        window.location.href = data.data;
+        $('#tips_model').modal('hide');
+      },
+        error: function (e) {}
+    })
+}
+</script>
+
+
+
+

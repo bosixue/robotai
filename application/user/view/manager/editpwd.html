@@ -1,0 +1,141 @@
+{extend name="public/base"/}
+{block name="body"}
+<style>
+	.control-label.col-lg-3{
+		text-align:right !important;
+		width:120px;
+	}
+	.main-box .main-box-header {
+    padding: 10px 30px !important;
+	}
+	.n_panel_title img{
+		vertical-align: sub;
+		margin-right:8px;
+	}
+	.form-group {
+    margin-bottom: 16px !important;
+	}
+</style>
+<div class="main-box no-header clearfix fadeInRight animated pz_manping_height">
+
+	<!-- 标题栏 -->
+	<header class="main-box-header n_head_box n_head_box_b clearfix">
+		<div class="pull-left">
+			<span class="n_panel_title"><img src="/public/img/pz_jingsuo.png"/>修改密码</span>
+		</div>
+		<div class="pull-right">
+		</div>
+	</header>
+
+	<div class="main-box-body clearfix" style="padding: 30px 70px 20px 70px;">
+		<!-- 修改密码表单 -->
+		<form id="form" method="post" class="form-horizontal" enctype="multipart/form-data">
+			<div class="form-group">
+				<label class="col-lg-3 control-label">原密码：</label>
+				<div class="col-lg-5 col-sm-5">
+					<input type="password" placeholder="请输入您当前的密码" name="oldpassword" id="oldpassword" class="form-control " autocomplete="off" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-3 control-label">新密码：</label>
+				<div class="col-lg-5 col-sm-5">
+					<input type="password" placeholder="请输入您的新密码" name="password" id="password" class="form-control " autocomplete="off" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-3 control-label">确认新密码：</label>
+				<div class="col-lg-5 col-sm-5">
+					<input type="password" placeholder="请再次确认您的新密码" name="repassword" id="repassword" class="form-control " autocomplete="off" />
+				</div>
+			</div>
+			<div class="form-group">
+				<div style="color: #909090;font-size:12px;margin-left: 128px;">温馨提示：密码确认修改后系统将会自动退出，请您重新登录！</div>
+			</div>
+			<div class="form-group" style="margin-top: 44px;">
+				<div class="col-lg-offset-2 col-lg-10" style="padding-left:0px;margin-left: 129px;">
+					<button class="btn btn-primary submit-btn" onclick="updata();" type="button" style="margin-left:0px;">确 认</button>
+					<!-- <button class="btn btn-default btn-return" onclick="javascript:history.back(-1);return false;">返 回</button> -->
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+</div>
+
+<div class="modal fade" id="customer-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+ <div class="modal-dialog modal-sm" style="width:340px;top: 20%;">
+	 <div class="modal-content">
+		 <div class="modal-header">
+			 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+				 <span aria-hidden="true">×</span>
+			 </button>
+			 <h4 class="modal-title" id="myModalLabel">
+				 操作提示
+			 </h4>
+		 </div>
+		 <div class="modal-body modal-body-tips l-modal-body">确定进行密码修改？</div>
+		 <div class="modal-footer">
+			 <button type="button" class="btn btn-default" data-dismiss="modal">   取消	</button>
+			 <button type="button" class="btn btn-primary" onclick="updata_queding();">	确定    </button>
+		 </div>
+	 </div>
+ </div>
+</div>
+
+
+<script type="text/javascript">
+
+function updata(){
+	var oldpassword = $("#oldpassword").val();
+	 if(!oldpassword){
+	   alert("原密码不能为空");
+	   return false;
+	 }
+
+	 var password = $("#password").val();
+	 if(password==''){
+	   alert("密码不能为空");
+	   return false;
+	 }
+	 var repassword = $("#repassword").val();
+	 if(repassword==''){
+	   alert("确认密码不能为空");
+	   return false;
+	 }
+
+	 if(password != repassword){
+	   alert("密码和确认密码不一致");
+	   return false;
+	 }
+	$('#customer-delete').modal('show');
+}
+
+function updata_queding(){
+	var oldpassword = $("#oldpassword").val();
+	var password = $("#password").val();
+	var repassword = $("#repassword").val();
+		var href = window.location.href;
+		$.ajax({
+		    type: "POST",
+		    dataType:'json',
+		    url: href,
+		    cache: false,
+		    data: $("#form").serialize(),
+		    success: function(data) {
+		   	if (data.code == 1) {
+		   	     alert(data.msg + ' 页面即将自动跳转~');
+		   	 	 location.href = "{:url('user/index/logout')}";
+		   	}else{
+		   		 alert(data.msg);
+		   		 location.reload();
+		   	}
+		    },
+		    error: function(data) {
+		   	 alert("提交失败");
+		    }
+		})
+}
+</script>
+
+{/block}

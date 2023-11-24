@@ -1,0 +1,346 @@
+a, a:hover {
+  text-decoration: none;
+}
+.dflex {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+}
+.pr {
+  position: relative;
+}
+.dis_in {
+  display: inline-block;
+}
+.dis_no {
+  display: none;
+}
+.dis_blo {
+  display: block;
+}
+.panel {
+  border: none;
+  border-radius: 0px;
+  box-shadow: none;
+}
+.panel-body {
+  padding: 25px 20px 34px;
+}
+.n_panel_title {
+  display: inline-block;
+  line-height: 30px;
+}
+.n_panel_title img {
+  width: 22px;
+	height: 22px;
+  vertical-align: sub;
+  margin-right: 8px;
+}
+.c_taskleft {
+  /* max-width: 400px; */
+  min-width: 200px;
+  width: 45%;
+  float: left;
+  margin-right: 11px;
+  margin-right: 1%;
+  /* flex: 1; */
+  display: flex;
+  display: -webkit-flex;
+}
+.c_taskleft .panel {
+  width: 100%;
+  /* max-height: 652px; */
+  /* min-height: 500px; */
+  /* overflow-y: scroll; */
+  padding-top: 0px;
+}
+.c_taskdata {
+  width: 100%;
+  display: flex;
+  display: -webkit-flex;
+}
+.c_taskright {
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  display: -webkit-flex;
+}
+.c_taskright .panel {
+  width: 100%;
+}
+.f_maindata {
+  margin-top: 10px;
+}
+.f_surveyleft {
+  width: 50%;
+  padding-right: 20px;
+  text-align: center;
+  box-sizing: border-box;
+  border-right: 1px solid #eeeeee;
+  padding: 35px 0px;
+}
+.f_suleftimg {
+  line-height: 0px;
+  display: inline-block;
+  cursor: pointer;
+}
+.f_suleftimg img:nth-last-of-type(1) {
+  position: absolute;
+  bottom: 0px;
+  right: -5px;
+}
+.f_sulefdata {
+  margin-top: 20px;
+}
+.f_sulefttype {
+  font-size: 18px;
+	color: #404040;
+  margin-bottom: 0px;
+}
+.f_suleftname {
+  font-size: 16px;
+	color: #404040;
+}
+.f_suleftname span {
+  font-size: 20px;
+}
+.f_surveyright {
+  width: 50%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.f_surighttop {
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 20px;
+  padding-left: 14%;
+  text-align: left;
+}
+.f_surightbot {
+  padding-top: 23px;
+  padding-left: 14%;
+  text-align: left;
+}
+.f_surveyright p {
+  margin-bottom: 5px;
+}
+.f_surveyright p:nth-of-type(1) {
+  font-size: 24px;
+	letter-spacing: 2px;
+	color: #333333;
+}
+.f_surveyright p:nth-of-type(2) {
+  font-size: 22px;
+  color: #4996fb;
+}
+.f_surveyright p:nth-of-type(3) {
+  font-size: 20px;
+	color: #388bfa;
+}
+.f_surveyright p:nth-of-type(4) {
+  width: 90%;
+  max-width: 250px;
+	height: 55px;
+  line-height: 55px;
+	background-color: #388bfa;
+	border-radius: 27px;
+  text-align: center;
+  font-size: 18px;
+	color: #ffffff;
+  margin-top: 32px;
+}
+.f_rateul {
+  padding: 0px 20px;
+}
+.f_rateul li {
+  width: 50%;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  padding: 30px 0px;
+}
+.f_rateul li:nth-of-type(odd) {
+  border-right: 1px solid #eeeeee;
+}
+.f_rateul li:nth-of-type(1),
+.f_rateul li:nth-of-type(2) {
+   border-bottom: 1px solid #eeeeee;
+}
+.f_rateul li img {
+  margin-right: 15px;
+}
+.f_rateuldata {
+  text-align: left;
+  width: 125px;
+}
+.f_rateul li:nth-of-type(1) .f_rateuldata,
+.f_rateul li:nth-of-type(3) .f_rateuldata {
+  width: 190px;
+}
+.f_rateuldata p:nth-of-type(1){
+  font-size: 16px;
+}
+.f_rateuldata p:nth-of-type(2){
+  font-size: 14px;
+	color: #404040;
+  margin-bottom: 0px;
+}
+.f_yesterday.dflex {
+  justify-content: flex-start;
+  -webkit-justify-content: flex-start;
+  margin-top: 30px;
+}
+.f_yesterdaydata {
+  /* width: 210px; */
+  width: 12.9%;
+  margin: 0px 10px 15px;
+  padding: 45px 10px;
+  text-align: center;
+  border: solid 1px #eeeeee;
+  box-sizing: border-box;
+}
+.f_yesterdaydata:nth-last-of-type(1) {
+  margin-right: 0px;
+}
+.f_yesterdaydata p:nth-of-type(1) {
+  font-size: 18px;
+	letter-spacing: 1px;
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+.f_yesterdaydata p:nth-of-type(2) {
+  font-size: 20px;
+	color: #666666;
+}
+.table-responsive {
+  margin-top: 25px;
+  padding-bottom: 50px;
+}
+.table {
+  border: solid 1px #d7e9ff;
+}
+.table tr th {
+  font-size: 16px;
+  font-weight: normal;
+  vertical-align: middle !important;
+}
+.table thead tr th {
+  font-size: 15px !important;
+  height: 50px;
+  vertical-align: middle !important;
+}
+.table tr td {
+  height: 80px;
+  font-size: 14px !important;
+	color: #212121;
+}
+.table tr th, .table tr td {
+  border: solid 1px #d7e9ff !important;
+}
+@media (max-width: 1780px){
+  .f_yesterdaydata {
+    width: 17%;
+    margin: 0px 1.5% 3%;
+  }
+}
+@media (max-width: 1640px){
+  .f_yesterdaydata {
+    width: 20%;
+    margin: 0px 2.5% 3%;
+  }
+}
+
+
+
+
+.fl {
+  float: left;
+}
+@media screen and (max-width:1220px) {
+  .c_taskleft {
+      width: 40%;
+  }
+  .f_surveyleft {
+    padding-right: 0px;
+  }
+  .f_surighttop, .f_surightbot {
+    padding-left: 5%;
+  }
+  .f_rateul {
+    padding: 0px;
+  }
+  .f_rateuldata p:nth-of-type(1) {
+    font-size: 16px;
+  }
+  .f_rateuldata p:nth-of-type(2),
+  .f_rateuldata p:nth-of-type(2) a {
+    font-size: 12px !important;
+  }
+  .f_rateuldata p:nth-of-type(2) a {
+    margin-left: 7px !important;
+  }
+}
+@media screen and (max-width:1400px) {
+  .panel-body {
+    padding: 22px 20px 16px;
+  }
+  .f_surveyleft {
+    padding-right: 12px;
+  }
+  .f_sulefttype {
+    font-size: 18px;
+  }
+  .f_suleftname {
+    font-size: 16px;
+  }
+  .f_suleftname span {
+    font-size: 18px;
+  }
+  .f_surighttop, .f_surightbot {
+    padding-left: 10%;
+  }
+  .f_surveyright p:nth-of-type(1) {
+    font-size: 20px;
+    letter-spacing: 0px;
+  }
+  .f_surveyright p:nth-of-type(2) {
+    font-size: 18px;
+  }
+  .f_surveyright p:nth-of-type(4) {
+    margin-top: 15px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 15px;
+  }
+  .f_rateuldata p:nth-of-type(1) {
+    font-size: 17px;
+    margin-bottom: 5px;
+  }
+  .f_rateuldata p:nth-of-type(2) {
+    font-size: 15px;
+  }
+  .f_rateul li img {
+    margin-right: 10px;
+    width: 17%;
+  }
+  .f_rateul {
+    padding: 0px 5px;
+  }
+}
+.pz_xiaofeitongji{
+  border-radius: 3px;border: solid 1px #e0e2e4;
+  height:28px;
+  line-height: 28px;
+  color: #0e90fe;
+  display: inline-block;
+  padding: 0px;
+  width: 119px;
+  font-size:12px;
+}

@@ -1,0 +1,97 @@
+{extend name="public/base" /}
+{block name="body"}
+{include file="sms/sms_targer" /}
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<div>
+		<div class="form-group">
+        <label
+                class="col-sm-2 control-label no-padding-right">音频</label>
+         <FORM method="post" enctype="multipart/form-data" class="form" action="{:url('fileUpload')}">选择文件： 
+            <input class="form-control" name="files"  onchange="formSoundv(this);" accept=".zip,.rar" id="test" type="file">
+            <!--<audio id="audio" controls autoplay="" style="display: none; "></audio>-->
+				  <!--<INPUT type="file" class="files" name="files"><br/> -->
+				  <INPUT type="submit" class="btn" value=" 提交 "> 
+				</FORM> 
+    </div>
+</div>
+<Div onclick="preservation();">dsafsdfa </Div>
+<script>
+		function preservation(){
+			var excel = document.getElementById("test").files[0];
+			// console.log(excel);
+			// var url = "{:url('batchfile')}"//excel
+			var url = "{:url('filezipbatch')}"//zip包
+			var formFile = new FormData();
+			formFile.append("excel",excel);
+			$.ajax({
+		    type: 'post',
+		    data: formFile,
+		    dataType: 'json',
+		    url: url,
+		    cache: false,
+        contentType: false,    //不可缺
+        processData: false,    //不可缺
+		    success: function (data) {
+		    	console.log();
+		    },
+		      error: function (e) {}
+	    })
+		}
+    //录音上传
+    function formSoundv(Object){
+			console.log(Object.files)
+			if(Object.files.length > 0 ){
+				var excel = document.getElementById("test").files[0];
+				var objUrl = getObjectURL(Object.files[0]);
+				var filePath = $('#test').val().toLowerCase().split(".");
+				var fileType =  filePath[filePath.length - 1]; //获得文件结尾的类型如 zip rar 这种写法确保是最后的
+				if(!(fileType == "zip"|| fileType == "rar")){
+        		alert('文件格式不符合要求！');
+        		var file = $("#test") ;
+						file.after(file.clone().val(""));      
+						file.remove();  
+        		return 
+		    }
+		    // else if(excel.size>10485760){
+		    //     alert('错误！请上传不超过10M的文件');
+		    //     var file = $("#test") ;
+						// file.after(file.clone().val(""));      
+						// file.remove();  
+		    //     return
+		    // }
+	      // $("#audio").attr("src", objUrl);
+	      // $("#audio")[0].pause();
+	      // $("#audio").show();
+	      // $("#mp3_submit").show()
+	      // getTime();
+			}
+    	
+    }
+    // // <!--获取mp3文件的时间 兼容浏览器-->
+    // function getTime() {
+    //     setTimeout(function () {
+    //         var duration = $("#audio")[0].duration;
+    //         if(isNaN(duration)){
+    //             getTime();
+    //         }
+    //         else{
+    //             console.info("该歌曲的总时间为："+$("#audio")[0].duration+"秒")
+    //         }
+    //     }, 10);
+    // }
+    // <!--把文件转换成可读URL-->
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+</script>
+{/block}

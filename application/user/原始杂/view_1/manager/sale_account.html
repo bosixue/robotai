@@ -1,0 +1,280 @@
+{extend name="public/base" /} 
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+{include file="sms/sms_targer" /}
+{include file="manager/dialog" /}
+
+
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+<style>
+.l-resetBtn {
+		padding: 6px 15px;
+    color: #333;
+    background-color: #fff;
+    border-color: #dedede;
+}
+
+.l-resetBtn:active, .l-resetBtn:focus, .l-resetBtn:hover, .l-resetBtn:active:focus, .l-resetBtn:active:hover {
+    background-color: #fff;
+    border-color: #0e90fe;
+    color: #0e90fe!important;
+}
+
+.l-searchBtn{
+	padding: 6px 15px;
+}
+
+.form-group label{
+	min-width: 0px;
+}
+
+
+	label{
+		margin-bottom: 0px;
+	}
+
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header clearfix">
+                <div class="pull-left">	<span class="n_panel_title">
+                		<img src="__PUBLIC__/img_sj/sale_manager.png" alt="">销售账号管理
+                	</span>
+
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+
+            	<section class="navbar clearfix">
+								<div class="form-inline pull-left">
+									<div class="form-group">
+										<label class="statusSelect pull-left">用户名：</label>
+										<input type="text" class="form-control pull-left l-search" id="username_list" name="keyword">
+									</div>
+									<div class="form-group">
+										<span class="btn btn-primary  pull-left l-searchBtn" type="button" onclick="">查询</span>
+										<span class="btn btn-primary pull-left l-resetBtn" type="button" onclick="">重置</span>
+									</div>
+								</div>
+								<div class="form-inline pull-right" style="margin-top:-28px">
+									<a class="btn btn-primary state " type="button" href="/user/manager/add_account">添加账户</a>
+									<span class="btn btn-primary state " type="button" data-title="开启" onclick="popTipswin(this);">开启账号</span>
+									<span class="btn btn-primary state " type="button" data-title="锁定" onclick="popTipswin(this);">锁定账号</span>
+								</div>
+							</section>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input class="check-all" name='all_checked' type="checkbox" />
+                                </th>
+                                <th class="text-center">序号</th>
+                                <th class="text-center">用户名</th>
+                                <th class="text-center">手机号码</th>
+                                <th class="text-center">余额</th>
+                                <th class="text-center">机器人数</th>
+                                <th class="text-center">到期时间</th>
+                                <th class="text-center">租金</th>
+                                <th class="text-center">ASR名称</th>
+                                <th class="text-center">线路名称</th>
+                                <th class="text-center">短信通道</th>
+                                <th class="text-center">创建时间</th>
+                                <th class="text-center">最后登录时间</th>
+                                <th class="text-center">账号状态</th>
+                                <th class="text-center">操作</th>
+                                <th class="text-center">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recharge-recored-list">
+                            <tr>
+                                <td class="text-center">
+                                    <input class="rolecheck" name='checkids' value="1" type="checkbox"/>
+                                </td>
+                                <td class="text-center">1</td>
+                                <td class="text-center">小明</td>
+                                <td class="text-center">167XXXXXXXX</td>
+                                <td class="text-center">6767</td>
+                                <td class="text-center">100</td>
+                                <td class="text-center">2018-11-11</td>
+                                <td class="text-center">0.02元/天/个</td>
+                                <td class="text-center">ASR1</td>
+                                <td class="text-center">线路1</td>
+                                <td class="text-center">中国移动</td>
+                                <td class="text-center">2018-11-02</td>
+                                <td class="text-center">2018-11-02</td>
+                                <td class="text-center">已开启</td>
+                                <td class="text-center">
+																	<a href="javascript:void(0);" onclick="editSaleAccount();">编辑&nbsp;&nbsp;&nbsp;</a>
+																	<a href="javascript:void(0);" onclick="bindingWechat();">绑定微信</a>
+                                </td>
+                                <td class="text-center">暂无备注</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">
+                                    <input class="rolecheck" name='checkids' value="2" type="checkbox" />
+                                </td>
+                                <td class="text-center">2</td>
+                                <td class="text-center">小明</td>
+                                <td class="text-center">167XXXXXXXX</td>
+                                <td class="text-center">6767</td>
+                                <td class="text-center">100</td>
+                                <td class="text-center">2018-11-11</td>
+                                <td class="text-center">0.02元/天/个</td>
+                                <td class="text-center">ASR1</td>
+                                <td class="text-center">线路1</td>
+                                <td class="text-center">中国移动</td>
+                                <td class="text-center">2018-11-02</td>
+                                <td class="text-center">2018-11-02</td>
+                                <td class="text-center">已开启</td>
+                                <td class="text-center">
+																	<a href="javascript:void(0);" onclick="editSaleAccount();">编辑&nbsp;&nbsp;&nbsp;</a>
+																	<a href="javascript:void(0);" onclick="bindingWechat();">绑定微信</a>
+
+                                </td>
+                                <td class="text-center">暂无备注</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <footer class="clearfix col-sm-12">
+                            <div class="pull-left">
+                                <input class="ppzrolecheck all_checked_count"  type="checkbox" />全选（已选中0个销售账号）</div>
+                            <div class="text-right pull-right ">
+                                <div class="paging">
+                                    <div>
+                                        <ul class="pagination">
+                                            <div style="font-size: 12px;display: inline-block;">
+                                                <select class="limit" style="width: 80px;margin: 0px 8px;height:32px;background:#fff;border:1px solid #ddd;">
+                                                    <option value="10" selected="selected">10条/页</option>
+                                                    <option value="30">30条/页</option>
+                                                    <option value="50">50条/页</option>
+                                                    <option value="100">100条/页</option>
+                                                </select>
+                                            </div>
+                                            <div style="font-size: 12px;margin: 0px;display: inline-block;">跳至
+                                                <input class="Nowpage" type="number" style="width: 50px;height:32px; margin: 1px 8px;border:1px solid #ddd;border-radius: 5px;text-align: center;" value="1" max="15" min="1">页</div>
+                                            <button class="btn btn-primary go_up" type="button" data-toggle="modal">确定</button>
+                                            <li id="prevbtn" class="disabled"><span>«</span>
+                                            </li>
+                                            <li class="active"><a href="javascript:void(0);">1 </a>
+                                            </li>
+                                            <li><a href="javascript:void(0);"><span>»</span></a>
+                                            </li>
+                                        </ul>
+                                        <div style="font-size: 12px;float: right;margin: 14px 9px 0px 0px;display: inline-block;"><span style="font-size: 12px;">总页数：<span id="all_page">1页</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+//全选  反选
+function election(){
+		if($('.all_checked_count').is(":checked")){
+			$("input[name='checkids'][type='checkbox']").prop("checked",true);
+		}
+		$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+		 $("input[name='all_checked'][type='checkbox']").click(function(){
+			 if ($("input[name='all_checked'][type='checkbox']").is(":checked")) {
+		  		$("input[name='checkids'][type='checkbox']").prop("checked",true);
+		  		$(".all_checked_count").prop("checked", false);
+		  	} else {
+		 		$("input[name='checkids'][type='checkbox']").prop("checked",false);
+		 		$(".all_checked_count").prop("checked", false);
+		 	}
+
+		 	$('.check_count').text($("input[name='checkids'][type='checkbox']:checked").length);
+		 });
+			//子复选框的事件
+			$('input[type="checkbox"][name="checkids"]').click(function(){
+				//当没有选中某个子复选框时，check-all取消选中
+				if (!$(".rolecheck").checked) {
+					$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+					$(".all_checked_count").prop("checked", false);
+				}
+				var chsub = $("input[name='checkids'][type='checkbox']").length; //获取checkids的个数
+				var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+				if (checkedsub == chsub) {
+					$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+					$(".all_checked_count").prop("checked", false);
+				}
+				$('.check_count').text(checkedsub);
+			});
+			$('.all_checked_count').click(function(){
+				if($(this).prop('checked') === true){
+					$.each($('.all_checked_count'),function(index,obj){
+						$(obj).prop("checked",true);
+					});
+					$("input[name='checkids'][type='checkbox']").prop("checked",true);
+					$("input[name='all_checked'][type='checkbox']").prop("checked", true);
+					// $('.check_count').text(count);
+				}else{
+					$.each($('.all_checked_count'),function(index,obj){
+						$(obj).prop("checked",false);
+					});
+						$("input[name='checkids'][type='checkbox']").prop("checked",false);
+		 			$("input[name='all_checked'][type='checkbox']").prop("checked", false);
+		 			$('.check_count').text(0);
+				}
+			});
+	}
+
+//重置
+
+function orderChongzhi() {
+    $('#startDate').val("");
+    $('#endTime').val("");
+} 
+</script>
+<script>
+//显示编辑销售账号
+function editSaleAccount() {
+  $('#sales-account-edit').modal('show');
+}
+
+//显示分配机器人
+function distributionRobot() {
+    $('#distribution-robot').modal('show');
+}
+
+//显示充值记录
+
+function recharge() {
+    $('#rechargedialog').modal('show');
+}
+
+//显示绑定微信
+
+function bindingWechat() {
+    $('#bindingwechat').modal('show');
+}
+
+//重置密码
+function resetpwd() {
+    $('#resetpwd').modal('show');
+}
+
+
+</script>
+
+<script>
+	$(function(){
+		election();
+	})
+</script>
+{/block}

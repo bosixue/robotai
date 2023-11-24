@@ -1,0 +1,5 @@
+{
+    "require": {
+        "aliyun/aliyun-mns-php-sdk": "^1.0"
+    }
+}

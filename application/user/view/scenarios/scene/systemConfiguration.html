@@ -1,0 +1,132 @@
+<div class="system-content">
+  <div class="config-title">
+    <span>机器人语言参数配置</span>
+  </div>
+  <!--<div class="form-group clearfix config-content">-->
+  <!--  <label class=" control-label" style="letter-spacing:1px;">打断-持续时长：</label>-->
+  <!--  <div class="col-lg-8 col-sm-8 ">-->
+  <!--    <input type="text" class="form-control" id="duration-time" name="pause_play_ms" value="">毫秒-->
+  <!--    <p>注：机器人说话过程中，若用户说话持续时长大于该值时，则中断说话并进行监听。该值越小，则机器人打断效果越灵敏</p>-->
+  <!--  </div>-->
+  <!--</div>-->
+  <div class="form-group clearfix config-content">
+    <label class=" control-label" style="letter-spacing:2px;">最小说话时间：</label>
+    <div class="col-lg-8 col-sm-8">
+      <input type="text" class="form-control" id="min-speakingTime" name="min_speak_ms" value="">毫秒
+      <p>注：最小说话时间，默认值100，单位毫秒，说话时间小于这个值，会被认为是无效声音</p>
+    </div>
+  </div>
+  <div class="form-group clearfix config-content">
+    <label class=" control-label" style="letter-spacing:2px;">最大说话时间：</label>
+    <div class="col-lg-8 col-sm-8 ">
+      <input type="text" class="form-control" id="max-speakingTime" name="max_speak_ms" value="">毫秒
+      <p>注：最大说话时间，默认值10000，单位毫秒，说话时间超过这个值，就停止录音，直接提交ASR服务器识别</p>
+    </div>
+  </div>
+  <div class="from-group clearfix config-content">
+    <label class=" control-label" style="letter-spacing:7px;">过滤噪音：</label>
+    <div class="col-lg-8 col-sm-8 ">
+      <input type="text" class="form-control" id="filtering-noise" name="filter_level" value="">
+      <p>注：防止干扰等级。0-1.0之间，无特殊要求设置为0</p>
+    </div>
+  </div>
+  <div class="form-group clearfix config-content">
+    <label class=" control-label" style="letter-spacing:4px;">机器人音量：</label>
+    <div class="col-lg-8 col-sm-8 ">
+      <input type="text" class="form-control" id="robot-volume" name="volume" value="">
+      <p>注：音量标准化的值。0-100，0不使用音量标准化，其他值 音量把录音音量调整到这个值后，再提交ASR识别</p>
+    </div>
+  </div>
+</div>
+
+<script>
+ //显示某个话术场景的配置
+ function view_scenarios_config(id){
+ 	 //话术id 
+	 var id =$("#nowsceneID").val();
+	 var url ="{:url('user/Scenarios/scenariosView')}"
+	 	$.ajax({	
+	 		 url : url,
+       dataType : "json",
+       type : "post",
+       data : {'scenarios_id':id},
+	 		 success: function(data){
+	 		 	  console.log(data);
+	 		 	  if(data.code==1){
+	 		 	  	 console.log(data.smg);
+	 		 	  }
+	 		 	  //code==0 代表从数据库中读取数据成功
+	 		 	  if(data.code==0){
+	 		 	  	 $("#duration-time").val(data.data.pause_play_ms); 
+						 $("#min-speakingTime").val(data.data.min_speak_ms); 
+						 $("#max-speakingTime").val(data.data.max_speak_ms); 
+						 $("#filtering-noise").val(data.data.filter_level); 
+					   $("#robot-volume").val(data.data.volume); 
+	 		 	  }
+	 		 	  //code==2 代表数据为空 里面没有配置信息
+	 		 	  if(data.code==2){
+	 		 	  	 $("#duration-time").val(''); 
+						 $("#min-speakingTime").val(''); 
+						 $("#max-speakingTime").val(''); 
+						 $("#filtering-noise").val(''); 
+					   $("#robot-volume").val(''); 
+	 		 	  }
+	 		 },
+	 		 error : function() {
+           console.log('出错了。');
+       }
+	 		
+	 	});
+	 
+ }
+
+
+ //修改某个话术场景的配置
+ function save_scenarios_config(){
+  //话术id
+	var id =$("#nowsceneID").val(); 
+	var pause_play_ms=$("#duration-time").val(); 
+	var min_speak_ms=$("#min-speakingTime").val(); 
+	var max_speak_ms=$("#max-speakingTime").val(); 
+	var filter_level=$("#filtering-noise").val(); 
+	var volume=$("#robot-volume").val(); 
+	
+	var url ="{:url('user/Scenarios/scenariosUpdate')}"
+	$.ajax({
+		     url : url,
+         dataType : "json",
+         type : "post",
+         data : {'scenarios_id':id,'pause_play_ms':pause_play_ms,'min_speak_ms':min_speak_ms,'max_speak_ms':max_speak_ms,'filter_level':filter_level,'volume':volume},
+         success: function(data){
+           console.log(data);
+           //code==0 代表修改成功
+	 		 	   if(data.code==0){
+	 		 	   	 $('#tips_model').modal('hide');
+	 		 	  	 alert('修改配置成功。');
+	 		 	  	 view_scenarios_config(id);
+	 		 	   }
+	 		 	   //code==1 代表修改失败
+	 		 	   if(data.code==1){
+	 		 	   	 $('#tips_model').modal('hide');
+	 		 	  	 alert(data.msg);
+	 		 	   }
+         },
+         error : function() {
+           console.log('出错了');
+         }
+		 
+		
+	});
+		
+ }
+	
+	
+</script>
+
+
+
+
+
+
+
+

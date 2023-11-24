@@ -1,0 +1,675 @@
+{extend name="public/base" /}
+{block name="body"}
+
+<link href="/public/plugs/datepicker/css/foundation-datepicker.min.css" rel="stylesheet" type="text/css">
+<link href="/public/css/smsmodel.css" rel="stylesheet" type="text/css">
+<link href="/public/css/sale_account.css" rel="stylesheet" type="text/css">
+
+<script src="/public/plugs/datepicker/js/foundation-datepicker.js"></script>
+<script src="/public/plugs/datepicker/js/foundation-datepicker.zh-CN.js"></script>
+<script src="__PUBLIC__/js/messager.js"></script>
+
+<link href="/public/css/enterprise.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="/public/css/enterpriseA.css">
+
+{include file="sms/sms_targer" /}
+{include file="manager/dialog" /}
+
+<style>
+.l-resetBtn {
+		padding: 6px 15px;
+    color: #333;
+    background-color: #fff;
+    border-color: #dedede;
+}
+
+.l-resetBtn:active, .l-resetBtn:focus, .l-resetBtn:hover, .l-resetBtn:active:focus, .l-resetBtn:active:hover {
+    background-color: #fff;
+    border-color: #0e90fe;
+    color: #0e90fe!important;
+}
+.disable-mouse{
+	cursor: not-allowed;
+}
+
+.l-searchBtn{
+	padding: 6px 15px;
+}
+
+.form-group label{
+	min-width: 0px;
+}
+
+.l-marginleft{
+  margin-left: 15px;
+}
+
+	label{
+		margin-bottom: 0px;
+	}
+	.op_account {
+		margin-top: -28px;
+	}
+
+	@media screen and (min-width:991px) and (max-width:1100px) {
+		.op_account {
+			margin-top: 5px;
+		}
+	}
+	.only_sale{
+	  display:none
+	}
+
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box clearfix fadeInRight animated pz_manping_height">
+            <header class="main-box-header clearfix">
+                <div class="pull-left">	<span class="n_panel_title">
+                		<img src="__PUBLIC__/img_sj/sale_manager.png" alt="">账户管理
+                	</span>
+                </div>
+            </header>
+            <div class="main-box-body clearfix">
+
+            	<section class="navbar clearfix">
+								<div class="form-inline pull-left">
+									<div class="form-group">
+										<label class="statusSelect pull-left">用户名： </label>
+										<input type="text" class="form-control pull-left l-search" id="username-list" name="keyword" autocomplete="off">
+									</div>
+									{if $role_id != 12 && $role_id != 18}
+									<!--运营商、代理商-->
+										<div class="form-group">
+											<label class="statusSelect pull-left e_headmargin">用户类型：</label>
+											<select class="form-control textwidth l-search resetSel c_selectimg" name="" id='role_type' >
+												<option value="">请选择用户类型</option>
+												{volist name='role_list' id ='vo'}
+													<option value="{$vo['source_id']}">{$vo['name']}</option>
+												{/volist}
+											</select>
+										</div>
+									{/if}
+									<!--/运营商、代理商-->
+									<div class="form-group">
+										<span class="btn btn-primary  pull-left l-searchBtn" type="button" onclick="show_data();">查询</span>
+										<span class="btn btn-primary pull-left l-resetBtn" type="button" onclick="reset_click();">重置</span>
+									</div>
+								</div>
+								<div class="form-inline pull-right op_account">
+								<a class="btn btn-primary state " type="button" href="{:url('user/manager/add_account')}" >添加账户</a>
+								<span class="btn btn-primary state " type="button" data-title="开启" data-type="0" onclick="message(this);">开启账号</span>
+								<span class="btn btn-primary state " type="button" data-title="锁定" data-type="1" onclick="message(this);">锁定账号</span>
+								</div>
+							</section>
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th class="text-center">
+                          <input class="check-all" name='all_checked' type="checkbox" />
+                      </th>
+                      <th class="text-center">序号</th>
+                      <th class="text-center">用户名</th>
+                      <th class="text-center">用户类型</th>
+                      <th class="text-center">手机号码</th>
+                      <th class="text-center">余额</th>
+                      <th class="text-center">机器人数</th>
+                      {if $role_id != 12}<th class="text-center">租金</th>{/if}
+                      <th class="text-center">到期时间</th>
+                      <th class="text-center">ASR名称</th>
+                      <th class="text-center">线路名称</th>
+                      <th class="text-center">短信通道</th>
+                      <th class="text-center">技术服务费</th>
+                      <th class="text-center">创建时间</th>
+                      <th class="text-center">最后登录时间</th>
+                      <th class="text-center">账号状态</th>
+                      <th class="text-center">操作</th>
+                      <th class="text-center">备注</th>
+                    </tr>
+                  </thead>
+                  <tbody id="account-recored-list">
+                  </tbody>
+                </table>
+              	<div class="component-page-empty" id="consumeempty">
+		  						<div class="empty-tip line">暂无数据</div>
+		  					</div>
+                <div class="row">
+                  <footer class="clearfix col-sm-12">
+                    <div class="pull-left margintop">
+                      <input class="ppzrolecheck all_checked_count"  type="checkbox"/>全选（已选中<span id='user_count'>0</span>个账号）</div>
+                    <div class="text-right pull-right">
+                    	<div class="paging clearfix">
+                    	</div>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--//<a href="javascript:void(0);" data-title="强制回收机器人" data_id="5963" onclick="popTipswin(this);">强制回收</a>delSaleAccount({%id%})-->
+<script id='operator_list' type='text/tepmate'>
+	<tr>
+		<td class="text-center">
+			<input class="rolecheck" name='checkids' value="{%id%}" type="checkbox"/>
+		</td>
+		<td class="text-center">{%sequence%}</td>
+    <td class="text-center">{%name%}</td>
+    <td class="text-center">{%user_type%}</td>
+    <td class="text-center">{%phone_num%}</td>
+    <td class="text-center">{%balance%}</td>
+    <td class="text-center">{%rebot_num%}</td>
+    {if $role_id != 12}<td class="text-center">{%rebot_prcie%}{%type_price%}</td>{/if}
+    <td class="text-center">{%expiration_date%}</td>
+    <td class="text-center">{%ASR_name%}</td>
+    <td class="text-center">{%line%}</td>
+    <td class="text-center">{%SMS_hannel%}</td>
+    <td class="text-center">{%technology_service_price%}</td>
+    <td class="text-center">{%create_time%}</td>
+    <td class="text-center">{%last_time%}</td>
+    <td class="text-center">{%account_state%}</td>
+    <td class="text-center">
+			<a href="javascript:void(0);" onclick="editSaleAccount({%id%});">编辑</a>&nbsp;&nbsp;
+
+			<a href="javascript:void(0);" class="{%only_sale%}" data-title="删除销售账号" data-id='{%id%}' data-type='delete_user' onclick="popTipswin(this);">删除</a>&nbsp;&nbsp;
+    </td>
+    <td class="text-center">{%remarks%}</td>
+	</tr>
+</script>
+<script id ='line_s_a_list' type='text/tepmate'>
+	<div class="l-marginright">
+		<span title={%title%}>{%name%}</span>
+		<span>成本价：{%c_price%}{%c_company%}</span>
+		{if $role_id != 18}<span>销售价：{%x_price%}{%x_company%}</span>{/if}
+	</div>
+</script>
+
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script type="text/javascript" src='/public/js/paging.js'></script>
+
+<script type="text/javascript">
+	//切换登录密码重置
+	$('#resetPwd').click(function(){
+		if($('#resetPwd').hasClass('reset')){
+			$('#resetPwd').text("取消重置登录密码");
+			$('.showpwd').removeClass('hidden');
+			$('#resetPwd').removeClass('reset');
+		}else{
+			$('#resetPwd').text("重置登录密码");
+			$('.showpwd').addClass('hidden');
+			$('#resetPwd').addClass('reset');
+		}
+	});
+</script>
+<script type="text/javascript">
+	//显示添加销售账号
+	function addSaleAccount() {
+	    $('#sales-account-add').modal('show');
+	}
+
+	//显示分配机器人
+	function distributionRobot() {
+	    $('#distribution-robot').modal('show');
+	}
+
+	//显示充值记录
+	function recharge() {
+	    $('#rechargedialog').modal('show');
+	}
+
+	//显示绑定微信
+	function bindingWechat() {
+	    $('#bindingwechat').modal('show');
+	}
+
+	//重置密码
+	function resetpwd() {
+	    $('#resetpwd').modal('show');
+	}
+
+</script>
+
+<script type="text/javascript">
+	/**
+	* 配置分页
+	*
+	* @param int args.page 页码 页码参数统一"page"
+	* @param int args.limit 每页显示的数量 参数统一"limit"
+	* @param string args.paging_class 放置分页的class
+	* @param function args.callback 回调函数
+	*/
+	var Paging = new Paging01();
+		Paging.init_args({
+		// url:
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_data //回调函数 比如show_datas(页码, 显示条数)
+	});
+
+	show_data();
+	onmyTime();
+	// 数据展示
+	function show_data(page,page_size) {
+		if (!page) {
+			page = 1;
+		}
+		if (!page_size) {
+			page_size = 10;
+		}
+		var data = {};
+		data.page = parseInt(page);
+		data.page_size = parseInt(page_size);
+		data.name = $('#username-list').val();
+		data.role_type = $('#role_type').find("option:selected").val();
+		var url = "{:url('account_management')}";
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			type: 'post',
+			data: data,
+			success: function(result) {
+				console.log(result);
+				var htmls = '';
+				if(result.code === 0) {	//数据获取成功
+					if(result.data.list.length == 0) {
+						$('#consumeempty').show();
+					} else {
+						$('#consumeempty').hide();
+						var total = result.data.page;   //总页数
+						var Nowpage = result.data.Nowpage;  //当前页码
+						var count  = result.data.total;  //总条数
+						window.count = count;
+						var Nowpage = parseInt(Nowpage);
+						var i = (Nowpage - 1) * page_size + 1;
+						$.each(result.data.list, function(index, object) {
+							data.i = i;
+							if(object.robot_date == 0 || object.robot_date < 50000){
+								object.robot_date = '暂未设置';
+							}else{
+								object.robot_date =	timestampToTime(object.robot_date);
+							}
+							if(object.last_login_time == 0 || object.last_login_time < 50000){
+								object.last_login_time = '暂未登录';
+							}else{
+								object.last_login_time =	timestampToTime(object.last_login_time,2);
+							}
+							if(object.type_price == 1){
+								object.type_price_name = '元/天/个'
+							}else if(object.type_price == 2){
+								object.type_price_name = '元/月/个'
+							}else{
+								object.type_price_name = ''
+							}
+							if(object.role_id  == 19 && object.status == '关闭'){
+							  object.only_sale = '';
+							}else{
+							  object.only_sale = 'only_sale';
+							}
+
+							var html = $('#operator_list').html();
+							html = html.replace('{%id%}', object.id);
+							html = html.replace('{%sequence%}', i);
+							html = html.replace('{%name%}', object.username);
+							html = html.replace('{%user_type%}', object.role_name);
+							html = html.replace('{%phone_num%}', object.mobile);
+							html = html.replace('{%balance%}', toFixed_num(object.money,2)+'元');
+							html = html.replace('{%rebot_num%}', object.robot_cnt);
+							html = html.replace('{%rebot_prcie%}', toFixed_num(object.month_price,3));
+							html = html.replace('{%type_price%}',object.type_price_name);
+							html = html.replace('{%expiration_date%}', object.robot_date);
+							html = html.replace('{%ASR_name%}', object.asr_name);
+							html = html.replace('{%line%}', object.line_name);
+							html = html.replace('{%SMS_hannel%}', object.sms_name);
+							html = html.replace('{%create_time%}', timestampToTime(object.create_time,2));
+							html = html.replace('{%last_time%}', object.last_login_time);
+							html = html.replace('{%account_state%}', object.status);
+							html = html.replace('{%technology_service_price%}', object.technology_service_price);
+							html = html.replace('{%id%}', object.id);
+							html = html.replace('{%only_sale%}', object.only_sale);
+							html = html.replace('{%id%}', object.id);
+							html = html.replace('{%remarks%}', object.remark);
+							htmls += html;
+							i++;
+						});
+						Paging.paging(Nowpage, count, page_size);
+					}
+					$('#account-recored-list').html(htmls);
+					election();
+				}
+			},
+			error: function(error) {
+				alert('数据获取失败！');
+			}
+		});
+	}
+	function delSaleAccount(id){
+	  var data = {};
+	  data.id = id;
+	  data.pid_role_id = {$role_id};
+	  var url = "{:url('soft_deletion')}"
+	  $.ajax({
+  		type:'POST',
+  		data: data,
+  		dataType:'json',
+  		url:url,
+  		success:function(data){
+  		  console.log(data);
+  		  if(data.code == 0){
+  		    alert(data.msg);
+  		    $('#tips_model').modal('hide');
+  		    show_data();
+  		  }
+  		},
+  		error:function(e){
+  			alert('数据提交失败！');
+  		}
+  	});
+	}
+	//重置
+  function reset_click(){
+    $('#username-list').val("");//清空筛选条件
+    $('#role_type').val("");//清空筛选条件
+    show_data();
+  }
+	// 验证手机号
+  function isPhoneNo(phone) {
+	   var pattern = /^1[34578]\d{9}$/;
+	   return pattern.test(phone);
+  }
+  // 获取账号弹窗数据
+  function getdata() {
+  	var datas = {};
+  	//判断条件
+		var res = [] ;
+		res['str'] = true;
+  	if($('.showpwd').is(':visible')){
+	  	var agent_pwd = $('#agent_pwd').val();
+			var confirmPwd = $('#confirmPwd').val();
+			if(agent_pwd != '' || confirmPwd !=''){
+				datas.password = agent_pwd
+				if(datas.password != confirmPwd){
+					res['msg'] = '两次密码输入不一致';
+					res['str'] = false;
+				}
+			}
+  	}
+  	datas.mobile = $('#phoneNumber').val();//手机号码
+		datas.spare_mobile = $('#alternateCellPhone').val();//备用手机号码
+		if(datas.mobile == ''){
+			res['msg'] = '手机号码不能为空';
+			res['str'] = false;
+		}else{
+			if(!isPhoneNo(datas.mobile)){
+				res['msg'] = '手机号码格式不正确';
+				res['str'] = false;
+			}
+		}
+		if(datas.spare_mobile !=''){
+			if(!isPhoneNo(datas.spare_mobile)){
+				res['msg'] = '备用手机号码格式不正确';
+				res['str'] = false;
+			}
+		}
+		if($('.zujin2').is(':visible')){
+			datas.type_price = $('[name="price_type"]:checked').val();//机器人销售价格状态
+			datas.month_price = $('#robotprice').val();//机器人销售价格
+		}
+		if ($('.riqi2').is(':visible')) {
+			datas.robot_date = $('#robot_date').text();
+		}
+		if ($('.shijian2').is(':visible')) {
+			datas.month_price = $('#robot_rent .num').text();
+		}
+		if($('#z_start_date').is(':visible')){
+			datas.robot_date = $('#z_start_date').val();
+		}
+		datas.remark = $('#agent_remark').val();
+		datas.username = $('#agent_username').val();
+		datas.id = $('#eixd_click').attr('data_id');
+		res['data'] = datas;
+		return res;
+  }
+	$('input[name=price_type]').change(function(){
+		if($('input[name="price_type"][value="1"]').prop('checked')){
+			$('#enterMonthPrice').addClass('hidden');
+			$('#enterDayPrice'). removeClass('hidden');
+		}else{
+			$('#enterMonthPrice').removeClass('hidden');
+			$('#enterDayPrice').addClass('hidden');
+		}
+	});
+	//显示编辑销售账号
+	function editSaleAccount(id) {
+		var url = "{:url('add_account')}";
+		$.ajax({
+	  		type:'GET',
+	  		data: {id:id},
+	  		dataType:'json',
+	  		url:url,
+	  		success:function(data){
+	  			$('#agent-account-edit').modal('show');
+	  			console.log(data);
+	  			var info = data.data;
+	  			if(data.code == 1){
+	  				$('#agent_username').val(info.username);
+	  				$('#user_type').val(info.role_name);
+	  				$('#phoneNumber').val(info.mobile);
+	  				$('#alternateCellPhone').val(info.spare_mobile);
+	  				$('#accountBalance').val(toFixed_num(info.money,2));
+	  				$('#robotNum').val(info.robot_cnt);
+	  				$('#agent_remark').val(info.remark);
+	  				$('#z_start_date').val(timestampToTime(info.robot_date));
+	  				$('#eixd_click').attr('data_id',info.id);
+	  				if(info.pid_robot_date){
+	  					$('#d_robot_date').text(timestampToTime(info.pid_robot_date))
+	  				}else{
+	  					$('#d_robot_date').text('')
+	  				}
+	  				if(info.type_price == 1){
+	  					info.type_price_name ='元 / 天 / 个';
+	  				}else if(info.type_price == 2){
+	  					info.type_price_name ='元 / 月 / 个'
+	  				}
+						$('#robotprice').val(toFixed_num(info.month_price,3));
+	  				if(info.pid_role_id == 12){
+	  					$('#sj_robot_date').hide();
+	  					$('#d_robot_date').text('无期限');
+	  					$('#z_role_name').text(info.pid_role_name);
+	  					$('.zujin1').hide();
+							$('#nowDayPrice').hide();
+							$('.zujin2').hide();
+							$('.riqi2').hide();
+							$('.shijian2').hide();
+							$('.chengbe').hide();
+	  				}else if(info.pid_role_id ==18){
+	  					$('.zujin1').hide();
+	  					$('.riqi').hide();
+	  					$('.zujin2').hide();
+	  					$('#robot_date').text(timestampToTime(info.robot_date));
+	  					$('#robot_rent .num').text(toFixed_num(info.month_price,3));
+	  					$('#type_price').text(info.type_price_name);
+						}else if(info.pid_role_id == 16 || info.pid_role_id == 17){
+							if(info.role_id == 18 || info.role_id ==19){
+								$('.riqi2').hide();
+								$('.shijian2').hide();
+								$('.zujin2').show();
+								if(info.type_price == 1){
+									$("[name='price_type'][value='1']").prop("checked",true);
+									$("[name='price_type'][value='2']").prop("checked",false);
+									$('#enterMonthPrice').addClass('hidden');
+									$('#enterDayPrice'). removeClass('hidden');
+								}else if(info.type_price == 2){
+									$("[name='price_type'][value='1']").prop("checked",false);
+									$("[name='price_type'][value='2']").prop("checked",true);
+									$('#enterMonthPrice').removeClass('hidden');
+									$('#enterDayPrice').addClass('hidden');
+								}
+							}else{
+								$('.riqi2').hide();
+								$('.shijian2').hide();
+								$('.zujin2').hide();
+							}
+						}
+	  				//线路
+						var htmls = '';
+						if(info.line_list.length == 0){
+							var html = ''
+							html = '<label class=" control-label">暂未分配</label>'
+							$('#account-line-list').html(html);
+						}else{
+							$('#line_data_x').hide();
+							$.each(info.line_list, function(index, object) {
+								var html = $('#line_s_a_list').html();
+								html = html.replace('{%name%}', object.name);
+								html = html.replace('{%title%}', object.name);
+								html = html.replace('{%c_price%}', toFixed_num(object.pid_sale_price,3));
+								html = html.replace('{%c_company%}', '元/分钟');
+								html = html.replace('{%x_price%}', toFixed_num(object.sales_price,3));
+								html = html.replace('{%x_company%}', '元/分钟');
+								htmls += html;
+							});
+							$('#account-line-list').html(htmls);
+						}
+						//asr
+						var htmls1 = '';
+						if(info.asr_list.length == 0){
+							var html = ''
+							html = '<label class=" control-label">暂未分配</label>'
+							$('#account-asr-list').html(html);
+						}else{
+							$('#asr_data_x').hide();
+							$.each(info.asr_list, function(index, object) {
+								if(!object.pid_sale_price){
+									object.pid_sale_price = 0.00;
+								}else
+								if(!object.sale_price){
+									object.sale_price = 0.00;
+								}
+								var html = $('#line_s_a_list').html();
+								html = html.replace('{%name%}', object.name);
+								html = html.replace('{%title%}', object.name);
+								html = html.replace('{%c_price%}', toFixed_num(object.pid_sale_price,4));
+								html = html.replace('{%c_company%}', '元/次');
+								html = html.replace('{%x_price%}', toFixed_num(object.sale_price,4));
+								html = html.replace('{%x_company%}', '元/次');
+								htmls1 += html;
+							});
+							$('#account-asr-list').html(htmls1);
+						}
+						//短信
+						var htmls2 = '';
+						if(info.sms_list.length == 0){
+							var html = ''
+							html = '<label class=" control-label">暂未分配</label>'
+							$('#account-msm-list').html(html);
+						}else{
+							$('#msm_data_x').hide();
+							$.each(info.sms_list, function(index, object) {
+								if(!object.pid_sale_price){
+									object.pid_sale_price = 0.00;
+								}else
+								if(!object.price){
+									object.price=0.00;
+								}
+								var html = $('#line_s_a_list').html();
+								html = html.replace('{%name%}', object.name);
+								html = html.replace('{%title%}', object.name);
+								html = html.replace('{%c_price%}', toFixed_num(object.pid_sale_price,3));
+								html = html.replace('{%c_company%}', '元/条');
+								html = html.replace('{%x_price%}', toFixed_num(object.price,3));
+								html = html.replace('{%x_company%}', '元/条');
+								htmls2 += html;
+							});
+							$('#account-msm-list').html(htmls2);
+						}
+	  			}
+	  		},
+	  		error:function(e){
+	  			alert('数据提交失败！');
+	  		}
+	  	});
+
+	}
+	//保存账号弹窗数据
+  function save() {
+		 var data = getdata();
+		 if(data.str == true){
+			 var url = "{:url('manager/add_account')}";
+				$.ajax({
+		  		type:'POST',
+		  		data: data.data,
+		  		dataType:'json',
+		  		url:url,
+		  		success:function(data){
+		  			$('#agent-account-edit').modal('hide');
+		  			show_data();
+		  		},
+		  		error:function(e){
+		  			alert('数据提交失败！');
+		  		}
+		  	});
+		}else{
+			alert(data.msg);
+		}
+  }
+
+  // 获取数据复选框的值
+  function getcheckbox() {
+  	var chk_val = [];
+  	$('input[name="roleids"]:checked').each(function() {
+  		chk_val.push($(this).val());
+  	});
+  	return chk_val;
+  }
+
+  // 开启/锁定账号 是否有选中数据
+  function message(obj) {
+  	var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+  	if(checkedsub >0){
+  		popTipswin(obj);
+  	}else{
+  		alert('请选择操作的数据');
+    	return false;
+  	}
+  }
+
+  function openstar(num) {
+		var arr = new Array();
+  	var data = {} ;
+  	data.type = 0;
+		if($('.all_checked_count').is(":checked")){
+			data.type = 1;
+		}
+		if($("input[name='checkids'][type='checkbox']").is(':checked')){
+    	$("input[name='checkids'][type='checkbox']").each(function(i){
+				if($(this).context.checked == true){
+						arr[i] = $(this).val();
+				}
+			});
+			data.vals = arr.join();
+    }
+    data.alt = num;
+    var url = "{:url('open_close_state')}";
+    $.ajax({
+			type: 'POST',
+      url: url,
+      data: data,
+      success:function(data){
+      	console.log(data);
+      	alert(data.msg);
+      	$('#tips_model').modal('hide');
+      	if(data.code === 0) {
+      		// window.location.reload();
+      		$('#tips_model').modal('hide');
+      		show_data();
+      	}
+      }
+		});
+
+  }
+</script>
+
+{/block}

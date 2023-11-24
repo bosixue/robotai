@@ -1,0 +1,197 @@
+{extend name="public/base" /}
+{block name="body"}
+
+
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.custom.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/webuploader/webuploader.css" />
+
+
+<style type="text/css">
+.table tbody>tr>td {
+padding: 12px 8px;
+}
+.table-responsive {
+min-height: .01%;
+overflow-x: hidden;
+}
+
+h1 {
+    clear: both;
+    color: #03a9f4;
+    margin: 0 0 20px 0;
+    padding-left: 14px;
+    font-size: 2em;
+}
+
+
+.textwidth{
+width:250px;
+}
+.main-box .main-box-header {
+    padding: 10px 30px;
+}
+  .n_panel_title img{
+    vertical-align: sub;
+    margin-right:8px;
+  }
+  .control-label.col-lg-3{
+    text-align:right !important;
+    width:120px;
+    float: left;
+  }
+  .help-block {
+    font-size: 12px;
+    color: #909090;
+    margin-top:23px;
+  }
+  .f_suleftimg {
+    line-height: 0px;
+    display: inline-block;
+  }
+  .f_suleftimg img:nth-last-of-type(1) {
+    position: absolute;
+    bottom: 0px;
+    right: -5px;
+    width:30px;
+    height:30px;
+  }
+  .pr {
+      position: relative;
+  }
+  .form-group {
+    margin-bottom: 43px;
+  }
+  .pz_disabled{
+    background:#f4f4f4 !important;
+  }
+</style>
+
+
+<div class="row">
+<div class="col-lg-12">
+   <div class="main-box clearfix fadeInRight animated pz_manping_height">
+    <header class="main-box-header n_head_box n_head_box_b clearfix">
+      <div class="pull-left">
+        <span class="n_panel_title"><img src="/public/img/pz_jibenziliao.png"/>修改资料</span>
+      </div>
+    </header>
+
+    <div class="main-box-body clearfix">
+      <!--<div style="height:10px;line-height:30px;background-color:#FBFBFB;"></div>-->
+       <div class="table-responsive" style="border:none;">
+           <div class="panel-body">
+             <form id="form" method="post" class="form-horizontal margintop" enctype="multipart/form-data" method="post">
+
+                <div class="form-group">
+				          <label class="col-lg-3 control-label">用户名：</label>
+				           <div class="col-lg-5 col-sm-5">
+                    <input type="text" class="form-control textwidth pz_disabled" disabled="disabled" placeholder="用户名" name="contactName" id="contactName" value="{:$user_data['username']}" />
+                   </div>
+		            </div>
+			          <div class="form-group">
+			             <label class="col-lg-3 control-label">上传头像：</label>
+					          <div class="col-lg-5 col-sm-5">
+                      <input type="file" name="photo" id="head_portrait_file" style="display:none;" />
+                      <div class="f_suleftimg pr">
+                        <img src="{if $user_data['logo'] == '' || $user_data['logo'] == null}__PUBLIC__/img/e_touxiang.png{else/}__PUBLIC__/../{:$user_data['logo']}{/if}" alt="" style="width:70px;height:70px;" class="show_head_portrait">
+                        <img src="/public/img/e_touxiangshangchuan.png" style="width:30px;height:30px;" alt="">
+                      </div>
+
+					            <div class="help-block">建议上传70*70大小的图片作为头像</div>
+					          </div>
+			          </div>
+                <div class="form-group">
+				          <label class="col-lg-3 control-label">联系手机：</label>
+				           <div class="col-lg-5 col-sm-5">
+                    <input type="text" class="form-control textwidth pz_disabled" disabled="disabled" placeholder="联系手机" name="contactmode" id="contactmode" value="{:$user_data['mobile']}" />
+                   </div>
+		            </div>
+                <div class="form-group">
+				          <label class="col-lg-3 control-label">备用手机：</label>
+				           <div class="col-lg-5 col-sm-5">
+                    <input type="text" class="form-control textwidth" placeholder="备用手机" name="contactMailbox" id="contactMailbox" value="{:$user_data['email']}" />
+                   </div>
+		            </div>
+			          <div class="form-group">
+  			          <div style="padding-left: 128px;">
+  			             <input type="hidden" name="configId" id="configId" value="{:$user_data['id']}" />
+  			             <span class="btn btn-success submit-btn" onclick="checkform();" type="submit">确 定</span>
+  			          </div>
+  			        </div>
+             </form>
+           </div>
+        </div>
+     </div>
+   </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+//上传头像
+$('.f_suleftimg').click(function(){
+  $('#head_portrait_file').click();
+});
+
+//选择图片后 上传到服务器
+$('#head_portrait_file').change(function () {
+  // var imageObject = $(this).prop('files')[0];
+  var imageObject = document.getElementById("head_portrait_file").files[0];
+  var formFile = new FormData();
+  formFile.append("image", imageObject); //加入文件对象
+  formFile.append("enctype", "multipart/form-data");
+  var url = "{:url('edit_headimg')}";
+  console.log(formFile);
+  $.ajax({
+    data: formFile,
+  	url: url,
+  	type: "POST",
+  	dataType: "json",
+  	cache: false,			//上传文件无需缓存
+  	processData: false,		//用于对data参数进行序列化处理 这里必须false
+  	contentType: false, 	//必须
+  	success: function(result){
+  	  console.log(result);
+  		if(result.code == 0){
+        // console.log(result.datas.filename);
+  		  // $('#show_head_portrait').attr('src', '/'+result.data.filename);
+  		  window.location.reload();
+  		}
+  	},
+  	error: function(result){
+  		alert('上传失败');
+  	}
+  });
+});
+
+//检查表单
+function checkform() {
+  var href = window.location.href;
+  console.log($("#form").serialize());
+  $.ajax({
+     type: "POST",
+     dataType:'json',
+     url: href,
+     cache: false,
+     data: $("#form").serialize(),
+     success: function(data) {
+       if (data.code) {
+         alert(data.msg);
+        // location.reload();
+        // console.log(data);
+      }else{
+         alert(data.msg + ' 页面即将自动跳转~');
+         // console.log(data);
+      }
+       location.href = "{:url('User/System/setting')}";
+     },
+     error: function(data) {
+       alert("提交失败");
+     }
+   }); 
+}
+
+ </script>
+
+{/block}

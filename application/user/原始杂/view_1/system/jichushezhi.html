@@ -1,0 +1,137 @@
+{extend name="public/base" /}
+
+{block name="body"}
+
+
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/plugs/webuploader/webuploader.custom.js"></script>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/plugs/webuploader/webuploader.css" />
+
+<style type="text/css">
+.table tbody>tr>td {
+padding: 12px 8px;
+}
+.table-responsive {
+min-height: .01%;
+overflow-x: hidden;
+}
+h1 {
+    clear: both;
+    color: #03a9f4;
+    margin: 0 0 20px 0;
+    padding-left: 14px;
+    font-size: 2em;
+}
+
+
+.textwidth{
+width:250px;
+}
+.form-group {
+     margin-bottom: 20px; 
+}
+.n_panel_title i {
+    font-size: 21px;
+  }
+  @media (min-width: 768px){
+		.form-horizontal .control-label {
+		    min-width: 114px;
+		}
+	}
+	@media (max-width: 1200px){
+		.pz_queding{
+			width: 83.33333333%;margin-left: 13%;float: left;
+		}
+	}
+</style>
+<div class="row">
+	<div class="col-lg-12">
+	  <div class="main-box clearfix fadeInRight animated pz_manping_height">
+	   
+			<header class="main-box-header n_head_box n_head_box_b clearfix">
+				<div class="pull-left">
+					<span class="n_panel_title"><i class="icon iconfont icon-jichushezhi"></i>基础设置</span>
+				</div>
+			</header>
+	 
+	    <div class="main-box-body clearfix">
+	      <div class="table-responsive">    
+	        <div class="panel-body">
+	          <form id="form" method="post" class="form-horizontal margintop" enctype="multipart/form-data"> 
+							<div class="form-group">
+							  <label class="col-lg-2 control-label">网站名称:</label>
+							  <div class="col-lg-10 col-sm-10">
+							    <input type="text" class="form-control textwidth" name="websitename" id="site_name" value="{$data['site_name']}">
+							  </div>
+							</div>
+					          
+							<div class="form-group">
+							  <label class="col-lg-2 control-label">官方网址:</label>
+							  <div class="col-lg-10 col-sm-10">
+							    <input type="text" class="form-control textwidth" name="websiteURL" id="site_url" value="{$data['site_url']}">
+							  </div>
+							</div>
+							
+							<div class="form-group">
+							  <label class="col-lg-2 control-label">联系地址:</label>
+							  <div class="col-lg-10 col-sm-10">
+							    <input type="text" class="form-control textwidth" placeholder="联系地址" name="address" id="Contactaddress" value="{$data['address']}">
+							  </div>
+							</div>
+							<div class="form-group">
+								<label class="col-lg-2 control-label">网站描述:</label>
+								<div class="col-lg-10 col-sm-10">
+								     <textarea name="desc" placeholder="网站描述" id="description" style="width: 80%;padding: 6px 12px;height:100px;">{$data['site_description']}</textarea>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<label class="col-lg-2 control-label">网站logo:</label>
+								<div class="col-lg-10 col-sm-10">
+								 	<div class="picker-box"> 
+										<div id="pz_pickerCover" class="picker_button webuploader-container">
+										  {if $data['logo'] != ''}
+										  <img src='{$data["logo"]}' id='show_logo_file' />
+										  {else/}
+										  <img src='' id='show_logo_file' style='display:none;' />
+										  {/if}
+											<a class="webuploader-pick" id='click_upload_login_file' style="height:37px;line-height:27px;">上传图片</a>
+											<input type='file' id='login_file' style='display:none;' accept='.png,.jpeg,.git' />
+										</div>
+										<input type="hidden" name="cover" id="field_cover" value="">
+										<div id="fileList_cover" class="upload-file-list-info" style="width:280px;"></div>
+									</div>
+								 <div class="help-block">建议使用宽165像素-高23像素内的GIF或PNG透明图片；点击下方"确定"按钮后生效。</div> 
+								</div>
+							</div>
+					              
+							<div class="form-group">
+							  <label class="col-lg-2 control-label">网站备案号:</label>
+							  <div class="col-lg-10 col-sm-10">
+							    <input type="text" class="form-control textwidth" name="Websiterecordnumber" id="site_record_number" value="{$data['site_record_number']}">
+							  </div>
+							</div>
+							
+							<div class="form-group">
+							  <label class="col-lg-2 control-label">网站联系方式:</label>
+							   <div class="col-lg-10 col-sm-10">
+							    <input type="text" class="form-control textwidth" placeholder="网站联系方式" name="site_contact_number" id="site_contact_number" value="{$data['site_contact_number']}">
+							   </div>
+							</div>
+							
+							<div class="form-group" >
+								<div class="col-lg-offset-2 col-lg-10 pz_queding" style="margin-top: 20px;">   
+								 <input type="hidden" name="configId" id="configId" value="86">    
+								 <span class="btn btn-success submit-btn" id='submit'>确 定</span>
+								</div>
+						</div>
+	        </form>
+	      	</div>
+	    	</div>
+	    	<script src='/public/js/basics_config.js' type='text/javascript'></script>
+			</div> 
+	  </div>
+	</div>
+</div>
+{/block}

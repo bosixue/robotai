@@ -1,0 +1,476 @@
+<ul class="nav r_recorddata">
+	<li class="active">
+		<a href="javascript:;">录音管理</a>
+	</li>
+	<li>
+		<a href="javascript:;">音频合成</a>
+	</li>
+</ul>
+<div class="r_recordshow">
+	<section class="main-head clearfix r_section">
+   <div class="form-inline dis_in">
+			<div class="form-group clearfix">
+        <label class="statusSelect pull-left">关键字：</label>
+        <input type="text" class="form-control pull-left inwidth" autocomplete="off" id="voice_keyword" name="keyword" placeholder="请输入关键字" >
+      </div>
+      <div class="form-group clearfix marginleft">
+        <label class="statusSelect pull-left">标签名称：</label>
+        <input type="text" class="form-control pull-left inwidth" autocomplete="off" id="voice_lableName" name="name" placeholder="请输入标签名称" >
+      </div>
+	    <div class="form-group clearfix marginleft">
+        <label class="statusSelect pull-left">来源：</label>
+        <select class="form-control inwidth" id="record_source" name="knlgType">
+					<option value="">请选择来源</option>
+					<option value="0">上传音频</option>
+					<option value="1">合成音频</option>
+				</select>
+      </div>
+      <div class="form-group">
+     	  <botton class="btn btn-primary " type="button" onclick="show_voicemanage()">搜索</botton>
+        <botton class="btn btn-primary ant-btn btn-reset" type="button" onclick="reset();">重置</botton>
+      </div>
+		</div>
+		<div class="pull-right">
+			<botton class="btn btn-primary " type="button" onclick="record_upload()">上传</botton>
+			<botton class="btn btn-primary " type="button" onclick="record_upload()">批量导入</botton>
+			<botton class="btn btn-primary " type="button" data-title="批量删除录音管理" onclick="popTipswin(this);">批量删除</botton>
+		</div>
+	</section>
+	<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="text-center"><input class="check-all" name='all_checked' type="checkbox"/></th>
+            <th class="text-center">序号</th>
+            <th class="text-center">录音编号</th>
+            <th class="text-center ">录音名称</th>
+            <th class="text-center" style="width:26%;">文字内容</th>
+            <th class="text-center">文件大小</th>
+            <th class="text-center">格式</th>
+            <th class="text-center">来源</th>
+            <th class="text-center">用途</th>
+            <th class="text-center">标签名称</th>
+            <th class="text-center">操作</th>
+        </tr>
+    </thead>
+    <tbody id="voice_listdata_all">
+    	<!--<tr>-->
+    	<!--	<td class="text-center">-->
+     <!--       <input type="checkbox" name="mobiles" class="check_knowledgebase" data-page="0" onclick="check_recording_thing();">-->
+     <!--   </td>-->
+     <!--   <td class="text-center">1</td>-->
+     <!--   <td class="text-center">0001</td>-->
+     <!--   <td class="text-center ">问候</td>-->
+     <!--   <td class="text-center">您好</td>-->
+     <!--   <td class="text-center">20kb</td>-->
+     <!--   <td class="text-center">MP3</td>-->
+     <!--   <td class="text-center">合成音</td>-->
+     <!--   <td class="text-center">知识库</td>-->
+     <!--   <td class="text-center">炒股</td>-->
+     <!--   <td class="text-center">-->
+     <!--   	<a href="javascript:;" onclick="audition();">试听</a>-->
+     <!--   	<a href="javascript:;" data-title="删除录音管理" onclick="popTipswin(this);">删除</a>-->
+     <!--   </td>-->
+    	<!--</tr>-->
+    </tbody>
+	</table>
+	<div class="row">
+		<footer class="main-box-footer clearfix col-sm-12">
+			<div class="pull-left">
+				<input type="checkbox" name="mobiles" class="check_knowledgebase all_checked_count" data-page="0" >全选
+				（已选中<span id='user_count'>0</span>条语义标签）</div>
+			<div class="pull-right " >
+				<div class=" pull-right paging01"  >
+				</div>
+			</div>
+		</footer>
+	</div>
+	
+	<div class="datatips datatips_know01">
+	 <span>暂无相关内容</span>
+	</div>
+</div>
+<div class="r_recordshow hidden">
+	<section class="main-head clearfix r_section">
+   <div class="form-inline dis_in">
+			<div class="form-group clearfix">
+        <label class="statusSelect pull-left">音频名称：</label>
+        <input type="text" class="form-control pull-left inwidth" autocomplete="off" id="record_vocie_name" name="keyword" placeholder="请输入关键字" >
+      </div>
+      <div class="form-group ">
+     	  <botton class="btn btn-primary " type="button" onclick="show_voicedata()">搜索</botton>
+        <botton class="btn btn-primary ant-btn btn-reset" type="button" onclick="voice_reset();">重置</botton>
+      </div>
+		</div>
+		<div class="pull-right">
+			<botton class="btn btn-primary " type="button" onclick="audio_synthesis()">音频合成</botton>
+		</div>
+	</section>
+	<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <!--<th class="text-center">-->
+            <!--    <input type="checkbox" name="mobiles" class="check_knowledgebase" data-page="0" onclick="check_recording_thing();">-->
+            <!--</th>-->
+            <th class="text-center">序号</th>
+            <th class="text-center">录音名称</th>
+            <th class="text-center">录音编号</th>
+            <th class="text-center" style="width:32%;">文字内容</th>
+            <th class="text-center">文件大小</th>
+            <th class="text-center">格式</th>
+            <th class="text-center">操作</th>
+        </tr>
+    </thead>
+    <tbody id="voice_listdata">
+    	<!--<tr>-->
+    	<!--	<td class="text-center">-->
+     <!--       <input type="checkbox" name="mobiles" class="check_knowledgebase" data-page="0" onclick="check_recording_thing();">-->
+     <!--   </td>-->
+     <!--   <td class="text-center">1</td>-->
+     <!--   <td class="text-center">往上翻</td>-->
+     <!--   <td class="text-center ">0001</td>-->
+     <!--   <td class="text-center">您好</td>-->
+     <!--   <td class="text-center">20kb</td>-->
+     <!--   <td class="text-center">mav</td>-->
+     <!--   <td class="text-center">-->
+     <!--   	<a href="javascript:;" onclick="audition();">试听</a>-->
+     <!--   	<a href="javascript:;" data-title="删除录音管理" onclick="popTipswin(this);">删除</a>-->
+     <!--   </td>-->
+    	<!--</tr>-->
+    </tbody>
+	</table>
+	<div class="row">
+		<footer class="main-box-footer clearfix col-sm-12">
+			<div class="pull-left">
+				<!--<input type="checkbox" name="mobiles" class="check_knowledgebase" data-page="0" >全选-->
+				<!--（已选中<span>2</span>条语义标签）-->
+			</div>
+			<div class="pull-right " >
+				<div class="pull-right paging"></div>
+				<!--<div class="text-right pull-right">-->
+				<!--	<p>总页数：1页</p>-->
+				<!--</div>-->
+			</div>
+		</footer>
+	</div>
+	<div class="datatips datatips_know02">
+	 <span>暂无相关内容</span>
+	</div>
+</div>
+<script id="operation-data_all" type="text/template">
+	<tr>
+		<td class="text-center">
+			<input type="checkbox" name="checkids" value="{%id%}" class="check_knowledgebase" data-page="0">
+		</td>
+    <td class="text-center">{%sequence%}</td>
+    <td class="text-center">{%number%}</td>
+    <td class="text-center">{%name%}</td>
+    <td class="text-center">{%text%}</td>
+    <td class="text-center">{%file_size%}KB</td>
+    <td class="text-center">{%format%}</td>
+    <td class="text-center">{%source%}</td>
+    <td class="text-center">{%purpose%}</td>
+    <td class="text-center">{%label%}</td>
+    <td class="text-center">
+    	<a href="javascript:;" onclick="audition({%id%});">试听</a>
+    	<a href="javascript:;" onclick="up_audition({%id%});">编辑</a>
+    	<a href="javascript:;" data-title="删除录音管理" data-id={%id%} onclick="popTipswin(this);">删除</a>
+    </td>
+	</tr>
+</script>
+<script id="operation-data_voice" type="text/template">
+	<tr>
+    <td class="text-center">{%sequence%}</td>
+    <td class="text-center">{%name%}</td>
+    <td class="text-center">{%number%}</td>
+    <td class="text-center">{%text%}</td>
+    <td class="text-center">{%file_size%}KB</td>
+    <td class="text-center">{%format%}</td>
+    <td class="text-center">
+    	<a href="javascript:;" onclick="audition({%id%});">试听</a>
+    	<a href="javascript:;" data-title="删除录音管理" data-id={%id%} onclick="popTipswin(this);">删除</a>
+    </td>
+	</tr>
+</script>
+<script src="__PUBLIC__/js_manage/account_manage.js"></script>
+<script>
+  /**
+   * 录音管理
+   */
+   var Paging1 = new Paging01();
+		Paging1.init_args({
+		// url: 
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging01', //放置分页的class
+		callback: show_voicemanage //回调函数 比如show_voicedatas(页码, 显示条数)
+	});
+  function show_voicemanage(pase,limit){
+  	pase2 = pase ? pase : 1;
+		limit = limit ? limit : 10;
+		var data = {};
+		var url = "{:url('ajax_voice_manage')}";
+		data.page = pase2 ;
+		data.limit = limit ;
+		data.id = $('.active .Idlist').val();
+		data.keyword = $('#voice_keyword').val();
+		data.usource = $("#record_source  option:selected").val();
+		data.lableName = $("#voice_lableName").val();
+		$.ajax({
+      type: 'POST',
+      data: data,
+      dataType: 'json',
+      url: url,
+      success: function (result) {
+      	console.log(result);
+      	if(result.code == 1){
+      		var htmls = '';
+					var list = result.data.list;
+					if(list.length == 0){
+						$(".datatips_know01").show();
+					}else{
+						$(".datatips_know01").hide();
+						var Nowpage = result.data.Nowpage;//当前页
+						var count = result.data.total//总数
+						var page = result.data.page//总页数
+						window.count = count;
+						var i = (Nowpage - 1) * limit + 1;
+						$.each(list,function(index,object){
+							data.i = i;
+							var source = object.source == 0 ? '上传音频':'合成音频';
+							if(object.src_type == 0){
+								object.src_type = '话术流程'
+							}else if(object.src_type == 1){
+								object.src_type = '知识库'
+							}else if(object.src_type == 2 || object.src_type == 3){
+								object.src_type = '暂无用途'
+							}
+							if(!object.file_name){
+							  file_name = '暂无名称';
+							}else{
+							  file_name = object.file_name
+							}
+							if(!object.content){
+							  object.content = '暂无相关内容';
+							}else{
+							  object.content = object.content
+							}
+							var html = $('#operation-data_all').html();
+							html = html.replace('{%id%}',object.id);
+							html = html.replace('{%sequence%}',i);
+							html = html.replace('{%number%}',PrefixInteger(object.id,9));
+							html = html.replace('{%name%}',file_name);
+							html = html.replace('{%text%}',object.content);
+							html = html.replace('{%file_size%}',object.file_size);
+							html = html.replace('{%format%}',object.format);
+							html = html.replace('{%source%}',source);
+							html = html.replace('{%purpose%}',object.src_type);
+							html = html.replace('{%label%}',object.src_id);
+							html = html.replace('{%id%}',object.id);
+							html = html.replace('{%id%}',object.id);
+							html = html.replace('{%id%}',object.id);
+							htmls += html;
+							i++;
+						});
+					}
+					$('#voice_listdata_all').html(htmls);
+					Paging1.paging(Nowpage, count, limit);
+					election();
+      	}
+      },
+      error: function (e) {}
+    })
+  }
+  
+  /**
+   *语音合成 
+   */
+  var Paging = new Paging01();
+		Paging.init_args({
+		// url: 
+		page: 1, //初始页码
+		limit: 10, //初始每页显示的数据量
+		paging_class: 'paging', //放置分页的class
+		callback: show_voicedata //回调函数 比如show_voicedatas(页码, 显示条数)
+	});
+	function show_voicedata(pase,limit){
+		pase2 = pase ? pase : 1;
+		limit = limit ? limit : 10;
+		var data = {};
+		var url = "{:url('ajax_audio_synthesis')}";
+		data.id = $('.active .Idlist').val();
+		data.record_name = $('#record_vocie_name').val();
+		data.page = pase2 ;
+		data.limit = limit ;
+		// console.log(data);
+		$.ajax({
+			url:url,
+			dataType:'json',
+			type:'post',
+			data:data,
+			success:function(result){
+				console.log(result);
+				if(result.code == 1){
+					var htmls = '';
+					var list = result.data.list;
+					if(list.length == 0){
+						$(".datatips_know02").show();
+					}else{
+						$(".datatips_know02").hide();
+						var Nowpage = result.data.Nowpage;//当前页
+						var count = result.data.total//总数
+						var page = result.data.page//总页数
+						var i = (Nowpage - 1) * limit + 1;
+						$.each(list,function(index,object){
+							data.i = i;
+							var html = $('#operation-data_voice').html();
+							html = html.replace('{%sequence%}',i);
+							html = html.replace('{%name%}',object.file_name);
+							html = html.replace('{%number%}',PrefixInteger(object.id,9));
+							html = html.replace('{%text%}',object.content);
+							html = html.replace('{%file_size%}',object.file_size);
+							html = html.replace('{%format%}',object.format);
+							html = html.replace('{%id%}',object.id);
+							html = html.replace('{%id%}',object.id);
+							htmls += html;
+							i++;
+						});
+						Paging.paging(Nowpage, count, limit);
+					}
+					$('#voice_listdata').html(htmls);
+				}
+			},
+			error: function(error) {
+			}
+		})
+	}
+	//删除
+	function record_del(id){
+		var url = "{:url('delete_listvoice')}";
+		$.ajax({
+      type: 'POST',
+      data: {id: id},
+      dataType: 'json',
+      url: url,
+      success: function (data) {
+      	console.log(data);
+        if (data.code == 1) {
+        	alert(data.msg);
+        	$('#tips_model').modal('hide');
+        	show_voicedata();
+        	show_voicemanage();
+        }else{
+        	alert(data.msg);
+        }
+      },
+      error: function (e) {}
+    })
+	}
+	//批量删除
+	function batchvoice_del(){
+		var data = {};
+		data.type = 0 ;
+		var arr = new Array();
+		var checkedsub = $("input[name='checkids'][type='checkbox']:checked").length; //获取选中的checkids的个数
+		if(checkedsub > 0 ){
+			if($('.all_checked_count').is(':checked')){
+				data.type = 1 ;
+			}
+			if($("input[name='checkids'][type='checkbox']").is(':checked')){
+	    	$("input[name='checkids'][type='checkbox']").each(function(i){
+					if($(this).context.checked == true){
+							arr[i] = $(this).val();
+					}
+				});
+				data.vals = arr.join();
+    	}
+    	data.uid = $('.active .Idlist').val();
+    	console.log(data);
+    	var url = "{:url('batchvoice_del')}";
+    	$.ajax({
+	  		type:'POST',
+	  		data: data,
+	  		dataType:'json',
+	  		url:url,
+	  		success:function(data){
+	  			console.log(data);
+	  			if(data.code == 0){
+	  				alert(data.msg);
+	  				$('#tips_model').modal('hide');
+	  				show_voicedata();
+        		show_voicemanage();
+	  			}else{
+	  				alert(data.msg);
+	  				$('#tips_model').modal('hide');
+	  			}
+	  		},
+	  		error:function(e){
+	  			alert('数据提交失败！');
+	  		}
+	  	});
+		}else{
+			alert('请选择批量删除的数据');
+		}
+	}
+	
+	//重置
+	function voice_reset(){
+		$('#record_vocie_name').val('');
+		show_voicedata();
+	}
+	function reset(){
+		$('#voice_keyword').val('');
+		$('#voice_lableName').val('');
+		$('#record_source').val('');
+		show_voicemanage();
+	}
+	function audio_synthesis() {
+		$('#record_compose').modal('show');
+	}
+	function record_upload() {
+		$('#recording_upload_zip').modal('show');
+	}
+	function audition(id) {
+		$('#recording_audition').modal('show');
+		var url = "{:url('Scenarios/voice_audition')}"
+		$.ajax({
+      type: 'POST',
+      data: {id: id},
+      dataType: 'json',
+      url: url,
+      success: function (data) {
+      	console.log(data);
+        if (data.code == 1) {
+        	$('#voice_url_only').attr('src',data.data);
+        }
+      },
+      error: function (e) {}
+    })
+	}
+	//按照指定长度为数字前面补零
+	function PrefixInteger(num, length) {
+	 return ( "0000000000000000" + num ).substr( -length );
+	}
+	// 录音编辑
+	function up_audition(id) {
+		$('#recording_edit').modal('show');
+		var url = "{:url('Scenarios/edit_vioce')}"
+		$.ajax({
+	    type: 'GET',
+	    data: {id: id},
+	    dataType: 'json',
+	    url: url,
+	    success: function (data) {
+	    	console.log(data);
+	    	var info = data.data;
+	    	$('#record_name').val(info.file_name);
+	    	$('#record_content').val(info.content);
+	    	$('#record_sourced').val(info.source);
+	    	$('#record_use').val(info.src_type);
+	    	$('#record_mark').val(info.src_id);
+	    	$('#audio_url').attr('src',info.audio);
+	    	$('#upda_id').attr('data-id',info.id);
+	    },
+	      error: function (e) {}
+    })
+	}
+</script>
