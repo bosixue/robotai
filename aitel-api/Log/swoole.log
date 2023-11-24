@@ -1,0 +1,4 @@
+[2023-11-20 19:19:07 #1029.2]	NOTICE	Server is shutdown now.
+[2023-11-20 19:19:07 $1032.0]	WARNING	swProcessPool_shutdown(:371): swKill(1087) failed. Error: No such process[3].
+[2023-11-20 19:19:07 $1032.0]	WARNING	swProcessPool_shutdown(:380): waitpid(1087) failed. Error: No child processes[10].
+[2023-11-20 19:21:27 #1026.2]	NOTICE	Server is shutdown now.
